@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import {
   Zap,
@@ -34,6 +35,7 @@ import { BIKE_MODELS, BikeModel } from "@/data/bikes";
 import Hero from "@/components/ui/hero";
 import FadeIn from "@/components/FadeIn";
 import TextReveal from "@/components/TextReveal";
+import BrandBounceText from "@/components/BrandBounceText";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -203,131 +205,8 @@ export default function ZubooHomePage() {
 
   return (
     <div ref={containerRef} className="min-h-screen bg-[#FFFFFF] text-[#111820] flex flex-col selection:bg-[#ff5e14] selection:text-white font-sans">
-      {/* 1. TOP ANNOUNCEMENT BAR (Clean OEM Style) */}
-      <div className="bg-[#0F172A] text-white py-2 px-4 text-xs font-medium border-b border-slate-800">
-        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
-          <div className="flex items-center gap-3">
-            <span className="inline-flex items-center gap-1.5 bg-[#FF5E14] text-white px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-wider">
-              OFFICIAL OEM DEALERSHIP
-            </span>
-            <span className="hidden md:inline text-slate-300">
-              Udan Enterprises • Kurunduwatta, Galle • JOIN US & CHARGE YOUR RIDE ⚡
-            </span>
-          </div>
-          <div className="flex items-center gap-4 text-slate-300 text-[11px]">
-            <a href="tel:0784969652" className="flex items-center gap-1 hover:text-white transition-colors">
-              <Phone className="w-3.5 h-3.5 text-[#FF5E14]" />
-              <span>078 496 9652</span>
-            </a>
-            <span className="text-slate-600">|</span>
-            <a
-              href="https://wa.me/94784969652"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-1 hover:text-[#25D366] transition-colors"
-            >
-              <MessageSquare className="w-3.5 h-3.5 text-[#25D366]" />
-              <span>WhatsApp Direct</span>
-            </a>
-            <span className="text-slate-600">|</span>
-            <a href="mailto:Pibida17udan4131@gmail.com" className="hover:text-white transition-colors hidden sm:inline">
-              Pibida17udan4131@gmail.com
-            </a>
-          </div>
-        </div>
-      </div>
-
-      {/* 2. OEM MAIN NAVIGATION HEADER (Pure Clean White with Zuboo Signature Orange) */}
-      <header className="main-header sticky top-0 z-50 bg-white/75 backdrop-blur-xl border-b border-white/30 shadow-[0_4px_30px_rgba(0,0,0,0.03)] transition-all">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-24 flex items-center justify-between">
-          {/* Brand Logo & OEM Partnership */}
-          <div className="flex items-center">
-            <Link href="/" className="flex items-center gap-4 group mr-6">
-              <div className="relative h-14 w-14 sm:h-16 sm:w-16 shrink-0">
-                <Image
-                  src="/media/branding/udan-logo.png"
-                  alt="Udan Enterprises"
-                  fill
-                  priority
-                  sizes="64px"
-                  className="object-contain"
-                />
-              </div>
-              <div className="flex flex-col">
-                <div className="flex items-center gap-1.5">
-                  <span className="text-xl sm:text-2xl font-black tracking-tight text-slate-900 group-hover:text-[#FF5E14] transition-colors">
-                    UDAN
-                  </span>
-                  <span className="text-xl sm:text-2xl font-black tracking-tight text-[#FF5E14]">
-                    ENTERPRISES
-                  </span>
-                </div>
-                <span className="text-[10px] uppercase font-bold tracking-widest text-slate-500">
-                  Authorized Zuboo Dealership • Galle
-                </span>
-              </div>
-              <div className="h-10 w-px bg-slate-300 mx-4 hidden sm:block" />
-              <div className="relative h-10 sm:h-12 w-28 sm:w-36 shrink-0 hidden sm:block opacity-90 group-hover:opacity-100 transition-opacity">
-                <Image
-                  src="/zuboo-logo.webp"
-                  alt="Zuboo Electric"
-                  fill
-                  sizes="144px"
-                  className="object-contain"
-                />
-              </div>
-            </Link>
-          </div>
-
-          {/* Nav Links */}
-          <nav className="hidden lg:flex items-center gap-6 xl:gap-8 text-xs font-bold uppercase tracking-wider text-slate-700">
-            <Link href="/" className="text-[#FF5E14] hover:text-[#FF5E14] transition-colors">
-              Home
-            </Link>
-            <a href="#featured-models" className="hover:text-[#FF5E14] transition-colors">
-              E-Scooters & Bikes
-            </a>
-            <a href="#categories" className="hover:text-[#FF5E14] transition-colors">
-              Categories
-            </a>
-            <a href="#technology" className="hover:text-[#FF5E14] transition-colors">
-              Technology & BMS
-            </a>
-            <a href="#savings-calculator" className="hover:text-[#FF5E14] transition-colors text-emerald-700 font-extrabold flex items-center gap-1">
-              <DollarSign className="w-3.5 h-3.5" />
-              <span>Fuel Savings</span>
-            </a>
-            <Link href="/about" className="hover:text-[#FF5E14] transition-colors">
-              About Showroom
-            </Link>
-            <Link href="/offers" className="hover:text-[#FF5E14] transition-colors flex items-center gap-1">
-              <span>Offers</span>
-              <span className="bg-red-500 text-white text-[9px] px-1.5 py-0.2 rounded font-black">Hot</span>
-            </Link>
-            <a href="#showroom-location" className="hover:text-[#FF5E14] transition-colors">
-              Contact Galle
-            </a>
-          </nav>
-
-          {/* Action CTAs */}
-          <div className="flex items-center gap-3">
-            <a
-              href="tel:0784969652"
-              className="hidden sm:inline-flex items-center gap-2 px-3.5 py-2 rounded-lg border border-slate-200 hover:border-slate-300 text-slate-800 text-xs font-bold transition-colors bg-slate-50"
-            >
-              <Phone className="w-3.5 h-3.5 text-[#FF5E14]" />
-              <span>078 496 9652</span>
-            </a>
-            <button
-              onClick={() => openBookingModal("Zuboo T3")}
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[#FF5E14] hover:bg-[#E04D09] text-white text-xs font-bold uppercase tracking-wider transition-all shadow-md shadow-orange-500/20 active:scale-95"
-            >
-              <Calendar className="w-3.5 h-3.5" />
-              <span>Book Test Ride</span>
-            </button>
-          </div>
-        </div>
-      </header>
+      {/* Centered Navigation Navbar */}
+      <Navbar onOpenTestRide={() => openBookingModal("Zuboo T3")} />
 
       {/* AERO-HERO-3 INTEGRATION */}
       <Hero
@@ -888,8 +767,9 @@ export default function ZubooHomePage() {
                 <span className="text-xs font-black tracking-widest text-[#FF5E14] uppercase block mb-2 font-manrope">
                   OFFICIAL GALLE SHOWROOM
                 </span>
-                <h2 className="text-3xl sm:text-4xl font-normal text-slate-900 tracking-tight font-story">
-                  VISIT UDAN ENTERPRISES
+                <h2 className="text-3xl sm:text-4xl font-normal text-slate-900 tracking-tight font-story flex flex-wrap items-center gap-2">
+                  <span>VISIT</span>
+                  <BrandBounceText sizeClassName="text-2xl sm:text-3xl lg:text-4xl" />
                 </h2>
                 <p className="mt-2 text-sm text-slate-600 font-manrope">
                   Step inside our modern showroom, inspect all 8 Zuboo models in person, speak with certified technicians, and experience a live test ride.

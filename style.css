@@ -1714,7 +1714,7 @@ footer.oem-footer {
   margin-top: 60px;
 }
 
-/* Skyline Canvas Wrapper - Compact 150px Stage */
+/* Skyline Canvas Wrapper - Clean Responsive Stage (Desktop 180px, Mobile 110px) */
 .skyline-canvas-wrapper {
   position: relative;
   width: 100%;
@@ -1722,42 +1722,43 @@ footer.oem-footer {
   overflow: hidden;
   z-index: 2;
   border-bottom: none;
-  height: 150px;
-  max-height: 150px;
+  height: 180px;
+  max-height: 180px;
 }
 
 .motorcycle-skyline-svg {
   width: 100%;
-  height: 150px;
-  min-height: 140px;
-  max-height: 150px;
+  height: 180px;
+  min-height: 160px;
+  max-height: 180px;
   display: block;
   transform: translateZ(0);
   object-fit: cover;
 }
 
-/* Traveling Motorcycle Animation - Smooth 60fps */
-@keyframes rideAcrossDesktop {
+/* Traveling Motorcycle Animation along Road Curve - Smooth 60fps */
+@keyframes rideMotorcycleOnRoad {
   0% {
-    transform: translate(-180px, 20px) rotate(-1.5deg);
+    transform: translate(-160px, 160px) rotate(0deg);
   }
-  20% {
-    transform: translate(320px, 14px) rotate(1deg);
+  25% {
+    transform: translate(350px, 168px) rotate(0.8deg);
   }
-  45% {
-    transform: translate(750px, -2px) rotate(-1deg);
+  48% {
+    transform: translate(740px, 140px) rotate(-1.5deg);
   }
-  70% {
-    transform: translate(1180px, 20px) rotate(1.8deg);
+  74% {
+    transform: translate(1220px, 180px) rotate(1.5deg);
   }
   100% {
-    transform: translate(1750px, 10px) rotate(-1deg);
+    transform: translate(1750px, 154px) rotate(-0.5deg);
   }
 }
 
 .traveling-motorcycle-carrier {
-  animation: rideAcrossDesktop 12s cubic-bezier(0.35, 0, 0.25, 1) infinite;
+  animation: rideMotorcycleOnRoad 10s cubic-bezier(0.35, 0, 0.25, 1) infinite;
   will-change: transform;
+  transform-origin: 0 0;
   transform: translateZ(0);
 }
 
@@ -1768,9 +1769,15 @@ footer.oem-footer {
 }
 
 .wheel-spoke {
+  transform-box: fill-box;
   transform-origin: center;
   animation: wheelSpinFast 0.3s linear infinite;
   will-change: transform;
+}
+
+.bike-wheel {
+  transform-box: fill-box;
+  transform-origin: center;
 }
 
 /* Headlight Beam Pulsing */
@@ -2359,10 +2366,6 @@ footer.oem-footer {
     min-height: 110px;
     max-height: 120px;
   }
-  .traveling-motorcycle-carrier {
-    transform-origin: center;
-    transform: scale(0.85);
-  }
   .footer-body-wrapper {
     padding: 22px 18px 16px;
   }
@@ -2393,16 +2396,13 @@ footer.oem-footer {
 /* 430px: iPhone 14/15/16 Pro Max */
 @media (max-width: 430px) {
   .skyline-canvas-wrapper {
-    height: 100px;
-    max-height: 100px;
+    height: 110px;
+    max-height: 110px;
   }
   .motorcycle-skyline-svg {
-    height: 100px;
-    min-height: 95px;
-    max-height: 100px;
-  }
-  .traveling-motorcycle-carrier {
-    transform: scale(0.75);
+    height: 110px;
+    min-height: 110px;
+    max-height: 110px;
   }
   .footer-body-wrapper {
     padding: 20px 16px 14px;
@@ -2442,16 +2442,13 @@ footer.oem-footer {
 /* 390px: iPhone 12/13/14/15 */
 @media (max-width: 390px) {
   .skyline-canvas-wrapper {
-    height: 100px;
-    max-height: 100px;
+    height: 110px;
+    max-height: 110px;
   }
   .motorcycle-skyline-svg {
-    height: 100px;
-    min-height: 95px;
-    max-height: 100px;
-  }
-  .traveling-motorcycle-carrier {
-    transform: scale(0.7);
+    height: 110px;
+    min-height: 110px;
+    max-height: 110px;
   }
   .footer-body-wrapper {
     padding: 18px 14px 14px;
@@ -2475,16 +2472,13 @@ footer.oem-footer {
 /* 375px: iPhone SE & Small Devices */
 @media (max-width: 375px) {
   .skyline-canvas-wrapper {
-    height: 100px;
-    max-height: 100px;
+    height: 110px;
+    max-height: 110px;
   }
   .motorcycle-skyline-svg {
-    height: 100px;
-    min-height: 95px;
-    max-height: 100px;
-  }
-  .traveling-motorcycle-carrier {
-    transform: scale(0.65);
+    height: 110px;
+    min-height: 110px;
+    max-height: 110px;
   }
   .footer-body-wrapper {
     padding: 18px 12px 14px;
@@ -2510,16 +2504,13 @@ footer.oem-footer {
 /* 320px: Ultra-Narrow Compact Devices */
 @media (max-width: 320px) {
   .skyline-canvas-wrapper {
-    height: 100px;
-    max-height: 100px;
+    height: 110px;
+    max-height: 110px;
   }
   .motorcycle-skyline-svg {
-    height: 100px;
-    min-height: 95px;
-    max-height: 100px;
-  }
-  .traveling-motorcycle-carrier {
-    transform: scale(0.6);
+    height: 110px;
+    min-height: 110px;
+    max-height: 110px;
   }
   .footer-body-wrapper {
     padding: 16px 10px 12px;
@@ -2552,6 +2543,65 @@ footer.oem-footer {
     animation: none !important;
   }
   .traveling-motorcycle-carrier {
-    transform: translate(260px, 15px) !important;
+    transform: translate(740px, 140px) !important;
   }
 }
+
+/* ==========================================================================
+   AUTOMOTIVE BOUNCE TEXT ANIMATION - UDAN ENTERPRISES
+   ========================================================================== */
+
+@keyframes textBounceEntrance {
+  0% {
+    opacity: 0;
+    transform: translateY(-28px) scale(0.82);
+  }
+  42% {
+    opacity: 1;
+    transform: translateY(7px) scale(1.08);
+  }
+  65% {
+    transform: translateY(-3.5px) scale(0.97);
+  }
+  82% {
+    transform: translateY(1.5px) scale(1.02);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes textBounceHover {
+  0% {
+    transform: translateY(0) scale(1) rotate(0deg);
+  }
+  25% {
+    transform: translateY(-8px) scale(1.12) rotate(-1.2deg);
+  }
+  50% {
+    transform: translateY(3.5px) scale(0.96) rotate(0.8deg);
+  }
+  75% {
+    transform: translateY(-1.5px) scale(1.02) rotate(-0.3deg);
+  }
+  100% {
+    transform: translateY(0) scale(1) rotate(0deg);
+  }
+}
+
+.udan-bounce-letter {
+  display: inline-block;
+  will-change: transform, opacity;
+  animation: textBounceEntrance 0.85s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  animation-delay: calc(var(--char-index, 0) * 0.032s);
+  transform-origin: center bottom;
+  cursor: pointer;
+}
+
+.group:hover .udan-bounce-letter,
+.udan-bounce-letter:hover {
+  animation: textBounceHover 0.65s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  animation-delay: calc(var(--char-index, 0) * 0.022s);
+}
+

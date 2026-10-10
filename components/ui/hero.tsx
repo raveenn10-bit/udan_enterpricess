@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState, useMemo } from "react";
 import { ArrowUpRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import gsap from "gsap";
@@ -34,6 +34,40 @@ export default function Hero({
   const gridLinesRef = useRef<(HTMLDivElement | null)[]>([]);
   const videoRef = useRef<HTMLVideoElement>(null);
 
+  // Typewriter reveal state
+  const [visibleCount, setVisibleCount] = useState<number>(0);
+  const [isTypingComplete, setIsTypingComplete] = useState<boolean>(false);
+
+  // Tokenize title into words & characters for zero-layout-shift typewriter effect
+  const wordsData = useMemo(() => {
+    const words = title.split(" ");
+    let runningIndex = 0;
+    return words.map((word, wordIdx) => {
+      const chars = word.split("").map((char) => {
+        const idx = runningIndex;
+        runningIndex += 1;
+        return { char, index: idx };
+      });
+      const hasSpaceAfter = wordIdx < words.length - 1;
+      const spaceIndex = hasSpaceAfter ? runningIndex : null;
+      if (hasSpaceAfter) {
+        runningIndex += 1;
+      }
+      return {
+        word,
+        chars,
+        spaceIndex,
+      };
+    });
+  }, [title]);
+
+  const totalChars = useMemo(() => {
+    if (wordsData.length === 0) return 0;
+    const lastWord = wordsData[wordsData.length - 1];
+    if (lastWord.chars.length === 0) return 0;
+    return lastWord.chars[lastWord.chars.length - 1].index + 1;
+  }, [wordsData]);
+
   useEffect(() => {
     // Lazy defer video playback until after DOM load to ensure ultrafast FCP / LCP
     const video = videoRef.current;
@@ -60,7 +94,7 @@ export default function Hero({
     const ctx = gsap.context(() => {
       const tl = gsap.timeline();
 
-      // Grid lines stagger fade in
+      // 1. Architectural Grid Lines stagger fade in
       tl.fromTo(
         gridLinesRef.current,
         { opacity: 0 },
@@ -73,7 +107,7 @@ export default function Hero({
         0
       );
 
-      // Badge
+      // 2. Eyebrow Badge
       tl.fromTo(
         badgeRef.current,
         { opacity: 0, y: 20 },
@@ -86,49 +120,59 @@ export default function Hero({
         0.2
       );
 
-      // Title words
-      if (titleRef.current) {
-        const words = titleRef.current.querySelectorAll(".word");
-        tl.fromTo(
-          words,
-          { opacity: 0, y: 30 },
+      // 3. Smooth realistic Typewriter reveal on Hero Title
+      const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      if (prefersReducedMotion) {
+        setVisibleCount(totalChars);
+        setIsTypingComplete(true);
+      } else {
+        const typeProgress = { count: 0 };
+        tl.to(
+          typeProgress,
           {
-            opacity: 1,
-            y: 0,
-            duration: 0.8,
-            stagger: 0.04,
-            ease: "power3.out",
+            count: totalChars,
+            duration: Math.max(1.7, totalChars * 0.046),
+            ease: "none",
+            onUpdate: () => {
+              const current = Math.floor(typeProgress.count);
+              setVisibleCount((prev) => (prev !== current ? current : prev));
+            },
+            onComplete: () => {
+              setVisibleCount(totalChars);
+              setIsTypingComplete(true);
+            },
           },
           0.4
         );
       }
 
-      // Subtitle
+      // 4. Subtitle fade in (timed to blend as typing progresses)
       tl.fromTo(
         subtitleRef.current,
-        { opacity: 0 },
+        { opacity: 0, y: 15 },
         {
           opacity: 1,
-          duration: 1,
+          y: 0,
+          duration: 0.9,
           ease: "power2.out",
         },
-        0.7
+        1.7
       );
 
-      // CTA
+      // 5. CTA Button pop in with spring physics
       tl.fromTo(
         ctaRef.current,
-        { opacity: 0, scale: 0.9 },
+        { opacity: 0, scale: 0.92 },
         {
           opacity: 1,
           scale: 1,
           duration: 0.8,
-          ease: "back.out(1.5)",
+          ease: "back.out(1.4)",
         },
-        0.9
+        2.0
       );
 
-      // Parallax effect on scroll
+      // 6. Parallax effect on scroll
       if (sectionRef.current && contentRef.current) {
         gsap.to(contentRef.current, {
           y: "25%",
@@ -144,9 +188,21 @@ export default function Hero({
     }, sectionRef);
 
     return () => ctx.revert();
-  }, []);
+  }, [totalChars]);
 
-  const titleWords = title.split(" ");
+  // Glowing orange bar typing cursor
+  const renderCursor = () => (
+    <span
+      aria-hidden="true"
+      className="inline-block w-0 relative overflow-visible pointer-events-none select-none align-baseline"
+    >
+      <span
+        className={`absolute -left-[1.5px] -top-[0.08em] h-[1.15em] w-[3px] sm:w-[4px] lg:w-[5px] rounded-full bg-[#FF5E14] shadow-[0_0_12px_#FF5E14,0_0_24px_rgba(255,94,20,0.7)] ${
+          isTypingComplete ? "animate-cursor-pulse" : "animate-cursor-blink"
+        }`}
+      />
+    </span>
+  );
 
   return (
     <section ref={sectionRef} className="relative flex min-h-[90vh] lg:h-screen w-full items-center justify-center overflow-hidden">
@@ -179,17 +235,48 @@ export default function Hero({
       </div>
 
       {/* Content */}
-      <div ref={contentRef} className="relative z-20 max-w-5xl px-6 py-20 text-center text-white will-change-transform">
+      <div ref={contentRef} className="relative z-20 max-w-5xl px-4 sm:px-6 py-20 text-center text-white will-change-transform">
         {/* Eyebrow badge */}
         <div ref={badgeRef} className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-[#e1fcad] backdrop-blur-md">
           <span className="h-1.5 w-1.5 rounded-full bg-[#e1fcad] animate-pulse" />
           <span>JOIN US &amp; CHARGE YOUR RIDE ⚡</span>
         </div>
 
-        <h1 ref={titleRef} className="text-center font-normal text-4xl text-white tracking-tight sm:text-6xl lg:text-7xl xl:text-8xl leading-[1.08] flex flex-wrap justify-center overflow-hidden font-hero">
-          {titleWords.map((word, i) => (
-            <span key={i} className="word inline-block mr-[0.25em] last:mr-0">
-              {word}
+        {/* Hero Title with realistic Typewriter reveal animation and zero layout shift */}
+        <h1
+          ref={titleRef}
+          aria-label={title}
+          className="text-center font-normal text-3xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl leading-[1.12] sm:leading-[1.08] tracking-tight text-white flex flex-wrap justify-center font-hero select-none break-words hyphens-none"
+        >
+          {wordsData.map((wordObj, wordIdx) => (
+            <span
+              key={wordIdx}
+              className="inline-block whitespace-nowrap mr-[0.25em] last:mr-0"
+            >
+              {/* If cursor is before first character */}
+              {visibleCount === 0 && wordIdx === 0 && renderCursor()}
+
+              {wordObj.chars.map((charObj) => {
+                const isVisible = charObj.index < visibleCount;
+                const isCursorHere = charObj.index === visibleCount - 1;
+                return (
+                  <span key={charObj.index} className="inline">
+                    <span
+                      className={`inline transition-opacity duration-75 ${
+                        isVisible ? "opacity-100" : "opacity-0"
+                      }`}
+                    >
+                      {charObj.char}
+                    </span>
+                    {isCursorHere && renderCursor()}
+                  </span>
+                );
+              })}
+
+              {/* If cursor is active on the space following this word */}
+              {wordObj.spaceIndex !== null &&
+                wordObj.spaceIndex === visibleCount - 1 &&
+                renderCursor()}
             </span>
           ))}
         </h1>

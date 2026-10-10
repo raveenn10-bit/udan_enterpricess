@@ -23,6 +23,7 @@ import { db } from "@/lib/firebase";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import { useTranslation } from "@/lib/i18n";
 import { gsap, ScrollTrigger } from "@/lib/gsap";
+import BrandBounceText from "@/components/BrandBounceText";
 
 export default function Footer() {
   const { t } = useTranslation();
@@ -205,7 +206,7 @@ export default function Footer() {
       <div className="skyline-neon-edge" aria-hidden="true" />
 
       {/* 2. ANIMATED MOTORCYCLE SKYLINE HORIZON STAGE */}
-      <div className="skyline-canvas-wrapper relative w-full h-[150px] max-h-[150px] max-sm:h-[100px] max-sm:max-h-[100px] overflow-hidden bg-[#090104] z-10" aria-hidden="true">
+      <div className="skyline-canvas-wrapper relative w-full h-[180px] max-h-[180px] max-sm:h-[110px] max-sm:max-h-[110px] overflow-hidden bg-[#090104] z-10" aria-hidden="true">
         {/* Floating Particles Canvas */}
         <canvas
           ref={canvasRef}
@@ -214,9 +215,9 @@ export default function Footer() {
         />
 
         <svg
-          className="motorcycle-skyline-svg w-full h-[150px] max-h-[150px] max-sm:h-[100px] max-sm:max-h-[100px] block"
+          className="motorcycle-skyline-svg w-full h-[180px] max-h-[180px] max-sm:h-[110px] max-sm:max-h-[110px] block"
           viewBox="0 0 1600 300"
-          preserveAspectRatio="xMidYMid meet"
+          preserveAspectRatio="xMidYMid slice"
           xmlns="http://www.w3.org/2000/svg"
         >
           <defs>
@@ -384,28 +385,64 @@ export default function Footer() {
 
           {/* Traveling Motorcycle with Headlight Beam & Taillight Streak */}
           <g className="traveling-motorcycle-carrier" id="traveling-motorcycle">
+            {/* Native SVG Translation along the exact Road Curve */}
+            <animateTransform
+              attributeName="transform"
+              type="translate"
+              values="-160 160; 350 168; 740 140; 1220 180; 1750 154"
+              keyTimes="0; 0.25; 0.48; 0.74; 1"
+              dur="10s"
+              repeatCount="indefinite"
+            />
+            {/* Red Taillight Streaks streaming behind */}
             <g className="tail-light-streaks" opacity="0.9">
               <path d="M 0 26 C -40 24, -90 18, -140 16" stroke="url(#tailLightTrail)" strokeWidth="4.5" fill="none" strokeLinecap="round" />
               <path d="M 0 29 C -30 28, -75 25, -115 24" stroke="url(#tailLightTrail)" strokeWidth="3" fill="none" strokeLinecap="round" />
               <path d="M 0 33 C -20 33, -60 32, -90 32" stroke="url(#tailLightTrail)" strokeWidth="2.5" fill="none" strokeLinecap="round" />
             </g>
+            {/* Bright Headlight Cone Beam casting light forward onto road */}
             <g className="headlight-beam-group">
               <polygon points="98,28 260,10 280,68 98,38" fill="url(#headlightBeam)" opacity="0.75" />
               <circle cx="98" cy="32" r="5" fill="#ffffff" filter="url(#neonRedGlow)" />
               <ellipse cx="210" cy="52" rx="45" ry="10" fill="#ffeaa7" opacity="0.25" />
             </g>
+            {/* Racer Silhouette & Spinning Wheels */}
             <g className="racer-bike-silhouette" fill="#040001">
               <g className="bike-wheel rear-wheel">
                 <circle cx="22" cy="42" r="14" fill="#040001" stroke="#ff2200" strokeWidth="1.2" />
                 <circle cx="22" cy="42" r="8" fill="#111" />
-                <line x1="22" y1="28" x2="22" y2="56" stroke="#444" strokeWidth="1" className="wheel-spoke" />
-                <line x1="8" y1="42" x2="36" y2="42" stroke="#444" strokeWidth="1" className="wheel-spoke" />
+                <g className="wheel-spokes-group">
+                  <animateTransform
+                    attributeName="transform"
+                    type="rotate"
+                    from="0 22 42"
+                    to="360 22 42"
+                    dur="0.3s"
+                    repeatCount="indefinite"
+                  />
+                  <line x1="22" y1="28" x2="22" y2="56" stroke="#444" strokeWidth="1" className="wheel-spoke" />
+                  <line x1="8" y1="42" x2="36" y2="42" stroke="#444" strokeWidth="1" className="wheel-spoke" />
+                  <line x1="12" y1="32" x2="32" y2="52" stroke="#444" strokeWidth="1" className="wheel-spoke" />
+                  <line x1="12" y1="52" x2="32" y2="32" stroke="#444" strokeWidth="1" className="wheel-spoke" />
+                </g>
               </g>
               <g className="bike-wheel front-wheel">
                 <circle cx="86" cy="42" r="14" fill="#040001" stroke="#ff2200" strokeWidth="1.2" />
                 <circle cx="86" cy="42" r="8" fill="#111" />
-                <line x1="86" y1="28" x2="86" y2="56" stroke="#444" strokeWidth="1" className="wheel-spoke" />
-                <line x1="72" y1="42" x2="100" y2="42" stroke="#444" strokeWidth="1" className="wheel-spoke" />
+                <g className="wheel-spokes-group">
+                  <animateTransform
+                    attributeName="transform"
+                    type="rotate"
+                    from="0 86 42"
+                    to="360 86 42"
+                    dur="0.3s"
+                    repeatCount="indefinite"
+                  />
+                  <line x1="86" y1="28" x2="86" y2="56" stroke="#444" strokeWidth="1" className="wheel-spoke" />
+                  <line x1="72" y1="42" x2="100" y2="42" stroke="#444" strokeWidth="1" className="wheel-spoke" />
+                  <line x1="76" y1="32" x2="96" y2="52" stroke="#444" strokeWidth="1" className="wheel-spoke" />
+                  <line x1="76" y1="52" x2="96" y2="32" stroke="#444" strokeWidth="1" className="wheel-spoke" />
+                </g>
               </g>
               <line x1="22" y1="42" x2="48" y2="40" stroke="#040001" strokeWidth="5" />
               <line x1="38" y1="43" x2="18" y2="44" stroke="#ff4400" strokeWidth="2.5" />
@@ -443,9 +480,7 @@ export default function Footer() {
                   />
                 </div>
                 <div className="flex flex-col">
-                  <span className="font-heading font-black text-base tracking-tight text-white leading-none uppercase">
-                    UDAN <span className="text-[#FF5E14]">ENTERPRISES</span>
-                  </span>
+                  <BrandBounceText sizeClassName="text-base" dark={true} />
                   <span className="text-[9px] text-[#FF4D4D] uppercase tracking-widest mt-1 font-bold">
                     {t.brand_subtitle}
                   </span>
