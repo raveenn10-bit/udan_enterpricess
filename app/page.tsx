@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -33,8 +33,71 @@ import { BIKE_MODELS, BikeModel } from "@/data/bikes";
 import Hero from "@/components/ui/hero";
 import FadeIn from "@/components/FadeIn";
 import TextReveal from "@/components/TextReveal";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 export default function ZubooHomePage() {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    gsap.registerPlugin(ScrollTrigger);
+    
+    let ctx = gsap.context(() => {
+      // 1. Header Animation
+      gsap.from(".main-header", {
+        y: -100,
+        opacity: 0,
+        duration: 1,
+        ease: "expo.out",
+        delay: 0.2
+      });
+
+      // 2. Sections Reveal
+      gsap.utils.toArray<HTMLElement>(".reveal-section").forEach((section) => {
+        gsap.from(section, {
+          scrollTrigger: {
+            trigger: section,
+            start: "top 85%",
+          },
+          y: 40,
+          opacity: 0,
+          duration: 1,
+          ease: "power3.out"
+        });
+      });
+
+      // 3. Staggered Cards
+      gsap.utils.toArray<HTMLElement>(".stagger-grid").forEach((grid) => {
+        gsap.from(grid.querySelectorAll(".stagger-card"), {
+          scrollTrigger: {
+            trigger: grid,
+            start: "top 80%",
+          },
+          y: 30,
+          opacity: 0,
+          duration: 0.8,
+          stagger: 0.1,
+          ease: "power2.out"
+        });
+      });
+
+      // 4. Parallax Image
+      gsap.utils.toArray<HTMLElement>(".parallax-img").forEach((img) => {
+        gsap.to(img, {
+          scrollTrigger: {
+            trigger: img,
+            start: "top bottom",
+            scrub: true
+          },
+          y: -30,
+          ease: "none"
+        });
+      });
+    }, containerRef);
+    
+    return () => ctx.revert();
+  }, []);
+
   const [selectedHeroModel, setSelectedHeroModel] = useState<"t3" | "gt" | "the-tank" | "kb1">("t3");
   const [t3Color, setT3Color] = useState<string>("/bikes/t3/t3-black.webp");
   const [activeCategory, setActiveCategory] = useState<string>("all");
@@ -159,7 +222,7 @@ export default function ZubooHomePage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#FFFFFF] text-[#111820] flex flex-col selection:bg-[#ff5e14] selection:text-white font-sans">
+    <div ref={containerRef} className="min-h-screen bg-[#FFFFFF] text-[#111820] flex flex-col selection:bg-[#ff5e14] selection:text-white font-sans">
       {/* 1. TOP ANNOUNCEMENT BAR (Clean OEM Style) */}
       <div className="bg-[#0F172A] text-white py-2 px-4 text-xs font-medium border-b border-slate-800">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
@@ -195,45 +258,47 @@ export default function ZubooHomePage() {
       </div>
 
       {/* 2. OEM MAIN NAVIGATION HEADER (Pure Clean White with Zuboo Signature Orange) */}
-      <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-100 shadow-sm transition-all">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+      <header className="main-header sticky top-0 z-50 bg-white/75 backdrop-blur-xl border-b border-white/30 shadow-[0_4px_30px_rgba(0,0,0,0.03)] transition-all">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-24 flex items-center justify-between">
           {/* Brand Logo & OEM Partnership */}
-          <Link href="/" className="flex items-center gap-3 group">
-            <div className="relative h-11 w-11 shrink-0">
-              <Image
-                src="/media/branding/udan-logo.png"
-                alt="Udan Enterprises"
-                fill
-                priority
-                className="object-contain"
-              />
-            </div>
-            <div className="flex flex-col">
-              <div className="flex items-center gap-1.5">
-                <span className="text-xl sm:text-2xl font-black tracking-tight text-slate-900 group-hover:text-[#FF5E14] transition-colors">
-                  UDAN
-                </span>
-                <span className="text-xl sm:text-2xl font-black tracking-tight text-[#FF5E14]">
-                  ENTERPRISES
+          <div className="flex items-center">
+            <Link href="/" className="flex items-center gap-4 group mr-6">
+              <div className="relative h-14 w-14 sm:h-16 sm:w-16 shrink-0">
+                <Image
+                  src="/media/branding/udan-logo.png"
+                  alt="Udan Enterprises"
+                  fill
+                  priority
+                  className="object-contain"
+                />
+              </div>
+              <div className="flex flex-col">
+                <div className="flex items-center gap-1.5">
+                  <span className="text-xl sm:text-2xl font-black tracking-tight text-slate-900 group-hover:text-[#FF5E14] transition-colors">
+                    UDAN
+                  </span>
+                  <span className="text-xl sm:text-2xl font-black tracking-tight text-[#FF5E14]">
+                    ENTERPRISES
+                  </span>
+                </div>
+                <span className="text-[10px] uppercase font-bold tracking-widest text-slate-500">
+                  Authorized Zuboo Dealership • Galle
                 </span>
               </div>
-              <span className="text-[10px] uppercase font-bold tracking-widest text-slate-500">
-                Authorized Zuboo Dealership • Galle
-              </span>
-            </div>
-            <div className="hidden lg:block h-6 w-px bg-slate-200 mx-1" />
-            <div className="hidden lg:block relative h-6 w-16 opacity-90 group-hover:opacity-100 transition-opacity">
-              <Image
-                src="/zuboo-logo.webp"
-                alt="Zuboo Electric"
-                fill
-                className="object-contain"
-              />
-            </div>
-          </Link>
+              <div className="h-10 w-px bg-slate-300 mx-4 hidden sm:block" />
+              <div className="relative h-10 sm:h-12 w-28 sm:w-36 shrink-0 hidden sm:block opacity-90 group-hover:opacity-100 transition-opacity">
+                <Image
+                  src="/zuboo-logo.webp"
+                  alt="Zuboo Electric"
+                  fill
+                  className="object-contain"
+                />
+              </div>
+            </Link>
+          </div>
 
           {/* Nav Links */}
-          <nav className="hidden lg:flex items-center gap-7 text-xs font-bold uppercase tracking-wider text-slate-700">
+          <nav className="hidden lg:flex items-center gap-6 xl:gap-8 text-xs font-bold uppercase tracking-wider text-slate-700">
             <Link href="/" className="text-[#FF5E14] hover:text-[#FF5E14] transition-colors">
               Home
             </Link>

@@ -52,7 +52,7 @@ export default function BikesCataloguePage() {
     const text = encodeURIComponent(
       `Hi Udan Enterprises, I would like to inquire about the ${bike.name} (${bike.modelCode}) advertised at ${bike.formattedPrice}.`
     );
-    return `https://wa.me/94771234567?text=${text}`;
+    return `https://wa.me/94784969652?text=${text}`;
   };
 
   return (
@@ -76,7 +76,7 @@ export default function BikesCataloguePage() {
             <div className="max-w-4xl">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-widest text-[#346C83] bg-[#E8F1F5] border border-[#346C83]/20 mb-4">
                 <Sparkles className="w-3.5 h-3.5 text-[#346C83]" />
-                <span>Authorized Zuboo Dealership • Galle, Sri Lanka</span>
+                <span>Authorized Zuboo Dealership • Udugama Road, Kurunduwatta, Galle, Sri Lanka</span>
               </div>
 
               <h1 className="font-heading text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-[#111820] leading-[1.08]">

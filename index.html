@@ -26,25 +26,27 @@
   </div>
 
   <!-- 2. OEM NAVIGATION HEADER -->
-  <header class="oem-header">
-    <div class="header-container">
-      <div class="brand-wrap">
-        <img class="logo" src="media/branding/udan-logo.png" alt="Udan Enterprises">
-        <div class="brand-text">
-          <h1>UDAN <span>ENTERPRISES</span></h1>
-          <small>Official Zuboo Dealership • Galle</small>
+  <header class="oem-header" style="position: sticky; top: 0; z-index: 50; background: rgba(255, 255, 255, 0.75); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); border-bottom: 1px solid rgba(255, 255, 255, 0.3); box-shadow: 0 4px 30px rgba(0, 0, 0, 0.03); transition: all 0.3s ease;">
+    <div class="header-container" style="display: flex; align-items: center; justify-content: space-between; max-width: 1280px; margin: 0 auto; padding: 0 20px; height: 96px;">
+      <div class="brand-wrap" style="display: flex; align-items: center; gap: 16px;">
+        <img class="logo" src="media/branding/udan-logo.png" alt="Udan Enterprises" style="height: 64px; width: 64px; object-fit: contain;">
+        <div class="brand-text" style="display: flex; flex-direction: column;">
+          <h1 style="font-size: 24px; font-weight: 900; margin: 0; color: #111827; letter-spacing: -0.5px;">UDAN <span style="color: #FF5E14;">ENTERPRISES</span></h1>
+          <small style="font-size: 10px; text-transform: uppercase; font-weight: 700; color: #6b7280; letter-spacing: 1px;">Authorized Zuboo Dealership • Galle</small>
         </div>
+        <div style="height: 40px; width: 1px; background-color: #cbd5e1; margin: 0 16px;"></div>
+        <img src="zuboo-logo.webp" alt="Zuboo Electric" style="height: 48px; width: 144px; object-fit: contain;">
       </div>
 
-      <nav class="main-nav">
-        <a href="#hero" class="active">Home</a>
-        <a href="#categories">Categories</a>
-        <a href="#products">E-Scooters & Bikes</a>
-        <a href="#technology">Technology & BMS</a>
-        <a href="#showroom">Showroom & Contact</a>
+      <nav class="main-nav" style="display: flex; gap: 32px; align-items: center; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;">
+        <a href="#hero" class="active" style="color: #FF5E14; text-decoration: none;">Home</a>
+        <a href="#categories" style="color: #374151; text-decoration: none;">Categories</a>
+        <a href="#products" style="color: #374151; text-decoration: none;">E-Scooters & Bikes</a>
+        <a href="#technology" style="color: #374151; text-decoration: none;">Technology & BMS</a>
+        <a href="#showroom" style="color: #374151; text-decoration: none;">Showroom & Contact</a>
       </nav>
 
-      <div class="header-actions">
+      <div class="header-actions" style="display: flex; gap: 12px; align-items: center;">
         <a href="tel:0784969652" class="btn-hotline">
           <span>📞</span> 078 496 9652
         </a>

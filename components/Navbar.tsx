@@ -26,17 +26,17 @@ export default function Navbar({ onOpenTestRide }: NavbarProps) {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-200 ${
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         scrolled
-          ? "bg-[#F7F9FA]/95 backdrop-blur-md py-3 border-b border-[#E0E8EC] shadow-sm"
-          : "bg-[#F7F9FA]/80 backdrop-blur-sm py-4 border-b border-[#E0E8EC]/60"
+          ? "bg-white/85 backdrop-blur-xl py-2.5 border-b border-slate-200/60 shadow-sm"
+          : "bg-white/75 backdrop-blur-xl py-3.5 border-b border-white/40 shadow-[0_4px_30px_rgba(0,0,0,0.03)]"
       }`}
     >
-      <div className="editorial-container">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between">
-          {/* Brand Mark */}
-          <Link href="/" className="flex items-center gap-3 group">
-            <div className="relative h-9 w-9">
+          {/* Brand Mark with Big Logos */}
+          <Link href="/" className="flex items-center gap-3.5 group mr-6">
+            <div className="relative h-12 w-12 sm:h-14 sm:w-14 shrink-0">
               <Image
                 src="/media/branding/udan-logo.png"
                 alt="Udan Enterprises"
@@ -46,17 +46,17 @@ export default function Navbar({ onOpenTestRide }: NavbarProps) {
               />
             </div>
             <div className="flex flex-col">
-              <span className="font-heading font-bold text-sm sm:text-base tracking-tight text-[#111820] leading-none uppercase">
-                UDAN <span className="text-[#346C83]">ENTERPRISES</span>
+              <span className="font-heading font-black text-base sm:text-lg tracking-tight text-slate-900 leading-none uppercase">
+                UDAN <span className="text-[#FF5E14]">ENTERPRISES</span>
               </span>
-              <span className="text-[9px] sm:text-[10px] tracking-wider text-[#667780] uppercase font-semibold mt-0.5">
-                {t.brand_subtitle}
+              <span className="text-[9px] sm:text-[10px] tracking-wider text-slate-500 uppercase font-bold mt-1">
+                Authorized Zuboo Dealership • Galle
               </span>
             </div>
-            <div className="hidden lg:block h-5 w-px bg-[#E0E8EC] mx-1" />
-            <div className="hidden lg:block relative h-5 w-14 opacity-80 group-hover:opacity-100 transition-opacity">
+            <div className="hidden sm:block h-8 w-px bg-slate-300 mx-3" />
+            <div className="hidden sm:block relative h-8 sm:h-10 w-24 sm:w-32 shrink-0 opacity-90 group-hover:opacity-100 transition-opacity">
               <Image
-                src="/media/branding/zuboo-logo.webp"
+                src="/zuboo-logo.webp"
                 alt="Zuboo Electric Bikes"
                 fill
                 className="object-contain"

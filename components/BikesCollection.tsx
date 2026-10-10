@@ -47,7 +47,7 @@ export default function BikesCollection({ onSelectModelForTestRide }: BikesColle
     const text = encodeURIComponent(
       `Hi Udan Enterprises, I would like to inquire about the pricing and availability of the ${bike.name}.`
     );
-    return `https://wa.me/94771234567?text=${text}`;
+    return `https://wa.me/94784969652?text=${text}`;
   };
 
   return (

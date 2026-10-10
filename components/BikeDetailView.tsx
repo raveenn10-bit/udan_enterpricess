@@ -19,12 +19,10 @@ import {
   ArrowRight,
   ChevronRight,
   CheckCircle2,
-  ExternalLink,
   Info,
   Clock,
   Sliders,
   Eye,
-  X,
   Phone,
   Sparkles,
   Layers,
@@ -40,7 +38,6 @@ interface BikeDetailViewProps {
 
 export default function BikeDetailView({ bike, relatedBikes }: BikeDetailViewProps) {
   const [testRideModalOpen, setTestRideModalOpen] = useState(false);
-  const [posterModalOpen, setPosterModalOpen] = useState(false);
   const [selectedColorImage, setSelectedColorImage] = useState<string>(
     bike.colors?.[0]?.image || bike.mainImage
   );
@@ -213,21 +210,6 @@ export default function BikeDetailView({ bike, relatedBikes }: BikeDetailViewPro
                   </div>
                 )}
 
-                {/* Original Promotional Poster Link Bar */}
-                <div className="mt-4 w-full max-w-[620px] flex items-center justify-between gap-3 text-xs p-3 rounded-lg border border-[#E0E8EC] bg-[#F7F9FA]">
-                  <div className="flex items-center gap-2 text-[#667780]">
-                    <Eye className="w-4 h-4 text-[#346C83]" />
-                    <span>Official Factory Promotional Poster Available</span>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => setPosterModalOpen(true)}
-                    className="inline-flex items-center gap-1.5 font-bold text-[#346C83] hover:text-[#111820] transition-colors uppercase tracking-wider text-[11px]"
-                  >
-                    <span>View Authentic Poster</span>
-                    <ExternalLink className="w-3.5 h-3.5" />
-                  </button>
-                </div>
               </div>
 
               {/* Right Column: Model Details, Pricing & Call-to-Actions */}
@@ -314,11 +296,11 @@ export default function BikeDetailView({ bike, relatedBikes }: BikeDetailViewPro
                     <span>Official Galle Showroom Inspection</span>
                   </span>
                   <a
-                    href="tel:+94771234567"
+                    href="tel:0784969652"
                     className="font-bold text-[#111820] hover:text-[#346C83] flex items-center gap-1"
                   >
                     <Phone className="w-3.5 h-3.5" />
-                    <span>Hotline: 077 123 4567</span>
+                    <span>Hotline: 078 496 9652</span>
                   </a>
                 </div>
               </div>
@@ -718,60 +700,6 @@ export default function BikeDetailView({ bike, relatedBikes }: BikeDetailViewPro
         preSelectedModelId={bike.id}
       />
 
-      {/* Authentic Original Promotional Poster Modal */}
-      {posterModalOpen && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in"
-          onClick={() => setPosterModalOpen(false)}
-        >
-          <div
-            className="relative max-w-2xl w-full bg-white rounded-2xl p-4 sm:p-6 shadow-2xl overflow-hidden"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="flex items-center justify-between pb-3 mb-3 border-b border-[#E0E8EC]">
-              <div>
-                <h4 className="font-heading text-base font-bold text-[#111820]">
-                  Official Factory Promotional Poster
-                </h4>
-                <p className="text-xs text-[#667780]">
-                  {bike.name} ({bike.modelCode}) Authentic Zuboo Literature
-                </p>
-              </div>
-              <button
-                type="button"
-                onClick={() => setPosterModalOpen(false)}
-                className="p-2 rounded-full text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors"
-                aria-label="Close poster preview"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-
-            <div className="relative w-full h-[65vh] max-h-[600px] bg-slate-900 rounded-lg overflow-hidden flex items-center justify-center">
-              <Image
-                src={bike.originalPoster}
-                alt={`${bike.name} Original Promotional Poster`}
-                fill
-                className="object-contain"
-                sizes="(max-width: 768px) 100vw, 672px"
-              />
-            </div>
-
-            <div className="mt-4 flex flex-wrap items-center justify-between gap-3 text-xs text-[#667780]">
-              <span>* Transcribed for English specification reference.</span>
-              <a
-                href={bike.originalPoster}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1 font-bold text-[#346C83] hover:underline"
-              >
-                <span>Open Full-Resolution Image</span>
-                <ExternalLink className="w-3.5 h-3.5" />
-              </a>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

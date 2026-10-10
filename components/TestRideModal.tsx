@@ -62,7 +62,7 @@ export default function TestRideModal({
     const text = encodeURIComponent(
       `Hi Udan Enterprises, I booked a Test Ride on your website:\n- Name: ${name}\n- Phone: ${phone}\n- Model: ${selectedBikeObj.name}\n- Date: ${preferredDate || "Anytime this week"}`
     );
-    return `https://wa.me/94771234567?text=${text}`;
+    return `https://wa.me/94784969652?text=${text}`;
   };
 
   return (

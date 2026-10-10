@@ -655,7 +655,7 @@ export default function OffersPage() {
                 </h4>
                 <p className="text-xs text-[#667780] leading-relaxed">
                   Due to high demand and limited stock batches in Sri Lanka, click the WhatsApp button next to the desired offer
-                  or call our showroom hotline at +94 77 123 4567. Our team will verify current stock availability and assist you
+                  or call our showroom hotline at 078 496 9652. Our team will verify current stock availability and assist you
                   with reserving the unit.
                 </p>
               </div>

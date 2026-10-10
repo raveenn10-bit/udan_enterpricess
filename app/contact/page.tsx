@@ -63,7 +63,7 @@ export default function ContactPage() {
     const text = encodeURIComponent(
       `Hi Udan Enterprises,\nMy name is ${fullName || "Customer"}.\nPhone: ${phone || "N/A"}\nTopic: ${subject}\nModel: ${selectedModel}\nMessage: ${message || "I would like to inquire about Zuboo electric bikes."}`
     );
-    return `https://wa.me/94771234567?text=${text}`;
+    return `https://wa.me/94784969652?text=${text}`;
   };
 
   return (
@@ -135,7 +135,7 @@ export default function ContactPage() {
                     Direct Telephone Hotline
                   </span>
                   <h3 className="font-heading font-bold text-lg text-[#111820]">
-                    +94 77 123 4567
+                    078 496 9652
                   </h3>
                   <p className="text-xs text-[#667780] mt-2 leading-relaxed">
                     Available during opening hours for stock inquiries, test ride slots, and spare parts availability.
@@ -143,7 +143,7 @@ export default function ContactPage() {
                 </div>
                 <div className="pt-4">
                   <a
-                    href="tel:+94771234567"
+                    href="tel:+94784969652"
                     className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-[#346C83] hover:text-[#111820] transition-colors"
                   >
                     <span>Call Hotline Now</span>
@@ -162,7 +162,7 @@ export default function ContactPage() {
                     WhatsApp Direct Chat
                   </span>
                   <h3 className="font-heading font-bold text-lg text-[#111820]">
-                    +94 77 123 4567
+                    078 496 9652
                   </h3>
                   <p className="text-xs text-[#667780] mt-2 leading-relaxed">
                     Fast response channel. Receive live photos of bike colorways, spec sheets, and quotation PDFs.
@@ -170,7 +170,7 @@ export default function ContactPage() {
                 </div>
                 <div className="pt-4">
                   <a
-                    href="https://wa.me/94771234567?text=Hi%20Udan%20Enterprises,%20I%20would%20like%20to%20inquire%20about%20Zuboo%20electric%20bikes."
+                    href="https://wa.me/94784969652?text=Hi%20Udan%20Enterprises,%20I%20would%20like%20to%20inquire%20about%20Zuboo%20electric%20bikes."
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-emerald-700 hover:text-emerald-900 transition-colors"
@@ -221,7 +221,7 @@ export default function ContactPage() {
                 </div>
                 <div className="pt-4">
                   <a
-                    href="https://wa.me/94771234567?text=Hi%20Udan%20Enterprises,%20please%20send%20me%20directions%20to%20your%20Galle%20showroom."
+                    href="https://wa.me/94784969652?text=Hi%20Udan%20Enterprises,%20please%20send%20me%20directions%20to%20your%20Galle%20showroom."
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-[#346C83] hover:text-[#111820] transition-colors"
@@ -280,7 +280,7 @@ export default function ContactPage() {
                           required
                           value={phone}
                           onChange={(e) => setPhone(e.target.value)}
-                          placeholder="077 123 4567"
+                          placeholder="078 496 9652"
                           className="w-full px-4 py-3 rounded-xl border border-[#E0E8EC] bg-[#F7F9FA] text-[#111820] text-sm focus:outline-none focus:ring-2 focus:ring-[#346C83] focus:bg-white transition-all"
                         />
                       </div>
@@ -296,7 +296,7 @@ export default function ContactPage() {
                           type="email"
                           value={email}
                           onChange={(e) => setEmail(e.target.value)}
-                          placeholder="kasun@example.com"
+                          placeholder="Pibida17udan4131@gmail.com"
                           className="w-full px-4 py-3 rounded-xl border border-[#E0E8EC] bg-[#F7F9FA] text-[#111820] text-sm focus:outline-none focus:ring-2 focus:ring-[#346C83] focus:bg-white transition-all"
                         />
                       </div>

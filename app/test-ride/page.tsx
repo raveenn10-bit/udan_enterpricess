@@ -74,7 +74,7 @@ function TestRideFormContent() {
     const text = encodeURIComponent(
       `Hi Udan Enterprises, I booked a Test Ride on your website:\n- Name: ${name}\n- Phone: ${phone}\n- Model: ${selectedBike.name} (${selectedBike.modelCode})\n- Date: ${preferredDate || "Anytime this week"}\n- Time Slot: ${preferredSlot}\n- Notes: ${notes || "None"}`
     );
-    return `https://wa.me/94771234567?text=${text}`;
+    return `https://wa.me/94784969652?text=${text}`;
   };
 
   return (
@@ -167,7 +167,7 @@ function TestRideFormContent() {
                     required
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
-                    placeholder="077 123 4567"
+                    placeholder="078 496 9652"
                     className="w-full pl-10 pr-4 py-3 rounded-xl border border-[#E0E8EC] bg-[#F7F9FA] text-[#111820] text-sm focus:outline-none focus:ring-2 focus:ring-[#346C83] focus:bg-white transition-all"
                   />
                 </div>
@@ -358,8 +358,8 @@ function TestRideFormContent() {
 
           <div className="mt-4 pt-4 border-t border-slate-800 text-[11px] text-slate-400">
             Showroom Location: Galle, Sri Lanka. Need immediate assistance? Call{" "}
-            <a href="tel:+94771234567" className="text-white underline font-bold">
-              +94 77 123 4567
+            <a href="tel:+94784969652" className="text-white underline font-bold">
+              078 496 9652
             </a>
           </div>
         </div>

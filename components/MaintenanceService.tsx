@@ -95,7 +95,7 @@ export default function MaintenanceService() {
 
             <div className="pt-2">
               <a
-                href="https://wa.me/94771234567?text=Hi%20Udan%20Enterprises,%20I%20would%20like%20to%20book%20a%20maintenance%20service%20for%20my%20Zuboo%20electric%20bike."
+                href="https://wa.me/94784969652?text=Hi%20Udan%20Enterprises,%20I%20would%20like%20to%20book%20a%20maintenance%20service%20for%20my%20Zuboo%20electric%20bike."
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-slate-900 hover:bg-red-600 text-white text-xs font-bold uppercase tracking-wider transition-colors shadow-md"

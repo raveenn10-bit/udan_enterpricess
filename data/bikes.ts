@@ -33,7 +33,7 @@ export interface BikeModel {
   };
   features: string[];
   mainImage: string;
-  originalPoster: string;
+  originalPoster?: string;
   colors?: BikeColor[];
   isFeatured?: boolean;
   provisionalNotes: string[];
@@ -75,7 +75,6 @@ export const ZUBOO_COLLECTION: BikeModel[] = [
       "Anti-theft alarm security system"
     ],
     mainImage: "/media/bikes/gt/main.webp",
-    originalPoster: "/media/bikes/gt/original.jpg",
     isFeatured: true,
     provisionalNotes: [
       "Price and warranty transcribed from promotional poster; pending showroom verification.",

@@ -450,7 +450,7 @@ export default function AboutPage() {
                 </Link>
 
                 <a
-                  href="https://wa.me/94771234567?text=Hi%20Udan%20Enterprises,%20I%20would%20like%20to%20learn%20more%20about%20your%20company%20and%20Zuboo%20bikes."
+                  href="https://wa.me/94784969652?text=Hi%20Udan%20Enterprises,%20I%20would%20like%20to%20learn%20more%20about%20your%20company%20and%20Zuboo%20bikes."
                   target="_blank"
                   rel="noopener noreferrer"
                   className="px-6 py-3.5 rounded-xl text-xs font-bold uppercase tracking-wider bg-[#E8F1F5] hover:bg-[#d8e7ee] text-[#111820] transition-all flex items-center gap-2"
