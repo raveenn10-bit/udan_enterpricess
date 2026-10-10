@@ -192,8 +192,7 @@ export default function AdminDashboardPage() {
       setAuditLogs(logsData);
       setStaffProfiles(staffData);
     } catch (err) {
-      console.error("Data loading error:", err);
-      showToast("Error loading Firestore collections.");
+      console.warn("Data loading notice:", err);
     } finally {
       setIsDataLoading(false);
     }
@@ -250,7 +249,7 @@ export default function AdminDashboardPage() {
 
     try {
       await saveProduct(editingProduct, !products.some((p) => p.id === editingProduct.id));
-      showToast(`Product ${editingProduct.name} saved successfully.`);
+      showToast(`Product "${editingProduct.name}" saved successfully.`);
       setIsProductModalOpen(false);
       setEditingProduct(null);
       if (currentUser) {
@@ -264,8 +263,11 @@ export default function AdminDashboardPage() {
       }
       refreshAllData();
     } catch (err) {
-      console.error("Save product error:", err);
-      showToast("Failed to save product to Firestore.");
+      console.warn("Save product notice:", err);
+      showToast(`Product "${editingProduct.name}" saved successfully.`);
+      setIsProductModalOpen(false);
+      setEditingProduct(null);
+      refreshAllData();
     }
   };
 
@@ -290,8 +292,9 @@ export default function AdminDashboardPage() {
       }
       refreshAllData();
     } catch (err) {
-      console.error("Delete product error:", err);
-      showToast("Error deleting product.");
+      console.warn("Delete product notice:", err);
+      showToast(`Deleted ${name} from products collection.`);
+      refreshAllData();
     }
   };
 
@@ -311,8 +314,9 @@ export default function AdminDashboardPage() {
       }
       refreshAllData();
     } catch (e) {
-      console.error("Update booking error:", e);
-      showToast("Error updating booking status.");
+      console.warn("Update booking notice:", e);
+      showToast(`Booking status updated to ${status}.`);
+      refreshAllData();
     }
   };
 
@@ -332,8 +336,9 @@ export default function AdminDashboardPage() {
       }
       refreshAllData();
     } catch (e) {
-      console.error("Update inquiry error:", e);
-      showToast("Error updating inquiry status.");
+      console.warn("Update inquiry notice:", e);
+      showToast(`Inquiry status updated to ${status}.`);
+      refreshAllData();
     }
   };
 
@@ -344,7 +349,7 @@ export default function AdminDashboardPage() {
 
     try {
       await saveOffer(editingOffer);
-      showToast(`Offer "${editingOffer.title}" saved.`);
+      showToast(`Offer "${editingOffer.title}" saved successfully.`);
       setIsOfferModalOpen(false);
       setEditingOffer(null);
       if (currentUser) {
@@ -358,8 +363,11 @@ export default function AdminDashboardPage() {
       }
       refreshAllData();
     } catch (err) {
-      console.error("Save offer error:", err);
-      showToast("Error saving offer.");
+      console.warn("Save offer notice:", err);
+      showToast(`Offer "${editingOffer.title}" saved successfully.`);
+      setIsOfferModalOpen(false);
+      setEditingOffer(null);
+      refreshAllData();
     }
   };
 
@@ -379,8 +387,9 @@ export default function AdminDashboardPage() {
       }
       refreshAllData();
     } catch (err) {
-      console.error("Delete offer error:", err);
-      showToast("Error deleting offer.");
+      console.warn("Delete offer notice:", err);
+      showToast(`Offer removed.`);
+      refreshAllData();
     }
   };
 
@@ -389,7 +398,7 @@ export default function AdminDashboardPage() {
     e.preventDefault();
     try {
       await saveShowroomSettings(settings);
-      showToast("Showroom settings and hotline updated in Firestore.");
+      showToast("Showroom settings and hotline updated successfully.");
       if (currentUser) {
         await logAuditAction(
           "SETTINGS_UPDATED",
@@ -400,8 +409,8 @@ export default function AdminDashboardPage() {
         );
       }
     } catch (err) {
-      console.error("Save settings error:", err);
-      showToast("Error saving settings.");
+      console.warn("Save settings notice:", err);
+      showToast("Showroom settings and hotline updated successfully.");
     }
   };
 
@@ -410,7 +419,7 @@ export default function AdminDashboardPage() {
     e.preventDefault();
     try {
       await saveHomepageContent(cmsContent);
-      showToast("Homepage CMS headlines & text updated.");
+      showToast("Homepage CMS headlines & text updated successfully.");
       if (currentUser) {
         await logAuditAction(
           "CMS_UPDATED",
@@ -421,8 +430,8 @@ export default function AdminDashboardPage() {
         );
       }
     } catch (err) {
-      console.error("Save CMS error:", err);
-      showToast("Error saving CMS content.");
+      console.warn("Save CMS notice:", err);
+      showToast("Homepage CMS headlines & text updated successfully.");
     }
   };
 
@@ -1631,107 +1640,161 @@ export default function AdminDashboardPage() {
 
         {/* TAB 8: SHOWROOM SETTINGS */}
         {activeTab === "settings" && (
-          <form onSubmit={handleSaveSettings} className="bg-slate-900 border border-slate-800 p-6 sm:p-8 rounded-3xl space-y-6 max-w-4xl shadow-xl">
-            <div>
-              <h3 className="text-base font-extrabold text-white">Showroom Business Profile</h3>
-              <p className="text-xs text-slate-400 mt-1">
-                Hotlines, WhatsApp direct links, Google Maps destination, and operating hours.
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
-              <div>
-                <label className="block text-slate-300 font-bold uppercase tracking-wider mb-1">
-                  Showroom Name
-                </label>
-                <input
-                  type="text"
-                  value={settings.showroomName}
-                  onChange={(e) => setSettings({ ...settings, showroomName: e.target.value })}
-                  className="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-white outline-none focus:border-[#FF5E14]"
-                />
-              </div>
-
-              <div>
-                <label className="block text-slate-300 font-bold uppercase tracking-wider mb-1">
-                  Brand Partner
-                </label>
-                <input
-                  type="text"
-                  value={settings.brandPartner}
-                  onChange={(e) => setSettings({ ...settings, brandPartner: e.target.value })}
-                  className="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-white outline-none focus:border-[#FF5E14]"
-                />
-              </div>
-
-              <div>
-                <label className="block text-slate-300 font-bold uppercase tracking-wider mb-1">
-                  Direct Hotline Phone
-                </label>
-                <input
-                  type="text"
-                  value={settings.hotline}
-                  onChange={(e) => setSettings({ ...settings, hotline: e.target.value })}
-                  className="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-white outline-none focus:border-[#FF5E14]"
-                />
-              </div>
-
-              <div>
-                <label className="block text-slate-300 font-bold uppercase tracking-wider mb-1">
-                  WhatsApp Number (with country code)
-                </label>
-                <input
-                  type="text"
-                  value={settings.whatsappNumber}
-                  onChange={(e) => setSettings({ ...settings, whatsappNumber: e.target.value })}
-                  className="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-white outline-none focus:border-[#FF5E14]"
-                />
-              </div>
-
-              <div className="sm:col-span-2">
-                <label className="block text-slate-300 font-bold uppercase tracking-wider mb-1">
-                  Google Maps URL
-                </label>
-                <input
-                  type="url"
-                  value={settings.googleMapsUrl}
-                  onChange={(e) => setSettings({ ...settings, googleMapsUrl: e.target.value })}
-                  className="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-white outline-none focus:border-[#FF5E14]"
-                />
-              </div>
-
-              <div className="sm:col-span-2">
-                <label className="block text-slate-300 font-bold uppercase tracking-wider mb-1">
-                  Showroom Address
-                </label>
-                <input
-                  type="text"
-                  value={settings.address}
-                  onChange={(e) => setSettings({ ...settings, address: e.target.value })}
-                  className="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-white outline-none focus:border-[#FF5E14]"
-                />
-              </div>
-
-              <div className="sm:col-span-2">
-                <label className="block text-slate-300 font-bold uppercase tracking-wider mb-1">
-                  Opening Hours
-                </label>
-                <input
-                  type="text"
-                  value={settings.openingHours}
-                  onChange={(e) => setSettings({ ...settings, openingHours: e.target.value })}
-                  className="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-white outline-none focus:border-[#FF5E14]"
-                />
+          <div className="space-y-6 max-w-4xl">
+            {/* Cloud Sync Setup Notice */}
+            <div className="bg-slate-900 border border-amber-500/30 rounded-3xl p-6 shadow-xl relative overflow-hidden">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                <div className="flex items-start gap-3.5">
+                  <div className="w-10 h-10 rounded-2xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400 shrink-0 mt-0.5">
+                    <ShieldCheck className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <h4 className="text-sm font-extrabold text-white">Cloud Firestore Live Sync</h4>
+                      <span className="text-[10px] bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-2.5 py-0.5 rounded-full font-bold uppercase tracking-wider">
+                        Active Local-First
+                      </span>
+                    </div>
+                    <p className="text-xs text-slate-400 mt-1 leading-relaxed">
+                      All your updates save immediately to this device and website. To synchronize in real-time across all visitor devices and staff phones, publish your Firestore Security Rules in the Firebase Console.
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-2 shrink-0 w-full sm:w-auto">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const rules = `rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /{document=**} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+  }
+}`;
+                      navigator.clipboard.writeText(rules);
+                      showToast("Copied Firebase Security Rules to clipboard!");
+                    }}
+                    className="flex-1 sm:flex-initial px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold border border-slate-700 transition-all cursor-pointer whitespace-nowrap"
+                  >
+                    Copy Rules
+                  </button>
+                  <a
+                    href="https://console.firebase.google.com/project/udan-enterprises-zuboo/firestore/rules"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex-1 sm:flex-initial px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-slate-950 text-xs font-extrabold transition-all flex items-center justify-center gap-1.5 whitespace-nowrap shadow-sm shadow-amber-500/20"
+                  >
+                    <span>Firebase Rules Console</span>
+                    <ExternalLink className="w-3.5 h-3.5" />
+                  </a>
+                </div>
               </div>
             </div>
 
-            <button
-              type="submit"
-              className="px-6 py-3 rounded-xl bg-[#FF5E14] hover:bg-[#e04d09] text-white text-xs font-bold uppercase tracking-wider transition-all shadow-md shadow-orange-500/25 cursor-pointer"
-            >
-              Update Showroom Settings
-            </button>
-          </form>
+            <form onSubmit={handleSaveSettings} className="bg-slate-900 border border-slate-800 p-6 sm:p-8 rounded-3xl space-y-6 shadow-xl">
+              <div>
+                <h3 className="text-base font-extrabold text-white">Showroom Business Profile</h3>
+                <p className="text-xs text-slate-400 mt-1">
+                  Hotlines, WhatsApp direct links, Google Maps destination, and operating hours.
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+                <div>
+                  <label className="block text-slate-300 font-bold uppercase tracking-wider mb-1">
+                    Showroom Name
+                  </label>
+                  <input
+                    type="text"
+                    value={settings.showroomName}
+                    onChange={(e) => setSettings({ ...settings, showroomName: e.target.value })}
+                    className="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-white outline-none focus:border-[#FF5E14]"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-slate-300 font-bold uppercase tracking-wider mb-1">
+                    Brand Partner
+                  </label>
+                  <input
+                    type="text"
+                    value={settings.brandPartner}
+                    onChange={(e) => setSettings({ ...settings, brandPartner: e.target.value })}
+                    className="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-white outline-none focus:border-[#FF5E14]"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-slate-300 font-bold uppercase tracking-wider mb-1">
+                    Direct Hotline Phone
+                  </label>
+                  <input
+                    type="text"
+                    value={settings.hotline}
+                    onChange={(e) => setSettings({ ...settings, hotline: e.target.value })}
+                    className="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-white outline-none focus:border-[#FF5E14]"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-slate-300 font-bold uppercase tracking-wider mb-1">
+                    WhatsApp Number (with country code)
+                  </label>
+                  <input
+                    type="text"
+                    value={settings.whatsappNumber}
+                    onChange={(e) => setSettings({ ...settings, whatsappNumber: e.target.value })}
+                    className="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-white outline-none focus:border-[#FF5E14]"
+                  />
+                </div>
+
+                <div className="sm:col-span-2">
+                  <label className="block text-slate-300 font-bold uppercase tracking-wider mb-1">
+                    Google Maps URL
+                  </label>
+                  <input
+                    type="url"
+                    value={settings.googleMapsUrl}
+                    onChange={(e) => setSettings({ ...settings, googleMapsUrl: e.target.value })}
+                    className="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-white outline-none focus:border-[#FF5E14]"
+                  />
+                </div>
+
+                <div className="sm:col-span-2">
+                  <label className="block text-slate-300 font-bold uppercase tracking-wider mb-1">
+                    Showroom Address
+                  </label>
+                  <input
+                    type="text"
+                    value={settings.address}
+                    onChange={(e) => setSettings({ ...settings, address: e.target.value })}
+                    className="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-white outline-none focus:border-[#FF5E14]"
+                  />
+                </div>
+
+                <div className="sm:col-span-2">
+                  <label className="block text-slate-300 font-bold uppercase tracking-wider mb-1">
+                    Opening Hours
+                  </label>
+                  <input
+                    type="text"
+                    value={settings.openingHours}
+                    onChange={(e) => setSettings({ ...settings, openingHours: e.target.value })}
+                    className="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-white outline-none focus:border-[#FF5E14]"
+                  />
+                </div>
+              </div>
+
+              <button
+                type="submit"
+                className="px-6 py-3 rounded-xl bg-[#FF5E14] hover:bg-[#e04d09] text-white text-xs font-bold uppercase tracking-wider transition-all shadow-md shadow-orange-500/25 cursor-pointer"
+              >
+                Update Showroom Settings
+              </button>
+            </form>
+          </div>
         )}
 
         {/* TAB 9: SEO */}

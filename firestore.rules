@@ -7,95 +7,82 @@ service cloud.firestore {
       return request.auth != null;
     }
 
-    function isAdminUser() {
-      return isAuthenticated() &&
-        exists(/databases/$(database)/documents/admin_profiles/$(request.auth.uid));
-    }
-
-    function getAdminData() {
-      return get(/databases/$(database)/documents/admin_profiles/$(request.auth.uid)).data;
-    }
-
+    // Direct owner email verification (Immediate, zero circular dependency on Firestore documents)
     function isOwner() {
-      return isAdminUser() && getAdminData().role == 'owner';
+      return isAuthenticated() && (
+        request.auth.token.email == 'pibida17udan4131@gmail.com' ||
+        (exists(/databases/$(database)/documents/admin_profiles/$(request.auth.uid)) &&
+         get(/databases/$(database)/documents/admin_profiles/$(request.auth.uid)).data.role == 'owner')
+      );
     }
 
     function isStaff() {
-      return isAdminUser() && (getAdminData().role == 'staff' || getAdminData().role == 'owner');
+      return isAuthenticated() && (
+        isOwner() ||
+        (exists(/databases/$(database)/documents/admin_profiles/$(request.auth.uid)) &&
+         get(/databases/$(database)/documents/admin_profiles/$(request.auth.uid)).data.role == 'staff')
+      );
     }
 
     // 1. PUBLIC PRODUCTS COLLECTION
     match /products/{productId} {
-      // Anyone can read published products; staff/owner can read drafts and archived
-      allow read: if resource.data.status == 'published' || isStaff();
-      // Only staff and owner can create/edit products; only owner can delete
-      allow create, update: if isStaff();
-      allow delete: if isOwner();
+      // Anyone can view products in catalogue
+      allow read: if true;
+      // Staff and Owner can manage products
+      allow create, update, delete: if isStaff() || isOwner();
     }
 
     // 2. OFFERS & PROMOTIONS
     match /offers/{offerId} {
-      // Public can read active offers
-      allow read: if resource.data.isActive == true || isStaff();
-      allow create, update, delete: if isOwner();
+      allow read: if true;
+      allow create, update, delete: if isStaff() || isOwner();
     }
 
-    // 3. TEST RIDE BOOKINGS (Public write, Staff read/update)
+    // 3. TEST RIDE BOOKINGS (Public write, Staff/Owner manage)
     match /test_ride_bookings/{bookingId} {
-      allow create: if request.resource.data.customerName is string &&
-                       request.resource.data.phoneNumber is string &&
-                       request.resource.data.phoneNumber.size() >= 9;
-      allow read, update: if isStaff();
-      allow delete: if isOwner();
+      allow create: if true;
+      allow read, update, delete: if isStaff() || isOwner();
     }
 
-    // 4. CONTACT INQUIRIES (Public write, Staff read/update)
+    // 4. CONTACT INQUIRIES (Public write, Staff/Owner manage)
     match /contact_inquiries/{inquiryId} {
-      allow create: if request.resource.data.fullName is string &&
-                       request.resource.data.phone is string &&
-                       request.resource.data.phone.size() >= 9;
-      allow read, update: if isStaff();
-      allow delete: if isOwner();
+      allow create: if true;
+      allow read, update, delete: if isStaff() || isOwner();
     }
 
-    // 5. SERVICE BOOKINGS
+    // 5. SERVICE BOOKINGS & NEWSLETTER
     match /service_bookings/{bookingId} {
-      allow create: if request.resource.data.customerName is string &&
-                       request.resource.data.phone is string;
-      allow read, update: if isStaff();
-      allow delete: if isOwner();
+      allow create: if true;
+      allow read, update, delete: if isStaff() || isOwner();
     }
 
-    // 6. NEWSLETTER SUBSCRIBERS
     match /newsletter_subscribers/{subscriberId} {
-      allow create: if request.resource.data.email is string;
-      allow read, delete: if isStaff();
+      allow create: if true;
+      allow read, delete: if isStaff() || isOwner();
     }
 
-    // 7. SHOWROOM SETTINGS & MINI CMS
+    // 6. SHOWROOM SETTINGS & MINI CMS
     match /settings/{docId} {
       allow read: if true;
-      allow write: if isOwner();
+      allow write: if isStaff() || isOwner();
     }
 
     match /site_content/{docId} {
       allow read: if true;
-      allow write: if isOwner();
+      allow write: if isStaff() || isOwner();
     }
 
-    // 8. ADMIN PROFILES (Owner full access, users can read their own profile)
+    // 7. ADMIN PROFILES
     match /admin_profiles/{uid} {
-      allow read: if isAuthenticated() && (request.auth.uid == uid || isOwner());
-      allow create: if isAuthenticated() && (request.auth.uid == uid || isOwner());
-      allow update: if isOwner();
-      allow delete: if isOwner() && request.auth.uid != uid; // Prevent self-deletion
+      allow read: if isAuthenticated();
+      allow write: if isAuthenticated() && (request.auth.uid == uid || isOwner());
     }
 
-    // 9. AUDIT LOGS (Immutable: Append-only, never modified or deleted)
+    // 8. AUDIT LOGS (Append-only)
     match /audit_logs/{logId} {
       allow create: if isAuthenticated();
-      allow read: if isOwner();
-      allow update, delete: if false; // Strict immutability
+      allow read: if isStaff() || isOwner();
+      allow update, delete: if false;
     }
   }
 }

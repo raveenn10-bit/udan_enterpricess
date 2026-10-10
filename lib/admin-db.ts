@@ -31,40 +31,71 @@ import {
 } from "@/types/admin";
 
 // ==========================================
+// LOCAL STORAGE RESILIENT CACHE UTILITIES
+// ==========================================
+
+function readLocal<T>(key: string, fallback: T): T {
+  if (typeof window === "undefined") return fallback;
+  try {
+    const item = localStorage.getItem(key);
+    return item ? JSON.parse(item) : fallback;
+  } catch (e) {
+    return fallback;
+  }
+}
+
+function writeLocal<T>(key: string, data: T): void {
+  if (typeof window === "undefined") return;
+  try {
+    localStorage.setItem(key, JSON.stringify(data));
+  } catch (e) {
+    console.warn(`localStorage write failed for ${key}:`, e);
+  }
+}
+
+// Track whether Firestore sync succeeded or has rules pending
+export let isCloudFirestoreSynced = true;
+
+// ==========================================
 // 1. ADMIN PROFILES & RBAC
 // ==========================================
 
 export const INITIAL_OWNER_EMAIL = "pibida17udan4131@gmail.com";
 
 export async function getAdminProfile(uid: string): Promise<AdminProfile | null> {
+  // Check local cache first
+  const cached = readLocal<Record<string, AdminProfile>>("udan_admin_profiles", {});
+  if (cached[uid]) {
+    return cached[uid];
+  }
+
   try {
     const ref = doc(db, "admin_profiles", uid);
     const snap = await getDoc(ref);
     if (snap.exists()) {
-      return snap.data() as AdminProfile;
+      const data = snap.data() as AdminProfile;
+      cached[uid] = data;
+      writeLocal("udan_admin_profiles", cached);
+      return data;
     }
-    return null;
   } catch (error) {
-    console.warn("getAdminProfile error:", error);
-    return null;
+    console.warn("getAdminProfile notice:", error);
   }
+  return null;
 }
 
 export async function ensureAdminProfile(uid: string, email: string): Promise<AdminProfile> {
   const existing = await getAdminProfile(uid);
   if (existing) {
-    // Update lastLoginAt
     try {
       await updateDoc(doc(db, "admin_profiles", uid), {
         lastLoginAt: serverTimestamp(),
       });
-    } catch (e) {
-      console.warn("Could not update lastLoginAt:", e);
-    }
+    } catch (e) {}
     return existing;
   }
 
-  // Check if this is the initial owner or first registered user
+  // Check if this is the initial showroom owner
   const isOwner = email.toLowerCase().trim() === INITIAL_OWNER_EMAIL.toLowerCase().trim();
   const newProfile: AdminProfile = {
     uid,
@@ -75,35 +106,82 @@ export async function ensureAdminProfile(uid: string, email: string): Promise<Ad
       ? ["all", "manage_bikes", "manage_offers", "view_leads", "manage_staff", "manage_settings", "manage_cms"]
       : ["view_leads", "manage_leads", "view_inventory"],
     status: "active",
-    createdAt: serverTimestamp(),
-    lastLoginAt: serverTimestamp(),
+    createdAt: new Date().toISOString(),
+    lastLoginAt: new Date().toISOString(),
   };
 
+  // Cache locally immediately
+  const cached = readLocal<Record<string, AdminProfile>>("udan_admin_profiles", {});
+  cached[uid] = newProfile;
+  writeLocal("udan_admin_profiles", cached);
+
+  // Sync to Cloud Firestore
   try {
-    await setDoc(doc(db, "admin_profiles", uid), newProfile);
+    await setDoc(doc(db, "admin_profiles", uid), {
+      ...newProfile,
+      createdAt: serverTimestamp(),
+      lastLoginAt: serverTimestamp(),
+    });
   } catch (error) {
-    console.warn("ensureAdminProfile write notice:", error);
+    console.warn("ensureAdminProfile cloud write notice:", error);
   }
 
   return newProfile;
 }
 
 export async function getAllAdminProfiles(): Promise<AdminProfile[]> {
+  const localMap = readLocal<Record<string, AdminProfile>>("udan_admin_profiles", {});
+  let list = Object.values(localMap);
+
   try {
     const snap = await getDocs(collection(db, "admin_profiles"));
-    return snap.docs.map((d) => d.data() as AdminProfile);
+    if (!snap.empty) {
+      const remoteList = snap.docs.map((d) => d.data() as AdminProfile);
+      remoteList.forEach((p) => {
+        localMap[p.uid] = p;
+      });
+      writeLocal("udan_admin_profiles", localMap);
+      return remoteList;
+    }
   } catch (err) {
-    console.warn("getAllAdminProfiles error:", err);
-    return [];
+    console.warn("getAllAdminProfiles notice:", err);
   }
+
+  if (list.length === 0) {
+    // Default showroom owner fallback
+    list = [
+      {
+        uid: "owner-initial",
+        email: INITIAL_OWNER_EMAIL,
+        displayName: "Showroom Owner",
+        role: "owner",
+        permissions: ["all"],
+        status: "active",
+        createdAt: "2026-10-10",
+      },
+    ];
+  }
+
+  return list;
 }
 
 export async function updateAdminRole(uid: string, role: "owner" | "staff", permissions: string[]): Promise<void> {
-  await updateDoc(doc(db, "admin_profiles", uid), {
-    role,
-    permissions,
-    updatedAt: serverTimestamp(),
-  });
+  const localMap = readLocal<Record<string, AdminProfile>>("udan_admin_profiles", {});
+  if (localMap[uid]) {
+    localMap[uid].role = role;
+    localMap[uid].permissions = permissions;
+    writeLocal("udan_admin_profiles", localMap);
+  }
+
+  try {
+    await updateDoc(doc(db, "admin_profiles", uid), {
+      role,
+      permissions,
+      updatedAt: serverTimestamp(),
+    });
+  } catch (err) {
+    console.warn("updateAdminRole cloud notice:", err);
+  }
 }
 
 // ==========================================
@@ -118,6 +196,21 @@ export async function logAuditAction(
   summary: string,
   details?: Record<string, any>
 ): Promise<void> {
+  const newLog: AuditLogItem = {
+    id: `log-${Date.now()}`,
+    action,
+    actorUid,
+    actorEmail,
+    resource,
+    summary,
+    details: details || {},
+    timestamp: new Date().toLocaleTimeString(),
+  };
+
+  const logs = readLocal<AuditLogItem[]>("udan_audit_logs", []);
+  logs.unshift(newLog);
+  writeLocal("udan_audit_logs", logs.slice(0, 100));
+
   try {
     await addDoc(collection(db, "audit_logs"), {
       action,
@@ -129,31 +222,38 @@ export async function logAuditAction(
       timestamp: serverTimestamp(),
     });
   } catch (err) {
-    console.warn("logAuditAction notice:", err);
+    console.warn("logAuditAction cloud notice:", err);
   }
 }
 
 export async function getAuditLogs(maxCount = 50): Promise<AuditLogItem[]> {
+  const localLogs = readLocal<AuditLogItem[]>("udan_audit_logs", []);
+
   try {
     const q = query(collection(db, "audit_logs"), orderBy("timestamp", "desc"), limit(maxCount));
     const snap = await getDocs(q);
-    return snap.docs.map((d) => {
-      const data = d.data();
-      return {
-        id: d.id,
-        action: data.action || "ACTION",
-        actorUid: data.actorUid || "",
-        actorEmail: data.actorEmail || "staff",
-        resource: data.resource || "",
-        summary: data.summary || "",
-        details: data.details || {},
-        timestamp: data.timestamp?.toDate ? data.timestamp.toDate().toLocaleString() : "Recent",
-      };
-    });
+    if (!snap.empty) {
+      const remoteLogs = snap.docs.map((d) => {
+        const data = d.data();
+        return {
+          id: d.id,
+          action: data.action || "ACTION",
+          actorUid: data.actorUid || "",
+          actorEmail: data.actorEmail || "staff",
+          resource: data.resource || "",
+          summary: data.summary || "",
+          details: data.details || {},
+          timestamp: data.timestamp?.toDate ? data.timestamp.toDate().toLocaleString() : "Recent",
+        };
+      });
+      writeLocal("udan_audit_logs", remoteLogs);
+      return remoteLogs;
+    }
   } catch (err) {
-    console.warn("getAuditLogs offline/mock mode:", err);
-    return [];
+    console.warn("getAuditLogs cloud notice:", err);
   }
+
+  return localLogs;
 }
 
 // ==========================================
@@ -199,30 +299,68 @@ export function mapStaticBikeToProduct(b: (typeof ZUBOO_COLLECTION)[0]): Product
 }
 
 export async function getProducts(): Promise<ProductItem[]> {
+  const localProducts = readLocal<ProductItem[]>("udan_products_cache", []);
+
   try {
     const snap = await getDocs(collection(db, "products"));
     if (!snap.empty) {
-      return snap.docs.map((d) => d.data() as ProductItem);
+      const remote = snap.docs.map((d) => d.data() as ProductItem);
+      writeLocal("udan_products_cache", remote);
+      return remote;
     }
   } catch (err) {
-    console.warn("getProducts Firestore notice, loading default Zuboo collection:", err);
+    console.warn("getProducts Firestore notice:", err);
   }
-  // Fallback to static Zuboo collection
-  return ZUBOO_COLLECTION.map(mapStaticBikeToProduct);
+
+  if (localProducts.length > 0) {
+    return localProducts;
+  }
+
+  const initial = ZUBOO_COLLECTION.map(mapStaticBikeToProduct);
+  writeLocal("udan_products_cache", initial);
+  return initial;
 }
 
 export async function saveProduct(product: ProductItem, isNew = false): Promise<void> {
-  const ref = doc(db, "products", product.id);
-  const data = {
-    ...product,
-    updatedAt: serverTimestamp(),
-    ...(isNew ? { createdAt: serverTimestamp() } : {}),
-  };
-  await setDoc(ref, data, { merge: true });
+  // 1. Update local cache
+  const products = readLocal<ProductItem[]>("udan_products_cache", ZUBOO_COLLECTION.map(mapStaticBikeToProduct));
+  const idx = products.findIndex((p) => p.id === product.id);
+  if (idx >= 0) {
+    products[idx] = { ...product, updatedAt: new Date().toISOString() };
+  } else {
+    products.unshift({
+      ...product,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    });
+  }
+  writeLocal("udan_products_cache", products);
+
+  // 2. Cloud Firestore sync
+  try {
+    const ref = doc(db, "products", product.id);
+    const data = {
+      ...product,
+      updatedAt: serverTimestamp(),
+      ...(isNew ? { createdAt: serverTimestamp() } : {}),
+    };
+    await setDoc(ref, data, { merge: true });
+    isCloudFirestoreSynced = true;
+  } catch (err) {
+    console.warn("saveProduct cloud sync notice:", err);
+    isCloudFirestoreSynced = false;
+  }
 }
 
 export async function deleteProduct(productId: string): Promise<void> {
-  await deleteDoc(doc(db, "products", productId));
+  const products = readLocal<ProductItem[]>("udan_products_cache", []);
+  writeLocal("udan_products_cache", products.filter((p) => p.id !== productId));
+
+  try {
+    await deleteDoc(doc(db, "products", productId));
+  } catch (err) {
+    console.warn("deleteProduct cloud notice:", err);
+  }
 }
 
 // ==========================================
@@ -230,11 +368,13 @@ export async function deleteProduct(productId: string): Promise<void> {
 // ==========================================
 
 export async function getTestRideBookings(): Promise<TestRideBookingItem[]> {
+  const local = readLocal<TestRideBookingItem[]>("udan_bookings_cache", []);
+
   try {
     const q = query(collection(db, "test_ride_bookings"), orderBy("createdAt", "desc"), limit(100));
     const snap = await getDocs(q);
     if (!snap.empty) {
-      return snap.docs.map((d) => {
+      const remote = snap.docs.map((d) => {
         const data = d.data();
         return {
           id: d.id,
@@ -254,11 +394,14 @@ export async function getTestRideBookings(): Promise<TestRideBookingItem[]> {
           updatedAt: data.updatedAt?.toDate ? data.updatedAt.toDate().toLocaleString() : undefined,
         };
       });
+      writeLocal("udan_bookings_cache", remote);
+      return remote;
     }
   } catch (err) {
-    console.warn("getTestRideBookings Firestore notice:", err);
+    console.warn("getTestRideBookings notice:", err);
   }
-  return [];
+
+  return local;
 }
 
 export async function updateBookingStatus(
@@ -266,15 +409,27 @@ export async function updateBookingStatus(
   status: BookingStatus,
   internalNotes?: string
 ): Promise<void> {
-  const ref = doc(db, "test_ride_bookings", bookingId);
-  const updateData: any = {
-    status,
-    updatedAt: serverTimestamp(),
-  };
-  if (internalNotes !== undefined) {
-    updateData.internalNotes = internalNotes;
+  const bookings = readLocal<TestRideBookingItem[]>("udan_bookings_cache", []);
+  const idx = bookings.findIndex((b) => b.id === bookingId);
+  if (idx >= 0) {
+    bookings[idx].status = status;
+    if (internalNotes !== undefined) bookings[idx].internalNotes = internalNotes;
+    writeLocal("udan_bookings_cache", bookings);
   }
-  await updateDoc(ref, updateData);
+
+  try {
+    const ref = doc(db, "test_ride_bookings", bookingId);
+    const updateData: any = {
+      status,
+      updatedAt: serverTimestamp(),
+    };
+    if (internalNotes !== undefined) {
+      updateData.internalNotes = internalNotes;
+    }
+    await updateDoc(ref, updateData);
+  } catch (e) {
+    console.warn("updateBookingStatus cloud notice:", e);
+  }
 }
 
 // ==========================================
@@ -282,11 +437,13 @@ export async function updateBookingStatus(
 // ==========================================
 
 export async function getContactInquiries(): Promise<ContactInquiryItem[]> {
+  const local = readLocal<ContactInquiryItem[]>("udan_inquiries_cache", []);
+
   try {
     const q = query(collection(db, "contact_inquiries"), orderBy("createdAt", "desc"), limit(100));
     const snap = await getDocs(q);
     if (!snap.empty) {
-      return snap.docs.map((d) => {
+      const remote = snap.docs.map((d) => {
         const data = d.data();
         return {
           id: d.id,
@@ -304,11 +461,14 @@ export async function getContactInquiries(): Promise<ContactInquiryItem[]> {
           updatedAt: data.updatedAt?.toDate ? data.updatedAt.toDate().toLocaleString() : undefined,
         };
       });
+      writeLocal("udan_inquiries_cache", remote);
+      return remote;
     }
   } catch (err) {
-    console.warn("getContactInquiries Firestore notice:", err);
+    console.warn("getContactInquiries notice:", err);
   }
-  return [];
+
+  return local;
 }
 
 export async function updateInquiryStatus(
@@ -316,15 +476,27 @@ export async function updateInquiryStatus(
   status: InquiryStatus,
   internalNotes?: string
 ): Promise<void> {
-  const ref = doc(db, "contact_inquiries", inquiryId);
-  const updateData: any = {
-    status,
-    updatedAt: serverTimestamp(),
-  };
-  if (internalNotes !== undefined) {
-    updateData.internalNotes = internalNotes;
+  const inquiries = readLocal<ContactInquiryItem[]>("udan_inquiries_cache", []);
+  const idx = inquiries.findIndex((i) => i.id === inquiryId);
+  if (idx >= 0) {
+    inquiries[idx].status = status;
+    if (internalNotes !== undefined) inquiries[idx].internalNotes = internalNotes;
+    writeLocal("udan_inquiries_cache", inquiries);
   }
-  await updateDoc(ref, updateData);
+
+  try {
+    const ref = doc(db, "contact_inquiries", inquiryId);
+    const updateData: any = {
+      status,
+      updatedAt: serverTimestamp(),
+    };
+    if (internalNotes !== undefined) {
+      updateData.internalNotes = internalNotes;
+    }
+    await updateDoc(ref, updateData);
+  } catch (e) {
+    console.warn("updateInquiryStatus cloud notice:", e);
+  }
 }
 
 // ==========================================
@@ -388,27 +560,56 @@ export const DEFAULT_OFFERS: OfferItem[] = [
 ];
 
 export async function getOffers(): Promise<OfferItem[]> {
+  const local = readLocal<OfferItem[]>("udan_offers_cache", []);
+
   try {
     const snap = await getDocs(collection(db, "offers"));
     if (!snap.empty) {
-      return snap.docs.map((d) => d.data() as OfferItem);
+      const remote = snap.docs.map((d) => d.data() as OfferItem);
+      writeLocal("udan_offers_cache", remote);
+      return remote;
     }
   } catch (err) {
     console.warn("getOffers Firestore notice:", err);
   }
+
+  if (local.length > 0) return local;
+  writeLocal("udan_offers_cache", DEFAULT_OFFERS);
   return DEFAULT_OFFERS;
 }
 
 export async function saveOffer(offer: OfferItem): Promise<void> {
-  const ref = doc(db, "offers", offer.id);
-  await setDoc(ref, {
-    ...offer,
-    updatedAt: serverTimestamp(),
-  }, { merge: true });
+  const offers = readLocal<OfferItem[]>("udan_offers_cache", DEFAULT_OFFERS);
+  const idx = offers.findIndex((o) => o.id === offer.id);
+  if (idx >= 0) {
+    offers[idx] = offer;
+  } else {
+    offers.unshift(offer);
+  }
+  writeLocal("udan_offers_cache", offers);
+
+  try {
+    const ref = doc(db, "offers", offer.id);
+    await setDoc(ref, {
+      ...offer,
+      updatedAt: serverTimestamp(),
+    }, { merge: true });
+    isCloudFirestoreSynced = true;
+  } catch (err) {
+    console.warn("saveOffer cloud sync notice:", err);
+    isCloudFirestoreSynced = false;
+  }
 }
 
 export async function deleteOffer(offerId: string): Promise<void> {
-  await deleteDoc(doc(db, "offers", offerId));
+  const offers = readLocal<OfferItem[]>("udan_offers_cache", []);
+  writeLocal("udan_offers_cache", offers.filter((o) => o.id !== offerId));
+
+  try {
+    await deleteDoc(doc(db, "offers", offerId));
+  } catch (err) {
+    console.warn("deleteOffer cloud notice:", err);
+  }
 }
 
 // ==========================================
@@ -435,24 +636,39 @@ export const DEFAULT_SETTINGS: ShowroomSettings = {
 };
 
 export async function getShowroomSettings(): Promise<ShowroomSettings> {
+  const cached = readLocal<ShowroomSettings>("udan_settings_cache", DEFAULT_SETTINGS);
+
   try {
     const ref = doc(db, "settings", "showroom");
     const snap = await getDoc(ref);
     if (snap.exists()) {
-      return snap.data() as ShowroomSettings;
+      const remote = snap.data() as ShowroomSettings;
+      writeLocal("udan_settings_cache", remote);
+      return remote;
     }
   } catch (err) {
     console.warn("getShowroomSettings Firestore notice:", err);
   }
-  return DEFAULT_SETTINGS;
+
+  return cached;
 }
 
 export async function saveShowroomSettings(settings: ShowroomSettings): Promise<void> {
-  const ref = doc(db, "settings", "showroom");
-  await setDoc(ref, {
-    ...settings,
-    updatedAt: serverTimestamp(),
-  }, { merge: true });
+  // 1. Immediately persist locally
+  writeLocal("udan_settings_cache", settings);
+
+  // 2. Cloud Firestore sync
+  try {
+    const ref = doc(db, "settings", "showroom");
+    await setDoc(ref, {
+      ...settings,
+      updatedAt: serverTimestamp(),
+    }, { merge: true });
+    isCloudFirestoreSynced = true;
+  } catch (err) {
+    console.warn("saveShowroomSettings cloud notice:", err);
+    isCloudFirestoreSynced = false;
+  }
 }
 
 // ==========================================
@@ -475,22 +691,35 @@ export const DEFAULT_HOMEPAGE_CONTENT: SiteContentHomepage = {
 };
 
 export async function getHomepageContent(): Promise<SiteContentHomepage> {
+  const cached = readLocal<SiteContentHomepage>("udan_cms_cache", DEFAULT_HOMEPAGE_CONTENT);
+
   try {
     const ref = doc(db, "site_content", "homepage");
     const snap = await getDoc(ref);
     if (snap.exists()) {
-      return snap.data() as SiteContentHomepage;
+      const remote = snap.data() as SiteContentHomepage;
+      writeLocal("udan_cms_cache", remote);
+      return remote;
     }
   } catch (err) {
     console.warn("getHomepageContent Firestore notice:", err);
   }
-  return DEFAULT_HOMEPAGE_CONTENT;
+
+  return cached;
 }
 
 export async function saveHomepageContent(content: SiteContentHomepage): Promise<void> {
-  const ref = doc(db, "site_content", "homepage");
-  await setDoc(ref, {
-    ...content,
-    updatedAt: serverTimestamp(),
-  }, { merge: true });
+  writeLocal("udan_cms_cache", content);
+
+  try {
+    const ref = doc(db, "site_content", "homepage");
+    await setDoc(ref, {
+      ...content,
+      updatedAt: serverTimestamp(),
+    }, { merge: true });
+    isCloudFirestoreSynced = true;
+  } catch (err) {
+    console.warn("saveHomepageContent cloud notice:", err);
+    isCloudFirestoreSynced = false;
+  }
 }

@@ -1,6 +1,4 @@
 import { useState, useEffect } from "react";
-import { doc, getDoc, collection, getDocs, query, where } from "firebase/firestore";
-import { db } from "@/lib/firebase";
 import { BUSINESS_CONFIG } from "@/data/business";
 import { ZUBOO_COLLECTION, BikeModel } from "@/data/bikes";
 import {
@@ -13,12 +11,15 @@ import {
   DEFAULT_SETTINGS,
   DEFAULT_HOMEPAGE_CONTENT,
   DEFAULT_OFFERS,
-  mapStaticBikeToProduct,
+  getShowroomSettings,
+  getHomepageContent,
+  getProducts,
+  getOffers,
 } from "@/lib/admin-db";
 
 /**
  * Hook to retrieve live showroom settings (hotline, whatsapp, address, hours)
- * with instant fallback to static BUSINESS_CONFIG
+ * with instant fallback to static BUSINESS_CONFIG and local cache
  */
 export function useShowroomSettings() {
   const [settings, setSettings] = useState<ShowroomSettings>(DEFAULT_SETTINGS);
@@ -28,9 +29,9 @@ export function useShowroomSettings() {
     let isMounted = true;
     async function load() {
       try {
-        const snap = await getDoc(doc(db, "settings", "showroom"));
-        if (snap.exists() && isMounted) {
-          setSettings(snap.data() as ShowroomSettings);
+        const data = await getShowroomSettings();
+        if (isMounted && data) {
+          setSettings(data);
         }
       } catch (e) {
         // Fallback silently
@@ -58,9 +59,9 @@ export function useHomepageContent() {
     let isMounted = true;
     async function load() {
       try {
-        const snap = await getDoc(doc(db, "site_content", "homepage"));
-        if (snap.exists() && isMounted) {
-          setCms(snap.data() as SiteContentHomepage);
+        const data = await getHomepageContent();
+        if (isMounted && data) {
+          setCms(data);
         }
       } catch (e) {
         // Fallback silently
@@ -78,7 +79,7 @@ export function useHomepageContent() {
 }
 
 /**
- * Hook to retrieve live published bike models from Firestore,
+ * Hook to retrieve live published bike models from Firestore / Local Cache,
  * with fallback to ZUBOO_COLLECTION
  */
 export function useDynamicProducts() {
@@ -89,52 +90,47 @@ export function useDynamicProducts() {
     let isMounted = true;
     async function load() {
       try {
-        const q = query(collection(db, "products"), where("status", "==", "published"));
-        const snap = await getDocs(q);
-        if (!snap.empty && isMounted) {
-          const remoteBikes: BikeModel[] = snap.docs.map((docSnap) => {
-            const data = docSnap.data() as ProductItem;
-            return {
-              id: data.id,
-              slug: data.slug,
-              name: data.name,
-              modelCode: data.modelCode,
-              badge: data.badge,
-              category: data.category,
-              tagline: data.tagline,
-              description: data.description,
-              advertisedPrice: data.priceLKR,
-              formattedPrice: `LKR ${data.priceLKR.toLocaleString()}`,
-              isPriceVerified: data.isPriceVerified,
-              motorPower: data.motorPower,
-              topSpeed: data.topSpeed,
-              advertisedRange: data.advertisedRange,
-              battery: data.battery,
-              chargingTime: data.chargingTime,
-              dimensions: data.dimensions,
-              brakes: data.brakes,
-              display: data.display,
-              warranty: data.warranty,
-              features: data.features || [],
-              mainImage: data.mainImage,
-              gallery: data.gallery,
-              colors: (data.colors || []).map((c) => ({
-                name: c.name,
-                hex: c.hex,
-                image: c.image || data.mainImage,
-              })),
-              isFeatured: data.isFeatured,
-              provisionalNotes: [],
-            };
-          });
-
-          // Merge: if remote has items, use remote, otherwise fallback
-          if (remoteBikes.length > 0) {
-            setProducts(remoteBikes);
-          }
+        const productItems = await getProducts();
+        const publishedItems = productItems.filter((p) => p.status === "published");
+        if (publishedItems.length > 0 && isMounted) {
+          const mappedBikes: BikeModel[] = publishedItems.map((data) => ({
+            id: data.id,
+            slug: data.slug,
+            name: data.name,
+            modelCode: data.modelCode,
+            badge: data.badge,
+            category: data.category as any,
+            tagline: data.tagline,
+            description: data.description,
+            advertisedPrice: data.priceLKR,
+            formattedPrice: `LKR ${data.priceLKR.toLocaleString()}`,
+            isPriceVerified: data.isPriceVerified,
+            motorPower: data.motorPower,
+            topSpeed: data.topSpeed,
+            advertisedRange: data.advertisedRange,
+            battery: data.battery,
+            chargingTime: data.chargingTime,
+            dimensions: data.dimensions,
+            brakes: data.brakes,
+            display: data.display,
+            warranty: data.warranty,
+            features: data.features || [],
+            mainImage: data.mainImage,
+            gallery: data.gallery,
+            colors: data.colors?.map((c) => ({
+              name: c.name,
+              hex: c.hex,
+              image: c.image || data.mainImage,
+            })) || [{ name: "Default", hex: "#111827", image: data.mainImage }],
+            isFeatured: data.isFeatured,
+            provisionalNotes: data.isPriceVerified
+              ? ["Pricing verified by Udan Enterprises showroom."]
+              : ["Price & specifications provisional; verify with Galle showroom."],
+          }));
+          setProducts(mappedBikes);
         }
       } catch (e) {
-        // Fallback to static
+        // Fallback silently
       } finally {
         if (isMounted) setLoading(false);
       }
@@ -159,13 +155,10 @@ export function useDynamicOffers() {
     let isMounted = true;
     async function load() {
       try {
-        const q = query(collection(db, "offers"), where("isActive", "==", true));
-        const snap = await getDocs(q);
-        if (!snap.empty && isMounted) {
-          const list = snap.docs.map((d) => d.data() as OfferItem);
-          if (list.length > 0) {
-            setOffers(list);
-          }
+        const data = await getOffers();
+        const active = data.filter((o) => o.isActive);
+        if (active.length > 0 && isMounted) {
+          setOffers(active);
         }
       } catch (e) {
         // Fallback silently
