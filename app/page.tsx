@@ -257,6 +257,26 @@ export default function ZubooHomePage() {
   const [selectedShowcaseBike, setSelectedShowcaseBike] = useState<number>(0);
   const [galleryIndex, setGalleryIndex] = useState<number>(0);
   const [lightboxPhotoIndex, setLightboxPhotoIndex] = useState<number | null>(null);
+  const [isBikeHovered, setIsBikeHovered] = useState<boolean>(false);
+  const [isGalleryHovered, setIsGalleryHovered] = useState<boolean>(false);
+
+  // Auto-cycle showcase bike every 3.5 seconds (pauses on hover)
+  useEffect(() => {
+    if (isBikeHovered) return;
+    const interval = setInterval(() => {
+      setSelectedShowcaseBike((prev) => (prev + 1) % SHOWCASE_BIKES.length);
+    }, 3500);
+    return () => clearInterval(interval);
+  }, [isBikeHovered]);
+
+  // Auto-advance showroom gallery photos every 4 seconds (pauses on hover)
+  useEffect(() => {
+    if (isGalleryHovered) return;
+    const interval = setInterval(() => {
+      setGalleryIndex((prev) => (prev + 1) % SHOWROOM_PHOTOS.length);
+    }, 4000);
+    return () => clearInterval(interval);
+  }, [isGalleryHovered]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -837,140 +857,90 @@ export default function ZubooHomePage() {
 
 
 
-      {/* 8. EXCELLENT PRODUCTS SHOWCASE & GALLE SHOWROOM GALLERY (Zuboo OEM White Showcase) */}
+      {/* 8. EXCELLENT PRODUCTS SHOWCASE & GALLE SHOWROOM GALLERY (Zuboo OEM Clean White Showcase) */}
       <section id="excellent-products" data-scroll-section className="reveal-section py-16 sm:py-24 bg-white text-slate-900 border-b border-slate-200 relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           {/* Section Header matching zuboo.com */}
-          <div className="text-center max-w-3xl mx-auto mb-8 sm:mb-10">
+          <div className="text-center max-w-3xl mx-auto mb-6 sm:mb-8">
             <h2 className="text-3xl sm:text-5xl font-black tracking-tight uppercase text-black font-manrope">
               EXCELLENT PRODUCTS
             </h2>
           </div>
 
-          {/* Model Switcher Tabs */}
-          <div className="flex items-center overflow-x-auto scrollbar-none sm:flex-wrap justify-start sm:justify-center gap-2 sm:gap-2.5 mb-8 pb-2 px-1 max-w-full">
-            {SHOWCASE_BIKES.map((bike, idx) => (
-              <button
-                key={bike.name}
-                onClick={() => setSelectedShowcaseBike(idx)}
-                className={`px-4 sm:px-5 py-2 rounded-full text-xs sm:text-sm font-bold transition-all duration-300 cursor-pointer shrink-0 whitespace-nowrap ${
-                  selectedShowcaseBike === idx
-                    ? "bg-black text-white shadow-md scale-105"
-                    : "bg-slate-100 hover:bg-slate-200 text-slate-700"
-                }`}
+          {/* Center Stage: Large Bike Model Cutout on Seamless Pure White with Prev / Next Arrows */}
+          <div
+            className="relative w-full max-w-4xl mx-auto flex items-center justify-center mb-10 sm:mb-14"
+            onMouseEnter={() => setIsBikeHovered(true)}
+            onMouseLeave={() => setIsBikeHovered(false)}
+          >
+            {/* Previous Bike Button */}
+            <button
+              onClick={() =>
+                setSelectedShowcaseBike(
+                  (prev) => (prev - 1 + SHOWCASE_BIKES.length) % SHOWCASE_BIKES.length
+                )
+              }
+              className="absolute left-0 sm:-left-6 lg:-left-8 top-1/2 -translate-y-1/2 z-20 w-11 h-11 sm:w-13 sm:h-13 rounded-full bg-white/90 hover:bg-white text-slate-800 border border-slate-200 shadow-md hover:shadow-xl flex items-center justify-center transition-all cursor-pointer hover:scale-105 active:scale-95"
+              aria-label="Previous bike model"
+            >
+              <ChevronLeft className="w-6 h-6" />
+            </button>
+
+            {/* Bike Horizontal Slide Track */}
+            <div className="w-full overflow-hidden bg-white">
+              <div
+                className="flex transition-transform duration-700 ease-[cubic-bezier(0.25,1,0.5,1)]"
+                style={{ transform: `translateX(-${selectedShowcaseBike * 100}%)` }}
               >
-                {bike.name}
-              </button>
-            ))}
-          </div>
-
-          {/* Center Stage: Large Bike Model Cutout on Pure White with Prev / Next Arrows */}
-          {(() => {
-            const currentBike = SHOWCASE_BIKES[selectedShowcaseBike];
-            return (
-              <div className="relative w-full max-w-4xl mx-auto flex flex-col items-center justify-center mb-12">
-                {/* Bike Display Canvas */}
-                <div className="relative w-full h-[320px] sm:h-[440px] md:h-[500px] flex items-center justify-center">
-                  {/* Previous Bike Button */}
-                  <button
-                    onClick={() =>
-                      setSelectedShowcaseBike(
-                        (prev) => (prev - 1 + SHOWCASE_BIKES.length) % SHOWCASE_BIKES.length
-                      )
-                    }
-                    className="absolute left-0 sm:-left-6 top-1/2 -translate-y-1/2 z-20 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white/90 hover:bg-white text-slate-800 border border-slate-200 shadow-lg hover:shadow-xl flex items-center justify-center transition-all cursor-pointer hover:scale-105"
-                    aria-label="Previous bike model"
+                {SHOWCASE_BIKES.map((bike, idx) => (
+                  <div
+                    key={bike.name}
+                    className="w-full shrink-0 flex items-center justify-center h-[320px] sm:h-[440px] md:h-[500px] px-2 sm:px-6 bg-white"
                   >
-                    <ChevronLeft className="w-6 h-6" />
-                  </button>
-
-                  {/* Main Studio Cutout Image */}
-                  <div className="relative w-full h-full max-w-2xl flex items-center justify-center transition-all duration-500">
-                    <Image
-                      src={currentBike.image}
-                      alt={currentBike.name}
-                      fill
-                      sizes="(max-width: 1024px) 100vw, 800px"
-                      className="object-contain drop-shadow-[0_20px_35px_rgba(0,0,0,0.12)] hover:scale-105 transition-transform duration-500"
-                      priority
-                    />
+                    <div className="relative w-full h-full max-w-2xl flex items-center justify-center">
+                      <Image
+                        src={bike.image}
+                        alt={bike.name}
+                        fill
+                        sizes="(max-width: 1024px) 100vw, 850px"
+                        className="object-contain mix-blend-multiply select-none drop-shadow-[0_20px_35px_rgba(0,0,0,0.08)] hover:scale-105 transition-transform duration-500"
+                        style={{ mixBlendMode: "multiply" }}
+                        priority={idx === 0}
+                      />
+                    </div>
                   </div>
-
-                  {/* Next Bike Button */}
-                  <button
-                    onClick={() =>
-                      setSelectedShowcaseBike((prev) => (prev + 1) % SHOWCASE_BIKES.length)
-                    }
-                    className="absolute right-0 sm:-right-6 top-1/2 -translate-y-1/2 z-20 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white/90 hover:bg-white text-slate-800 border border-slate-200 shadow-lg hover:shadow-xl flex items-center justify-center transition-all cursor-pointer hover:scale-105"
-                    aria-label="Next bike model"
-                  >
-                    <ChevronRight className="w-6 h-6" />
-                  </button>
-                </div>
-
-                {/* Subtle Bike Info Badge & Quick Actions */}
-                <div className="flex flex-wrap items-center justify-center gap-3 mt-4 text-xs font-semibold text-slate-600">
-                  <span className="bg-slate-100 text-slate-900 px-3.5 py-1.5 rounded-full border border-slate-200">
-                    {currentBike.name} • {currentBike.power}
-                  </span>
-                  <span className="bg-slate-100 text-slate-900 px-3.5 py-1.5 rounded-full border border-slate-200">
-                    Top Speed: {currentBike.speed}
-                  </span>
-                  <span className="bg-slate-100 text-emerald-700 px-3.5 py-1.5 rounded-full border border-slate-200">
-                    Range: {currentBike.range}
-                  </span>
-                  <span className="bg-orange-50 text-[#FF5E14] px-3.5 py-1.5 rounded-full border border-orange-200 font-bold">
-                    {currentBike.price}
-                  </span>
-                  <button
-                    onClick={() => {
-                      setTestRideBike(currentBike.name);
-                      setIsTestRideOpen(true);
-                    }}
-                    className="ml-1 px-4 py-1.5 rounded-full bg-[#FF5E14] hover:bg-[#E04D09] text-white font-bold text-xs uppercase tracking-wider transition-all shadow-sm cursor-pointer"
-                  >
-                    Book Test Ride
-                  </button>
-                </div>
-              </div>
-            );
-          })()}
-
-          {/* Lower Stage: 4 Clean Showroom Photo Thumbnails Directly Below Bike (Matching zuboo.com) */}
-          <div className="w-full max-w-5xl mx-auto pt-6 border-t border-slate-100">
-            <div className="flex items-center justify-between mb-4">
-              <span className="text-xs font-bold uppercase tracking-wider text-slate-500 font-manrope">
-                Galle Showroom Gallery ({galleryIndex + 1}–{Math.min(galleryIndex + 4, SHOWROOM_PHOTOS.length)} of {SHOWROOM_PHOTOS.length})
-              </span>
-              <div className="flex items-center gap-1.5">
-                <button
-                  onClick={() => setGalleryIndex((prev) => Math.max(0, prev - 1))}
-                  disabled={galleryIndex === 0}
-                  className="p-1.5 rounded-lg border border-slate-200 hover:bg-slate-100 text-slate-700 disabled:opacity-30 disabled:cursor-not-allowed transition-colors cursor-pointer"
-                  aria-label="Previous gallery photos"
-                >
-                  <ChevronLeft className="w-4 h-4" />
-                </button>
-                <button
-                  onClick={() => setGalleryIndex((prev) => Math.min(SHOWROOM_PHOTOS.length - 4, prev + 1))}
-                  disabled={galleryIndex >= SHOWROOM_PHOTOS.length - 4}
-                  className="p-1.5 rounded-lg border border-slate-200 hover:bg-slate-100 text-slate-700 disabled:opacity-30 disabled:cursor-not-allowed transition-colors cursor-pointer"
-                  aria-label="Next gallery photos"
-                >
-                  <ChevronRight className="w-4 h-4" />
-                </button>
+                ))}
               </div>
             </div>
 
+            {/* Next Bike Button */}
+            <button
+              onClick={() =>
+                setSelectedShowcaseBike((prev) => (prev + 1) % SHOWCASE_BIKES.length)
+              }
+              className="absolute right-0 sm:-right-6 lg:-right-8 top-1/2 -translate-y-1/2 z-20 w-11 h-11 sm:w-13 sm:h-13 rounded-full bg-white/90 hover:bg-white text-slate-800 border border-slate-200 shadow-md hover:shadow-xl flex items-center justify-center transition-all cursor-pointer hover:scale-105 active:scale-95"
+              aria-label="Next bike model"
+            >
+              <ChevronRight className="w-6 h-6" />
+            </button>
+          </div>
+
+          {/* Lower Stage: 4 Clean Showroom Photo Thumbnails Directly Below Bike (Matching zuboo.com) */}
+          <div
+            className="w-full max-w-5xl mx-auto pt-8 border-t border-slate-100"
+            onMouseEnter={() => setIsGalleryHovered(true)}
+            onMouseLeave={() => setIsGalleryHovered(false)}
+          >
             {/* 4 Clean Thumbnails in a Horizontal Row */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
-              {SHOWROOM_PHOTOS.slice(galleryIndex, galleryIndex + 4).map((photo, sliceIdx) => {
-                const originalIdx = galleryIndex + sliceIdx;
+              {Array.from({ length: 4 }, (_, i) => {
+                const photoIdx = (galleryIndex + i) % SHOWROOM_PHOTOS.length;
+                const photo = SHOWROOM_PHOTOS[photoIdx];
                 return (
                   <button
-                    key={photo.src}
-                    onClick={() => setLightboxPhotoIndex(originalIdx)}
-                    className="group relative aspect-[4/3] rounded-xl overflow-hidden border border-slate-200 hover:border-black shadow-xs hover:shadow-md transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-black cursor-pointer text-left bg-slate-50"
+                    key={`${photoIdx}-${photo.src}`}
+                    onClick={() => setLightboxPhotoIndex(photoIdx)}
+                    className="group relative aspect-[4/3] rounded-xl overflow-hidden border border-slate-200/80 hover:border-black shadow-xs hover:shadow-md transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-black cursor-pointer text-left bg-white"
                     title={photo.title}
                   >
                     <Image
@@ -980,7 +950,7 @@ export default function ZubooHomePage() {
                       sizes="(max-width: 640px) 50vw, 25vw"
                       className="object-cover group-hover:scale-105 transition-transform duration-500"
                     />
-                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center">
+                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/15 transition-colors flex items-center justify-center">
                       <span className="opacity-0 group-hover:opacity-100 transition-opacity bg-white/95 text-slate-900 p-2 rounded-full shadow-md">
                         <ZoomIn className="w-4 h-4" />
                       </span>

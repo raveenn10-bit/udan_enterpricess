@@ -591,11 +591,43 @@
     { src: "media/gallery/gallery-11.jpg", title: "Zuboo Premium Showroom Showcase", desc: "Modern indoor display featuring top-tier electric models and original accessories." }
   ];
 
+  let currentShowcaseIdx = 0;
+  window.currentShowcaseIdx = 0;
   let currentGalleryIndex = 0;
   let currentLightboxIndex = 0;
+  let isBikeHovered = false;
+  let isGalleryHovered = false;
 
   function initShowcaseAndGallery() {
     renderGalleryThumbs();
+
+    // Auto-cycle showcase bike every 3.5 seconds (pauses on hover)
+    setInterval(() => {
+      if (!isBikeHovered) {
+        currentShowcaseIdx = (currentShowcaseIdx + 1) % showcaseBikesData.length;
+        window.switchShowcaseBike(currentShowcaseIdx);
+      }
+    }, 3500);
+
+    // Auto-advance showroom gallery photos every 4 seconds (pauses on hover)
+    setInterval(() => {
+      if (!isGalleryHovered) {
+        currentGalleryIndex = (currentGalleryIndex + 1) % galleryPhotosData.length;
+        renderGalleryThumbs();
+      }
+    }, 4000);
+
+    const bikeStage = document.getElementById("showcase-bike-stage-container") || document.querySelector(".showcase-bike-display");
+    if (bikeStage) {
+      bikeStage.addEventListener("mouseenter", () => { isBikeHovered = true; });
+      bikeStage.addEventListener("mouseleave", () => { isBikeHovered = false; });
+    }
+
+    const galleryStrip = document.getElementById("showroom-gallery-strip-container") || document.querySelector(".showroom-gallery-strip");
+    if (galleryStrip) {
+      galleryStrip.addEventListener("mouseenter", () => { isGalleryHovered = true; });
+      galleryStrip.addEventListener("mouseleave", () => { isGalleryHovered = false; });
+    }
 
     // Lightbox keyboard navigation
     document.addEventListener("keydown", (e) => {
@@ -616,73 +648,59 @@
     if (!grid) return;
 
     grid.innerHTML = "";
-    const visiblePhotos = galleryPhotosData.slice(currentGalleryIndex, currentGalleryIndex + 4);
+    // Display 4 clean showroom photos in sequence with circular wrap
+    const visiblePhotos = Array.from({ length: 4 }, (_, i) => {
+      const idx = (currentGalleryIndex + i) % galleryPhotosData.length;
+      return { photo: galleryPhotosData[idx], originalIdx: idx };
+    });
 
-    visiblePhotos.forEach((photo, sliceIdx) => {
-      const originalIdx = currentGalleryIndex + sliceIdx;
+    visiblePhotos.forEach(({ photo, originalIdx }) => {
       const item = document.createElement("div");
       item.className = "gallery-thumb-item";
       item.title = photo.title;
+      item.style.cssText = "position: relative; aspect-ratio: 4/3; border-radius: 12px; overflow: hidden; border: 1px solid #e2e8f0; cursor: pointer; background: #ffffff; transition: all 0.3s ease;";
       item.innerHTML = `
-        <img src="${photo.src}" alt="${photo.title}" loading="lazy">
-        <span class="gallery-thumb-badge">#${originalIdx + 1}</span>
+        <img src="${photo.src}" alt="${photo.title}" loading="lazy" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease; display: block;">
       `;
+      item.onmouseenter = () => {
+        item.style.borderColor = "#000000";
+        item.style.transform = "translateY(-2px)";
+        const img = item.querySelector("img");
+        if (img) img.style.transform = "scale(1.05)";
+      };
+      item.onmouseleave = () => {
+        item.style.borderColor = "#e2e8f0";
+        item.style.transform = "translateY(0)";
+        const img = item.querySelector("img");
+        if (img) img.style.transform = "scale(1)";
+      };
       item.onclick = () => window.openShowroomLightbox(originalIdx);
       grid.appendChild(item);
     });
-
-    const rangeLabel = document.getElementById("gallery-range-label");
-    if (rangeLabel) {
-      rangeLabel.textContent = `${currentGalleryIndex + 1}–${Math.min(currentGalleryIndex + 4, galleryPhotosData.length)}`;
-    }
-
-    const prevBtn = document.getElementById("gallery-prev-btn");
-    const nextBtn = document.getElementById("gallery-next-btn");
-    if (prevBtn) prevBtn.disabled = currentGalleryIndex === 0;
-    if (nextBtn) nextBtn.disabled = currentGalleryIndex >= galleryPhotosData.length - 4;
   }
 
   window.switchShowcaseBike = function (idx) {
+    currentShowcaseIdx = idx;
+    window.currentShowcaseIdx = idx;
     const bike = showcaseBikesData[idx];
     if (!bike) return;
 
-    const pills = document.querySelectorAll(".model-pill");
-    pills.forEach((p, i) => {
-      if (i === idx) p.classList.add("active");
-      else p.classList.remove("active");
-    });
-
-    const badge = document.getElementById("showcase-badge");
-    const title = document.getElementById("showcase-title");
-    const desc = document.getElementById("showcase-desc");
-    const power = document.getElementById("showcase-power");
     const img = document.getElementById("showcase-image");
-    const speed = document.getElementById("showcase-speed");
-    const range = document.getElementById("showcase-range");
-    const price = document.getElementById("showcase-price");
-    const inquireLink = document.getElementById("showcase-inquire-link");
-
-    if (badge) badge.textContent = bike.badge;
-    if (title) title.textContent = bike.name;
-    if (desc) desc.textContent = bike.desc;
-    if (power) power.textContent = bike.power;
     if (img) {
-      img.src = bike.image;
-      img.alt = bike.name;
-    }
-    if (speed) speed.innerHTML = `⚡ Speed: <strong>${bike.speed}</strong>`;
-    if (range) range.innerHTML = `🔋 Range: <strong>${bike.range}</strong>`;
-    if (price) price.innerHTML = `💰 <strong>${bike.price}</strong>`;
-    if (inquireLink) {
-      inquireLink.href = `https://wa.me/94784969652?text=${encodeURIComponent(
-        `Hello Udan Enterprises, I would like to inquire about the ${bike.name} (${bike.power}) at your Galle showroom.`
-      )}`;
+      img.style.opacity = "0.2";
+      img.style.transform = "scale(0.98)";
+      setTimeout(() => {
+        img.src = bike.image;
+        img.alt = bike.name;
+        img.style.mixBlendMode = "multiply";
+        img.style.opacity = "1";
+        img.style.transform = "scale(1)";
+      }, 150);
     }
   };
 
   window.slideGallery = function (dir) {
-    const maxIdx = galleryPhotosData.length - 4;
-    currentGalleryIndex = Math.max(0, Math.min(maxIdx, currentGalleryIndex + dir));
+    currentGalleryIndex = (currentGalleryIndex + dir + galleryPhotosData.length) % galleryPhotosData.length;
     renderGalleryThumbs();
   };
 
