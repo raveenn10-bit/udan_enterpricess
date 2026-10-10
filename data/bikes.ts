@@ -116,7 +116,6 @@ export const ZUBOO_COLLECTION: BikeModel[] = [
       "Heavy-duty long travel front hydraulic suspension"
     ],
     mainImage: "/media/bikes/the-tank/main.webp",
-    originalPoster: "/media/bikes/the-tank/original.jpg",
     isFeatured: true,
     provisionalNotes: [
       "Exact battery chemistry and dimensions to be verified with showroom.",
@@ -158,7 +157,6 @@ export const ZUBOO_COLLECTION: BikeModel[] = [
       "Vintage chrome styling accents and mirrors"
     ],
     mainImage: "/media/bikes/paris/main.webp",
-    originalPoster: "/media/bikes/paris/original.jpg",
     isFeatured: true,
     provisionalNotes: [
       "Promotional price of Rs 330,000 marked as promotional; confirm showroom retail list."
@@ -199,7 +197,6 @@ export const ZUBOO_COLLECTION: BikeModel[] = [
       "Safety climbing assist mode"
     ],
     mainImage: "/media/bikes/t11/main.webp",
-    originalPoster: "/media/bikes/t11/original.jpg",
     provisionalNotes: [
       "Battery type specified as Tianneng Lead-acid on original promo poster."
     ]
@@ -239,7 +236,6 @@ export const ZUBOO_COLLECTION: BikeModel[] = [
       "Available in 5 custom colorways"
     ],
     mainImage: "/media/bikes/t3/main.webp",
-    originalPoster: "/media/bikes/t3/original.jpg",
     colors: [
       { name: "Matte Black", hex: "#1e1e1e", image: "/bikes/t3/t3-black.webp" },
       { name: "Charcoal Grey", hex: "#4b5563", image: "/bikes/t3/t3-grey.webp" },
@@ -286,7 +282,6 @@ export const ZUBOO_COLLECTION: BikeModel[] = [
       "Integrated USB mobile charging socket"
     ],
     mainImage: "/media/bikes/ex008/main.webp",
-    originalPoster: "/media/bikes/ex008/original.jpg",
     provisionalNotes: [
       "Battery capacity specification to be verified on physical spec plate."
     ]
@@ -326,7 +321,6 @@ export const ZUBOO_COLLECTION: BikeModel[] = [
       "Platinum single kickstand & sturdy center stand"
     ],
     mainImage: "/media/bikes/kb1/main.webp",
-    originalPoster: "/media/bikes/kb1/original.jpg",
     provisionalNotes: [
       "Motor wattage marked as variable; confirm rated vs peak watt."
     ]
@@ -366,7 +360,6 @@ export const ZUBOO_COLLECTION: BikeModel[] = [
       "Eco low-speed safe cruising mode"
     ],
     mainImage: "/media/bikes/mini/main.webp",
-    originalPoster: "/media/bikes/mini/original.jpg",
     provisionalNotes: [
       "Entry-level lightweight model. 1 year warranty as per promotional poster."
     ]
