@@ -2675,6 +2675,14 @@ footer.oem-footer {
     gap: 20px;
     padding-bottom: 18px;
   }
+  .footer-nav-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+  .footer-nav-list li {
+    margin-bottom: 0;
+  }
   .brand-col {
     grid-column: span 1;
   }

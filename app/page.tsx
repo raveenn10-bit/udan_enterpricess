@@ -1056,11 +1056,21 @@ export default function ZubooHomePage() {
                 {/* 1. Address */}
                 <div className="flex items-start gap-3.5 p-4 bg-slate-50 rounded-2xl border border-slate-200">
                   <MapPin className="w-5 h-5 text-[#FF5E14] shrink-0 mt-0.5" />
-                  <div>
+                  <div className="flex-1">
                     <h4 className="text-xs font-black uppercase text-slate-900">Showroom Address</h4>
                     <p className="text-xs text-slate-600 mt-1 leading-relaxed">
                       Udugama Road, Kurunduwatta, Galle, Sri Lanka
                     </p>
+                    <a
+                      href="https://maps.app.goo.gl/GyJCSSS7p6Bd18xM8"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 text-xs font-bold text-blue-600 hover:text-blue-700 mt-2 transition-colors group"
+                    >
+                      <MapPin className="w-3.5 h-3.5 text-blue-600" />
+                      <span>Open in Google Maps</span>
+                      <ExternalLink className="w-3 h-3 opacity-80 group-hover:translate-x-0.5 transition-transform" />
+                    </a>
                   </div>
                 </div>
 
@@ -1101,6 +1111,17 @@ export default function ZubooHomePage() {
 
               {/* Direct CTA Buttons */}
               <div className="flex flex-wrap items-center gap-3 pt-2">
+                <a
+                  href="https://maps.app.goo.gl/GyJCSSS7p6Bd18xM8"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold uppercase tracking-wider transition-colors shadow-md shadow-blue-600/20"
+                >
+                  <MapPin className="w-4 h-4" />
+                  <span>Google Maps</span>
+                  <ExternalLink className="w-3.5 h-3.5 opacity-80" />
+                </a>
+
                 <a
                   href="https://wa.me/94784969652"
                   target="_blank"

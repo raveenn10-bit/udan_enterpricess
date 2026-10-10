@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, CheckCircle2, ArrowUp } from "lucide-react";
+import { ArrowRight, CheckCircle2, ArrowUp, MapPin, ExternalLink } from "lucide-react";
 import { db } from "@/lib/firebase";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import { useTranslation } from "@/lib/i18n";
@@ -498,6 +498,18 @@ export default function Footer() {
                     {t.phone_label}
                   </a>
                 </div>
+                <div className="pt-0.5">
+                  <a
+                    href="https://maps.app.goo.gl/GyJCSSS7p6Bd18xM8"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 text-[11px] font-bold text-white bg-white/10 hover:bg-[#FF5E14] px-3 py-1.5 rounded-lg border border-white/15 transition-all mt-1.5"
+                  >
+                    <MapPin className="w-3.5 h-3.5 text-[#FF5E14]" />
+                    <span>View on Google Maps</span>
+                    <ExternalLink className="w-3 h-3 opacity-70" />
+                  </a>
+                </div>
               </div>
 
               {/* Social Media Cluster with Animated Rings */}
@@ -554,68 +566,101 @@ export default function Footer() {
               <h4 className="footer-col-title text-[11px] font-extrabold uppercase tracking-[1.5px] text-[#E2E8F0] flex items-center gap-1.5">
                 <span className="footer-slash text-[#FF5E14]">/</span> {t.footer_models}
               </h4>
-              <ul className="footer-nav-list space-y-1.5 text-xs font-medium text-slate-300">
+              <ul className="footer-nav-list grid grid-cols-2 md:grid-cols-1 gap-2 text-xs font-medium text-slate-300">
                 <li>
-                  <Link href="/bikes/t3" className="footer-nav-link group hover:text-white transition-all flex items-center justify-between">
-                    <span className="flex items-center gap-1.5">
-                      <span className="arrow-bullet text-[#FF2222] font-black text-xs transition-transform duration-200 group-hover:translate-x-1">›</span>
-                      <span>Zuboo T3</span>
+                  <Link
+                    href="/bikes/t3"
+                    className="footer-nav-link group p-2.5 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 hover:border-[#FF5E14]/50 transition-all flex items-center justify-between"
+                  >
+                    <span className="flex items-center gap-1.5 min-w-0">
+                      <span className="arrow-bullet text-[#FF2222] font-black text-xs transition-transform duration-200 group-hover:translate-x-0.5 shrink-0">›</span>
+                      <span className="truncate group-hover:text-white">Zuboo T3</span>
                     </span>
-                    <span className="text-[10px] px-1.5 py-0.5 rounded bg-[#FF5E14]/15 text-[#FF5E14] font-bold border border-[#FF5E14]/30">2000W</span>
+                    <span className="text-[10px] px-1.5 py-0.5 rounded bg-[#FF5E14]/15 text-[#FF5E14] font-bold border border-[#FF5E14]/30 shrink-0 ml-1">2000W</span>
                   </Link>
                 </li>
                 <li>
-                  <Link href="/bikes/gt" className="footer-nav-link group hover:text-white transition-all flex items-center justify-between">
-                    <span className="flex items-center gap-1.5">
-                      <span className="arrow-bullet text-[#FF2222] font-black text-xs transition-transform duration-200 group-hover:translate-x-1">›</span>
-                      <span>Zuboo GT</span>
+                  <Link
+                    href="/bikes/gt"
+                    className="footer-nav-link group p-2.5 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 hover:border-[#FF5E14]/50 transition-all flex items-center justify-between"
+                  >
+                    <span className="flex items-center gap-1.5 min-w-0">
+                      <span className="arrow-bullet text-[#FF2222] font-black text-xs transition-transform duration-200 group-hover:translate-x-0.5 shrink-0">›</span>
+                      <span className="truncate group-hover:text-white">Zuboo GT</span>
                     </span>
-                    <span className="text-[10px] px-1.5 py-0.5 rounded bg-white/10 text-slate-300 font-bold">1800W</span>
+                    <span className="text-[10px] px-1.5 py-0.5 rounded bg-white/10 text-slate-300 font-bold shrink-0 ml-1">1800W</span>
                   </Link>
                 </li>
                 <li>
-                  <Link href="/bikes/the-tank" className="footer-nav-link group hover:text-white transition-all flex items-center justify-between">
-                    <span className="flex items-center gap-1.5">
-                      <span className="arrow-bullet text-[#FF2222] font-black text-xs transition-transform duration-200 group-hover:translate-x-1">›</span>
-                      <span>Zuboo The Tank</span>
+                  <Link
+                    href="/bikes/the-tank"
+                    className="footer-nav-link group p-2.5 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 hover:border-[#FF5E14]/50 transition-all flex items-center justify-between"
+                  >
+                    <span className="flex items-center gap-1.5 min-w-0">
+                      <span className="arrow-bullet text-[#FF2222] font-black text-xs transition-transform duration-200 group-hover:translate-x-0.5 shrink-0">›</span>
+                      <span className="truncate group-hover:text-white">Zuboo The Tank</span>
                     </span>
-                    <span className="text-[10px] px-1.5 py-0.5 rounded bg-[#FF5E14]/15 text-[#FF5E14] font-bold border border-[#FF5E14]/30">3000W</span>
+                    <span className="text-[10px] px-1.5 py-0.5 rounded bg-[#FF5E14]/15 text-[#FF5E14] font-bold border border-[#FF5E14]/30 shrink-0 ml-1">3000W</span>
                   </Link>
                 </li>
                 <li>
-                  <Link href="/bikes/paris" className="footer-nav-link group hover:text-white transition-all flex items-center justify-between">
-                    <span className="flex items-center gap-1.5">
-                      <span className="arrow-bullet text-[#FF2222] font-black text-xs transition-transform duration-200 group-hover:translate-x-1">›</span>
-                      <span>Zuboo Paris</span>
+                  <Link
+                    href="/bikes/paris"
+                    className="footer-nav-link group p-2.5 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 hover:border-[#FF5E14]/50 transition-all flex items-center justify-between"
+                  >
+                    <span className="flex items-center gap-1.5 min-w-0">
+                      <span className="arrow-bullet text-[#FF2222] font-black text-xs transition-transform duration-200 group-hover:translate-x-0.5 shrink-0">›</span>
+                      <span className="truncate group-hover:text-white">Zuboo Paris</span>
                     </span>
-                    <span className="text-[10px] px-1.5 py-0.5 rounded bg-white/10 text-slate-300 font-bold">Retro</span>
+                    <span className="text-[10px] px-1.5 py-0.5 rounded bg-white/10 text-slate-300 font-bold shrink-0 ml-1">Retro</span>
                   </Link>
                 </li>
                 <li>
-                  <Link href="/bikes/t11" className="footer-nav-link group hover:text-white transition-all flex items-center justify-between">
-                    <span className="flex items-center gap-1.5">
-                      <span className="arrow-bullet text-[#FF2222] font-black text-xs transition-transform duration-200 group-hover:translate-x-1">›</span>
-                      <span>Zuboo T11</span>
+                  <Link
+                    href="/bikes/t11"
+                    className="footer-nav-link group p-2.5 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 hover:border-[#FF5E14]/50 transition-all flex items-center justify-between"
+                  >
+                    <span className="flex items-center gap-1.5 min-w-0">
+                      <span className="arrow-bullet text-[#FF2222] font-black text-xs transition-transform duration-200 group-hover:translate-x-0.5 shrink-0">›</span>
+                      <span className="truncate group-hover:text-white">Zuboo T11</span>
                     </span>
-                    <span className="text-[10px] px-1.5 py-0.5 rounded bg-white/10 text-slate-300 font-bold">Sport</span>
+                    <span className="text-[10px] px-1.5 py-0.5 rounded bg-white/10 text-slate-300 font-bold shrink-0 ml-1">Sport</span>
                   </Link>
                 </li>
                 <li>
-                  <Link href="/bikes/mini" className="footer-nav-link group hover:text-white transition-all flex items-center justify-between">
-                    <span className="flex items-center gap-1.5">
-                      <span className="arrow-bullet text-[#FF2222] font-black text-xs transition-transform duration-200 group-hover:translate-x-1">›</span>
-                      <span>Zuboo Mini</span>
+                  <Link
+                    href="/bikes/ex008"
+                    className="footer-nav-link group p-2.5 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 hover:border-[#FF5E14]/50 transition-all flex items-center justify-between"
+                  >
+                    <span className="flex items-center gap-1.5 min-w-0">
+                      <span className="arrow-bullet text-[#FF2222] font-black text-xs transition-transform duration-200 group-hover:translate-x-0.5 shrink-0">›</span>
+                      <span className="truncate group-hover:text-white">Zuboo EX008</span>
                     </span>
-                    <span className="text-[10px] px-1.5 py-0.5 rounded bg-white/10 text-slate-300 font-bold">City</span>
+                    <span className="text-[10px] px-1.5 py-0.5 rounded bg-[#FF5E14]/15 text-[#FF5E14] font-bold border border-[#FF5E14]/30 shrink-0 ml-1">2000W</span>
                   </Link>
                 </li>
                 <li>
-                  <Link href="/bikes/kb1" className="footer-nav-link group hover:text-white transition-all flex items-center justify-between">
-                    <span className="flex items-center gap-1.5">
-                      <span className="arrow-bullet text-[#FF2222] font-black text-xs transition-transform duration-200 group-hover:translate-x-1">›</span>
-                      <span>Zuboo KB1</span>
+                  <Link
+                    href="/bikes/mini"
+                    className="footer-nav-link group p-2.5 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 hover:border-[#FF5E14]/50 transition-all flex items-center justify-between"
+                  >
+                    <span className="flex items-center gap-1.5 min-w-0">
+                      <span className="arrow-bullet text-[#FF2222] font-black text-xs transition-transform duration-200 group-hover:translate-x-0.5 shrink-0">›</span>
+                      <span className="truncate group-hover:text-white">Zuboo Mini</span>
                     </span>
-                    <span className="text-[10px] px-1.5 py-0.5 rounded bg-white/10 text-slate-300 font-bold">Utility</span>
+                    <span className="text-[10px] px-1.5 py-0.5 rounded bg-white/10 text-slate-300 font-bold shrink-0 ml-1">City</span>
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/bikes/kb1"
+                    className="footer-nav-link group p-2.5 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 hover:border-[#FF5E14]/50 transition-all flex items-center justify-between"
+                  >
+                    <span className="flex items-center gap-1.5 min-w-0">
+                      <span className="arrow-bullet text-[#FF2222] font-black text-xs transition-transform duration-200 group-hover:translate-x-0.5 shrink-0">›</span>
+                      <span className="truncate group-hover:text-white">Zuboo KB1</span>
+                    </span>
+                    <span className="text-[10px] px-1.5 py-0.5 rounded bg-white/10 text-slate-300 font-bold shrink-0 ml-1">Utility</span>
                   </Link>
                 </li>
               </ul>

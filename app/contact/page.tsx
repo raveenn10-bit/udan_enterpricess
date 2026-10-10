@@ -20,6 +20,7 @@ import {
   ShieldCheck,
   User,
   HelpCircle,
+  ExternalLink,
 } from "lucide-react";
 import { BIKE_MODELS } from "@/data/bikes";
 import { db } from "@/lib/firebase";
@@ -152,6 +153,16 @@ export default function ContactPage() {
                 </p>
                 <div className="pt-2 flex flex-wrap gap-3">
                   <a
+                    href="https://maps.app.goo.gl/GyJCSSS7p6Bd18xM8"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold uppercase tracking-wider transition-colors shadow-sm shadow-blue-600/20"
+                  >
+                    <MapPin className="w-3.5 h-3.5" />
+                    <span>View on Google Maps</span>
+                    <ExternalLink className="w-3.5 h-3.5 opacity-80" />
+                  </a>
+                  <a
                     href="tel:0784969652"
                     className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#111820] hover:bg-[#346C83] text-white text-xs font-bold uppercase tracking-wider transition-colors"
                   >
@@ -271,14 +282,23 @@ export default function ContactPage() {
                     Southern Province customer experience center & genuine Zuboo spare parts warehouse.
                   </p>
                 </div>
-                <div className="pt-4">
+                <div className="pt-4 flex flex-col gap-2">
+                  <a
+                    href="https://maps.app.goo.gl/GyJCSSS7p6Bd18xM8"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-blue-600 hover:text-blue-800 transition-colors"
+                  >
+                    <span>View on Google Maps</span>
+                    <ExternalLink className="w-3.5 h-3.5" />
+                  </a>
                   <a
                     href="https://wa.me/94784969652?text=Hi%20Udan%20Enterprises,%20please%20send%20me%20directions%20to%20your%20Galle%20showroom."
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-[#346C83] hover:text-[#111820] transition-colors"
                   >
-                    <span>Request Directions</span>
+                    <span>Request WhatsApp Directions</span>
                     <ArrowRight className="w-3.5 h-3.5" />
                   </a>
                 </div>
