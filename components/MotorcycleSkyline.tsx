@@ -1,0 +1,476 @@
+"use client";
+
+import React from "react";
+
+export default function MotorcycleSkyline() {
+  return (
+    <div className="udan-skyline-container" aria-hidden="true">
+      <svg
+        className="udan-skyline-svg"
+        viewBox="0 0 1440 260"
+        preserveAspectRatio="xMidYMax slice"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <defs>
+          {/* Deep Crimson Dusk Gradient */}
+          <linearGradient id="tsxSkyDuskGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stopColor="#080103" />
+            <stop offset="30%" stopColor="#1c0307" />
+            <stop offset="55%" stopColor="#3c050f" />
+            <stop offset="74%" stopColor="#5a0816" />
+            <stop offset="86%" stopColor="#7a0d1d" />
+            <stop offset="100%" stopColor="#140205" />
+          </linearGradient>
+
+          {/* Blood-Red Sun/Moon Radial Glow */}
+          <radialGradient id="tsxMoonGlowAura" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stopColor="#ff2632" stopOpacity="0.9" />
+            <stop offset="30%" stopColor="#e1081a" stopOpacity="0.6" />
+            <stop offset="62%" stopColor="#80040f" stopOpacity="0.25" />
+            <stop offset="100%" stopColor="#1a0205" stopOpacity="0" />
+          </radialGradient>
+
+          {/* Giant Crimson Sun/Moon Disc */}
+          <linearGradient id="tsxMoonDiscGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stopColor="#ff5845" />
+            <stop offset="40%" stopColor="#ff1a26" />
+            <stop offset="100%" stopColor="#880611" />
+          </linearGradient>
+
+          {/* Headlight Projector Conical Beam Gradient */}
+          <linearGradient id="tsxHeadlightBeamGrad" x1="0%" y1="50%" x2="100%" y2="50%">
+            <stop offset="0%" stopColor="#ffffff" stopOpacity="0.98" />
+            <stop offset="18%" stopColor="#fff5cc" stopOpacity="0.85" />
+            <stop offset="45%" stopColor="#ffc107" stopOpacity="0.45" />
+            <stop offset="75%" stopColor="#ff7043" stopOpacity="0.16" />
+            <stop offset="100%" stopColor="#ff5722" stopOpacity="0" />
+          </linearGradient>
+
+          {/* Headlight Road Asphalt Puddle Reflection */}
+          <radialGradient id="tsxRoadLightPuddle" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stopColor="#fff59d" stopOpacity="0.65" />
+            <stop offset="35%" stopColor="#ffb300" stopOpacity="0.32" />
+            <stop offset="70%" stopColor="#e65100" stopOpacity="0.1" />
+            <stop offset="100%" stopColor="#bf360c" stopOpacity="0" />
+          </radialGradient>
+
+          {/* Tail Light Speed Streaks Gradient */}
+          <linearGradient id="tsxSpeedStreakGrad" x1="100%" y1="50%" x2="0%" y2="50%">
+            <stop offset="0%" stopColor="#ffffff" stopOpacity="1" />
+            <stop offset="12%" stopColor="#ff3344" stopOpacity="0.95" />
+            <stop offset="45%" stopColor="#e60012" stopOpacity="0.65" />
+            <stop offset="80%" stopColor="#8a000c" stopOpacity="0.2" />
+            <stop offset="100%" stopColor="#ff0015" stopOpacity="0" />
+          </linearGradient>
+
+          {/* Streetlight Ambient Downward Cone */}
+          <linearGradient id="tsxLampConeGrad" x1="50%" y1="0%" x2="50%" y2="100%">
+            <stop offset="0%" stopColor="#fff9c4" stopOpacity="0.8" />
+            <stop offset="35%" stopColor="#ffb74d" stopOpacity="0.4" />
+            <stop offset="75%" stopColor="#ff9800" stopOpacity="0.14" />
+            <stop offset="100%" stopColor="#ff6d00" stopOpacity="0" />
+          </linearGradient>
+
+          {/* Colombo Lotus Tower Petal Gradient */}
+          <linearGradient id="tsxLotusPetalGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stopColor="#ff2e52" />
+            <stop offset="50%" stopColor="#c90829" />
+            <stop offset="100%" stopColor="#4e000c" />
+          </linearGradient>
+
+          {/* Neon Edge Bloom Filter */}
+          <filter id="tsxNeonBloom" x="-20%" y="-40%" width="140%" height="180%">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="6" result="blurWide" />
+            <feGaussianBlur in="SourceGraphic" stdDeviation="2" result="blurSharp" />
+            <feMerge>
+              <feMergeNode in="blurWide" />
+              <feMergeNode in="blurSharp" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
+
+          {/* Headlight Lens Flare Glow Filter */}
+          <filter id="tsxBulbGlow" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur stdDeviation="3.5" result="blur" />
+            <feMerge>
+              <feMergeNode in="blur" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
+
+          {/* Chevron Road Warning Sign Symbol */}
+          <g id="tsxChevronSign">
+            <rect x="-9" y="-13" width="18" height="26" rx="2.5" fill="#0c0204" stroke="#ff2632" strokeWidth="1.3" />
+            <polyline points="-3.5,-8 2.5,0 -3.5,8" fill="none" stroke="#ff2632" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
+            <line x1="0" y1="13" x2="0" y2="30" stroke="#120406" strokeWidth="2.6" />
+          </g>
+
+          {/* Arched Highway Streetlamp Symbol */}
+          <g id="tsxHighwayLamp">
+            <path d="M 0 0 L 0 -62 C 0 -73 13 -77 24 -73" fill="none" stroke="#130306" strokeWidth="2.2" />
+            <ellipse cx="25" cy="-72" rx="4" ry="1.8" fill="#2c050c" />
+            <circle cx="25" cy="-71" r="2.5" fill="#fff9c4" filter="url(#tsxBulbGlow)" />
+            <polygon points="23,-70 38,0 8,0" fill="url(#tsxLampConeGrad)" />
+          </g>
+        </defs>
+
+        <style>{`
+          .wheel-spin {
+            animation: udanWheelRoll 0.4s linear infinite;
+            transform-box: fill-box;
+            transform-origin: center center;
+          }
+          @keyframes udanWheelRoll {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+          }
+          .bike-chassis-bounce {
+            animation: udanSuspension 0.25s ease-in-out infinite alternate;
+          }
+          @keyframes udanSuspension {
+            0% { transform: translateY(0px); }
+            100% { transform: translateY(-0.9px); }
+          }
+          .beam-shimmer {
+            animation: udanBeamPulse 2.4s ease-in-out infinite alternate;
+          }
+          @keyframes udanBeamPulse {
+            0% { opacity: 0.84; transform: scaleY(0.97); }
+            100% { opacity: 1; transform: scaleY(1.03); }
+          }
+          .lotus-beacon {
+            animation: udanBeaconBlink 1.1s ease-in-out infinite alternate;
+          }
+          @keyframes udanBeaconBlink {
+            0% { opacity: 0.3; transform: scale(0.85); }
+            100% { opacity: 1; transform: scale(1.5); }
+          }
+          .sky-ember {
+            animation: udanEmberFloat 4.2s ease-in-out infinite;
+          }
+          .ember-1 { animation-delay: 0s; }
+          .ember-2 { animation-delay: 0.9s; }
+          .ember-3 { animation-delay: 1.8s; }
+          .ember-4 { animation-delay: 2.7s; }
+          .ember-5 { animation-delay: 3.5s; }
+          @keyframes udanEmberFloat {
+            0% { transform: translateY(0) translateX(0); opacity: 0; }
+            20% { opacity: 0.9; }
+            70% { opacity: 0.55; }
+            100% { transform: translateY(-46px) translateX(22px); opacity: 0; }
+          }
+          .speed-trail {
+            animation: udanTrailStretch 0.5s ease-in-out infinite alternate;
+          }
+          @keyframes udanTrailStretch {
+            0% { opacity: 0.8; transform: scaleX(0.94); }
+            100% { opacity: 1; transform: scaleX(1.06); }
+          }
+          .neon-glow-line {
+            animation: udanNeonPulse 3.2s ease-in-out infinite alternate;
+          }
+          @keyframes udanNeonPulse {
+            0% { filter: drop-shadow(0 0 6px #ff1f24); }
+            100% { filter: drop-shadow(0 0 16px #ff1f24) drop-shadow(0 0 5px #ff6666); }
+          }
+          @media (prefers-reduced-motion: reduce) {
+            .wheel-spin,
+            .bike-chassis-bounce,
+            .beam-shimmer,
+            .lotus-beacon,
+            .sky-ember,
+            .speed-trail,
+            .neon-glow-line {
+              animation: none !important;
+            }
+            #tsxTravelingRiderGroup animateMotion {
+              display: none !important;
+            }
+          }
+        `}</style>
+
+        {/* 1. ATMOSPHERIC DUSK SKY */}
+        <rect x="0" y="0" width="1440" height="260" fill="url(#tsxSkyDuskGrad)" />
+
+        {/* 2. DISTANT MOUNTAINS */}
+        <path
+          d="M -20 180 Q 140 120 280 145 T 620 150 T 960 125 T 1240 142 T 1460 135 L 1460 260 L -20 260 Z"
+          fill="#1a0308"
+          opacity="0.88"
+        />
+        <path
+          d="M -20 185 Q 190 140 370 162 T 740 160 T 1110 145 T 1460 152 L 1460 260 L -20 260 Z"
+          fill="#120206"
+          opacity="0.92"
+        />
+
+        {/* 3. GIANT CRIMSON SUN / MOON */}
+        <circle cx="890" cy="142" r="125" fill="url(#tsxMoonGlowAura)" />
+        <circle cx="890" cy="142" r="65" fill="url(#tsxMoonDiscGrad)" />
+        <line x1="828" y1="152" x2="952" y2="152" stroke="#0e0204" strokeWidth="2.2" opacity="0.8" />
+        <line x1="834" y1="160" x2="946" y2="160" stroke="#0e0204" strokeWidth="2.6" opacity="0.8" />
+        <line x1="844" y1="168" x2="936" y2="168" stroke="#0e0204" strokeWidth="3" opacity="0.85" />
+
+        {/* 4. DEEP BACKGROUND CITY SILHOUETTE */}
+        <g fill="#100205" opacity="0.75">
+          <rect x="180" y="105" width="22" height="75" />
+          <rect x="206" y="118" width="16" height="62" />
+          <rect x="230" y="92" width="28" height="88" />
+          <line x1="244" y1="92" x2="244" y2="76" stroke="#100205" strokeWidth="1.8" />
+          <rect x="270" y="125" width="20" height="55" />
+          <rect x="330" y="110" width="32" height="70" />
+          <rect x="375" y="128" width="24" height="52" />
+          <rect x="420" y="138" width="26" height="42" />
+
+          <rect x="540" y="112" width="28" height="68" />
+          <rect x="580" y="105" width="32" height="75" />
+          <rect x="620" y="82" width="40" height="98" />
+          <line x1="640" y1="82" x2="640" y2="65" stroke="#100205" strokeWidth="1.6" />
+          <rect x="670" y="115" width="26" height="65" />
+          <rect x="710" y="96" width="36" height="84" />
+          <rect x="755" y="122" width="30" height="58" />
+
+          <rect x="970" y="88" width="36" height="92" />
+          <line x1="988" y1="88" x2="988" y2="68" stroke="#100205" strokeWidth="1.8" />
+          <rect x="1014" y="102" width="28" height="78" />
+          <rect x="1050" y="115" width="32" height="65" />
+          <rect x="1095" y="95" width="28" height="85" />
+          <rect x="1135" y="120" width="24" height="60" />
+          <rect x="1170" y="105" width="36" height="75" />
+          <rect x="1230" y="128" width="26" height="52" />
+          <rect x="1270" y="112" width="26" height="68" />
+          <rect x="1330" y="124" width="24" height="56" />
+        </g>
+
+        {/* 5. MIDGROUND CITY SKYLINE + COLOMBO LOTUS TOWER */}
+        <g fill="#080103">
+          <polygon points="610,76 630,70 636,180 606,180" />
+          <polygon points="638,90 656,84 674,180 656,180" />
+
+          <rect x="678" y="88" width="38" height="92" />
+          <polygon points="687,88 697,60 707,88" />
+          <line x1="697" y1="60" x2="697" y2="44" stroke="#080103" strokeWidth="2" />
+
+          <rect x="724" y="104" width="30" height="76" />
+          <rect x="762" y="116" width="36" height="64" />
+
+          {/* COLOMBO LOTUS TOWER (NELUM KULUNA) */}
+          <polygon points="822,185 824,110 830,110 832,185" fill="#080103" />
+          <path d="M 821 112 Q 827 115 833 112 L 832 108 L 822 108 Z" fill="#1b0307" />
+          <path
+            d="M 822 108 C 810 100, 809 78, 827 68 C 845 78, 844 100, 832 108 Z"
+            fill="url(#tsxLotusPetalGrad)"
+          />
+          <path d="M 827 108 Q 827 85 827 68" stroke="#ff4d6d" strokeWidth="1.3" fill="none" opacity="0.88" />
+          <path d="M 822 98 Q 826 85 827 68" stroke="#ff4d6d" strokeWidth="1" fill="none" opacity="0.75" />
+          <path d="M 832 98 Q 828 85 827 68" stroke="#ff4d6d" strokeWidth="1" fill="none" opacity="0.75" />
+          <rect x="823" y="61" width="8" height="7" rx="1.5" fill="#080103" />
+          <line x1="827" y1="61" x2="827" y2="24" stroke="#080103" strokeWidth="2.2" />
+          <line x1="827" y1="24" x2="827" y2="18" stroke="#080103" strokeWidth="1.2" />
+          <circle cx="827" cy="18" r="2.4" fill="#ff1f24" className="lotus-beacon" />
+          <circle cx="827" cy="18" r="5" fill="#ff1f24" opacity="0.45" className="lotus-beacon" />
+
+          {/* Center-Right Skyscrapers */}
+          <rect x="850" y="92" width="38" height="88" />
+          <polygon points="861,92 869,70 877,92" />
+          <line x1="869" y1="70" x2="869" y2="52" stroke="#080103" strokeWidth="1.8" />
+          <rect x="898" y="112" width="32" height="68" />
+          <rect x="938" y="95" width="40" height="85" />
+          <rect x="988" y="80" width="46" height="100" />
+          <line x1="1000" y1="80" x2="1000" y2="58" stroke="#080103" strokeWidth="1.8" />
+          <line x1="1022" y1="80" x2="1022" y2="58" stroke="#080103" strokeWidth="1.8" />
+          <circle cx="1000" cy="58" r="1.6" fill="#ff2632" className="lotus-beacon" />
+          <circle cx="1022" cy="58" r="1.6" fill="#ff2632" className="lotus-beacon" />
+          <rect x="1044" y="108" width="34" height="72" />
+          <rect x="1088" y="125" width="28" height="55" />
+          <rect x="1126" y="110" width="38" height="70" />
+        </g>
+
+        {/* Windows */}
+        <g fill="#ffe082" opacity="0.7">
+          <rect x="614" y="95" width="2" height="3" /><rect x="620" y="95" width="2" height="3" /><rect x="626" y="95" width="2" height="3" />
+          <rect x="614" y="108" width="2" height="3" /><rect x="620" y="108" width="2" height="3" /><rect x="626" y="108" width="2" height="3" />
+          <rect x="614" y="120" width="2" height="3" /><rect x="620" y="120" width="2" height="3" /><rect x="626" y="120" width="2" height="3" />
+          <rect x="684" y="102" width="2" height="3" /><rect x="694" y="102" width="2" height="3" /><rect x="704" y="102" width="2" height="3" />
+          <rect x="684" y="114" width="2" height="3" /><rect x="694" y="114" width="2" height="3" /><rect x="704" y="114" width="2" height="3" />
+          <rect x="856" y="104" width="2" height="3" /><rect x="866" y="104" width="2" height="3" /><rect x="876" y="104" width="2" height="3" />
+          <rect x="944" y="106" width="2" height="3" /><rect x="956" y="106" width="2" height="3" /><rect x="968" y="106" width="2" height="3" />
+          <rect x="996" y="92" width="2" height="3" /><rect x="1008" y="92" width="2" height="3" /><rect x="1022" y="92" width="2" height="3" />
+        </g>
+
+        {/* 6. HIGHWAY STREETLIGHTS */}
+        <use href="#tsxHighwayLamp" x="280" y="150" />
+        <use href="#tsxHighwayLamp" x="580" y="186" />
+        <use href="#tsxHighwayLamp" x="880" y="184" />
+        <use href="#tsxHighwayLamp" x="1180" y="196" />
+        <use href="#tsxHighwayLamp" x="1360" y="165" />
+
+        {/* 7. WARNING CHEVRONS */}
+        <use href="#tsxChevronSign" x="75" y="152" transform="rotate(-6 75 152)" />
+        <use href="#tsxChevronSign" x="420" y="174" transform="rotate(3 420 174)" />
+        <use href="#tsxChevronSign" x="1290" y="172" transform="rotate(-4 1290 172)" />
+
+        {/* 8. SCENIC STATIONARY MOTORCYCLE SILHOUETTES */}
+        {/* Adventure / Naked Tourer */}
+        <g transform="translate(510, 184) scale(1.05)" fill="#050102">
+          <circle cx="-25" cy="-12" r="11.5" /><circle cx="-25" cy="-12" r="8" fill="#140206" />
+          <circle cx="25" cy="-12" r="11.5" /><circle cx="25" cy="-12" r="8" fill="#140206" />
+          <path d="M -25 -12 L -12 -18 L 4 -12 L 25 -12 L 18 -26 L 5 -25 L -4 -29 L -14 -25 L -25 -21 Z" />
+          <path d="M 5 -25 L 14 -33 L 25 -31 L 19 -26 Z" />
+          <polygon points="17,-34 22,-44 25,-42 21,-33" fill="#050102" />
+          <line x1="14" y1="-33" x2="16" y2="-40" stroke="#050102" strokeWidth="2.2" />
+          <circle cx="4" cy="-48" r="5.2" />
+          <path d="M 7 -49 L 9 -47 L 7 -46 Z" fill="#ff707a" />
+          <path d="M -3 -43 L 8 -42 L 6 -29 L -6 -29 Z" />
+          <path d="M 4 -40 L 16 -38" stroke="#050102" strokeWidth="2.6" strokeLinecap="round" />
+          <path d="M -4 -29 L 2 -19 L -3 -16" stroke="#050102" strokeWidth="3.2" strokeLinecap="round" strokeLinejoin="round" />
+          <polygon points="-16,-26 -26,-29 -24,-25 -14,-23" />
+        </g>
+
+        {/* Electric Commuter Scooter */}
+        <g transform="translate(710, 177) scale(1.02)" fill="#050102">
+          <circle cx="-23" cy="-10" r="10" /><circle cx="-23" cy="-10" r="6.5" fill="#130205" />
+          <circle cx="23" cy="-10" r="10" /><circle cx="23" cy="-10" r="6.5" fill="#130205" />
+          <rect x="-8" y="-9" width="16" height="4.5" rx="1.5" />
+          <path d="M 6 -9 L 17 -12 L 22 -26 L 15 -29 L 8 -17 Z" />
+          <path d="M -24 -14 C -22 -23, -10 -23, 6 -17 L 4 -13 L -21 -11 Z" />
+          <line x1="17" y1="-29" x2="15" y2="-35" stroke="#050102" strokeWidth="2.4" />
+          <circle cx="-2" cy="-46" r="5.4" />
+          <polygon points="2,-47 4.5,-45 2,-44" fill="#ff707a" />
+          <path d="M -8 -41 L 2 -40 L 1 -22 L -9 -22 Z" />
+          <path d="M 0 -37 L 15 -34" stroke="#050102" strokeWidth="2.4" strokeLinecap="round" />
+          <path d="M -1 -22 L 6 -13 L 4 -9" stroke="#050102" strokeWidth="3.2" strokeLinecap="round" strokeLinejoin="round" />
+          <polygon points="23,-23 100,-29 106,-9 24,-17" fill="url(#tsxHeadlightBeamGrad)" opacity="0.48" />
+        </g>
+
+        {/* Sportbike on Lookout */}
+        <g transform="translate(1180, 196) scale(1.05)" fill="#050102">
+          <circle cx="-26" cy="-12" r="11.5" /><circle cx="-26" cy="-12" r="7.5" fill="#120205" />
+          <circle cx="26" cy="-12" r="11.5" /><circle cx="26" cy="-12" r="7.5" fill="#120205" />
+          <path d="M -26 -12 L -14 -20 L 5 -12 L 26 -12 L 19 -27 L 6 -27 L -4 -23 L -17 -25 Z" />
+          <path d="M 6 -27 L 17 -33 L 24 -30 L 20 -23 Z" />
+          <polygon points="-13,-24 -27,-29 -23,-21 -11,-20" />
+          <line x1="17" y1="-32" x2="15" y2="-35" stroke="#050102" strokeWidth="2.2" />
+          <circle cx="2" cy="-46" r="5.2" />
+          <polygon points="6,-47 8.5,-45 6,-44" fill="#ff707a" />
+          <path d="M -5 -41 L 4 -40 L 2 -25 L -7 -25 Z" />
+          <path d="M 2 -37 L 15 -33" stroke="#050102" strokeWidth="2.4" strokeLinecap="round" />
+          <path d="M -1 -25 L 5 -16 L 0 -13" stroke="#050102" strokeWidth="3.2" strokeLinecap="round" strokeLinejoin="round" />
+        </g>
+
+        {/* 9. SWEEPING BLACK ROAD HILL */}
+        <path
+          d="M -60 172 C 80 162, 120 138, 220 138 C 320 138, 420 182, 530 185 C 640 188, 720 178, 830 178 C 940 178, 1040 196, 1150 196 C 1260 196, 1360 165, 1500 155 L 1500 270 L -60 270 Z"
+          fill="#050102"
+        />
+
+        {/* 10. NEON RED GLOWING ROAD CREST */}
+        <g className="neon-glow-line">
+          <path
+            d="M -60 172 C 80 162, 120 138, 220 138 C 320 138, 420 182, 530 185 C 640 188, 720 178, 830 178 C 940 178, 1040 196, 1150 196 C 1260 196, 1360 165, 1500 155"
+            fill="none"
+            stroke="#ff0018"
+            strokeWidth="9.5"
+            opacity="0.48"
+            strokeLinecap="round"
+            filter="url(#tsxNeonBloom)"
+          />
+          <path
+            d="M -60 172 C 80 162, 120 138, 220 138 C 320 138, 420 182, 530 185 C 640 188, 720 178, 830 178 C 940 178, 1040 196, 1150 196 C 1260 196, 1360 165, 1500 155"
+            fill="none"
+            stroke="#ff1f24"
+            strokeWidth="3.8"
+            opacity="0.95"
+            strokeLinecap="round"
+          />
+          <path
+            d="M -60 172 C 80 162, 120 138, 220 138 C 320 138, 420 182, 530 185 C 640 188, 720 178, 830 178 C 940 178, 1040 196, 1150 196 C 1260 196, 1360 165, 1500 155"
+            fill="none"
+            stroke="#ffb0b4"
+            strokeWidth="1.5"
+            opacity="0.98"
+            strokeLinecap="round"
+          />
+        </g>
+
+        {/* 11. ANIMATED TRAVELING SPORT MOTORCYCLE */}
+        <g id="tsxTravelingRiderGroup">
+          <animateMotion
+            dur="11.5s"
+            repeatCount="indefinite"
+            rotate="auto"
+            path="M -160 168 C 80 162, 120 138, 220 138 C 320 138, 420 182, 530 185 C 640 188, 720 178, 830 178 C 940 178, 1040 196, 1150 196 C 1260 196, 1360 165, 1600 148"
+          />
+          <g className="bike-chassis-bounce" transform="scale(1.25) translate(0, -1)">
+            {/* Speed Trails */}
+            <g className="speed-trail">
+              <polygon points="-30,-28 -175,-33 -171,-27 -30,-26" fill="url(#tsxSpeedStreakGrad)" />
+              <polygon points="-28,-24 -145,-26 -142,-21 -28,-22" fill="url(#tsxSpeedStreakGrad)" opacity="0.9" />
+              <polygon points="-26,-19 -105,-20 -102,-16 -26,-17" fill="url(#tsxSpeedStreakGrad)" opacity="0.75" />
+              <circle cx="-29" cy="-27" r="3.6" fill="#ff2632" filter="url(#tsxBulbGlow)" />
+              <circle cx="-29" cy="-27" r="1.6" fill="#ffffff" />
+            </g>
+
+            {/* Headlight Projector Beam */}
+            <g className="beam-shimmer">
+              <polygon points="38,-20 220,-34 245,14 36,-11" fill="url(#tsxHeadlightBeamGrad)" opacity="0.95" />
+              <ellipse cx="160" cy="1" rx="80" ry="8.5" fill="url(#tsxRoadLightPuddle)" />
+              <circle cx="37" cy="-18" r="4.8" fill="#ffffff" filter="url(#tsxBulbGlow)" />
+              <circle cx="37" cy="-18" r="2.2" fill="#fffde7" />
+            </g>
+
+            {/* Wheels + Spinning Spokes */}
+            <circle cx="-26" cy="-12" r="12" fill="#050102" />
+            <circle cx="-26" cy="-12" r="8.2" fill="#150206" stroke="#ff2632" strokeWidth="0.9" />
+            <g className="wheel-spin" style={{ transformOrigin: "-26px -12px" }}>
+              <line x1="-26" y1="-20" x2="-26" y2="-4" stroke="#ff8088" strokeWidth="1.3" opacity="0.85" />
+              <line x1="-34" y1="-12" x2="-18" y2="-12" stroke="#ff8088" strokeWidth="1.3" opacity="0.85" />
+              <line x1="-32" y1="-18" x2="-20" y2="-6" stroke="#ff8088" strokeWidth="1" opacity="0.65" />
+              <line x1="-32" y1="-6" x2="-20" y2="-18" stroke="#ff8088" strokeWidth="1" opacity="0.65" />
+            </g>
+            <circle cx="-26" cy="-12" r="3.2" fill="#050102" />
+
+            <circle cx="26" cy="-12" r="12" fill="#050102" />
+            <circle cx="26" cy="-12" r="8.2" fill="#150206" stroke="#ff2632" strokeWidth="0.9" />
+            <g className="wheel-spin" style={{ transformOrigin: "26px -12px" }}>
+              <line x1="26" y1="-20" x2="26" y2="-4" stroke="#ff8088" strokeWidth="1.3" opacity="0.85" />
+              <line x1="18" y1="-12" x2="34" y2="-12" stroke="#ff8088" strokeWidth="1.3" opacity="0.85" />
+              <line x1="20" y1="-18" x2="32" y2="-6" stroke="#ff8088" strokeWidth="1" opacity="0.65" />
+              <line x1="20" y1="-6" x2="32" y2="-18" stroke="#ff8088" strokeWidth="1" opacity="0.65" />
+            </g>
+            <circle cx="26" cy="-12" r="3.2" fill="#050102" />
+
+            {/* Chassis & Bodywork */}
+            <line x1="26" y1="-12" x2="18" y2="-27" stroke="#050102" strokeWidth="2.8" />
+            <line x1="-26" y1="-12" x2="-8" y2="-17" stroke="#050102" strokeWidth="3.4" />
+            <path d="M -14 -17 L -6 -23 L 8 -24 L 24 -20 L 37 -18 L 33 -26 L 21 -31 L 10 -31 L 0 -29 L -10 -25 L -28 -27 L -22 -19 Z" fill="#050102" />
+            <polygon points="21,-31 29,-39 36,-31 37,-25 28,-26" fill="#050102" />
+            <polygon points="28,-26 36,-27 38,-20 31,-20" fill="#180206" />
+            <polygon points="-8,-16 12,-16 19,-14 16,-8 -3,-8" fill="#050102" />
+            <polygon points="-12,-16 -24,-20 -23,-17 -11,-13" fill="#160205" stroke="#ff2632" strokeWidth="0.5" />
+            <line x1="21" y1="-30" x2="19" y2="-33" stroke="#050102" strokeWidth="2.5" />
+
+            {/* Racer in Full Tuck */}
+            <ellipse cx="14" cy="-40" rx="6.8" ry="5.6" transform="rotate(-15 14 -40)" fill="#050102" />
+            <path d="M 18 -41 L 21.5 -39 L 19 -38 Z" fill="#ff4d5a" />
+            <path d="M 10 -37 C 4 -40, -4 -39, -10 -35 C -14 -32, -14 -26, -9 -24 C -2 -24, 6 -29, 10 -32 Z" fill="#050102" />
+            <path d="M 8 -34 Q 13 -30 19 -32" stroke="#050102" strokeWidth="3.4" strokeLinecap="round" fill="none" />
+            <path d="M -7 -25 Q 3 -21 1 -14 Q -3 -14 -7 -14" stroke="#050102" strokeWidth="3.8" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+          </g>
+        </g>
+
+        {/* 12. FLOATING SPARKS / EMBERS */}
+        <g fill="#ff7043">
+          <circle cx="210" cy="140" r="1.6" className="sky-ember ember-1" />
+          <circle cx="340" cy="165" r="1.3" className="sky-ember ember-2" />
+          <circle cx="560" cy="175" r="1.7" className="sky-ember ember-3" />
+          <circle cx="780" cy="168" r="1.4" className="sky-ember ember-4" />
+          <circle cx="920" cy="175" r="1.6" className="sky-ember ember-5" />
+          <circle cx="1060" cy="180" r="1.8" className="sky-ember ember-1" />
+          <circle cx="1200" cy="185" r="1.4" className="sky-ember ember-3" />
+          <circle cx="1380" cy="155" r="1.5" className="sky-ember ember-5" />
+        </g>
+      </svg>
+    </div>
+  );
+}
