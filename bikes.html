@@ -297,58 +297,322 @@
   </main>
 
   <!-- High Fidelity 4-Column Footer -->
-  <footer>
-    <div>
-      <a class="brand" href="index.html">
-        <span class="brand-row">
-          <span data-i18n="brand_title">UDAN</span>
-          <span class="leaf">▰</span>
-        </span>
-        <small data-i18n="brand_sub">ENTERPRISES</small>
-      </a>
-      <div class="footer-info">
-        <p data-i18n="footer_partner" data-i18n-html="true">Your trusted partner for Zuboo electric bikes.<br>Ride today for a cleaner tomorrow.</p>
-        <br>
-        <strong data-i18n="slogan_charge">JOIN US &amp; CHARGE YOUR RIDE ⚡</strong><br>
-        <span data-i18n="contact_address" data-i18n-html="true">Udugama Road, Kurunduwatta, Galle, Sri Lanka</span><br>
-        <span data-i18n="footer_phone">Phone: 078 496 9652</span><br>
-        <span data-i18n="footer_email">Email: Pibida17udan4131@gmail.com</span>
-      </div>
+  <!-- UDAN ENTERPRISES — CINEMATIC MOTORCYCLE SKYLINE FOOTER -->
+  <footer class="udan-skyline-footer" id="site-footer">
+    <!-- Animated Motorcycle Skyline Horizon SVG -->
+    <div class="skyline-canvas-wrapper" aria-hidden="true">
+      <div class="skyline-particles" id="skyline-particles"></div>
+      <svg class="motorcycle-skyline-svg" viewBox="0 0 1600 300" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="skyDuskGlow" cx="60%" cy="85%" r="75%">
+            <stop offset="0%" stop-color="#800b16" stop-opacity="0.95" />
+            <stop offset="35%" stop-color="#4a040b" stop-opacity="0.85" />
+            <stop offset="70%" stop-color="#1e0205" stop-opacity="0.9" />
+            <stop offset="100%" stop-color="#0a0103" stop-opacity="1" />
+          </radialGradient>
+          <radialGradient id="crimsonSun" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#ff3b30" stop-opacity="0.9" />
+            <stop offset="45%" stop-color="#cc1111" stop-opacity="0.75" />
+            <stop offset="85%" stop-color="#660000" stop-opacity="0.3" />
+            <stop offset="100%" stop-color="#220000" stop-opacity="0" />
+          </radialGradient>
+          <filter id="neonRedGlow" x="-20%" y="-40%" width="140%" height="180%">
+            <feGaussianBlur stdDeviation="5" result="blur1" />
+            <feGaussianBlur stdDeviation="12" result="blur2" />
+            <feMerge>
+              <feMergeNode in="blur2" />
+              <feMergeNode in="blur1" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
+          <linearGradient id="headlightBeam" x1="0%" y1="50%" x2="100%" y2="50%">
+            <stop offset="0%" stop-color="#ffffff" stop-opacity="0.95" />
+            <stop offset="25%" stop-color="#ffe6a3" stop-opacity="0.6" />
+            <stop offset="65%" stop-color="#ff9900" stop-opacity="0.2" />
+            <stop offset="100%" stop-color="#ff4400" stop-opacity="0" />
+          </linearGradient>
+          <linearGradient id="tailLightTrail" x1="100%" y1="50%" x2="0%" y2="50%">
+            <stop offset="0%" stop-color="#ff1a1a" stop-opacity="0.9" />
+            <stop offset="40%" stop-color="#ff0044" stop-opacity="0.5" />
+            <stop offset="80%" stop-color="#cc0022" stop-opacity="0.15" />
+            <stop offset="100%" stop-color="#660000" stop-opacity="0" />
+          </linearGradient>
+          <radialGradient id="amberLampGlow" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#ffeaa7" stop-opacity="1" />
+            <stop offset="35%" stop-color="#fdcb6e" stop-opacity="0.8" />
+            <stop offset="70%" stop-color="#e17055" stop-opacity="0.3" />
+            <stop offset="100%" stop-color="#d63031" stop-opacity="0" />
+          </radialGradient>
+        </defs>
+
+        <!-- Sky Background -->
+        <rect width="1600" height="300" fill="url(#skyDuskGlow)" />
+        <circle cx="1060" cy="180" r="58" fill="url(#crimsonSun)" />
+
+        <!-- Distant Mountains -->
+        <path class="skyline-layer mountains" fill="#130104" opacity="0.85" d="M 0 300 L 0 190 Q 120 160 220 180 T 460 170 Q 580 145 680 175 T 920 165 Q 1040 140 1180 170 T 1420 155 Q 1520 175 1600 180 L 1600 300 Z" />
+
+        <!-- City Skyline & Lotus Tower -->
+        <g class="skyline-layer city" fill="#0d0103">
+          <rect x="40" y="170" width="35" height="130" /><rect x="85" y="155" width="28" height="145" /><polygon points="99,140 96,155 102,155" /><rect x="120" y="165" width="45" height="135" /><rect x="175" y="180" width="30" height="120" />
+          <rect x="320" y="160" width="32" height="140" /><rect x="360" y="145" width="40" height="155" /><rect x="410" y="170" width="25" height="130" /><rect x="520" y="150" width="35" height="150" /><rect x="565" y="165" width="48" height="135" />
+          <rect x="710" y="160" width="30" height="140" /><rect x="750" y="140" width="42" height="160" /><polygon points="771,120 769,140 773,140" /><rect x="800" y="155" width="36" height="145" /><rect x="845" y="168" width="50" height="132" /><rect x="910" y="150" width="38" height="150" />
+          <!-- Lotus Tower -->
+          <line x1="990" y1="95" x2="990" y2="135" stroke="#0d0103" stroke-width="3" />
+          <path d="M 980 148 C 975 140, 982 135, 990 133 C 998 135, 1005 140, 1000 148 C 1004 156, 996 162, 990 163 C 984 162, 976 156, 980 148 Z" />
+          <polygon points="986,163 994,163 996,250 984,250" />
+          <rect x="1020" y="145" width="45" height="155" /><rect x="1075" y="130" width="55" height="170" /><line x1="1102" y1="112" x2="1102" y2="130" stroke="#0d0103" stroke-width="2.5" /><rect x="1140" y="150" width="38" height="150" /><rect x="1190" y="138" width="48" height="162" /><rect x="1250" y="160" width="40" height="140" /><rect x="1300" y="175" width="35" height="125" /><rect x="1345" y="155" width="50" height="145" /><rect x="1405" y="165" width="42" height="135" /><rect x="1460" y="175" width="60" height="125" />
+        </g>
+
+        <!-- Streetlights -->
+        <g class="skyline-streetlights" stroke="#060102" stroke-width="2.5" fill="none">
+          <path d="M 240 220 L 240 160 Q 240 148 248 148 L 255 148" /><circle cx="255" cy="151" r="5" fill="url(#amberLampGlow)" stroke="none" />
+          <path d="M 670 215 L 670 152 Q 670 140 678 140 L 685 140" /><circle cx="685" cy="143" r="5" fill="url(#amberLampGlow)" stroke="none" />
+          <path d="M 1160 225 L 1160 162 Q 1160 150 1168 150 L 1175 150" /><circle cx="1175" cy="153" r="5" fill="url(#amberLampGlow)" stroke="none" />
+        </g>
+
+        <!-- Roadside Warning Chevrons -->
+        <g class="skyline-chevrons">
+          <rect x="62" y="172" width="20" height="16" rx="2" fill="#ff2200" stroke="#ffcc00" stroke-width="1.5" /><path d="M 77 175 L 70 180 L 77 185" stroke="#ffffff" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" /><line x1="72" y1="188" x2="72" y2="215" stroke="#111" stroke-width="2" />
+          <rect x="375" y="178" width="20" height="16" rx="2" fill="#ff2200" stroke="#ffcc00" stroke-width="1.5" /><path d="M 390 181 L 383 186 L 390 191" stroke="#ffffff" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" /><line x1="385" y1="194" x2="385" y2="225" stroke="#111" stroke-width="2" />
+          <rect x="1355" y="184" width="20" height="16" rx="2" fill="#ff2200" stroke="#ffcc00" stroke-width="1.5" /><path d="M 1370 187 L 1363 192 L 1370 197" stroke="#ffffff" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" /><line x1="1365" y1="200" x2="1365" y2="228" stroke="#111" stroke-width="2" />
+        </g>
+
+        <!-- Stationary Bike Silhouettes -->
+        <g class="stationary-bike bike-adventure" transform="translate(460, 162) scale(0.65)" fill="#050002">
+          <circle cx="22" cy="50" r="14" /><circle cx="82" cy="50" r="14" /><circle cx="22" cy="50" r="8" fill="#150205" /><circle cx="82" cy="50" r="8" fill="#150205" />
+          <path d="M 22 50 L 40 32 L 58 30 L 72 26 L 82 50 L 60 52 L 40 50 Z" /><path d="M 38 28 C 44 24 54 24 64 27 L 70 18 L 65 14 L 56 22 Z" /><rect x="14" y="24" width="14" height="12" rx="2" /><line x1="68" y1="18" x2="74" y2="16" stroke="#050002" stroke-width="3" />
+        </g>
+        <g class="stationary-bike bike-scooter" transform="translate(790, 172) scale(0.68)">
+          <polygon points="76,38 180,24 195,58 76,44" fill="url(#headlightBeam)" opacity="0.65" />
+          <circle cx="75" cy="41" r="3.5" fill="#ffffff" filter="url(#neonRedGlow)" />
+          <g fill="#050002">
+            <circle cx="20" cy="50" r="11" /><circle cx="72" cy="50" r="11" />
+            <path d="M 18 50 L 32 44 L 46 45 L 60 40 L 72 40 L 68 28 L 56 32 L 42 42 L 28 38 Z" /><circle cx="50" cy="10" r="8" /><path d="M 46 18 L 54 18 L 58 32 L 68 30 L 66 33 L 52 38 L 44 32 Z" /><path d="M 44 34 L 50 42 L 44 45 L 38 42 Z" />
+          </g>
+        </g>
+        <g class="stationary-bike bike-sport-parked" transform="translate(1240, 170) scale(0.65)" fill="#050002">
+          <circle cx="20" cy="50" r="13" /><circle cx="78" cy="50" r="13" />
+          <path d="M 20 50 L 36 34 L 52 30 L 70 24 L 78 50 L 58 50 L 40 48 Z" /><path d="M 50 24 L 64 22 L 72 16 L 62 16 Z" /><circle cx="48" cy="12" r="7.5" /><path d="M 44 19 L 52 19 L 56 30 L 42 30 Z" />
+        </g>
+
+        <!-- Curved Highway Road Base & Neon Red Light Crest -->
+        <path class="road-body-fill" fill="#08080a" d="M 0 300 L 0 216 C 180 205, 320 228, 480 220 C 640 212, 740 196, 900 204 C 1060 212, 1220 236, 1400 224 C 1480 218, 1540 214, 1600 210 L 1600 300 Z" />
+        <path class="road-neon-edge" id="road-crest-path" d="M 0 216 C 180 205, 320 228, 480 220 C 640 212, 740 196, 900 204 C 1060 212, 1220 236, 1400 224 C 1480 218, 1540 214, 1600 210" stroke="#ff1f24" stroke-width="3.5" fill="none" filter="url(#neonRedGlow)" stroke-linecap="round" />
+        <path d="M 0 216 C 180 205, 320 228, 480 220 C 640 212, 740 196, 900 204 C 1060 212, 1220 236, 1400 224 C 1480 218, 1540 214, 1600 210" stroke="#ffffff" stroke-width="1.2" opacity="0.8" fill="none" />
+
+        <!-- Traveling Motorcycle with Lights & Trails -->
+        <g class="traveling-motorcycle-carrier" id="traveling-motorcycle">
+          <g class="tail-light-streaks" opacity="0.9">
+            <path d="M 0 26 C -40 24, -90 18, -140 16" stroke="url(#tailLightTrail)" stroke-width="4.5" fill="none" stroke-linecap="round" />
+            <path d="M 0 29 C -30 28, -75 25, -115 24" stroke="url(#tailLightTrail)" stroke-width="3" fill="none" stroke-linecap="round" />
+            <path d="M 0 33 C -20 33, -60 32, -90 32" stroke="url(#tailLightTrail)" stroke-width="2.5" fill="none" stroke-linecap="round" />
+          </g>
+          <g class="headlight-beam-group">
+            <polygon points="98,28 260,10 280,68 98,38" fill="url(#headlightBeam)" opacity="0.75" />
+            <circle cx="98" cy="32" r="5" fill="#ffffff" filter="url(#neonRedGlow)" />
+            <ellipse cx="210" cy="52" rx="45" ry="10" fill="#ffeaa7" opacity="0.25" />
+          </g>
+          <g class="racer-bike-silhouette" fill="#040001">
+            <g class="bike-wheel rear-wheel">
+              <circle cx="22" cy="42" r="14" fill="#040001" stroke="#ff2200" stroke-width="1.2" /><circle cx="22" cy="42" r="8" fill="#111" />
+              <line x1="22" y1="28" x2="22" y2="56" stroke="#444" stroke-width="1" class="wheel-spoke" /><line x1="8" y1="42" x2="36" y2="42" stroke="#444" stroke-width="1" class="wheel-spoke" />
+            </g>
+            <g class="bike-wheel front-wheel">
+              <circle cx="86" cy="42" r="14" fill="#040001" stroke="#ff2200" stroke-width="1.2" /><circle cx="86" cy="42" r="8" fill="#111" />
+              <line x1="86" y1="28" x2="86" y2="56" stroke="#444" stroke-width="1" class="wheel-spoke" /><line x1="72" y1="42" x2="100" y2="42" stroke="#444" stroke-width="1" class="wheel-spoke" />
+            </g>
+            <line x1="22" y1="42" x2="48" y2="40" stroke="#040001" stroke-width="5" /><line x1="38" y1="43" x2="18" y2="44" stroke="#ff4400" stroke-width="2.5" />
+            <path d="M 22 42 L 40 26 L 56 22 L 78 18 L 94 28 L 86 42 L 62 44 L 42 42 Z" /><path d="M 72 16 L 86 16 L 96 28 L 84 28 Z" />
+            <ellipse cx="68" cy="8" rx="8.5" ry="7" /><ellipse cx="50" cy="12" rx="7" ry="5" />
+            <path d="M 44 14 C 52 10, 60 12, 68 14 L 72 24 L 56 24 Z" /><path d="M 46 22 L 40 32 L 52 35 L 56 24 Z" /><path d="M 62 16 L 78 20 L 76 24 L 60 20 Z" />
+          </g>
+        </g>
+      </svg>
     </div>
 
-    <div>
-      <h3 data-i18n="footer_quick_links">Quick Links</h3>
-      <div class="footer-links">
-        <a href="index.html" data-i18n="nav_home">Home</a>
-        <a href="bikes.html" data-i18n="nav_bikes">Zuboo Bikes</a>
-        <a href="calculator.html" data-i18n="nav_calculator">EMI Calculator</a>
-        <a href="parts.html" data-i18n="nav_parts">Spare Parts</a>
-        <a href="offers.html" data-i18n="nav_offers">Offers</a>
-        <button data-book data-i18n="nav_test_ride">Test Ride</button>
-        <a href="about.html" data-i18n="nav_about">About Us</a>
-        <a href="contact.html" data-i18n="nav_contact">Contact</a>
-      </div>
-    </div>
+    <!-- Main Footer Body Area (Deep Onyx / Carbon with Tire Tread Accents) -->
+    <div class="footer-body-wrapper">
+      <div class="tire-tread-glow-left" aria-hidden="true"></div>
+      <div class="tire-tread-glow-right" aria-hidden="true"></div>
 
-    <div>
-      <h3 data-i18n="footer_follow_us">Follow Us</h3>
-      <div class="socials">
-        <button data-social="Facebook" aria-label="Facebook">f</button>
-        <button data-social="Instagram" aria-label="Instagram">◎</button>
-        <button data-social="YouTube" aria-label="YouTube">▣</button>
-        <button data-social="TikTok" aria-label="TikTok">♪</button>
-      </div>
-    </div>
+      <div class="footer-main-container">
+        <!-- 5-Column Responsive Grid -->
+        <div class="footer-columns-grid">
+          <!-- Col 1: Brand & Socials -->
+          <div class="footer-col brand-col">
+            <div class="footer-brand-header">
+              <img src="/media/branding/udan-logo.png" alt="Udan Enterprises Logo" class="footer-brand-logo" width="56" height="56" onerror="this.src='assets/design/udan-logo.png'">
+              <div class="footer-brand-titles">
+                <span class="brand-name">UDAN <span class="brand-accent">ENTERPRISES</span></span>
+                <span class="brand-subtitle">YOUR TRUSTED MOTORCYCLE PARTNER</span>
+              </div>
+            </div>
+            <p class="brand-description">
+              Discover a wide range of brand new and pre-owned quality motorcycles and electric vehicles with genuine quality, trusted service and the best riding experience.
+            </p>
+            <div class="footer-social-cluster">
+              <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" class="social-circle-btn" aria-label="Facebook">
+                <svg width="15" height="15" fill="currentColor" viewBox="0 0 24 24"><path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H7v-3h3V9.5C10 6.57 11.76 5 14.4 5c1.26 0 2.38.09 2.7.13v3.13h-1.85c-1.42 0-1.7.67-1.7 1.66V12h3.45l-.45 3h-3v6.8c4.56-.93 8-4.96 8-9.8z"/></svg>
+              </a>
+              <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="social-circle-btn" aria-label="Instagram">
+                <svg width="15" height="15" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+              </a>
+              <a href="https://tiktok.com" target="_blank" rel="noopener noreferrer" class="social-circle-btn" aria-label="TikTok">
+                <svg width="15" height="15" fill="currentColor" viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.97-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.24 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
+              </a>
+              <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" class="social-circle-btn" aria-label="YouTube">
+                <svg width="15" height="15" fill="currentColor" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+              </a>
+            </div>
+          </div>
 
-    <div>
-      <h3 data-i18n="footer_newsletter">Newsletter</h3>
-      <p data-i18n="footer_newsletter_desc">Get the latest offers and updates.</p>
-      <form id="newsletter">
-        <label class="sr-only" for="email">Your email address</label>
-        <input id="email" type="email" placeholder="Enter your email" required>
-        <button class="dark" type="submit" aria-label="Subscribe">→</button>
-      </form>
-      <small id="newsletter-status" role="status"></small>
+          <!-- Col 2: Quick Links -->
+          <div class="footer-col links-col">
+            <h4 class="footer-col-title"><span class="footer-slash">/</span> QUICK LINKS</h4>
+            <ul class="footer-nav-list">
+              <li><a href="index.html" class="footer-nav-link"><span class="arrow-bullet">›</span> Home</a></li>
+              <li><a href="bikes.html" class="footer-nav-link"><span class="arrow-bullet">›</span> Available Bikes</a></li>
+              <li><a href="about.html" class="footer-nav-link"><span class="arrow-bullet">›</span> About Us</a></li>
+              <li><a href="offers.html" class="footer-nav-link"><span class="arrow-bullet">›</span> Special Offers</a></li>
+              <li><a href="contact.html" class="footer-nav-link"><span class="arrow-bullet">›</span> Contact Us</a></li>
+            </ul>
+          </div>
+
+          <!-- Col 3: Motorcycles -->
+          <div class="footer-col bikes-col">
+            <h4 class="footer-col-title"><span class="footer-slash">/</span> MOTORCYCLES</h4>
+            <ul class="footer-nav-list">
+              <li>
+                <a href="bikes.html" class="footer-nav-link">
+                  <svg class="bike-nav-icon" width="18" height="14" viewBox="0 0 24 18" fill="currentColor"><path d="M4 14a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm16 0a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm-7-7 2-3h3v2h-2.2l-1.3 2H13zm-2.8 1L8 11H5.4A4.97 4.97 0 0 1 9 6.2L10.2 8zm3.2 0 1.6 3H9.4l1.6-3h2.4z"/></svg>
+                  Sport Bikes
+                </a>
+              </li>
+              <li>
+                <a href="bikes.html" class="footer-nav-link">
+                  <svg class="bike-nav-icon" width="18" height="14" viewBox="0 0 24 18" fill="currentColor"><path d="M4 14a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm16 0a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm-7-7 2-3h3v2h-2.2l-1.3 2H13zm-2.8 1L8 11H5.4A4.97 4.97 0 0 1 9 6.2L10.2 8zm3.2 0 1.6 3H9.4l1.6-3h2.4z"/></svg>
+                  Naked &amp; Adventure
+                </a>
+              </li>
+              <li>
+                <a href="bikes.html" class="footer-nav-link">
+                  <svg class="bike-nav-icon" width="18" height="14" viewBox="0 0 24 18" fill="currentColor"><path d="M4 14a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm16 0a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm-7-7 2-3h3v2h-2.2l-1.3 2H13zm-2.8 1L8 11H5.4A4.97 4.97 0 0 1 9 6.2L10.2 8zm3.2 0 1.6 3H9.4l1.6-3h2.4z"/></svg>
+                  Electric Scooters
+                </a>
+              </li>
+              <li>
+                <a href="bikes.html" class="footer-nav-link">
+                  <svg class="bike-nav-icon" width="18" height="14" viewBox="0 0 24 18" fill="currentColor"><path d="M4 14a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm16 0a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm-7-7 2-3h3v2h-2.2l-1.3 2H13zm-2.8 1L8 11H5.4A4.97 4.97 0 0 1 9 6.2L10.2 8zm3.2 0 1.6 3H9.4l1.6-3h2.4z"/></svg>
+                  All Motorcycles
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Col 4: Get In Touch -->
+          <div class="footer-col contact-col">
+            <h4 class="footer-col-title"><span class="footer-slash">/</span> GET IN TOUCH</h4>
+            <ul class="footer-contact-list">
+              <li>
+                <svg class="contact-icon" width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                <span>Udan Enterprises, Udugama Road, Kurunduwatta, Galle, Sri Lanka</span>
+              </li>
+              <li>
+                <svg class="contact-icon" width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M20.01 15.38c-1.23 0-2.42-.2-3.53-.56a.977.977 0 0 0-1.01.24l-1.57 1.97c-2.83-1.44-5.15-3.75-6.59-6.59l1.97-1.57c.28-.28.36-.67.25-1.02A11.36 11.36 0 0 1 8.5 4.31c0-.55-.45-1-1-1H4.08c-.55 0-1 .45-1 1C3.08 13.56 10.44 20.92 19.5 20.92c.55 0 1-.45 1-1v-3.42c0-.55-.45-1-.99-1.12z"/></svg>
+                <a href="tel:0784969652">078 496 9652</a>
+              </li>
+              <li>
+                <svg class="contact-icon whatsapp-green" width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.79.47 3.53 1.37 5.08L2 22l5.17-1.36c1.49.81 3.17 1.25 4.87 1.25 5.46 0 9.91-4.45 9.91-9.91A9.91 9.91 0 0 0 12.04 2zm0 16.33c-1.5 0-2.98-.4-4.26-1.16l-.31-.18-3.16.83.84-3.08-.2-.32a8.03 8.03 0 0 1-1.23-4.47c0-4.47 3.64-8.11 8.12-8.11 2.17 0 4.21.85 5.75 2.38a8.07 8.07 0 0 1 2.37 5.73c0 4.47-3.64 8.11-8.12 8.11z"/></svg>
+                <a href="https://wa.me/94784969652" target="_blank" rel="noopener noreferrer">+94 78 496 9652 (WhatsApp)</a>
+              </li>
+              <li>
+                <svg class="contact-icon" width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+                <a href="mailto:Pibida17udan4131@gmail.com">Pibida17udan4131@gmail.com</a>
+              </li>
+              <li>
+                <svg class="contact-icon" width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm-1 4h2v2h-2V6zm0 4h2v6h-2v-6z"/></svg>
+                <a href="https://maps.google.com/?q=Kurunduwatta+Galle+Sri+Lanka" target="_blank" rel="noopener noreferrer">View on Google Maps</a>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Col 5: Newsletter -->
+          <div class="footer-col newsletter-col">
+            <h4 class="footer-col-title"><span class="footer-slash">/</span> NEWSLETTER</h4>
+            <p class="newsletter-description">
+              Be the first to know about new arrivals, special offers and showroom updates.
+            </p>
+            <form class="footer-newsletter-form" onsubmit="event.preventDefault(); alert('Thank you for subscribing to Udan Enterprises updates!'); this.reset();">
+              <div class="newsletter-input-wrap">
+                <input type="email" placeholder="Your email address" required class="newsletter-input">
+                <button type="submit" class="newsletter-submit-btn" aria-label="Subscribe">
+                  <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- Value Badges Ribbon (4 Automotive Badges) -->
+        <div class="footer-value-ribbon">
+          <div class="value-badge-item">
+            <div class="badge-icon-box">
+              <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/></svg>
+            </div>
+            <div class="badge-text-box">
+              <span class="badge-title">GENUINE PRODUCTS</span>
+              <span class="badge-sub">100% Certified Zuboo OEM Quality</span>
+            </div>
+          </div>
+          <div class="value-badge-item">
+            <div class="badge-icon-box">
+              <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24"><path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zM6 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm13.5-9l1.96 2.5H17V9.5h2.5zm-1.5 9c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
+            </div>
+            <div class="badge-text-box">
+              <span class="badge-title">FAST &amp; SAFE DELIVERY</span>
+              <span class="badge-sub">Island-wide Transport Available</span>
+            </div>
+          </div>
+          <div class="value-badge-item">
+            <div class="badge-icon-box">
+              <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24"><path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/></svg>
+            </div>
+            <div class="badge-text-box">
+              <span class="badge-title">RELIABLE SERVICE</span>
+              <span class="badge-sub">Certified Factory Technicians</span>
+            </div>
+          </div>
+          <div class="value-badge-item">
+            <div class="badge-icon-box">
+              <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24"><path d="M12 1a9 9 0 0 0-9 9v7c0 1.66 1.34 3 3 3h3v-8H5v-2c0-3.87 3.13-7 7-7s7 3.13 7 7v2h-4v8h3c1.66 0 3-1.34 3-3v-7a9 9 0 0 0-9-9z"/></svg>
+            </div>
+            <div class="badge-text-box">
+              <span class="badge-title">EXPERT SUPPORT</span>
+              <span class="badge-sub">Direct Showroom Consultation</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bottom Bar -->
+        <div class="footer-bottom-bar">
+          <div class="copyright-text">
+            © 2026 Udan Enterprises (Pvt) Ltd. All rights reserved.
+          </div>
+          <div class="footer-legal-links">
+            <a href="contact.html">Privacy Policy</a>
+            <span class="divider">|</span>
+            <a href="contact.html">Terms &amp; Conditions</a>
+          </div>
+          <div class="agency-credit">
+            Designed by <span class="apex-highlight">Harsh Apex Digital Solutions</span>
+          </div>
+          <!-- Smooth Back-To-Top Circular Button -->
+          <button type="button" class="back-to-top-circle" id="back-to-top-btn" aria-label="Back to Top" onclick="window.scrollTo({top: 0, behavior: 'smooth'});">
+            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M18 15l-6-6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </div>
+      </div>
     </div>
   </footer>
 </div>

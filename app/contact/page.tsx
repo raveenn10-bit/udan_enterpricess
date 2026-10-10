@@ -94,27 +94,26 @@ export default function ContactPage() {
           </div>
         </section>
 
-        {/* Verification Status Banner */}
+        {/* Verified Showroom Location Banner */}
         <section className="bg-white border-b border-[#E0E8EC] py-5">
           <div className="editorial-container">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 sm:p-5 rounded-2xl bg-[#F7F9FA] border border-[#E0E8EC]">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 sm:p-5 rounded-2xl bg-emerald-50/60 border border-emerald-200">
               <div className="flex items-start gap-3">
-                <div className="w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center text-amber-700 shrink-0 mt-0.5">
-                  <AlertTriangle className="w-4 h-4" />
+                <div className="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-700 shrink-0 mt-0.5">
+                  <ShieldCheck className="w-4 h-4" />
                 </div>
                 <div>
-                  <span className="text-xs font-bold uppercase tracking-wider text-amber-900 block">
-                    Showroom Facility Status: Galle, Southern Province, Sri Lanka
+                  <span className="text-xs font-bold uppercase tracking-wider text-emerald-950 block">
+                    Verified Showroom Facility: Udugama Road, Kurunduwatta, Galle
                   </span>
-                  <p className="text-xs text-[#667780] mt-0.5 leading-relaxed">
-                    Physical street address is awaiting final administrative verification. Showroom visits and test rides are
-                    hosted strictly by prior appointment or scheduled consultation.
+                  <p className="text-xs text-emerald-800 mt-0.5 leading-relaxed">
+                    Official Zuboo Electric Vehicles Dealership &amp; Service Center in Southern Province. Showroom test rides, consultations, and genuine spare parts available.
                   </p>
                 </div>
               </div>
               <div className="shrink-0">
-                <span className="inline-block px-3 py-1 text-[11px] font-bold uppercase tracking-wider bg-amber-50 text-amber-800 border border-amber-300 rounded-full">
-                  Status: Awaiting Verification
+                <span className="inline-block px-3 py-1 text-[11px] font-bold uppercase tracking-wider bg-emerald-100 text-emerald-800 border border-emerald-300 rounded-full">
+                  Status: Verified Showroom
                 </span>
               </div>
             </div>
@@ -213,7 +212,7 @@ export default function ContactPage() {
                     Showroom Hub
                   </span>
                   <h3 className="font-heading font-bold text-base text-[#111820]">
-                    Galle, Sri Lanka
+                    Udugama Road, Kurunduwatta, Galle
                   </h3>
                   <p className="text-xs text-[#667780] mt-2 leading-relaxed">
                     Southern Province customer experience center & genuine Zuboo spare parts warehouse.

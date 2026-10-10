@@ -140,7 +140,7 @@ export default function TestRideModal({
                     required
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
-                    placeholder="077 123 4567"
+                    placeholder="078 496 9652"
                     className="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-300 bg-white text-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-red-500"
                   />
                 </div>

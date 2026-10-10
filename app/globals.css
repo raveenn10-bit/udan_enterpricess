@@ -254,3 +254,921 @@ html {
 .section-line.visible {
   width: 48px;
 }
+
+/* ==========================================================================
+   UDAN SKYLINE FOOTER - CINEMATIC MOTORCYCLE & GALLE SKYLINE
+   ========================================================================== */
+
+/* 1. ROOT FOOTER CONTAINER */
+.udan-skyline-footer,
+footer.oem-footer {
+  position: relative;
+  background-color: #06080e;
+  color: #f1f5f9;
+  font-family: inherit;
+  overflow: hidden;
+  isolation: isolate;
+  padding: 0;
+  margin: 0;
+  border-top: 1px solid rgba(255, 94, 20, 0.25);
+  box-shadow: 0 -20px 40px -15px rgba(239, 68, 68, 0.15);
+}
+
+/* 2. NEON RED / CRIMSON LASER TOP GLOW EDGE */
+.skyline-neon-edge {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(239, 68, 68, 0.3) 10%,
+    #FF5E14 28%,
+    #ef4444 50%,
+    #FF5E14 72%,
+    rgba(239, 68, 68, 0.3) 90%,
+    transparent 100%
+  );
+  box-shadow: 0 0 14px #ef4444, 0 0 28px rgba(255, 94, 20, 0.6), 0 0 45px rgba(239, 68, 68, 0.35);
+  z-index: 20;
+  animation: neon-pulse 3s ease-in-out infinite alternate;
+}
+
+@keyframes neon-pulse {
+  0% {
+    opacity: 0.8;
+    filter: drop-shadow(0 0 6px #ef4444);
+  }
+  50% {
+    opacity: 1;
+    filter: drop-shadow(0 0 14px #ff2b2b);
+  }
+  100% {
+    opacity: 0.85;
+    filter: drop-shadow(0 0 8px #ef4444);
+  }
+}
+
+/* 3. VALUE BADGES RIBBON */
+.skyline-value-ribbon {
+  position: relative;
+  z-index: 15;
+  background: linear-gradient(180deg, rgba(14, 8, 14, 0.95) 0%, rgba(8, 10, 16, 0.9) 100%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  padding: 14px 24px;
+}
+
+.skyline-ribbon-container {
+  max-width: 1360px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.value-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 16px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 9999px;
+  color: #cbd5e1;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  user-select: none;
+}
+
+.value-badge:hover {
+  background: rgba(255, 94, 20, 0.12);
+  border-color: rgba(255, 94, 20, 0.5);
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 18px rgba(255, 94, 20, 0.25);
+}
+
+.value-badge .badge-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #FF5E14;
+  filter: drop-shadow(0 0 6px rgba(255, 94, 20, 0.6));
+  flex-shrink: 0;
+}
+
+/* 4. CINEMATIC SKYLINE STAGE */
+.skyline-stage {
+  position: relative;
+  width: 100%;
+  height: 220px;
+  overflow: hidden;
+  background: 
+    radial-gradient(ellipse 90% 80% at 50% 100%, rgba(153, 27, 27, 0.5) 0%, rgba(88, 16, 32, 0.4) 35%, rgba(20, 10, 18, 0.95) 75%, #06080e 100%),
+    linear-gradient(180deg, #05070c 0%, #120914 30%, #2b0c16 65%, #500f1e 100%);
+  user-select: none;
+}
+
+/* TIRE TREAD TEXTURE OVERLAY */
+.tire-tread-texture {
+  position: absolute;
+  inset: 0;
+  background-image: 
+    repeating-linear-gradient(45deg, rgba(255, 94, 20, 0.025) 0px, rgba(255, 94, 20, 0.025) 2px, transparent 2px, transparent 12px),
+    repeating-linear-gradient(-45deg, rgba(255, 94, 20, 0.025) 0px, rgba(255, 94, 20, 0.025) 2px, transparent 2px, transparent 12px);
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.75;
+}
+
+/* STARS & ATMOSPHERE */
+.skyline-stars {
+  position: absolute;
+  inset: 0;
+  background-image: 
+    radial-gradient(1.5px 1.5px at 80px 30px, rgba(255, 255, 255, 0.8), transparent),
+    radial-gradient(1px 1px at 220px 45px, rgba(255, 255, 255, 0.6), transparent),
+    radial-gradient(2px 2px at 450px 20px, rgba(255, 230, 200, 0.9), transparent),
+    radial-gradient(1.5px 1.5px at 680px 50px, rgba(255, 255, 255, 0.7), transparent),
+    radial-gradient(1px 1px at 890px 25px, rgba(255, 255, 255, 0.5), transparent),
+    radial-gradient(2px 2px at 1100px 40px, rgba(255, 240, 220, 0.85), transparent),
+    radial-gradient(1.5px 1.5px at 1320px 18px, rgba(255, 255, 255, 0.75), transparent);
+  pointer-events: none;
+  z-index: 2;
+  opacity: 0.85;
+}
+
+/* FLOATING LIGHT EMBERS CANVAS */
+.footer-embers-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 3;
+}
+
+/* SKYLINE SILHOUETTE SVG CONTAINER */
+.skyline-svg-container {
+  position: absolute;
+  bottom: 38px;
+  left: 0;
+  width: 100%;
+  height: 130px;
+  pointer-events: none;
+  z-index: 4;
+}
+
+.skyline-svg-container svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* ROAD SECTION */
+.skyline-road {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 42px;
+  background: linear-gradient(180deg, #1b202a 0%, #10141c 55%, #080b10 100%);
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.8);
+  z-index: 6;
+  overflow: hidden;
+}
+
+/* ROAD REFLECTOR LINE */
+.road-reflector-line {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: repeating-linear-gradient(
+    90deg,
+    #ef4444 0px,
+    #ef4444 4px,
+    transparent 4px,
+    transparent 80px
+  );
+  filter: drop-shadow(0 0 4px #ef4444);
+}
+
+/* ROAD DASHED LANE MARKINGS */
+.road-markings {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 200%;
+  height: 4px;
+  transform: translateY(-50%);
+  background: repeating-linear-gradient(
+    90deg,
+    #FF5E14 0px,
+    #FF5E14 28px,
+    transparent 28px,
+    transparent 64px
+  );
+  box-shadow: 0 0 8px rgba(255, 94, 20, 0.4);
+  animation: road-scroll 1.2s linear infinite;
+}
+
+@keyframes road-scroll {
+  0% {
+    transform: translateY(-50%) translateX(0);
+  }
+  100% {
+    transform: translateY(-50%) translateX(-64px);
+  }
+}
+
+/* 5. TRAVELING MOTORCYCLE & RIDER */
+.traveling-motorcycle-wrap {
+  position: absolute;
+  bottom: 12px;
+  left: 0;
+  width: 100%;
+  height: 68px;
+  pointer-events: none;
+  z-index: 10;
+  overflow: hidden;
+}
+
+.traveling-motorcycle {
+  position: absolute;
+  bottom: 0;
+  left: -160px;
+  width: 130px;
+  height: 65px;
+  pointer-events: none;
+  animation: motorcycle-travel 18s linear infinite;
+  will-change: transform;
+}
+
+@keyframes motorcycle-travel {
+  0% {
+    transform: translateX(-160px);
+  }
+  100% {
+    transform: translateX(calc(100vw + 160px));
+  }
+}
+
+.motorcycle-chassis {
+  width: 100%;
+  height: 100%;
+  animation: motorcycle-bounce 0.4s ease-in-out infinite alternate;
+}
+
+@keyframes motorcycle-bounce {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(-2px);
+  }
+}
+
+/* ROTATING WHEELS */
+.motorcycle-wheel-rear,
+.motorcycle-wheel-front {
+  transform-box: fill-box;
+  transform-origin: center center;
+  animation: wheel-spin 0.35s linear infinite;
+}
+
+@keyframes wheel-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* HEADLIGHT CONE BEAM */
+.headlight-cone-beam {
+  position: absolute;
+  top: 14px;
+  left: 112px;
+  width: 120px;
+  height: 48px;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.95) 0%,
+    rgba(255, 235, 170, 0.65) 20%,
+    rgba(255, 180, 50, 0.3) 60%,
+    transparent 100%
+  );
+  clip-path: polygon(0 42%, 100% 0%, 100% 100%, 0 58%);
+  filter: blur(2px);
+  pointer-events: none;
+  animation: headlight-flicker 2s ease-in-out infinite alternate;
+}
+
+@keyframes headlight-flicker {
+  0% {
+    opacity: 0.9;
+    transform: scaleY(0.98);
+  }
+  50% {
+    opacity: 1;
+    transform: scaleY(1.02);
+  }
+  100% {
+    opacity: 0.88;
+    transform: scaleY(0.97);
+  }
+}
+
+/* TAILLIGHT STREAK */
+.taillight-streak {
+  position: absolute;
+  top: 36px;
+  left: -24px;
+  width: 32px;
+  height: 6px;
+  background: linear-gradient(90deg, transparent 0%, rgba(239, 68, 68, 0.4) 40%, #ef4444 100%);
+  filter: blur(1px);
+  box-shadow: 0 0 10px #ef4444;
+}
+
+/* 6. MAIN FOOTER CONTENT GRID */
+.udan-footer-grid,
+.footer-container {
+  max-width: 1360px;
+  margin: 0 auto;
+  padding: 56px 24px 44px;
+  display: grid;
+  grid-template-columns: 2.2fr 1.2fr 1.4fr 1.8fr;
+  gap: 44px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  position: relative;
+  z-index: 10;
+}
+
+.udan-footer-col h4,
+.footer-col h4 {
+  font-size: 13px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: #ffffff;
+  margin-bottom: 18px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.udan-footer-col h4::after,
+.footer-col h4::after {
+  content: "";
+  display: inline-block;
+  width: 20px;
+  height: 2px;
+  background: #FF5E14;
+  border-radius: 2px;
+}
+
+.udan-footer-col p,
+.footer-col p {
+  font-size: 13px;
+  color: #94a3b8;
+  line-height: 1.65;
+  margin-bottom: 14px;
+}
+
+.udan-footer-col ul,
+.footer-col ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.udan-footer-col ul li a,
+.footer-col ul li a {
+  color: #94a3b8;
+  text-decoration: none;
+  font-size: 13px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.25s ease;
+  padding: 2px 0;
+}
+
+.udan-footer-col ul li a:hover,
+.footer-col ul li a:hover {
+  color: #ffffff;
+  transform: translateX(4px);
+}
+
+.udan-footer-col ul li a .model-badge {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: rgba(255, 94, 20, 0.15);
+  color: #FF5E14;
+  border: 1px solid rgba(255, 94, 20, 0.3);
+}
+
+/* SHOWROOM CONTACT BOX */
+.showroom-quick-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+.showroom-quick-card .card-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 12px;
+  color: #cbd5e1;
+  margin-bottom: 10px;
+}
+
+.showroom-quick-card .card-row:last-child {
+  margin-bottom: 0;
+}
+
+.showroom-quick-card .card-row strong {
+  color: #ffffff;
+}
+
+/* SOCIAL ICONS */
+.footer-social-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 18px;
+}
+
+.footer-social-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #94a3b8;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.footer-social-btn:hover {
+  color: #ffffff;
+  background: rgba(255, 94, 20, 0.18);
+  border-color: #FF5E14;
+  transform: translateY(-3px);
+  box-shadow: 0 4px 14px rgba(255, 94, 20, 0.4);
+}
+
+/* NEWSLETTER FORM */
+.skyline-newsletter-form {
+  margin-top: 14px;
+}
+
+.skyline-newsletter-form .input-group {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.skyline-newsletter-form input[type="email"] {
+  flex: 1;
+  min-width: 0;
+  padding: 12px 14px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
+  color: #ffffff;
+  font-size: 13px;
+  outline: none;
+  transition: all 0.25s ease;
+}
+
+.skyline-newsletter-form input[type="email"]:focus {
+  border-color: #FF5E14;
+  box-shadow: 0 0 14px rgba(255, 94, 20, 0.35);
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.skyline-newsletter-form input[type="email"]::placeholder {
+  color: #64748b;
+}
+
+.skyline-newsletter-form button[type="submit"] {
+  padding: 12px 18px;
+  background: linear-gradient(135deg, #FF5E14 0%, #e11d48 100%);
+  color: #ffffff;
+  border: none;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.25s ease;
+  box-shadow: 0 4px 12px rgba(255, 94, 20, 0.3);
+}
+
+.skyline-newsletter-form button[type="submit"]:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(255, 94, 20, 0.5);
+}
+
+.newsletter-success-note {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: rgba(16, 185, 129, 0.12);
+  border: 1px solid rgba(16, 185, 129, 0.4);
+  color: #34d399;
+  font-size: 12px;
+  font-weight: 600;
+  margin-top: 10px;
+}
+
+/* 7. FOOTER BOTTOM BAR */
+.udan-footer-bottom,
+.footer-bottom {
+  max-width: 1360px;
+  margin: 0 auto;
+  padding: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  font-size: 12px;
+  color: #64748b;
+  position: relative;
+  z-index: 10;
+}
+
+.udan-footer-bottom .bottom-brand-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.udan-footer-bottom .bottom-credits {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.udan-footer-bottom .bottom-credits strong {
+  color: #cbd5e1;
+}
+
+/* BACK TO TOP BUTTON */
+.footer-back-to-top {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #cbd5e1;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+  user-select: none;
+}
+
+.footer-back-to-top:hover {
+  background: rgba(255, 94, 20, 0.15);
+  border-color: #FF5E14;
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(255, 94, 20, 0.3);
+}
+
+.footer-back-to-top .arrow-icon {
+  width: 14px;
+  height: 14px;
+  color: #FF5E14;
+  transition: transform 0.25s ease;
+}
+
+.footer-back-to-top:hover .arrow-icon {
+  transform: translateY(-2px);
+}
+
+/* ==========================================================================
+   COMPREHENSIVE RESPONSIVENESS BREAKPOINTS
+   (1440px, 1024px, 768px, 430px, 390px, 375px, 320px)
+   ========================================================================== */
+
+/* 1440px+: Ultra-wide Display */
+@media (min-width: 1440px) {
+  .skyline-stage {
+    height: 240px;
+  }
+  .skyline-svg-container {
+    height: 145px;
+  }
+  .traveling-motorcycle {
+    width: 140px;
+    height: 70px;
+  }
+  .udan-footer-grid,
+  .footer-container {
+    padding: 64px 32px 48px;
+    gap: 56px;
+  }
+}
+
+/* 1024px: Desktop / Large Tablets */
+@media (max-width: 1024px) {
+  .skyline-stage {
+    height: 195px;
+  }
+  .skyline-svg-container {
+    height: 115px;
+  }
+  .udan-footer-grid,
+  .footer-container {
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    padding: 48px 24px 36px;
+  }
+  .skyline-ribbon-container {
+    justify-content: center;
+  }
+}
+
+/* 768px: Tablets & Large Mobile */
+@media (max-width: 768px) {
+  .skyline-stage {
+    height: 170px;
+  }
+  .skyline-svg-container {
+    height: 100px;
+    bottom: 34px;
+  }
+  .skyline-road {
+    height: 36px;
+  }
+  .traveling-motorcycle {
+    width: 110px;
+    height: 55px;
+    bottom: 0;
+  }
+  .headlight-cone-beam {
+    width: 90px;
+    height: 38px;
+    top: 10px;
+    left: 95px;
+  }
+  .udan-footer-grid,
+  .footer-container {
+    grid-template-columns: 1fr;
+    gap: 36px;
+    padding: 40px 20px 32px;
+  }
+  .skyline-ribbon-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .value-badge {
+    justify-content: center;
+    font-size: 10px;
+    padding: 7px 12px;
+  }
+  .udan-footer-bottom,
+  .footer-bottom {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+  }
+  .footer-back-to-top {
+    align-self: flex-start;
+  }
+}
+
+/* 430px: iPhone 14/15/16 Pro Max */
+@media (max-width: 430px) {
+  .skyline-stage {
+    height: 150px;
+  }
+  .skyline-svg-container {
+    height: 85px;
+    bottom: 30px;
+  }
+  .skyline-road {
+    height: 32px;
+  }
+  .traveling-motorcycle-wrap {
+    height: 52px;
+    bottom: 6px;
+  }
+  .traveling-motorcycle {
+    width: 95px;
+    height: 48px;
+  }
+  .headlight-cone-beam {
+    width: 75px;
+    height: 32px;
+    top: 8px;
+    left: 80px;
+  }
+  .skyline-ribbon-container {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+  .value-badge {
+    width: 100%;
+    min-height: 44px; /* Touch target */
+    font-size: 10.5px;
+  }
+  .skyline-newsletter-form .input-group {
+    flex-direction: column;
+    gap: 8px;
+  }
+  .skyline-newsletter-form input[type="email"],
+  .skyline-newsletter-form button[type="submit"] {
+    width: 100%;
+    min-height: 44px;
+  }
+  .footer-social-btn {
+    width: 44px;
+    height: 44px; /* Touch target */
+  }
+  .footer-back-to-top {
+    min-height: 44px;
+  }
+}
+
+/* 390px: iPhone 12/13/14/15 */
+@media (max-width: 390px) {
+  .skyline-stage {
+    height: 140px;
+  }
+  .skyline-svg-container {
+    height: 78px;
+    bottom: 28px;
+  }
+  .skyline-road {
+    height: 30px;
+  }
+  .traveling-motorcycle-wrap {
+    height: 48px;
+    bottom: 4px;
+  }
+  .traveling-motorcycle {
+    width: 88px;
+    height: 44px;
+  }
+  .headlight-cone-beam {
+    width: 65px;
+    height: 28px;
+    left: 74px;
+    top: 7px;
+  }
+  .udan-footer-grid,
+  .footer-container {
+    padding: 32px 16px 28px;
+    gap: 30px;
+  }
+}
+
+/* 375px: iPhone SE & Small Devices */
+@media (max-width: 375px) {
+  .skyline-stage {
+    height: 130px;
+  }
+  .skyline-svg-container {
+    height: 72px;
+    bottom: 26px;
+  }
+  .skyline-road {
+    height: 28px;
+  }
+  .traveling-motorcycle-wrap {
+    height: 44px;
+    bottom: 4px;
+  }
+  .traveling-motorcycle {
+    width: 80px;
+    height: 40px;
+  }
+  .headlight-cone-beam {
+    width: 58px;
+    height: 25px;
+    left: 68px;
+    top: 6px;
+  }
+  .udan-footer-col h4,
+  .footer-col h4 {
+    font-size: 12px;
+  }
+  .udan-footer-col p,
+  .footer-col p,
+  .udan-footer-col ul li a,
+  .footer-col ul li a {
+    font-size: 12px;
+  }
+}
+
+/* 320px: Ultra-Narrow Compact Devices */
+@media (max-width: 320px) {
+  .skyline-stage {
+    height: 120px;
+  }
+  .skyline-svg-container {
+    height: 64px;
+    bottom: 24px;
+  }
+  .skyline-road {
+    height: 26px;
+  }
+  .traveling-motorcycle-wrap {
+    height: 38px;
+    bottom: 2px;
+  }
+  .traveling-motorcycle {
+    width: 72px;
+    height: 36px;
+  }
+  .headlight-cone-beam {
+    width: 50px;
+    height: 22px;
+    left: 60px;
+    top: 5px;
+  }
+  .udan-footer-grid,
+  .footer-container {
+    padding: 28px 12px 24px;
+    gap: 26px;
+  }
+  .value-badge {
+    font-size: 9.5px;
+    padding: 6px 10px;
+  }
+  .udan-footer-bottom,
+  .footer-bottom {
+    padding: 18px 12px;
+  }
+}
+
+/* REDUCED MOTION PREFERENCE (ACCESSIBILITY) */
+@media (prefers-reduced-motion: reduce) {
+  .skyline-neon-edge {
+    animation: none;
+    opacity: 1;
+  }
+  .road-markings {
+    animation: none;
+  }
+  .traveling-motorcycle {
+    animation: none;
+    left: 48%;
+    transform: translateX(-50%);
+  }
+  .motorcycle-chassis {
+    animation: none;
+  }
+  .motorcycle-wheel-rear,
+  .motorcycle-wheel-front {
+    animation: none;
+  }
+  .headlight-cone-beam {
+    animation: none;
+    opacity: 0.95;
+  }
+  .footer-embers-canvas {
+    display: none;
+  }
+}

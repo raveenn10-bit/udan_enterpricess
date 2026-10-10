@@ -18,7 +18,7 @@ export const INITIAL_LEADS: TestRideLead[] = [
   {
     id: "LEAD-101",
     customerName: "Kasun Malinda",
-    phoneNumber: "0771234567",
+    phoneNumber: "0778899123",
     bikeModelId: "the-tank",
     bikeModelName: "Zuboo The Tank (3000W)",
     preferredDate: "2026-10-12",
