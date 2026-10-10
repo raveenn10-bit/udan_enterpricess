@@ -1,1091 +1,1205 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
-  ShieldCheck,
-  Lock,
-  Unlock,
-  KeyRound,
-  Users,
-  Layers,
-  Wrench,
-  Search,
-  Filter,
-  Download,
-  Plus,
-  Phone,
+  LayoutDashboard,
+  Bike,
+  Calendar,
   MessageSquare,
+  Tag,
+  Image as ImageIcon,
+  Globe,
+  Settings,
+  Search,
+  Plus,
+  Edit,
+  Trash2,
   CheckCircle2,
   Clock,
   AlertCircle,
-  TrendingUp,
-  Store,
-  RefreshCw,
-  LogOut,
-  ChevronDown,
-  Calendar,
-  Save,
-  Trash2,
-  ArrowUpRight,
+  Phone,
   ExternalLink,
-  Edit3,
-  X,
-  Mail,
-  LogIn,
-  Loader2,
+  Download,
+  LogOut,
+  RefreshCw,
+  ShieldCheck,
   UserCheck,
+  Users,
+  Eye,
+  FileText,
+  Filter,
+  Sliders,
+  ChevronRight,
+  Menu,
+  X,
+  Loader2,
+  Send,
+  Sparkles,
+  MapPin,
+  Lock,
 } from "lucide-react";
-import { INITIAL_LEADS, TestRideLead, LeadStatus, generateWhatsAppLink, exportLeadsToCSV } from "@/data/leads";
-import { INITIAL_INVENTORY, InventoryItem } from "@/data/inventory";
-import { SERVICE_PACKAGES } from "@/data/services";
-import { BUSINESS_CONFIG } from "@/data/business";
-import { auth, db } from "@/lib/firebase";
+import { auth } from "@/lib/firebase";
+import { onAuthStateChanged, signOut, User as FirebaseUser } from "firebase/auth";
 import {
-  signInWithEmailAndPassword,
-  signOut,
-  onAuthStateChanged,
-  User as FirebaseUser,
-} from "firebase/auth";
-import { collection, getDocs, query, orderBy, limit } from "firebase/firestore";
+  AdminProfile,
+  ProductItem,
+  TestRideBookingItem,
+  ContactInquiryItem,
+  OfferItem,
+  ShowroomSettings,
+  SiteContentHomepage,
+  AuditLogItem,
+  BookingStatus,
+  InquiryStatus,
+  BikePublishStatus,
+  BikeStockStatus,
+} from "@/types/admin";
+import {
+  getAdminProfile,
+  ensureAdminProfile,
+  getProducts,
+  saveProduct,
+  deleteProduct,
+  getTestRideBookings,
+  updateBookingStatus,
+  getContactInquiries,
+  updateInquiryStatus,
+  getOffers,
+  saveOffer,
+  deleteOffer,
+  getShowroomSettings,
+  saveShowroomSettings,
+  getHomepageContent,
+  saveHomepageContent,
+  getAuditLogs,
+  logAuditAction,
+  getAllAdminProfiles,
+  updateAdminRole,
+  DEFAULT_SETTINGS,
+  DEFAULT_HOMEPAGE_CONTENT,
+} from "@/lib/admin-db";
 
+type ActiveTab =
+  | "overview"
+  | "products"
+  | "bookings"
+  | "inquiries"
+  | "offers"
+  | "media"
+  | "cms"
+  | "settings"
+  | "seo"
+  | "staff"
+  | "audit";
 
-interface ServiceBookingRecord {
-  id: string;
-  customerName: string;
-  phone: string;
-  vinOrModel: string;
-  servicePackage: string;
-  preferredDate: string;
-  preferredTime: string;
-  notes?: string;
-  status: "Pending" | "Confirmed" | "In Bay" | "Completed";
-  createdAt: string;
-}
+export default function AdminDashboardPage() {
+  const router = useRouter();
 
-const DEFAULT_SERVICE_BOOKINGS: ServiceBookingRecord[] = [
-  {
-    id: "SRV-201",
-    customerName: "Kavindu Perera",
-    phone: "0771234821",
-    vinOrModel: "ZB-2026-T3-001 (Zuboo T3)",
-    servicePackage: "Routine 3-Month / 1,000 km Inspection",
-    preferredDate: "2026-10-14",
-    preferredTime: "Morning (10:00 AM)",
-    notes: "Routine warranty checkup. Please verify front brake lever tightness.",
-    status: "Confirmed",
-    createdAt: "2026-10-09 09:30 AM",
-  },
-  {
-    id: "SRV-202",
-    customerName: "Nuwan Jayasuriya",
-    phone: "0719876933",
-    vinOrModel: "ZB-2026-GT-042 (Zuboo GT)",
-    servicePackage: "Battery Health Diagnostics & BMS Calibration",
-    preferredDate: "2026-10-15",
-    preferredTime: "Afternoon (2:00 PM)",
-    notes: "Routine coastal BMS diagnostic check before hill country touring.",
-    status: "Pending",
-    createdAt: "2026-10-10 08:15 AM",
-  },
-  {
-    id: "SRV-203",
-    customerName: "M. Farook",
-    phone: "0763322119",
-    vinOrModel: "Zuboo The Tank",
-    servicePackage: "Hydraulic Brake Service & Caliper Overhaul",
-    preferredDate: "2026-10-12",
-    preferredTime: "Morning (11:30 AM)",
-    notes: "Rear brake pad replacement and fluid top-up.",
-    status: "In Bay",
-    createdAt: "2026-10-08 04:00 PM",
-  },
-];
-
-export default function AdminPage() {
-  // Authentication states
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  // Auth State
   const [currentUser, setCurrentUser] = useState<FirebaseUser | null>(null);
-  const [authMode, setAuthMode] = useState<"firebase" | "pin">("firebase");
-  const [authEmail, setAuthEmail] = useState<string>("");
-  const [authPassword, setAuthPassword] = useState<string>("");
-  const [isAuthLoading, setIsAuthLoading] = useState<boolean>(false);
-  const [pinInput, setPinInput] = useState<string>("");
-  const [loginError, setLoginError] = useState<string>("");
-  const [activeTab, setActiveTab] = useState<"leads" | "inventory" | "service">("leads");
+  const [adminProfile, setAdminProfile] = useState<AdminProfile | null>(null);
+  const [authLoading, setAuthLoading] = useState(true);
 
-  // Leads State
-  const [leads, setLeads] = useState<TestRideLead[]>(INITIAL_LEADS);
-  const [leadFilter, setLeadFilter] = useState<string>("All");
-  const [leadSearch, setLeadSearch] = useState<string>("");
-  const [isAddLeadModalOpen, setIsAddLeadModalOpen] = useState<boolean>(false);
-  const [newLeadForm, setNewLeadForm] = useState({
-    customerName: "",
-    phoneNumber: "",
-    bikeModelId: "t3",
-    bikeModelName: "Zuboo T3 (1200W)",
-    preferredDate: new Date().toISOString().slice(0, 10),
-    preferredTimeSlot: "Morning (10:00 AM)",
-    locationCity: "Galle",
-    notes: "Walk-in showroom visitor",
-  });
+  // Navigation State
+  const [activeTab, setActiveTab] = useState<ActiveTab>("overview");
+  const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
 
-  // Inventory State
-  const [inventory, setInventory] = useState<InventoryItem[]>(INITIAL_INVENTORY);
-  const [inventorySearch, setInventorySearch] = useState<string>("");
-  const [statusNotification, setStatusNotification] = useState<string | null>(null);
+  // Notification Toast State
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
 
-  // Service Bookings State
-  const [serviceBookings, setServiceBookings] = useState<ServiceBookingRecord[]>(DEFAULT_SERVICE_BOOKINGS);
+  // Data States
+  const [products, setProducts] = useState<ProductItem[]>([]);
+  const [bookings, setBookings] = useState<TestRideBookingItem[]>([]);
+  const [inquiries, setInquiries] = useState<ContactInquiryItem[]>([]);
+  const [offers, setOffers] = useState<OfferItem[]>([]);
+  const [settings, setSettings] = useState<ShowroomSettings>(DEFAULT_SETTINGS);
+  const [cmsContent, setCmsContent] = useState<SiteContentHomepage>(DEFAULT_HOMEPAGE_CONTENT);
+  const [auditLogs, setAuditLogs] = useState<AuditLogItem[]>([]);
+  const [staffProfiles, setStaffProfiles] = useState<AdminProfile[]>([]);
+  const [isDataLoading, setIsDataLoading] = useState(false);
 
-  // Sync / Load on mount from localStorage & Firebase Auth
+  // Search & Filters
+  const [productSearch, setProductSearch] = useState("");
+  const [bookingSearch, setBookingSearch] = useState("");
+  const [bookingFilter, setBookingFilter] = useState<string>("all");
+  const [inquirySearch, setInquirySearch] = useState("");
+  const [inquiryFilter, setInquiryFilter] = useState<string>("all");
+
+  // Modals & Editing
+  const [editingProduct, setEditingProduct] = useState<ProductItem | null>(null);
+  const [isProductModalOpen, setIsProductModalOpen] = useState(false);
+  const [editingOffer, setEditingOffer] = useState<OfferItem | null>(null);
+  const [isOfferModalOpen, setIsOfferModalOpen] = useState(false);
+
+  const showToast = (msg: string) => {
+    setToastMessage(msg);
+    setTimeout(() => setToastMessage(null), 3500);
+  };
+
+  // Auth verification
   useEffect(() => {
-    // 1. Firebase Auth listener
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        setCurrentUser(user);
-        setIsAuthenticated(true);
-        localStorage.setItem("udan_admin_auth", "true");
-        if (user.email) {
-          localStorage.setItem("udan_admin_email", user.email);
-        }
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        router.replace("/admin/login");
       } else {
-        const savedAuth = localStorage.getItem("udan_admin_auth");
-        if (savedAuth !== "true") {
-          setIsAuthenticated(false);
-          setCurrentUser(null);
+        setCurrentUser(user);
+        try {
+          const profile = await ensureAdminProfile(user.uid, user.email || "");
+          setAdminProfile(profile);
+        } catch (err) {
+          console.warn("Could not fetch admin profile:", err);
         }
+        setAuthLoading(false);
       }
     });
 
-    const savedAuth = localStorage.getItem("udan_admin_auth");
-    if (savedAuth === "true") {
-      setIsAuthenticated(true);
-    }
+    return () => unsubscribe();
+  }, [router]);
 
-    const savedLeads = localStorage.getItem("udan_admin_leads");
-    if (savedLeads) {
-      try {
-        setLeads(JSON.parse(savedLeads));
-      } catch (e) {
-        console.warn("Could not parse saved leads:", e);
-      }
-    }
-
-    const savedInventory = localStorage.getItem("udan_admin_inventory");
-    if (savedInventory) {
-      try {
-        setInventory(JSON.parse(savedInventory));
-      } catch (e) {
-        console.warn("Could not parse saved inventory:", e);
-      }
-    }
-
-    const savedService = localStorage.getItem("udan_service_bookings");
-    if (savedService) {
-      try {
-        const parsed = JSON.parse(savedService);
-        if (Array.isArray(parsed) && parsed.length > 0) {
-          setServiceBookings((prev) => {
-            const combined = [...parsed, ...prev.filter((p) => !parsed.some((x: ServiceBookingRecord) => x.id === p.id))];
-            return combined;
-          });
-        }
-      } catch (e) {
-        console.warn("Could not parse saved service bookings:", e);
-      }
-    }
-
-    // Try fetching from Firebase Firestore if available
-    const fetchFirestoreBookings = async () => {
-      try {
-        const q = query(collection(db, "test_ride_bookings"), orderBy("createdAt", "desc"), limit(20));
-        const snap = await getDocs(q);
-        if (!snap.empty) {
-          const remoteLeads: TestRideLead[] = [];
-          snap.forEach((doc) => {
-            const data = doc.data();
-            remoteLeads.push({
-              id: doc.id.substring(0, 8).toUpperCase(),
-              customerName: data.customerName || "Inquiry",
-              phoneNumber: data.phoneNumber || "",
-              bikeModelId: data.bikeModelId || "general",
-              bikeModelName: data.bikeModelName || "Zuboo Model",
-              preferredDate: data.preferredDate || "Earliest",
-              preferredTimeSlot: "Showroom Visit",
-              locationCity: "Galle Region",
-              notes: data.notes || "",
-              status: (data.status === "completed" ? "Test Ride Completed" : "New") as LeadStatus,
-              createdAt: data.createdAt?.toDate ? data.createdAt.toDate().toLocaleString() : "Recent",
-            });
-          });
-          if (remoteLeads.length > 0) {
-            setLeads((prev) => {
-              const ids = new Set(prev.map((l) => l.id));
-              const merged = [...remoteLeads.filter((r) => !ids.has(r.id)), ...prev];
-              localStorage.setItem("udan_admin_leads", JSON.stringify(merged));
-              return merged;
-            });
-          }
-        }
-      } catch (err) {
-        console.info("Firestore live sync offline/mock mode:", err);
-      }
-    };
-
-    fetchFirestoreBookings();
-
-    return () => {
-      unsubscribe();
-    };
-  }, []);
-
-  const triggerToast = (msg: string) => {
-    setStatusNotification(msg);
-    setTimeout(() => {
-      setStatusNotification(null);
-    }, 3500);
-  };
-
-  // Firebase Auth Login Handler
-  const handleFirebaseLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoginError("");
-    setIsAuthLoading(true);
-
+  // Load all data on mount
+  const refreshAllData = async () => {
+    setIsDataLoading(true);
     try {
-      const userCredential = await signInWithEmailAndPassword(
-        auth,
-        authEmail.trim(),
-        authPassword
-      );
-      setCurrentUser(userCredential.user);
-      setIsAuthenticated(true);
-      localStorage.setItem("udan_admin_auth", "true");
-      if (userCredential.user.email) {
-        localStorage.setItem("udan_admin_email", userCredential.user.email);
-      }
-      triggerToast(`Welcome back, ${userCredential.user.email || "Admin"}! Firebase authentication confirmed.`);
-    } catch (err: any) {
-      console.error("Firebase Login Error:", err);
-      let message = "Firebase sign-in failed. Please verify email and password.";
-      if (
-        err.code === "auth/invalid-credential" ||
-        err.code === "auth/user-not-found" ||
-        err.code === "auth/wrong-password"
-      ) {
-        message = "Incorrect email or password. Please verify the user added in Firebase Authentication.";
-      } else if (err.code === "auth/invalid-email") {
-        message = "Please enter a valid email address.";
-      } else if (err.code === "auth/too-many-requests") {
-        message = "Access temporarily limited. Try again shortly or use the emergency showroom PIN.";
-      } else if (err.code === "auth/network-request-failed") {
-        message = "Network error connecting to Firebase. You can switch to emergency PIN (4131) bypass.";
-      } else if (err.message) {
-        message = err.message;
-      }
-      setLoginError(message);
-    } finally {
-      setIsAuthLoading(false);
-    }
-  };
+      const [
+        prodsData,
+        bookingsData,
+        inquiriesData,
+        offersData,
+        settingsData,
+        cmsData,
+        logsData,
+        staffData,
+      ] = await Promise.all([
+        getProducts(),
+        getTestRideBookings(),
+        getContactInquiries(),
+        getOffers(),
+        getShowroomSettings(),
+        getHomepageContent(),
+        getAuditLogs(),
+        getAllAdminProfiles(),
+      ]);
 
-  // Emergency PIN Bypass Login Handler
-  const handlePinLogin = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (pinInput === "4131" || pinInput === "udan2026" || pinInput === "4131#") {
-      setIsAuthenticated(true);
-      localStorage.setItem("udan_admin_auth", "true");
-      localStorage.setItem("udan_admin_email", "showroom-staff@udan.lk");
-      setLoginError("");
-      triggerToast("Welcome back! Showroom staff PIN bypass verified.");
-    } else {
-      setLoginError("Invalid staff PIN. Use demo showroom PIN: 4131 or sign in with Firebase.");
-    }
-  };
-
-  // Logout Handler (signs out from Firebase Auth and clears storage)
-  const handleLogout = async () => {
-    try {
-      await signOut(auth);
+      setProducts(prodsData);
+      setBookings(bookingsData);
+      setInquiries(inquiriesData);
+      setOffers(offersData);
+      setSettings(settingsData);
+      setCmsContent(cmsData);
+      setAuditLogs(logsData);
+      setStaffProfiles(staffData);
     } catch (err) {
-      console.warn("Sign out error:", err);
-    }
-    setIsAuthenticated(false);
-    setCurrentUser(null);
-    localStorage.removeItem("udan_admin_auth");
-    localStorage.removeItem("udan_admin_email");
-    setPinInput("");
-    setAuthPassword("");
-    triggerToast("Signed out from Showroom CMS.");
-  };
-
-
-  // Leads Actions
-  const handleUpdateLeadStatus = (leadId: string, newStatus: LeadStatus) => {
-    const updated = leads.map((lead) =>
-      lead.id === leadId ? { ...lead, status: newStatus } : lead
-    );
-    setLeads(updated);
-    localStorage.setItem("udan_admin_leads", JSON.stringify(updated));
-    triggerToast(`Lead #${leadId} updated to "${newStatus}"`);
-  };
-
-  const handleDeleteLead = (leadId: string) => {
-    if (confirm(`Are you sure you want to remove lead #${leadId}?`)) {
-      const updated = leads.filter((l) => l.id !== leadId);
-      setLeads(updated);
-      localStorage.setItem("udan_admin_leads", JSON.stringify(updated));
-      triggerToast(`Lead #${leadId} removed.`);
+      console.error("Data loading error:", err);
+      showToast("Error loading Firestore collections.");
+    } finally {
+      setIsDataLoading(false);
     }
   };
 
-  const handleAddWalkInLead = (e: React.FormEvent) => {
+  useEffect(() => {
+    if (currentUser) {
+      refreshAllData();
+    }
+  }, [currentUser]);
+
+  const handleSignOut = async () => {
+    try {
+      if (currentUser) {
+        await logAuditAction(
+          "STAFF_LOGOUT",
+          currentUser.uid,
+          currentUser.email || "staff",
+          "auth",
+          "Staff member signed out from dashboard."
+        );
+      }
+      await signOut(auth);
+      router.replace("/admin/login");
+    } catch (e) {
+      console.warn("Sign out notice:", e);
+      router.replace("/admin/login");
+    }
+  };
+
+  // Derived Overview Statistics
+  const stats = useMemo(() => {
+    const totalBikes = products.length;
+    const publishedBikes = products.filter((p) => p.status === "published").length;
+    const outOfStock = products.filter((p) => p.stockStatus === "Out of Stock").length;
+    const pendingBookings = bookings.filter((b) => b.status === "pending").length;
+    const pendingInquiries = inquiries.filter((i) => i.status === "new").length;
+    const activeOffersCount = offers.filter((o) => o.isActive).length;
+
+    return {
+      totalBikes,
+      publishedBikes,
+      outOfStock,
+      pendingBookings,
+      pendingInquiries,
+      activeOffersCount,
+    };
+  }, [products, bookings, inquiries, offers]);
+
+  // Product Actions
+  const handleSaveProduct = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!newLeadForm.customerName || !newLeadForm.phoneNumber) {
-      alert("Please provide customer name and phone number.");
+    if (!editingProduct) return;
+
+    try {
+      await saveProduct(editingProduct, !products.some((p) => p.id === editingProduct.id));
+      showToast(`Product ${editingProduct.name} saved successfully.`);
+      setIsProductModalOpen(false);
+      setEditingProduct(null);
+      if (currentUser) {
+        await logAuditAction(
+          "PRODUCT_SAVED",
+          currentUser.uid,
+          currentUser.email || "staff",
+          `products/${editingProduct.id}`,
+          `Updated product specifications and pricing for ${editingProduct.name}.`
+        );
+      }
+      refreshAllData();
+    } catch (err) {
+      console.error("Save product error:", err);
+      showToast("Failed to save product to Firestore.");
+    }
+  };
+
+  const handleDeleteProduct = async (id: string, name: string) => {
+    if (adminProfile?.role !== "owner") {
+      showToast("Only showroom owner can delete products.");
       return;
     }
+    if (!confirm(`Are you sure you want to delete ${name}? This action cannot be undone.`)) return;
 
-    const createdLead: TestRideLead = {
-      id: `LEAD-${Math.floor(100 + Math.random() * 900)}`,
-      customerName: newLeadForm.customerName,
-      phoneNumber: newLeadForm.phoneNumber,
-      bikeModelId: newLeadForm.bikeModelId,
-      bikeModelName: newLeadForm.bikeModelName,
-      preferredDate: newLeadForm.preferredDate,
-      preferredTimeSlot: newLeadForm.preferredTimeSlot,
-      locationCity: newLeadForm.locationCity,
-      notes: newLeadForm.notes,
-      status: "New",
-      createdAt: new Date().toLocaleString(),
-    };
-
-    const updated = [createdLead, ...leads];
-    setLeads(updated);
-    localStorage.setItem("udan_admin_leads", JSON.stringify(updated));
-    setIsAddLeadModalOpen(false);
-    setNewLeadForm({
-      customerName: "",
-      phoneNumber: "",
-      bikeModelId: "t3",
-      bikeModelName: "Zuboo T3 (1200W)",
-      preferredDate: new Date().toISOString().slice(0, 10),
-      preferredTimeSlot: "Morning (10:00 AM)",
-      locationCity: "Galle",
-      notes: "Walk-in showroom visitor",
-    });
-    triggerToast(`New walk-in lead added for ${createdLead.customerName}`);
-  };
-
-  // Inventory Actions
-  const handleUpdateStockStatus = (
-    itemId: string,
-    newStatus: "In Showroom" | "Pre-Order" | "Low Stock" | "Out of Stock"
-  ) => {
-    const updated = inventory.map((item) =>
-      item.id === itemId
-        ? {
-            ...item,
-            stockStatus: newStatus,
-            lastUpdated: new Date().toISOString().slice(0, 10),
-          }
-        : item
-    );
-    setInventory(updated);
-    localStorage.setItem("udan_admin_inventory", JSON.stringify(updated));
-    triggerToast(`Stock status for ${itemId.toUpperCase()} set to "${newStatus}"`);
-  };
-
-  const handleUpdatePrice = (itemId: string, newPrice: number) => {
-    const updated = inventory.map((item) =>
-      item.id === itemId
-        ? {
-            ...item,
-            provisionalPriceLKR: newPrice,
-            lastUpdated: new Date().toISOString().slice(0, 10),
-          }
-        : item
-    );
-    setInventory(updated);
-    localStorage.setItem("udan_admin_inventory", JSON.stringify(updated));
-  };
-
-  const handleUpdateDeliveryTime = (itemId: string, newDelivery: string) => {
-    const updated = inventory.map((item) =>
-      item.id === itemId
-        ? {
-            ...item,
-            deliveryTime: newDelivery,
-            lastUpdated: new Date().toISOString().slice(0, 10),
-          }
-        : item
-    );
-    setInventory(updated);
-    localStorage.setItem("udan_admin_inventory", JSON.stringify(updated));
-  };
-
-  const handleUpdateFloorUnits = (itemId: string, delta: number) => {
-    const updated = inventory.map((item) => {
-      if (item.id === itemId) {
-        const count = Math.max(0, item.showroomUnits + delta);
-        return {
-          ...item,
-          showroomUnits: count,
-          stockStatus:
-            count === 0
-              ? ("Pre-Order" as const)
-              : count === 1
-              ? ("Low Stock" as const)
-              : ("In Showroom" as const),
-          lastUpdated: new Date().toISOString().slice(0, 10),
-        };
+    try {
+      await deleteProduct(id);
+      showToast(`Deleted ${name} from products collection.`);
+      if (currentUser) {
+        await logAuditAction(
+          "PRODUCT_DELETED",
+          currentUser.uid,
+          currentUser.email || "owner",
+          `products/${id}`,
+          `Deleted product ${name}.`
+        );
       }
-      return item;
-    });
-    setInventory(updated);
-    localStorage.setItem("udan_admin_inventory", JSON.stringify(updated));
-  };
-
-  const handleResetInventory = () => {
-    if (confirm("Reset inventory to factory catalogue defaults?")) {
-      setInventory(INITIAL_INVENTORY);
-      localStorage.removeItem("udan_admin_inventory");
-      triggerToast("Inventory reset to factory default specifications.");
+      refreshAllData();
+    } catch (err) {
+      console.error("Delete product error:", err);
+      showToast("Error deleting product.");
     }
   };
 
-  // Service Bookings Action
-  const handleUpdateServiceStatus = (
-    bookingId: string,
-    newStatus: "Pending" | "Confirmed" | "In Bay" | "Completed"
-  ) => {
-    const updated = serviceBookings.map((b) =>
-      b.id === bookingId ? { ...b, status: newStatus } : b
-    );
-    setServiceBookings(updated);
-    localStorage.setItem("udan_service_bookings", JSON.stringify(updated));
-    triggerToast(`Service Booking #${bookingId} marked as ${newStatus}`);
+  // Booking Actions
+  const handleUpdateBookingStatus = async (bookingId: string, status: BookingStatus) => {
+    try {
+      await updateBookingStatus(bookingId, status);
+      showToast(`Booking status updated to ${status}.`);
+      if (currentUser) {
+        await logAuditAction(
+          "BOOKING_STATUS_UPDATED",
+          currentUser.uid,
+          currentUser.email || "staff",
+          `test_ride_bookings/${bookingId}`,
+          `Changed test ride booking status to ${status}.`
+        );
+      }
+      refreshAllData();
+    } catch (e) {
+      console.error("Update booking error:", e);
+      showToast("Error updating booking status.");
+    }
   };
 
-  // Filtered Leads
-  const filteredLeads = leads.filter((lead) => {
-    const matchesFilter = leadFilter === "All" || lead.status === leadFilter;
-    const matchesSearch =
-      lead.customerName.toLowerCase().includes(leadSearch.toLowerCase()) ||
-      lead.phoneNumber.includes(leadSearch) ||
-      lead.bikeModelName.toLowerCase().includes(leadSearch.toLowerCase()) ||
-      (lead.locationCity && lead.locationCity.toLowerCase().includes(leadSearch.toLowerCase()));
-    return matchesFilter && matchesSearch;
-  });
+  // Inquiry Actions
+  const handleUpdateInquiryStatus = async (inquiryId: string, status: InquiryStatus) => {
+    try {
+      await updateInquiryStatus(inquiryId, status);
+      showToast(`Inquiry status updated to ${status}.`);
+      if (currentUser) {
+        await logAuditAction(
+          "INQUIRY_STATUS_UPDATED",
+          currentUser.uid,
+          currentUser.email || "staff",
+          `contact_inquiries/${inquiryId}`,
+          `Changed inquiry status to ${status}.`
+        );
+      }
+      refreshAllData();
+    } catch (e) {
+      console.error("Update inquiry error:", e);
+      showToast("Error updating inquiry status.");
+    }
+  };
 
-  // Filtered Inventory
-  const filteredInventory = inventory.filter((item) => {
+  // Offer Actions
+  const handleSaveOffer = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingOffer) return;
+
+    try {
+      await saveOffer(editingOffer);
+      showToast(`Offer "${editingOffer.title}" saved.`);
+      setIsOfferModalOpen(false);
+      setEditingOffer(null);
+      if (currentUser) {
+        await logAuditAction(
+          "OFFER_SAVED",
+          currentUser.uid,
+          currentUser.email || "owner",
+          `offers/${editingOffer.id}`,
+          `Saved promotional offer ${editingOffer.title}.`
+        );
+      }
+      refreshAllData();
+    } catch (err) {
+      console.error("Save offer error:", err);
+      showToast("Error saving offer.");
+    }
+  };
+
+  const handleDeleteOffer = async (id: string, title: string) => {
+    if (!confirm(`Delete promotion "${title}"?`)) return;
+    try {
+      await deleteOffer(id);
+      showToast(`Offer removed.`);
+      if (currentUser) {
+        await logAuditAction(
+          "OFFER_DELETED",
+          currentUser.uid,
+          currentUser.email || "owner",
+          `offers/${id}`,
+          `Deleted offer ${title}.`
+        );
+      }
+      refreshAllData();
+    } catch (err) {
+      console.error("Delete offer error:", err);
+      showToast("Error deleting offer.");
+    }
+  };
+
+  // Settings Actions
+  const handleSaveSettings = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      await saveShowroomSettings(settings);
+      showToast("Showroom settings and hotline updated in Firestore.");
+      if (currentUser) {
+        await logAuditAction(
+          "SETTINGS_UPDATED",
+          currentUser.uid,
+          currentUser.email || "owner",
+          "settings/showroom",
+          "Updated showroom contact information, hours, and map links."
+        );
+      }
+    } catch (err) {
+      console.error("Save settings error:", err);
+      showToast("Error saving settings.");
+    }
+  };
+
+  // CMS Content Actions
+  const handleSaveCms = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      await saveHomepageContent(cmsContent);
+      showToast("Homepage CMS headlines & text updated.");
+      if (currentUser) {
+        await logAuditAction(
+          "CMS_UPDATED",
+          currentUser.uid,
+          currentUser.email || "owner",
+          "site_content/homepage",
+          "Updated homepage headlines, hero banner, and announcement text."
+        );
+      }
+    } catch (err) {
+      console.error("Save CMS error:", err);
+      showToast("Error saving CMS content.");
+    }
+  };
+
+  // CSV Export utility
+  const exportBookingsToCsv = () => {
+    const headers = ["ID", "Customer Name", "Phone", "Bike Model", "Preferred Date", "Status", "Created At"];
+    const rows = bookings.map((b) => [
+      b.id,
+      `"${b.customerName}"`,
+      b.phoneNumber,
+      `"${b.bikeModelName}"`,
+      b.preferredDate,
+      b.status,
+      `"${b.createdAt}"`,
+    ]);
+    const csvContent = "data:text/csv;charset=utf-8," + [headers.join(","), ...rows.map((r) => r.join(","))].join("\n");
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", `udan_test_rides_${new Date().toISOString().slice(0, 10)}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const exportInquiriesToCsv = () => {
+    const headers = ["ID", "Full Name", "Phone", "Email", "Subject", "Model", "Status", "Created At"];
+    const rows = inquiries.map((i) => [
+      i.id,
+      `"${i.fullName}"`,
+      i.phone,
+      i.email || "N/A",
+      `"${i.subject || ""}"`,
+      `"${i.modelOfInterest || ""}"`,
+      i.status,
+      `"${i.createdAt}"`,
+    ]);
+    const csvContent = "data:text/csv;charset=utf-8," + [headers.join(","), ...rows.map((r) => r.join(","))].join("\n");
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", `udan_inquiries_${new Date().toISOString().slice(0, 10)}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  if (authLoading) {
     return (
-      item.name.toLowerCase().includes(inventorySearch.toLowerCase()) ||
-      item.modelCode.toLowerCase().includes(inventorySearch.toLowerCase()) ||
-      item.category.toLowerCase().includes(inventorySearch.toLowerCase())
-    );
-  });
-
-  // KPIs
-  const totalLeadsCount = leads.length;
-  const newLeadsCount = leads.filter((l) => l.status === "New").length;
-  const completedRidesCount = leads.filter((l) => l.status === "Test Ride Completed").length;
-  const convertedLeadsCount = leads.filter((l) => l.status === "Converted").length;
-  const showroomUnitsTotal = inventory.reduce((acc, curr) => acc + curr.showroomUnits, 0);
-
-  // If NOT authenticated, render the Showroom Staff Login screen
-  if (!isAuthenticated) {
-    return (
-      <div className="min-h-screen bg-[#F7F9FA] text-[#111820] flex flex-col justify-between py-12 px-4 sm:px-6 lg:px-8 selection:bg-[#346C83] selection:text-white">
-        <div className="max-w-md w-full mx-auto space-y-8 my-auto">
-          {/* Brand header */}
-          <div className="text-center space-y-3">
-            <div className="inline-flex items-center justify-center p-3 rounded-2xl bg-white shadow-sm border border-[#E0E8EC] mb-2">
-              <div className="relative h-12 w-12">
-                <Image
-                  src="/media/branding/udan-logo.png"
-                  alt="Udan Enterprises"
-                  fill
-                  priority
-                  className="object-contain"
-                />
-              </div>
-            </div>
-            <h1 className="font-heading font-black text-2xl tracking-tight text-[#111820] uppercase">
-              UDAN ENTERPRISES
-            </h1>
-            <p className="text-xs uppercase tracking-widest text-[#667780] font-semibold">
-              Showroom CMS & Inventory Management System
-            </p>
-          </div>
-
-          {/* Login Card */}
-          <div className="bg-white rounded-2xl shadow-xl border border-[#E0E8EC] p-8 space-y-6">
-            {/* Header / Mode Switcher */}
-            <div className="flex items-center justify-between pb-4 border-b border-[#E0E8EC]">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-[#E8F1F5] flex items-center justify-center text-[#346C83]">
-                  {authMode === "firebase" ? <Mail className="w-5 h-5" /> : <KeyRound className="w-5 h-5" />}
-                </div>
-                <div>
-                  <h2 className="font-heading font-bold text-sm text-[#111820] uppercase tracking-wide">
-                    {authMode === "firebase" ? "Firebase Admin Login" : "Staff PIN Verification"}
-                  </h2>
-                  <p className="text-xs text-[#667780]">
-                    {authMode === "firebase" ? "Official Firebase Credentials" : "Offline Showroom Terminal PIN"}
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            {/* Auth Mode Tabs */}
-            <div className="grid grid-cols-2 p-1 rounded-xl bg-[#F7F9FA] border border-[#E0E8EC] text-xs font-bold">
-              <button
-                type="button"
-                onClick={() => {
-                  setAuthMode("firebase");
-                  setLoginError("");
-                }}
-                className={`py-2 px-3 rounded-lg flex items-center justify-center gap-1.5 transition-all ${
-                  authMode === "firebase"
-                    ? "bg-[#111820] text-white shadow-xs"
-                    : "text-[#667780] hover:text-[#111820]"
-                }`}
-              >
-                <Mail className="w-3.5 h-3.5" />
-                <span>Firebase Auth</span>
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  setAuthMode("pin");
-                  setLoginError("");
-                }}
-                className={`py-2 px-3 rounded-lg flex items-center justify-center gap-1.5 transition-all ${
-                  authMode === "pin"
-                    ? "bg-[#111820] text-white shadow-xs"
-                    : "text-[#667780] hover:text-[#111820]"
-                }`}
-              >
-                <KeyRound className="w-3.5 h-3.5" />
-                <span>PIN Bypass (4131)</span>
-              </button>
-            </div>
-
-            {/* Error Message */}
-            {loginError && (
-              <div className="p-3 rounded-xl bg-rose-50 border border-rose-200 text-xs font-semibold text-rose-700 flex items-start gap-2 animate-in fade-in">
-                <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
-                <span>{loginError}</span>
-              </div>
-            )}
-
-            {/* MODE 1: Firebase Email & Password Form */}
-            {authMode === "firebase" ? (
-              <form onSubmit={handleFirebaseLogin} className="space-y-4">
-                <div>
-                  <label className="block text-xs font-bold uppercase tracking-wider text-[#111820] mb-1.5">
-                    Admin Email Address
-                  </label>
-                  <div className="relative">
-                    <input
-                      type="email"
-                      required
-                      autoFocus
-                      value={authEmail}
-                      onChange={(e) => setAuthEmail(e.target.value)}
-                      placeholder="admin@udan.lk"
-                      className="w-full px-4 py-3 rounded-xl border border-[#E0E8EC] bg-[#F7F9FA] text-[#111820] text-xs font-medium focus:outline-none focus:border-[#346C83] focus:bg-white transition-all pl-10"
-                    />
-                    <Mail className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-xs font-bold uppercase tracking-wider text-[#111820] mb-1.5">
-                    Password
-                  </label>
-                  <div className="relative">
-                    <input
-                      type="password"
-                      required
-                      value={authPassword}
-                      onChange={(e) => setAuthPassword(e.target.value)}
-                      placeholder="••••••••••••"
-                      className="w-full px-4 py-3 rounded-xl border border-[#E0E8EC] bg-[#F7F9FA] text-[#111820] text-xs font-medium focus:outline-none focus:border-[#346C83] focus:bg-white transition-all pl-10"
-                    />
-                    <Lock className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
-                  </div>
-                </div>
-
-                <div className="p-3 rounded-xl bg-[#E8F1F5]/80 border border-[#346C83]/20 text-[11px] text-[#111820] space-y-1">
-                  <div className="font-bold text-[#346C83] flex items-center gap-1.5">
-                    <ShieldCheck className="w-3.5 h-3.5" />
-                    <span>Firebase Authentication Connected</span>
-                  </div>
-                  <p className="text-[#667780]">
-                    Sign in with the user credentials added in your Firebase Console project.
-                  </p>
-                </div>
-
-                <button
-                  type="submit"
-                  disabled={isAuthLoading}
-                  className="w-full py-3.5 px-4 rounded-xl bg-[#111820] hover:bg-[#346C83] text-white font-heading font-bold text-xs uppercase tracking-wider transition-all duration-200 flex items-center justify-center gap-2 shadow-md hover:shadow-lg active:scale-[0.99] disabled:opacity-60 cursor-pointer"
-                >
-                  {isAuthLoading ? (
-                    <>
-                      <Loader2 className="w-4 h-4 animate-spin" />
-                      <span>Verifying Firebase Account...</span>
-                    </>
-                  ) : (
-                    <>
-                      <LogIn className="w-4 h-4" />
-                      <span>Log In with Firebase</span>
-                    </>
-                  )}
-                </button>
-              </form>
-            ) : (
-              /* MODE 2: Emergency PIN Bypass Form */
-              <form onSubmit={handlePinLogin} className="space-y-4">
-                <div>
-                  <label className="block text-xs font-bold uppercase tracking-wider text-[#111820] mb-1.5">
-                    Showroom Staff PIN / Code
-                  </label>
-                  <div className="relative">
-                    <input
-                      type="password"
-                      inputMode="numeric"
-                      autoFocus
-                      value={pinInput}
-                      onChange={(e) => setPinInput(e.target.value)}
-                      placeholder="Enter 4-digit PIN (e.g. 4131)"
-                      className="w-full px-4 py-3 rounded-xl border border-[#E0E8EC] bg-[#F7F9FA] text-[#111820] font-mono text-center text-lg tracking-widest focus:outline-none focus:border-[#346C83] focus:bg-white transition-all shadow-inner"
-                    />
-                    <Lock className="w-4 h-4 text-slate-400 absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none" />
-                  </div>
-                </div>
-
-                <div className="p-3.5 rounded-xl bg-[#E8F1F5]/80 border border-[#346C83]/20 flex items-start gap-2.5 text-xs text-[#111820]">
-                  <ShieldCheck className="w-4 h-4 text-[#346C83] shrink-0 mt-0.5" />
-                  <div>
-                    <span className="font-bold text-[#346C83] block">Showroom Demo PIN: 4131</span>
-                    <span className="text-[11px] text-[#667780]">
-                      Emergency showroom terminal bypass registered for Udan Enterprises Galle staff.
-                    </span>
-                  </div>
-                </div>
-
-                <button
-                  type="submit"
-                  className="w-full py-3.5 px-4 rounded-xl bg-[#111820] hover:bg-[#346C83] text-white font-heading font-bold text-xs uppercase tracking-wider transition-all duration-200 flex items-center justify-center gap-2 shadow-md hover:shadow-lg active:scale-[0.99] cursor-pointer"
-                >
-                  <Unlock className="w-4 h-4" />
-                  <span>Verify PIN & Enter Dashboard</span>
-                </button>
-              </form>
-            )}
-
-            <div className="pt-2 text-center border-t border-[#E0E8EC]">
-              <Link
-                href="/"
-                className="text-xs text-[#667780] hover:text-[#111820] transition-colors inline-flex items-center gap-1 font-medium"
-              >
-                <span>Return to Public Website</span>
-                <ArrowUpRight className="w-3.5 h-3.5" />
-              </Link>
-            </div>
-          </div>
-
-          <div className="text-center text-[11px] text-[#667780] space-y-1">
-            <p>Udan Enterprises • Official Zuboo Electric Mobility Dealership</p>
-            <p>Udugama Road, Kurunduwatta, Galle • Hotline: 078 496 9652</p>
-          </div>
-        </div>
+      <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center text-white">
+        <Loader2 className="w-10 h-10 animate-spin text-[#FF5E14] mb-4" />
+        <p className="text-xs uppercase tracking-widest text-slate-400 font-bold">
+          Verifying Authorized Session...
+        </p>
       </div>
     );
   }
 
-  // Authenticated Showroom CMS Admin Dashboard
   return (
-    <div className="min-h-screen bg-[#F7F9FA] text-[#111820] selection:bg-[#346C83] selection:text-white">
+    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col lg:flex-row font-sans selection:bg-[#FF5E14] selection:text-white">
       {/* Toast Notification */}
-      {statusNotification && (
-        <div className="fixed bottom-6 right-6 z-50 bg-[#111820] text-white px-5 py-3 rounded-xl shadow-2xl border border-white/20 text-xs font-bold flex items-center gap-3 animate-in slide-in-from-bottom-5">
-          <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-          <span>{statusNotification}</span>
+      {toastMessage && (
+        <div className="fixed top-5 right-5 z-50 bg-slate-900 border border-[#FF5E14]/40 text-white px-5 py-3 rounded-2xl shadow-2xl flex items-center gap-3 text-xs font-semibold animate-in fade-in slide-in-from-top-4">
+          <Sparkles className="w-4 h-4 text-[#FF5E14]" />
+          <span>{toastMessage}</span>
         </div>
       )}
 
-      {/* Top Admin Header Bar */}
-      <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-[#E0E8EC] shadow-xs">
-        <div className="editorial-container py-3.5">
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
-            {/* Showroom Brand Info */}
-            <div className="flex items-center gap-3.5">
-              <div className="relative h-9 w-9">
-                <Image
-                  src="/media/branding/udan-logo.png"
-                  alt="Udan Enterprises"
-                  fill
-                  className="object-contain"
-                />
-              </div>
-              <div>
-                <div className="flex items-center gap-2">
-                  <span className="font-heading font-black text-sm text-[#111820] tracking-tight uppercase">
-                    UDAN ENTERPRISES
-                  </span>
-                  <span className="px-2 py-0.5 rounded-full bg-[#E8F1F5] text-[#346C83] text-[10px] font-extrabold uppercase tracking-wider border border-[#346C83]/20">
-                    CMS Admin v3.2
-                  </span>
-                  <span className="hidden sm:inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 text-[10px] font-bold border border-emerald-200">
-                    <UserCheck className="w-3 h-3" />
-                    <span>{currentUser ? "Firebase Auth" : "Staff Verified"}</span>
-                  </span>
-                </div>
-                <p className="text-[11px] text-[#667780]">
-                  Galle Kurunduwatta Showroom • Operator:{" "}
-                  <span className="font-bold text-[#111820]">
-                    {currentUser?.email || (typeof window !== "undefined" && localStorage.getItem("udan_admin_email")) || "Showroom Staff"}
-                  </span>
-                </p>
-              </div>
-            </div>
-
-            {/* Quick Links & Staff Logout */}
-            <div className="flex items-center gap-2.5 flex-wrap">
-              <Link
-                href="/"
-                target="_blank"
-
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-[#111820] bg-[#F7F9FA] hover:bg-[#E8F1F5] border border-[#E0E8EC] transition-colors"
-              >
-                <span>Live Website</span>
-                <ExternalLink className="w-3 h-3 text-[#667780]" />
-              </Link>
-              <Link
-                href="/service"
-                target="_blank"
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-[#111820] bg-[#F7F9FA] hover:bg-[#E8F1F5] border border-[#E0E8EC] transition-colors"
-              >
-                <Wrench className="w-3 h-3 text-[#346C83]" />
-                <span>Service Portal</span>
-              </Link>
-              <Link
-                href="/warranty"
-                target="_blank"
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-[#111820] bg-[#F7F9FA] hover:bg-[#E8F1F5] border border-[#E0E8EC] transition-colors"
-              >
-                <ShieldCheck className="w-3 h-3 text-emerald-600" />
-                <span>Warranty Lookup</span>
-              </Link>
-              <button
-                onClick={handleLogout}
-                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-bold text-rose-600 bg-rose-50 hover:bg-rose-100 border border-rose-200 transition-colors ml-1"
-              >
-                <LogOut className="w-3 h-3" />
-                <span>Logout</span>
-              </button>
+      {/* MOBILE HEADER */}
+      <div className="lg:hidden flex items-center justify-between p-4 bg-slate-900 border-b border-slate-800">
+        <div className="flex items-center gap-3">
+          <Image
+            src="/media/branding/udan-logo.png"
+            alt="Udan Logo"
+            width={36}
+            height={36}
+            className="object-contain"
+          />
+          <div>
+            <div className="text-xs font-extrabold text-white">UDAN ENTERPRISES</div>
+            <div className="text-[10px] text-slate-400 font-bold tracking-wider uppercase">
+              Admin CMS
             </div>
           </div>
         </div>
-      </header>
+        <button
+          onClick={() => setMobileSidebarOpen(!mobileSidebarOpen)}
+          className="p-2 text-slate-400 hover:text-white bg-slate-800 rounded-xl"
+        >
+          {mobileSidebarOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+        </button>
+      </div>
 
-      {/* Main Content Area */}
-      <main className="editorial-container py-8 space-y-8">
-        {/* KPI Cards Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-          <div className="bg-white p-5 rounded-2xl border border-[#E0E8EC] shadow-xs">
-            <div className="flex items-center justify-between text-[#667780] mb-2">
-              <span className="text-[11px] font-bold uppercase tracking-wider">Total Leads</span>
-              <Users className="w-4 h-4 text-[#346C83]" />
+      {/* SIDEBAR NAVIGATION */}
+      <aside
+        className={`fixed inset-y-0 left-0 z-40 w-64 bg-slate-900/95 border-r border-slate-800 flex flex-col justify-between transform transition-transform duration-300 lg:translate-x-0 lg:static lg:w-64 ${
+          mobileSidebarOpen ? "translate-x-0" : "-translate-x-full"
+        }`}
+      >
+        <div className="p-5 flex flex-col flex-1 overflow-y-auto">
+          {/* Brand */}
+          <div className="flex items-center gap-3 pb-6 border-b border-slate-800">
+            <Image
+              src="/media/branding/udan-logo.png"
+              alt="Udan Logo"
+              width={42}
+              height={42}
+              className="object-contain"
+            />
+            <div>
+              <div className="text-sm font-extrabold text-white tracking-tight">UDAN ENTERPRISES</div>
+              <div className="text-[10px] text-[#FF5E14] font-extrabold uppercase tracking-widest flex items-center gap-1">
+                <span>Zuboo Dealership</span>
+              </div>
             </div>
-            <div className="text-2xl font-black font-heading text-[#111820]">{totalLeadsCount}</div>
-            <p className="text-[11px] text-[#667780] mt-1">Across Southern Province</p>
           </div>
 
-          <div className="bg-white p-5 rounded-2xl border border-[#E0E8EC] shadow-xs">
-            <div className="flex items-center justify-between text-[#667780] mb-2">
-              <span className="text-[11px] font-bold uppercase tracking-wider">New Actionable</span>
-              <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" />
+          {/* User profile chip */}
+          <div className="mt-4 p-3 bg-slate-950/60 rounded-2xl border border-slate-800 flex items-center gap-3">
+            <div className="w-8 h-8 rounded-xl bg-[#FF5E14]/10 border border-[#FF5E14]/30 text-[#FF5E14] flex items-center justify-center font-bold text-xs uppercase">
+              {adminProfile?.role === "owner" ? "OW" : "ST"}
             </div>
-            <div className="text-2xl font-black font-heading text-blue-600">{newLeadsCount}</div>
-            <p className="text-[11px] text-[#667780] mt-1">Awaiting showroom call</p>
+            <div className="flex-1 min-w-0">
+              <div className="text-xs font-bold text-white truncate">
+                {currentUser?.email || "Authorized User"}
+              </div>
+              <div className="text-[10px] text-slate-400 uppercase font-semibold">
+                Role: <span className="text-[#FF5E14]">{adminProfile?.role || "Staff"}</span>
+              </div>
+            </div>
           </div>
 
-          <div className="bg-white p-5 rounded-2xl border border-[#E0E8EC] shadow-xs">
-            <div className="flex items-center justify-between text-[#667780] mb-2">
-              <span className="text-[11px] font-bold uppercase tracking-wider">Rides Completed</span>
-              <CheckCircle2 className="w-4 h-4 text-teal-600" />
-            </div>
-            <div className="text-2xl font-black font-heading text-teal-700">{completedRidesCount}</div>
-            <p className="text-[11px] text-[#667780] mt-1">Galle trial track</p>
-          </div>
+          {/* Nav Items */}
+          <nav className="mt-6 space-y-1 text-xs font-medium">
+            <button
+              onClick={() => {
+                setActiveTab("overview");
+                setMobileSidebarOpen(false);
+              }}
+              className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition-all ${
+                activeTab === "overview"
+                  ? "bg-[#FF5E14] text-white font-bold shadow-md shadow-orange-500/20"
+                  : "text-slate-400 hover:text-white hover:bg-slate-800/60"
+              }`}
+            >
+              <LayoutDashboard className="w-4 h-4" />
+              <span>Overview</span>
+            </button>
 
-          <div className="bg-white p-5 rounded-2xl border border-[#E0E8EC] shadow-xs">
-            <div className="flex items-center justify-between text-[#667780] mb-2">
-              <span className="text-[11px] font-bold uppercase tracking-wider">Converted Sales</span>
-              <TrendingUp className="w-4 h-4 text-emerald-600" />
-            </div>
-            <div className="text-2xl font-black font-heading text-emerald-600">{convertedLeadsCount}</div>
-            <p className="text-[11px] text-[#667780] mt-1">
-              {totalLeadsCount > 0 ? `${Math.round((convertedLeadsCount / totalLeadsCount) * 100)}% Conversion` : "Active"}
+            <button
+              onClick={() => {
+                setActiveTab("products");
+                setMobileSidebarOpen(false);
+              }}
+              className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl transition-all ${
+                activeTab === "products"
+                  ? "bg-[#FF5E14] text-white font-bold shadow-md shadow-orange-500/20"
+                  : "text-slate-400 hover:text-white hover:bg-slate-800/60"
+              }`}
+            >
+              <div className="flex items-center gap-3">
+                <Bike className="w-4 h-4" />
+                <span>Bike Fleet CRUD</span>
+              </div>
+              <span className="text-[10px] bg-slate-800 px-2 py-0.5 rounded-md text-slate-300">
+                {products.length}
+              </span>
+            </button>
+
+            <button
+              onClick={() => {
+                setActiveTab("bookings");
+                setMobileSidebarOpen(false);
+              }}
+              className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl transition-all ${
+                activeTab === "bookings"
+                  ? "bg-[#FF5E14] text-white font-bold shadow-md shadow-orange-500/20"
+                  : "text-slate-400 hover:text-white hover:bg-slate-800/60"
+              }`}
+            >
+              <div className="flex items-center gap-3">
+                <Calendar className="w-4 h-4" />
+                <span>Test Ride Bookings</span>
+              </div>
+              {stats.pendingBookings > 0 && (
+                <span className="text-[10px] bg-orange-500 text-white font-bold px-2 py-0.5 rounded-full">
+                  {stats.pendingBookings}
+                </span>
+              )}
+            </button>
+
+            <button
+              onClick={() => {
+                setActiveTab("inquiries");
+                setMobileSidebarOpen(false);
+              }}
+              className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl transition-all ${
+                activeTab === "inquiries"
+                  ? "bg-[#FF5E14] text-white font-bold shadow-md shadow-orange-500/20"
+                  : "text-slate-400 hover:text-white hover:bg-slate-800/60"
+              }`}
+            >
+              <div className="flex items-center gap-3">
+                <MessageSquare className="w-4 h-4" />
+                <span>Customer Inquiries</span>
+              </div>
+              {stats.pendingInquiries > 0 && (
+                <span className="text-[10px] bg-blue-500 text-white font-bold px-2 py-0.5 rounded-full">
+                  {stats.pendingInquiries}
+                </span>
+              )}
+            </button>
+
+            <button
+              onClick={() => {
+                setActiveTab("offers");
+                setMobileSidebarOpen(false);
+              }}
+              className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl transition-all ${
+                activeTab === "offers"
+                  ? "bg-[#FF5E14] text-white font-bold shadow-md shadow-orange-500/20"
+                  : "text-slate-400 hover:text-white hover:bg-slate-800/60"
+              }`}
+            >
+              <div className="flex items-center gap-3">
+                <Tag className="w-4 h-4" />
+                <span>Offers &amp; Deals</span>
+              </div>
+              <span className="text-[10px] bg-slate-800 px-2 py-0.5 rounded-md text-slate-300">
+                {offers.length}
+              </span>
+            </button>
+
+            <button
+              onClick={() => {
+                setActiveTab("media");
+                setMobileSidebarOpen(false);
+              }}
+              className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition-all ${
+                activeTab === "media"
+                  ? "bg-[#FF5E14] text-white font-bold shadow-md shadow-orange-500/20"
+                  : "text-slate-400 hover:text-white hover:bg-slate-800/60"
+              }`}
+            >
+              <ImageIcon className="w-4 h-4" />
+              <span>Media Library</span>
+            </button>
+
+            <button
+              onClick={() => {
+                setActiveTab("cms");
+                setMobileSidebarOpen(false);
+              }}
+              className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition-all ${
+                activeTab === "cms"
+                  ? "bg-[#FF5E14] text-white font-bold shadow-md shadow-orange-500/20"
+                  : "text-slate-400 hover:text-white hover:bg-slate-800/60"
+              }`}
+            >
+              <Globe className="w-4 h-4" />
+              <span>Homepage CMS</span>
+            </button>
+
+            <button
+              onClick={() => {
+                setActiveTab("settings");
+                setMobileSidebarOpen(false);
+              }}
+              className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition-all ${
+                activeTab === "settings"
+                  ? "bg-[#FF5E14] text-white font-bold shadow-md shadow-orange-500/20"
+                  : "text-slate-400 hover:text-white hover:bg-slate-800/60"
+              }`}
+            >
+              <Settings className="w-4 h-4" />
+              <span>Showroom Settings</span>
+            </button>
+
+            <button
+              onClick={() => {
+                setActiveTab("seo");
+                setMobileSidebarOpen(false);
+              }}
+              className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition-all ${
+                activeTab === "seo"
+                  ? "bg-[#FF5E14] text-white font-bold shadow-md shadow-orange-500/20"
+                  : "text-slate-400 hover:text-white hover:bg-slate-800/60"
+              }`}
+            >
+              <Sliders className="w-4 h-4" />
+              <span>SEO Meta Tags</span>
+            </button>
+
+            {adminProfile?.role === "owner" && (
+              <button
+                onClick={() => {
+                  setActiveTab("staff");
+                  setMobileSidebarOpen(false);
+                }}
+                className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition-all ${
+                  activeTab === "staff"
+                    ? "bg-[#FF5E14] text-white font-bold shadow-md shadow-orange-500/20"
+                    : "text-slate-400 hover:text-white hover:bg-slate-800/60"
+                }`}
+              >
+                <Users className="w-4 h-4" />
+                <span>Staff &amp; Roles</span>
+              </button>
+            )}
+
+            <button
+              onClick={() => {
+                setActiveTab("audit");
+                setMobileSidebarOpen(false);
+              }}
+              className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition-all ${
+                activeTab === "audit"
+                  ? "bg-[#FF5E14] text-white font-bold shadow-md shadow-orange-500/20"
+                  : "text-slate-400 hover:text-white hover:bg-slate-800/60"
+              }`}
+            >
+              <FileText className="w-4 h-4" />
+              <span>Audit Trail</span>
+            </button>
+          </nav>
+        </div>
+
+        {/* Bottom controls */}
+        <div className="p-4 border-t border-slate-800 space-y-2">
+          <Link
+            href="/"
+            target="_blank"
+            className="w-full flex items-center justify-center gap-2 py-2 px-3 rounded-xl bg-slate-800/70 hover:bg-slate-800 text-slate-300 hover:text-white text-xs font-semibold transition-all"
+          >
+            <span>Live Showroom Site</span>
+            <ExternalLink className="w-3.5 h-3.5 opacity-70" />
+          </Link>
+
+          <button
+            onClick={handleSignOut}
+            className="w-full flex items-center justify-center gap-2 py-2 px-3 rounded-xl bg-red-500/10 hover:bg-red-500/20 text-red-400 text-xs font-semibold transition-all cursor-pointer"
+          >
+            <LogOut className="w-3.5 h-3.5" />
+            <span>Sign Out</span>
+          </button>
+        </div>
+      </aside>
+
+      {/* MAIN CONTENT AREA */}
+      <main className="flex-1 min-w-0 bg-slate-950 p-4 sm:p-6 lg:p-8 overflow-y-auto">
+        {/* Top Action Header */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-slate-800/80 mb-6">
+          <div>
+            <h1 className="text-xl sm:text-2xl font-extrabold text-white tracking-tight capitalize">
+              {activeTab === "overview" && "Executive Dashboard Overview"}
+              {activeTab === "products" && "Zuboo Motorcycle Fleet Management"}
+              {activeTab === "bookings" && "Test Ride Appointments"}
+              {activeTab === "inquiries" && "Showroom Customer Inquiries"}
+              {activeTab === "offers" && "Promotions & Cash Discounts"}
+              {activeTab === "media" && "Showroom Media & Asset Selector"}
+              {activeTab === "cms" && "Homepage Mini CMS"}
+              {activeTab === "settings" && "Showroom Business Settings"}
+              {activeTab === "seo" && "Search Engine Optimization"}
+              {activeTab === "staff" && "Staff Member Permissions (Owner Only)"}
+              {activeTab === "audit" && "Security Audit Trail"}
+            </h1>
+            <p className="text-xs text-slate-400 mt-1">
+              Cloud Firestore Project: <code className="text-[#FF5E14]">udan-enterprises-zuboo</code>
             </p>
           </div>
 
-          <div className="bg-white p-5 rounded-2xl border border-[#E0E8EC] shadow-xs sm:col-span-2 lg:col-span-1">
-            <div className="flex items-center justify-between text-[#667780] mb-2">
-              <span className="text-[11px] font-bold uppercase tracking-wider">Showroom Units</span>
-              <Store className="w-4 h-4 text-[#111820]" />
-            </div>
-            <div className="text-2xl font-black font-heading text-[#111820]">{showroomUnitsTotal} Units</div>
-            <p className="text-[11px] text-[#667780] mt-1">8 Zuboo models ready</p>
+          <div className="flex items-center gap-2.5">
+            <button
+              onClick={refreshAllData}
+              disabled={isDataLoading}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 text-xs font-bold text-slate-300 hover:text-white transition-all cursor-pointer"
+            >
+              <RefreshCw className={`w-3.5 h-3.5 ${isDataLoading ? "animate-spin" : ""}`} />
+              <span>Refresh Firestore</span>
+            </button>
+
+            {activeTab === "products" && (
+              <button
+                onClick={() => {
+                  setEditingProduct({
+                    id: `zuboo-model-${Date.now()}`,
+                    slug: `model-${Date.now()}`,
+                    name: "New Zuboo Model",
+                    modelCode: "ZB-NEW",
+                    badge: "New Arrival",
+                    category: "City Commuter",
+                    tagline: "Eco-friendly electric mobility",
+                    description: "High performance electric motorcycle.",
+                    priceLKR: 400000,
+                    isPriceVerified: true,
+                    motorPower: "1500W",
+                    topSpeed: "55 km/h",
+                    advertisedRange: "90 km",
+                    battery: "72V 32Ah",
+                    chargingTime: "6 - 8 hours",
+                    brakes: "Front & Rear Hydraulic Disc",
+                    display: "Digital Color LCD",
+                    stockStatus: "In Showroom",
+                    showroomUnits: 2,
+                    isFeatured: false,
+                    status: "draft",
+                    mainImage: "/media/bikes/t3/main.webp",
+                    gallery: ["/media/bikes/t3/main.webp"],
+                    colors: [{ name: "Stealth Black", hex: "#111827" }],
+                    warranty: {
+                      batteryAndMotor: "2 Years",
+                      chassis: "3 Years",
+                      isVerified: true,
+                    },
+                    features: ["Anti-theft Alarm", "LED Headlights", "Reverse Gear"],
+                    createdAt: new Date().toISOString(),
+                    updatedAt: new Date().toISOString(),
+                  });
+                  setIsProductModalOpen(true);
+                }}
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#FF5E14] hover:bg-[#e04d09] text-white text-xs font-bold uppercase tracking-wider transition-all shadow-md shadow-orange-500/25 cursor-pointer"
+              >
+                <Plus className="w-4 h-4" />
+                <span>Add Bike</span>
+              </button>
+            )}
+
+            {activeTab === "offers" && (
+              <button
+                onClick={() => {
+                  setEditingOffer({
+                    id: `promo-${Date.now()}`,
+                    title: "Special Festive Season Discount",
+                    badge: "Limited Offer",
+                    badgeColor: "bg-red-50 text-red-600 border-red-200",
+                    modelCode: "ZB-PROMO",
+                    regularPriceLKR: 420000,
+                    promoPriceLKR: 390000,
+                    savingsLKR: 30000,
+                    description: "Special seasonal cash rebate on confirmed bookings.",
+                    highlights: [
+                      "Complimentary certified DOT helmet",
+                      "First-year free maintenance checkup",
+                      "Priority fast charging bay access",
+                    ],
+                    image: "/media/bikes/t3/main.webp",
+                    whatsAppText: "Hi Udan Enterprises, I would like to inquire about the seasonal offer.",
+                    isActive: true,
+                    isPopular: true,
+                    displayPriority: 1,
+                    startDate: new Date().toISOString().slice(0, 10),
+                    expiryDate: "2026-12-31",
+                    createdAt: new Date().toISOString(),
+                  });
+                  setIsOfferModalOpen(true);
+                }}
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#FF5E14] hover:bg-[#e04d09] text-white text-xs font-bold uppercase tracking-wider transition-all shadow-md shadow-orange-500/25 cursor-pointer"
+              >
+                <Plus className="w-4 h-4" />
+                <span>Create Offer</span>
+              </button>
+            )}
           </div>
         </div>
 
-        {/* Tab Switcher */}
-        <div className="flex items-center justify-between border-b border-[#E0E8EC] pb-2 flex-wrap gap-4">
-          <div className="flex items-center gap-2">
-            <button
-              onClick={() => setActiveTab("leads")}
-              className={`px-4 py-2.5 rounded-xl font-heading text-xs font-bold uppercase tracking-wider transition-all duration-150 flex items-center gap-2 ${
-                activeTab === "leads"
-                  ? "bg-[#111820] text-white shadow-sm"
-                  : "bg-white text-[#667780] hover:text-[#111820] hover:bg-[#E8F1F5] border border-[#E0E8EC]"
-              }`}
-            >
-              <Users className="w-3.5 h-3.5" />
-              <span>Test Ride Leads ({leads.length})</span>
-            </button>
-
-            <button
-              onClick={() => setActiveTab("inventory")}
-              className={`px-4 py-2.5 rounded-xl font-heading text-xs font-bold uppercase tracking-wider transition-all duration-150 flex items-center gap-2 ${
-                activeTab === "inventory"
-                  ? "bg-[#111820] text-white shadow-sm"
-                  : "bg-white text-[#667780] hover:text-[#111820] hover:bg-[#E8F1F5] border border-[#E0E8EC]"
-              }`}
-            >
-              <Layers className="w-3.5 h-3.5" />
-              <span>Inventory & Stock (8 Models)</span>
-            </button>
-
-            <button
-              onClick={() => setActiveTab("service")}
-              className={`px-4 py-2.5 rounded-xl font-heading text-xs font-bold uppercase tracking-wider transition-all duration-150 flex items-center gap-2 ${
-                activeTab === "service"
-                  ? "bg-[#111820] text-white shadow-sm"
-                  : "bg-white text-[#667780] hover:text-[#111820] hover:bg-[#E8F1F5] border border-[#E0E8EC]"
-              }`}
-            >
-              <Wrench className="w-3.5 h-3.5" />
-              <span>Service Bay Bookings ({serviceBookings.length})</span>
-            </button>
-          </div>
-
-          {/* Tab Specific Quick CTA */}
-          {activeTab === "leads" && (
-            <div className="flex items-center gap-2.5">
-              <button
-                onClick={() => exportLeadsToCSV(filteredLeads)}
-                className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold text-[#111820] bg-white border border-[#E0E8EC] hover:bg-[#E8F1F5] transition-colors shadow-xs"
-              >
-                <Download className="w-3.5 h-3.5 text-[#346C83]" />
-                <span>Export CSV</span>
-              </button>
-              <button
-                onClick={() => setIsAddLeadModalOpen(true)}
-                className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold text-white bg-[#346C83] hover:bg-[#275365] transition-colors shadow-xs"
-              >
-                <Plus className="w-3.5 h-3.5" />
-                <span>Add Walk-In Lead</span>
-              </button>
-            </div>
-          )}
-
-          {activeTab === "inventory" && (
-            <button
-              onClick={handleResetInventory}
-              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold text-[#667780] bg-white border border-[#E0E8EC] hover:text-rose-600 hover:border-rose-200 transition-colors shadow-xs"
-            >
-              <RefreshCw className="w-3.5 h-3.5" />
-              <span>Reset Factory Defaults</span>
-            </button>
-          )}
-        </div>
-
-        {/* ======================================================== */}
-        {/* TAB 1: TEST RIDE LEADS MANAGER                          */}
-        {/* ======================================================== */}
-        {activeTab === "leads" && (
-          <div className="space-y-5">
-            {/* Filter and Search Toolbar */}
-            <div className="bg-white p-4 rounded-2xl border border-[#E0E8EC] shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
-              {/* Status Pills */}
-              <div className="flex items-center gap-1.5 overflow-x-auto pb-1 md:pb-0 text-xs">
-                {["All", "New", "Contacted", "Test Ride Completed", "Converted"].map((status) => (
-                  <button
-                    key={status}
-                    onClick={() => setLeadFilter(status)}
-                    className={`px-3 py-1.5 rounded-lg font-semibold tracking-tight transition-colors whitespace-nowrap ${
-                      leadFilter === status
-                        ? "bg-[#111820] text-white"
-                        : "bg-[#F7F9FA] text-[#667780] hover:bg-[#E8F1F5] hover:text-[#111820]"
-                    }`}
-                  >
-                    {status}
-                  </button>
-                ))}
+        {/* TAB 1: OVERVIEW */}
+        {activeTab === "overview" && (
+          <div className="space-y-6">
+            {/* Stats Grid */}
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+              <div className="bg-slate-900 border border-slate-800 p-4 rounded-2xl">
+                <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                  Total Bike Fleet
+                </div>
+                <div className="text-2xl font-black text-white mt-1">{stats.totalBikes}</div>
+                <div className="text-[11px] text-slate-500 mt-1">8 Standard Zuboo</div>
               </div>
 
-              {/* Search bar */}
-              <div className="relative w-full md:w-72">
-                <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+              <div className="bg-slate-900 border border-slate-800 p-4 rounded-2xl">
+                <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                  Published Online
+                </div>
+                <div className="text-2xl font-black text-green-400 mt-1">{stats.publishedBikes}</div>
+                <div className="text-[11px] text-slate-500 mt-1">Live in Catalogue</div>
+              </div>
+
+              <div className="bg-slate-900 border border-slate-800 p-4 rounded-2xl">
+                <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                  Out of Stock
+                </div>
+                <div className="text-2xl font-black text-amber-400 mt-1">{stats.outOfStock}</div>
+                <div className="text-[11px] text-slate-500 mt-1">Requires Restock</div>
+              </div>
+
+              <div className="bg-slate-900 border border-slate-800 p-4 rounded-2xl">
+                <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                  Pending Test Rides
+                </div>
+                <div className="text-2xl font-black text-[#FF5E14] mt-1">{stats.pendingBookings}</div>
+                <div className="text-[11px] text-slate-500 mt-1">Awaiting Contact</div>
+              </div>
+
+              <div className="bg-slate-900 border border-slate-800 p-4 rounded-2xl">
+                <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                  New Inquiries
+                </div>
+                <div className="text-2xl font-black text-sky-400 mt-1">{stats.pendingInquiries}</div>
+                <div className="text-[11px] text-slate-500 mt-1">Contact Form Leads</div>
+              </div>
+
+              <div className="bg-slate-900 border border-slate-800 p-4 rounded-2xl">
+                <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                  Active Offers
+                </div>
+                <div className="text-2xl font-black text-purple-400 mt-1">{stats.activeOffersCount}</div>
+                <div className="text-[11px] text-slate-500 mt-1">Promotional Deals</div>
+              </div>
+            </div>
+
+            {/* Quick Actions & Recent Bookings Split */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              {/* Quick Actions */}
+              <div className="bg-slate-900 border border-slate-800 p-6 rounded-3xl">
+                <h3 className="text-sm font-extrabold text-white uppercase tracking-wider mb-4 flex items-center gap-2">
+                  <Sparkles className="w-4 h-4 text-[#FF5E14]" />
+                  <span>Showroom Quick Actions</span>
+                </h3>
+                <div className="space-y-2.5">
+                  <button
+                    onClick={() => setActiveTab("bookings")}
+                    className="w-full text-left p-3.5 rounded-xl bg-slate-950 hover:bg-slate-800 border border-slate-800 text-xs font-semibold text-slate-200 transition-all flex items-center justify-between"
+                  >
+                    <span>View All Test Ride Appointments</span>
+                    <ChevronRight className="w-4 h-4 text-slate-500" />
+                  </button>
+
+                  <button
+                    onClick={() => setActiveTab("inquiries")}
+                    className="w-full text-left p-3.5 rounded-xl bg-slate-950 hover:bg-slate-800 border border-slate-800 text-xs font-semibold text-slate-200 transition-all flex items-center justify-between"
+                  >
+                    <span>Review Pending Customer Inquiries</span>
+                    <ChevronRight className="w-4 h-4 text-slate-500" />
+                  </button>
+
+                  <button
+                    onClick={() => setActiveTab("products")}
+                    className="w-full text-left p-3.5 rounded-xl bg-slate-950 hover:bg-slate-800 border border-slate-800 text-xs font-semibold text-slate-200 transition-all flex items-center justify-between"
+                  >
+                    <span>Update Bike Prices &amp; Stock Units</span>
+                    <ChevronRight className="w-4 h-4 text-slate-500" />
+                  </button>
+
+                  <button
+                    onClick={() => setActiveTab("cms")}
+                    className="w-full text-left p-3.5 rounded-xl bg-slate-950 hover:bg-slate-800 border border-slate-800 text-xs font-semibold text-slate-200 transition-all flex items-center justify-between"
+                  >
+                    <span>Edit Homepage Announcement Banner</span>
+                    <ChevronRight className="w-4 h-4 text-slate-500" />
+                  </button>
+
+                  <button
+                    onClick={() => setActiveTab("settings")}
+                    className="w-full text-left p-3.5 rounded-xl bg-slate-950 hover:bg-slate-800 border border-slate-800 text-xs font-semibold text-slate-200 transition-all flex items-center justify-between"
+                  >
+                    <span>Configure Hotline &amp; WhatsApp Number</span>
+                    <ChevronRight className="w-4 h-4 text-slate-500" />
+                  </button>
+                </div>
+              </div>
+
+              {/* Recent Test Ride Requests */}
+              <div className="lg:col-span-2 bg-slate-900 border border-slate-800 p-6 rounded-3xl">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-sm font-extrabold text-white uppercase tracking-wider flex items-center gap-2">
+                    <Calendar className="w-4 h-4 text-[#FF5E14]" />
+                    <span>Recent Test Ride Inquiries</span>
+                  </h3>
+                  <button
+                    onClick={() => setActiveTab("bookings")}
+                    className="text-xs text-[#FF5E14] hover:underline font-bold"
+                  >
+                    View All →
+                  </button>
+                </div>
+
+                {bookings.length === 0 ? (
+                  <div className="py-12 text-center text-slate-500 text-xs">
+                    No bookings logged in Firestore yet. Submissions from the website will appear here in real-time.
+                  </div>
+                ) : (
+                  <div className="space-y-3">
+                    {bookings.slice(0, 5).map((b) => (
+                      <div
+                        key={b.id}
+                        className="p-3.5 rounded-2xl bg-slate-950 border border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs"
+                      >
+                        <div>
+                          <div className="font-bold text-white flex items-center gap-2">
+                            <span>{b.customerName}</span>
+                            <span className="text-[10px] px-2 py-0.5 rounded-full bg-slate-800 text-slate-300">
+                              {b.bikeModelName}
+                            </span>
+                          </div>
+                          <div className="text-slate-400 mt-1 flex items-center gap-3 text-[11px]">
+                            <span>📞 {b.phoneNumber}</span>
+                            <span>📅 {b.preferredDate}</span>
+                          </div>
+                        </div>
+
+                        <div className="flex items-center gap-2">
+                          <span
+                            className={`px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${
+                              b.status === "completed"
+                                ? "bg-green-500/20 text-green-400 border border-green-500/30"
+                                : b.status === "confirmed"
+                                ? "bg-blue-500/20 text-blue-400 border border-blue-500/30"
+                                : b.status === "contacted"
+                                ? "bg-purple-500/20 text-purple-400 border border-purple-500/30"
+                                : "bg-orange-500/20 text-orange-400 border border-orange-500/30"
+                            }`}
+                          >
+                            {b.status}
+                          </span>
+
+                          <a
+                            href={`https://wa.me/${b.phoneNumber.replace(/[^0-9]/g, "")}?text=${encodeURIComponent(
+                              `Hello ${b.customerName}, regarding your test ride booking for ${b.bikeModelName} at Udan Enterprises Galle:`
+                            )}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="p-1.5 rounded-lg bg-[#25D366]/20 text-[#25D366] hover:bg-[#25D366] hover:text-white transition-all"
+                            title="Chat on WhatsApp"
+                          >
+                            <MessageSquare className="w-3.5 h-3.5" />
+                          </a>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* TAB 2: PRODUCTS FLEET CRUD */}
+        {activeTab === "products" && (
+          <div className="space-y-4">
+            {/* Search Bar */}
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-3 bg-slate-900 p-4 rounded-2xl border border-slate-800">
+              <div className="relative w-full sm:w-80">
+                <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
                 <input
                   type="text"
-                  value={leadSearch}
-                  onChange={(e) => setLeadSearch(e.target.value)}
-                  placeholder="Search name, phone, model..."
-                  className="w-full pl-9 pr-4 py-2 rounded-xl border border-[#E0E8EC] bg-[#F7F9FA] text-xs text-[#111820] placeholder-slate-400 focus:outline-none focus:border-[#346C83] focus:bg-white transition-all"
+                  placeholder="Search bike name, code, category..."
+                  value={productSearch}
+                  onChange={(e) => setProductSearch(e.target.value)}
+                  className="w-full bg-slate-950 border border-slate-700/80 rounded-xl pl-9 pr-3 py-2 text-xs text-white placeholder:text-slate-500 outline-none"
                 />
+              </div>
+
+              <div className="text-xs text-slate-400">
+                Total Models: <strong className="text-white">{products.length}</strong>
               </div>
             </div>
 
-            {/* Leads Table */}
-            <div className="bg-white rounded-2xl border border-[#E0E8EC] shadow-xs overflow-hidden">
+            {/* Products Table */}
+            <div className="bg-slate-900 border border-slate-800 rounded-3xl overflow-hidden shadow-xl">
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-xs">
-                  <thead className="bg-[#F7F9FA] border-b border-[#E0E8EC] text-[#667780] font-heading uppercase text-[10px] tracking-wider">
+                  <thead className="bg-slate-950 border-b border-slate-800 text-[10px] font-extrabold uppercase tracking-wider text-slate-400">
                     <tr>
-                      <th className="py-3.5 px-4 font-bold">ID / Customer</th>
-                      <th className="py-3.5 px-4 font-bold">Model Requested</th>
-                      <th className="py-3.5 px-4 font-bold">Preferred Slot</th>
-                      <th className="py-3.5 px-4 font-bold">Showroom Notes</th>
-                      <th className="py-3.5 px-4 font-bold">Status</th>
-                      <th className="py-3.5 px-4 font-bold text-right">Quick Contact</th>
+                      <th className="p-4">Model &amp; Visual</th>
+                      <th className="p-4">Power &amp; Battery</th>
+                      <th className="p-4">Price (LKR)</th>
+                      <th className="p-4">Stock Status</th>
+                      <th className="p-4">Publish State</th>
+                      <th className="p-4 text-right">Actions</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-[#E0E8EC]">
-                    {filteredLeads.length === 0 ? (
-                      <tr>
-                        <td colSpan={6} className="py-12 text-center text-[#667780]">
-                          No test ride inquiries matching criteria.
-                        </td>
-                      </tr>
-                    ) : (
-                      filteredLeads.map((lead) => {
-                        const waUrl = generateWhatsAppLink(lead);
-                        return (
-                          <tr key={lead.id} className="hover:bg-[#F7F9FA]/70 transition-colors">
-                            {/* Customer info */}
-                            <td className="py-4 px-4 align-top">
-                              <div className="font-heading font-bold text-sm text-[#111820]">
-                                {lead.customerName}
+                  <tbody className="divide-y divide-slate-800/60">
+                    {products
+                      .filter(
+                        (p) =>
+                          p.name.toLowerCase().includes(productSearch.toLowerCase()) ||
+                          p.category.toLowerCase().includes(productSearch.toLowerCase()) ||
+                          p.modelCode.toLowerCase().includes(productSearch.toLowerCase())
+                      )
+                      .map((bike) => (
+                        <tr key={bike.id} className="hover:bg-slate-800/30 transition-colors">
+                          <td className="p-4">
+                            <div className="flex items-center gap-3">
+                              <div className="w-14 h-10 bg-slate-950 rounded-xl border border-slate-800 p-1 flex items-center justify-center shrink-0">
+                                <Image
+                                  src={bike.mainImage}
+                                  alt={bike.name}
+                                  width={48}
+                                  height={36}
+                                  className="object-contain max-h-full"
+                                />
                               </div>
-                              <div className="font-mono text-[11px] text-[#346C83] font-semibold">
-                                {lead.phoneNumber}
+                              <div>
+                                <div className="font-extrabold text-white text-sm">{bike.name}</div>
+                                <div className="text-[11px] text-slate-400">{bike.modelCode} • {bike.category}</div>
                               </div>
-                              <div className="text-[10px] text-[#667780] mt-0.5">
-                                #{lead.id} • {lead.locationCity || "Galle"}
-                              </div>
-                            </td>
+                            </div>
+                          </td>
 
-                            {/* Model */}
-                            <td className="py-4 px-4 align-top">
-                              <span className="inline-block px-2.5 py-1 rounded-md bg-[#E8F1F5] text-[#111820] font-bold text-[11px]">
-                                {lead.bikeModelName}
-                              </span>
-                            </td>
+                          <td className="p-4">
+                            <div className="font-semibold text-slate-200">{bike.motorPower}</div>
+                            <div className="text-[11px] text-slate-400">{bike.battery} • {bike.advertisedRange}</div>
+                          </td>
 
-                            {/* Date / Time */}
-                            <td className="py-4 px-4 align-top text-slate-700">
-                              <div className="flex items-center gap-1.5 font-medium">
-                                <Calendar className="w-3.5 h-3.5 text-[#346C83]" />
-                                <span>{lead.preferredDate}</span>
-                              </div>
-                              <div className="text-[11px] text-[#667780] mt-0.5">
-                                {lead.preferredTimeSlot || "Morning"}
-                              </div>
-                            </td>
+                          <td className="p-4">
+                            <div className="font-bold text-white">
+                              LKR {bike.priceLKR.toLocaleString()}
+                            </div>
+                            <div className="text-[10px] text-slate-400">
+                              {bike.isPriceVerified ? (
+                                <span className="text-green-400">Verified Showroom Price</span>
+                              ) : (
+                                <span className="text-amber-400">Provisional Poster Price</span>
+                              )}
+                            </div>
+                          </td>
 
-                            {/* Notes */}
-                            <td className="py-4 px-4 align-top text-[#667780] max-w-xs">
-                              <p className="line-clamp-2 text-[11px]">{lead.notes || "—"}</p>
-                              <span className="text-[9px] text-slate-400 block mt-1">
-                                {lead.createdAt}
-                              </span>
-                            </td>
+                          <td className="p-4">
+                            <span
+                              className={`px-2 py-0.5 rounded-md text-[10px] font-bold ${
+                                bike.stockStatus === "In Showroom"
+                                  ? "bg-green-500/20 text-green-400"
+                                  : bike.stockStatus === "Low Stock"
+                                  ? "bg-amber-500/20 text-amber-400"
+                                  : "bg-red-500/20 text-red-400"
+                              }`}
+                            >
+                              {bike.stockStatus} ({bike.showroomUnits} units)
+                            </span>
+                          </td>
 
-                            {/* Status Selector */}
-                            <td className="py-4 px-4 align-top">
-                              <div className="relative inline-block">
-                                <select
-                                  value={lead.status}
-                                  onChange={(e) =>
-                                    handleUpdateLeadStatus(lead.id, e.target.value as LeadStatus)
-                                  }
-                                  className={`appearance-none px-3 py-1.5 pr-7 rounded-lg text-[11px] font-bold border transition-colors cursor-pointer focus:outline-none ${
-                                    lead.status === "New"
-                                      ? "bg-blue-50 text-blue-700 border-blue-200"
-                                      : lead.status === "Contacted"
-                                      ? "bg-amber-50 text-amber-700 border-amber-200"
-                                      : lead.status === "Test Ride Completed"
-                                      ? "bg-purple-50 text-purple-700 border-purple-200"
-                                      : lead.status === "Converted"
-                                      ? "bg-emerald-50 text-emerald-700 border-emerald-200"
-                                      : "bg-slate-100 text-slate-600 border-slate-200"
-                                  }`}
-                                >
-                                  <option value="New">New</option>
-                                  <option value="Contacted">Contacted</option>
-                                  <option value="Test Ride Completed">Test Ride Completed</option>
-                                  <option value="Converted">Converted</option>
-                                  <option value="Cancelled">Cancelled</option>
-                                </select>
-                                <ChevronDown className="w-3 h-3 absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none text-current opacity-70" />
-                              </div>
-                            </td>
+                          <td className="p-4">
+                            <span
+                              className={`px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider ${
+                                bike.status === "published"
+                                  ? "bg-blue-500/20 text-blue-400"
+                                  : "bg-slate-800 text-slate-400"
+                              }`}
+                            >
+                              {bike.status}
+                            </span>
+                          </td>
 
-                            {/* Quick Contact Buttons */}
-                            <td className="py-4 px-4 align-top text-right">
-                              <div className="flex items-center justify-end gap-1.5">
-                                <a
-                                  href={waUrl}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  title="Send WhatsApp Invitation / Confirmation"
-                                  className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-[11px] transition-colors shadow-xs"
-                                >
-                                  <MessageSquare className="w-3 h-3" />
-                                  <span>WhatsApp</span>
-                                </a>
-
-                                <a
-                                  href={`tel:${lead.phoneNumber}`}
-                                  title="Call Customer"
-                                  className="p-1.5 rounded-lg bg-[#E8F1F5] hover:bg-[#d8e7ee] text-[#111820] transition-colors border border-[#E0E8EC]"
-                                >
-                                  <Phone className="w-3.5 h-3.5 text-[#346C83]" />
-                                </a>
-
+                          <td className="p-4 text-right">
+                            <div className="flex items-center justify-end gap-2">
+                              <button
+                                onClick={() => {
+                                  setEditingProduct(bike);
+                                  setIsProductModalOpen(true);
+                                }}
+                                className="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white transition-colors"
+                                title="Edit Specifications & Pricing"
+                              >
+                                <Edit className="w-3.5 h-3.5" />
+                              </button>
+                              {adminProfile?.role === "owner" && (
                                 <button
-                                  onClick={() => handleDeleteLead(lead.id)}
-                                  title="Delete Lead"
-                                  className="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-colors"
+                                  onClick={() => handleDeleteProduct(bike.id, bike.name)}
+                                  className="p-1.5 rounded-lg bg-red-500/10 hover:bg-red-500/20 text-red-400 transition-colors"
+                                  title="Delete Product"
                                 >
                                   <Trash2 className="w-3.5 h-3.5" />
                                 </button>
-                              </div>
-                            </td>
-                          </tr>
-                        );
-                      })
-                    )}
+                              )}
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
                   </tbody>
                 </table>
               </div>
@@ -1093,189 +1207,296 @@ export default function AdminPage() {
           </div>
         )}
 
-        {/* ======================================================== */}
-        {/* TAB 2: INVENTORY & STOCK MANAGEMENT (8 ZUBOO MODELS)     */}
-        {/* ======================================================== */}
-        {activeTab === "inventory" && (
-          <div className="space-y-5">
-            {/* Inventory Controls */}
-            <div className="bg-white p-4 rounded-2xl border border-[#E0E8EC] shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
-              <div>
-                <h3 className="font-heading font-bold text-sm text-[#111820] uppercase tracking-wide">
-                  Showroom Fleet Management (All 8 Zuboo Models)
-                </h3>
-                <p className="text-xs text-[#667780]">
-                  Live updates for stock statuses, provisional LKR prices, and delivery times
-                </p>
+        {/* TAB 3: TEST RIDE BOOKINGS */}
+        {activeTab === "bookings" && (
+          <div className="space-y-4">
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-3 bg-slate-900 p-4 rounded-2xl border border-slate-800">
+              <div className="flex flex-wrap items-center gap-3 w-full sm:w-auto">
+                <div className="relative w-full sm:w-72">
+                  <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
+                  <input
+                    type="text"
+                    placeholder="Search customer, phone, bike..."
+                    value={bookingSearch}
+                    onChange={(e) => setBookingSearch(e.target.value)}
+                    className="w-full bg-slate-950 border border-slate-700/80 rounded-xl pl-9 pr-3 py-2 text-xs text-white placeholder:text-slate-500 outline-none"
+                  />
+                </div>
+
+                <select
+                  value={bookingFilter}
+                  onChange={(e) => setBookingFilter(e.target.value)}
+                  className="bg-slate-950 border border-slate-700/80 rounded-xl px-3 py-2 text-xs text-white outline-none"
+                >
+                  <option value="all">All Statuses</option>
+                  <option value="pending">Pending</option>
+                  <option value="contacted">Contacted</option>
+                  <option value="confirmed">Confirmed</option>
+                  <option value="completed">Completed</option>
+                  <option value="cancelled">Cancelled</option>
+                </select>
               </div>
 
-              <div className="relative w-full md:w-72">
-                <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
-                <input
-                  type="text"
-                  value={inventorySearch}
-                  onChange={(e) => setInventorySearch(e.target.value)}
-                  placeholder="Filter models..."
-                  className="w-full pl-9 pr-4 py-2 rounded-xl border border-[#E0E8EC] bg-[#F7F9FA] text-xs text-[#111820] placeholder-slate-400 focus:outline-none focus:border-[#346C83] focus:bg-white transition-all"
-                />
-              </div>
+              <button
+                onClick={exportBookingsToCsv}
+                className="inline-flex items-center gap-2 px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold transition-all"
+              >
+                <Download className="w-3.5 h-3.5" />
+                <span>Export CSV</span>
+              </button>
             </div>
 
-            {/* Inventory Cards Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
-              {filteredInventory.map((item) => (
-                <div
-                  key={item.id}
-                  className="bg-white rounded-2xl border border-[#E0E8EC] shadow-xs overflow-hidden flex flex-col justify-between hover:border-[#346C83]/40 transition-all"
-                >
-                  {/* Card Header & Spec */}
-                  <div className="p-5 space-y-4">
-                    <div className="flex items-start justify-between gap-2">
-                      <div>
-                        <span className="text-[10px] font-bold uppercase tracking-wider text-[#346C83] block">
-                          {item.category}
-                        </span>
-                        <h4 className="font-heading font-black text-lg text-[#111820] leading-tight">
-                          {item.name}
-                        </h4>
-                        <span className="font-mono text-[10px] text-[#667780] font-semibold">
-                          Code: {item.modelCode}
-                        </span>
-                      </div>
+            <div className="bg-slate-900 border border-slate-800 rounded-3xl overflow-hidden shadow-xl">
+              <div className="overflow-x-auto">
+                <table className="w-full text-left text-xs">
+                  <thead className="bg-slate-950 border-b border-slate-800 text-[10px] font-extrabold uppercase tracking-wider text-slate-400">
+                    <tr>
+                      <th className="p-4">Customer</th>
+                      <th className="p-4">Preferred Bike</th>
+                      <th className="p-4">Date &amp; Slot</th>
+                      <th className="p-4">Notes</th>
+                      <th className="p-4">Status Pipeline</th>
+                      <th className="p-4 text-right">WhatsApp Action</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-800/60">
+                    {bookings
+                      .filter((b) => {
+                        const matchesSearch =
+                          b.customerName.toLowerCase().includes(bookingSearch.toLowerCase()) ||
+                          b.phoneNumber.includes(bookingSearch) ||
+                          b.bikeModelName.toLowerCase().includes(bookingSearch.toLowerCase());
+                        const matchesFilter = bookingFilter === "all" || b.status === bookingFilter;
+                        return matchesSearch && matchesFilter;
+                      })
+                      .map((b) => (
+                        <tr key={b.id} className="hover:bg-slate-800/30 transition-colors">
+                          <td className="p-4">
+                            <div className="font-extrabold text-white text-sm">{b.customerName}</div>
+                            <div className="text-[11px] text-slate-400 font-mono">📞 {b.phoneNumber}</div>
+                          </td>
 
-                      {/* Stock Status Badge / Pill */}
+                          <td className="p-4 font-semibold text-slate-200">{b.bikeModelName}</td>
+
+                          <td className="p-4">
+                            <div className="text-white font-medium">{b.preferredDate}</div>
+                            <div className="text-[11px] text-slate-500">{b.preferredTimeSlot || "Showroom Visit"}</div>
+                          </td>
+
+                          <td className="p-4 max-w-xs text-slate-400 text-[11px] truncate">
+                            {b.notes || "No special requests."}
+                          </td>
+
+                          <td className="p-4">
+                            <select
+                              value={b.status}
+                              onChange={(e) => handleUpdateBookingStatus(b.id, e.target.value as BookingStatus)}
+                              className="bg-slate-950 border border-slate-700 rounded-lg px-2.5 py-1 text-[11px] font-bold text-white outline-none cursor-pointer"
+                            >
+                              <option value="pending">⏳ Pending</option>
+                              <option value="contacted">📞 Contacted</option>
+                              <option value="confirmed">✅ Confirmed</option>
+                              <option value="completed">🏆 Completed</option>
+                              <option value="cancelled">❌ Cancelled</option>
+                            </select>
+                          </td>
+
+                          <td className="p-4 text-right">
+                            <a
+                              href={`https://wa.me/${b.phoneNumber.replace(/[^0-9]/g, "")}?text=${encodeURIComponent(
+                                `Hi ${b.customerName}, this is Udan Enterprises Kurunduwatta Galle showroom regarding your test ride request for ${b.bikeModelName}. When would you like to visit?`
+                              )}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#25D366] hover:bg-[#20ba5a] text-white text-[11px] font-bold transition-all shadow-sm"
+                            >
+                              <MessageSquare className="w-3.5 h-3.5" />
+                              <span>WhatsApp</span>
+                            </a>
+                          </td>
+                        </tr>
+                      ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* TAB 4: CUSTOMER INQUIRIES */}
+        {activeTab === "inquiries" && (
+          <div className="space-y-4">
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-3 bg-slate-900 p-4 rounded-2xl border border-slate-800">
+              <div className="flex flex-wrap items-center gap-3 w-full sm:w-auto">
+                <div className="relative w-full sm:w-72">
+                  <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
+                  <input
+                    type="text"
+                    placeholder="Search inquirer, phone, subject..."
+                    value={inquirySearch}
+                    onChange={(e) => setInquirySearch(e.target.value)}
+                    className="w-full bg-slate-950 border border-slate-700/80 rounded-xl pl-9 pr-3 py-2 text-xs text-white placeholder:text-slate-500 outline-none"
+                  />
+                </div>
+
+                <select
+                  value={inquiryFilter}
+                  onChange={(e) => setInquiryFilter(e.target.value)}
+                  className="bg-slate-950 border border-slate-700/80 rounded-xl px-3 py-2 text-xs text-white outline-none"
+                >
+                  <option value="all">All Inquiry Statuses</option>
+                  <option value="new">New</option>
+                  <option value="contacted">Contacted</option>
+                  <option value="interested">Interested</option>
+                  <option value="follow_up">Follow-Up</option>
+                  <option value="converted">Converted</option>
+                  <option value="closed">Closed</option>
+                </select>
+              </div>
+
+              <button
+                onClick={exportInquiriesToCsv}
+                className="inline-flex items-center gap-2 px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold transition-all"
+              >
+                <Download className="w-3.5 h-3.5" />
+                <span>Export CSV</span>
+              </button>
+            </div>
+
+            <div className="bg-slate-900 border border-slate-800 rounded-3xl overflow-hidden shadow-xl">
+              <div className="overflow-x-auto">
+                <table className="w-full text-left text-xs">
+                  <thead className="bg-slate-950 border-b border-slate-800 text-[10px] font-extrabold uppercase tracking-wider text-slate-400">
+                    <tr>
+                      <th className="p-4">Customer</th>
+                      <th className="p-4">Subject &amp; Model</th>
+                      <th className="p-4">Message</th>
+                      <th className="p-4">Status</th>
+                      <th className="p-4 text-right">WhatsApp Contact</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-800/60">
+                    {inquiries
+                      .filter((i) => {
+                        const matchesSearch =
+                          i.fullName.toLowerCase().includes(inquirySearch.toLowerCase()) ||
+                          i.phone.includes(inquirySearch) ||
+                          (i.subject || "").toLowerCase().includes(inquirySearch.toLowerCase());
+                        const matchesFilter = inquiryFilter === "all" || i.status === inquiryFilter;
+                        return matchesSearch && matchesFilter;
+                      })
+                      .map((inq) => (
+                        <tr key={inq.id} className="hover:bg-slate-800/30 transition-colors">
+                          <td className="p-4">
+                            <div className="font-extrabold text-white text-sm">{inq.fullName}</div>
+                            <div className="text-[11px] text-slate-400 font-mono">📞 {inq.phone}</div>
+                            {inq.email && <div className="text-[10px] text-slate-500">{inq.email}</div>}
+                          </td>
+
+                          <td className="p-4">
+                            <div className="font-semibold text-white">{inq.subject || "General Inquiry"}</div>
+                            <div className="text-[11px] text-slate-400">Model: {inq.modelOfInterest || "Fleet"}</div>
+                          </td>
+
+                          <td className="p-4 max-w-sm text-slate-300 text-[11px] leading-relaxed">
+                            {inq.message}
+                          </td>
+
+                          <td className="p-4">
+                            <select
+                              value={inq.status}
+                              onChange={(e) => handleUpdateInquiryStatus(inq.id, e.target.value as InquiryStatus)}
+                              className="bg-slate-950 border border-slate-700 rounded-lg px-2.5 py-1 text-[11px] font-bold text-white outline-none cursor-pointer"
+                            >
+                              <option value="new">🆕 New</option>
+                              <option value="contacted">📞 Contacted</option>
+                              <option value="interested">⭐ Interested</option>
+                              <option value="follow_up">🔄 Follow-Up</option>
+                              <option value="converted">🏆 Converted</option>
+                              <option value="closed">🔒 Closed</option>
+                            </select>
+                          </td>
+
+                          <td className="p-4 text-right">
+                            <a
+                              href={`https://wa.me/${inq.phone.replace(/[^0-9]/g, "")}?text=${encodeURIComponent(
+                                `Hello ${inq.fullName}, this is Udan Enterprises Kurunduwatta Galle showroom regarding your message about ${inq.modelOfInterest || "Zuboo bikes"}:`
+                              )}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#25D366] hover:bg-[#20ba5a] text-white text-[11px] font-bold transition-all shadow-sm"
+                            >
+                              <MessageSquare className="w-3.5 h-3.5" />
+                              <span>WhatsApp</span>
+                            </a>
+                          </td>
+                        </tr>
+                      ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* TAB 5: OFFERS & PROMOTIONS */}
+        {activeTab === "offers" && (
+          <div className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {offers.map((offer) => (
+                <div
+                  key={offer.id}
+                  className="bg-slate-900 border border-slate-800 rounded-3xl p-5 flex flex-col justify-between shadow-xl relative overflow-hidden"
+                >
+                  <div>
+                    <div className="flex items-center justify-between gap-2 mb-3">
+                      <span className="px-2.5 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-wider bg-orange-500/20 text-[#FF5E14] border border-orange-500/30">
+                        {offer.badge}
+                      </span>
                       <span
-                        className={`px-2.5 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-wider border shrink-0 ${
-                          item.stockStatus === "In Showroom"
-                            ? "bg-emerald-50 text-emerald-700 border-emerald-200"
-                            : item.stockStatus === "Low Stock"
-                            ? "bg-amber-50 text-amber-700 border-amber-200"
-                            : item.stockStatus === "Pre-Order"
-                            ? "bg-blue-50 text-blue-700 border-blue-200"
-                            : "bg-rose-50 text-rose-700 border-rose-200"
+                        className={`text-[10px] font-bold px-2 py-0.5 rounded-md ${
+                          offer.isActive ? "bg-green-500/20 text-green-400" : "bg-red-500/20 text-red-400"
                         }`}
                       >
-                        {item.stockStatus}
+                        {offer.isActive ? "ACTIVE" : "EXPIRED"}
                       </span>
                     </div>
 
-                    {/* Key Technical Highlights */}
-                    <div className="grid grid-cols-2 gap-2 text-[11px] p-2.5 rounded-xl bg-[#F7F9FA] border border-[#E0E8EC]">
-                      <div>
-                        <span className="text-[9px] text-[#667780] uppercase block">Motor</span>
-                        <span className="font-bold text-[#111820]">{item.motorPower}</span>
-                      </div>
-                      <div>
-                        <span className="text-[9px] text-[#667780] uppercase block">Battery</span>
-                        <span className="font-bold text-[#111820]">{item.battery}</span>
-                      </div>
-                      <div>
-                        <span className="text-[9px] text-[#667780] uppercase block">Top Speed</span>
-                        <span className="font-bold text-[#111820]">{item.topSpeed}</span>
-                      </div>
-                      <div>
-                        <span className="text-[9px] text-[#667780] uppercase block">Range</span>
-                        <span className="font-bold text-[#111820]">{item.advertisedRange}</span>
-                      </div>
-                    </div>
+                    <h3 className="text-base font-extrabold text-white">{offer.title}</h3>
+                    <p className="text-xs text-slate-400 mt-1 line-clamp-2">{offer.description}</p>
 
-                    {/* Stock Status Selector */}
-                    <div>
-                      <label className="block text-[10px] font-bold uppercase tracking-wider text-[#667780] mb-1">
-                        Stock Status Toggle
-                      </label>
-                      <select
-                        value={item.stockStatus}
-                        onChange={(e) =>
-                          handleUpdateStockStatus(
-                            item.id,
-                            e.target.value as "In Showroom" | "Pre-Order" | "Low Stock" | "Out of Stock"
-                          )
-                        }
-                        className="w-full px-3 py-2 rounded-xl text-xs font-bold border border-[#E0E8EC] bg-[#F7F9FA] text-[#111820] focus:outline-none focus:border-[#346C83]"
-                      >
-                        <option value="In Showroom">In Showroom (Ready)</option>
-                        <option value="Low Stock">Low Stock (&lt; 2 units)</option>
-                        <option value="Pre-Order">Pre-Order (Batch in Transit)</option>
-                        <option value="Out of Stock">Out of Stock</option>
-                      </select>
-                    </div>
-
-                    {/* Provisional LKR Price Editor */}
-                    <div>
-                      <label className="block text-[10px] font-bold uppercase tracking-wider text-[#667780] mb-1">
-                        Provisional Retail Price (LKR)
-                      </label>
-                      <div className="flex items-center gap-2">
-                        <span className="text-xs font-bold text-[#667780]">LKR</span>
-                        <input
-                          type="number"
-                          step={5000}
-                          value={item.provisionalPriceLKR}
-                          onChange={(e) => handleUpdatePrice(item.id, Number(e.target.value))}
-                          className="w-full px-3 py-1.5 rounded-lg border border-[#E0E8EC] bg-[#F7F9FA] text-xs font-mono font-bold text-[#111820] focus:outline-none focus:border-[#346C83]"
-                        />
+                    <div className="my-4 p-3 bg-slate-950 rounded-2xl border border-slate-800">
+                      <div className="text-xs text-slate-400">Promotional Price</div>
+                      <div className="text-lg font-black text-white">
+                        LKR {offer.promoPriceLKR.toLocaleString()}
                       </div>
-                      <div className="text-[10px] text-[#667780] mt-1">
-                        Displayed as: <span className="font-bold text-[#346C83]">LKR {item.provisionalPriceLKR.toLocaleString()}</span>
-                      </div>
-                    </div>
-
-                    {/* Floor Units Counter */}
-                    <div>
-                      <label className="block text-[10px] font-bold uppercase tracking-wider text-[#667780] mb-1">
-                        Showroom Floor Units
-                      </label>
-                      <div className="flex items-center gap-3">
-                        <button
-                          type="button"
-                          onClick={() => handleUpdateFloorUnits(item.id, -1)}
-                          className="w-8 h-8 rounded-lg bg-[#E8F1F5] hover:bg-[#d8e7ee] text-xs font-black text-[#111820] flex items-center justify-center transition-colors"
-                        >
-                          -
-                        </button>
-                        <span className="font-heading font-black text-sm text-[#111820] w-6 text-center">
-                          {item.showroomUnits}
-                        </span>
-                        <button
-                          type="button"
-                          onClick={() => handleUpdateFloorUnits(item.id, 1)}
-                          className="w-8 h-8 rounded-lg bg-[#E8F1F5] hover:bg-[#d8e7ee] text-xs font-black text-[#111820] flex items-center justify-center transition-colors"
-                        >
-                          +
-                        </button>
-                        <span className="text-[11px] text-[#667780] ml-1">
-                          {item.showroomUnits > 0 ? "on Galle floor" : "none in bay"}
-                        </span>
-                      </div>
-                    </div>
-
-                    {/* Delivery Time Editor */}
-                    <div>
-                      <label className="block text-[10px] font-bold uppercase tracking-wider text-[#667780] mb-1">
-                        Delivery Timeframe
-                      </label>
-                      <input
-                        type="text"
-                        value={item.deliveryTime}
-                        onChange={(e) => handleUpdateDeliveryTime(item.id, e.target.value)}
-                        className="w-full px-3 py-1.5 rounded-lg border border-[#E0E8EC] bg-[#F7F9FA] text-[11px] text-[#111820] focus:outline-none focus:border-[#346C83]"
-                        placeholder="e.g. Immediate / 5 days"
-                      />
+                      {offer.regularPriceLKR && (
+                        <div className="text-xs text-slate-500 line-through">
+                          Regular: LKR {offer.regularPriceLKR.toLocaleString()}
+                        </div>
+                      )}
                     </div>
                   </div>
 
-                  {/* Card Footer / Action */}
-                  <div className="p-3 bg-[#F7F9FA] border-t border-[#E0E8EC] flex items-center justify-between text-[10px]">
-                    <span className="text-[#667780]">Updated: {item.lastUpdated}</span>
-                    <Link
-                      href={`/bikes/${item.slug}`}
-                      target="_blank"
-                      className="text-[#346C83] hover:text-[#111820] font-bold flex items-center gap-1"
-                    >
-                      <span>Public Page</span>
-                      <ArrowUpRight className="w-3 h-3" />
-                    </Link>
+                  <div className="pt-3 border-t border-slate-800 flex items-center justify-between">
+                    <span className="text-[11px] text-slate-500">Exp: {offer.expiryDate || "Ongoing"}</span>
+                    <div className="flex items-center gap-2">
+                      <button
+                        onClick={() => {
+                          setEditingOffer(offer);
+                          setIsOfferModalOpen(true);
+                        }}
+                        className="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-white transition-colors"
+                      >
+                        <Edit className="w-3.5 h-3.5" />
+                      </button>
+                      <button
+                        onClick={() => handleDeleteOffer(offer.id, offer.title)}
+                        className="p-2 rounded-xl bg-red-500/10 hover:bg-red-500/20 text-red-400 transition-colors"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
                   </div>
                 </div>
               ))}
@@ -1283,296 +1504,655 @@ export default function AdminPage() {
           </div>
         )}
 
-        {/* ======================================================== */}
-        {/* TAB 3: SERVICE BAY BOOKINGS TRACKER                     */}
-        {/* ======================================================== */}
-        {activeTab === "service" && (
-          <div className="space-y-5">
-            <div className="bg-white p-4 rounded-2xl border border-[#E0E8EC] shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
-              <div>
-                <h3 className="font-heading font-bold text-sm text-[#111820] uppercase tracking-wide">
-                  Galle Kurunduwatta After-Sales Service Bays
-                </h3>
-                <p className="text-xs text-[#667780]">
-                  Appointments scheduled for routine maintenance, battery diagnostics, and brake services
-                </p>
-              </div>
+        {/* TAB 6: MEDIA LIBRARY */}
+        {activeTab === "media" && (
+          <div className="space-y-6">
+            <div className="bg-slate-900 border border-slate-800 p-6 rounded-3xl">
+              <h3 className="text-sm font-extrabold text-white uppercase tracking-wider mb-2">
+                Curated Static Asset Library (Spark Plan Optimized)
+              </h3>
+              <p className="text-xs text-slate-400 mb-6 leading-relaxed">
+                To guarantee zero Firebase billing expenses and lightning-fast loading speeds on the Spark tier, the website uses transparent cutouts and high-definition WebP/PNG studio assets bundled in the project directory.
+              </p>
 
-              <Link
-                href="/service"
-                target="_blank"
-                className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold text-white bg-[#346C83] hover:bg-[#275365] transition-colors shadow-xs"
-              >
-                <Plus className="w-3.5 h-3.5" />
-                <span>Customer Booking Form</span>
-              </Link>
-            </div>
-
-            <div className="bg-white rounded-2xl border border-[#E0E8EC] shadow-xs overflow-hidden">
-              <div className="overflow-x-auto">
-                <table className="w-full text-left text-xs">
-                  <thead className="bg-[#F7F9FA] border-b border-[#E0E8EC] text-[#667780] font-heading uppercase text-[10px] tracking-wider">
-                    <tr>
-                      <th className="py-3.5 px-4 font-bold">Booking ID / Customer</th>
-                      <th className="py-3.5 px-4 font-bold">Vehicle / VIN</th>
-                      <th className="py-3.5 px-4 font-bold">Service Package</th>
-                      <th className="py-3.5 px-4 font-bold">Scheduled Slot</th>
-                      <th className="py-3.5 px-4 font-bold">Notes</th>
-                      <th className="py-3.5 px-4 font-bold">Bay Status</th>
-                      <th className="py-3.5 px-4 font-bold text-right">Action</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-[#E0E8EC]">
-                    {serviceBookings.map((b) => (
-                      <tr key={b.id} className="hover:bg-[#F7F9FA]/70 transition-colors">
-                        <td className="py-4 px-4 align-top">
-                          <div className="font-heading font-bold text-sm text-[#111820]">
-                            {b.customerName}
-                          </div>
-                          <div className="font-mono text-[11px] text-[#346C83] font-semibold">
-                            {b.phone}
-                          </div>
-                          <div className="text-[10px] text-[#667780] mt-0.5">#{b.id}</div>
-                        </td>
-
-                        <td className="py-4 px-4 align-top">
-                          <span className="font-semibold text-[#111820] block">{b.vinOrModel}</span>
-                          <span className="text-[10px] text-[#667780]">Galle Registration</span>
-                        </td>
-
-                        <td className="py-4 px-4 align-top">
-                          <span className="inline-block px-2 py-1 rounded bg-[#E8F1F5] text-[#346C83] font-bold text-[11px]">
-                            {b.servicePackage}
-                          </span>
-                        </td>
-
-                        <td className="py-4 px-4 align-top text-slate-700">
-                          <div className="flex items-center gap-1.5 font-medium">
-                            <Calendar className="w-3.5 h-3.5 text-[#346C83]" />
-                            <span>{b.preferredDate}</span>
-                          </div>
-                          <div className="text-[11px] text-[#667780] mt-0.5">{b.preferredTime}</div>
-                        </td>
-
-                        <td className="py-4 px-4 align-top text-[#667780] max-w-xs">
-                          <p className="line-clamp-2 text-[11px]">{b.notes || "Standard checkup"}</p>
-                        </td>
-
-                        <td className="py-4 px-4 align-top">
-                          <div className="relative inline-block">
-                            <select
-                              value={b.status}
-                              onChange={(e) =>
-                                handleUpdateServiceStatus(
-                                  b.id,
-                                  e.target.value as "Pending" | "Confirmed" | "In Bay" | "Completed"
-                                )
-                              }
-                              className={`appearance-none px-3 py-1.5 pr-7 rounded-lg text-[11px] font-bold border transition-colors cursor-pointer focus:outline-none ${
-                                b.status === "Pending"
-                                  ? "bg-amber-50 text-amber-700 border-amber-200"
-                                  : b.status === "Confirmed"
-                                  ? "bg-blue-50 text-blue-700 border-blue-200"
-                                  : b.status === "In Bay"
-                                  ? "bg-purple-50 text-purple-700 border-purple-200"
-                                  : "bg-emerald-50 text-emerald-700 border-emerald-200"
-                              }`}
-                            >
-                              <option value="Pending">Pending</option>
-                              <option value="Confirmed">Confirmed</option>
-                              <option value="In Bay">In Service Bay</option>
-                              <option value="Completed">Completed</option>
-                            </select>
-                            <ChevronDown className="w-3 h-3 absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none text-current opacity-70" />
-                          </div>
-                        </td>
-
-                        <td className="py-4 px-4 align-top text-right">
-                          <a
-                            href={`https://wa.me/94${b.phone.replace(/^0/, "")}?text=${encodeURIComponent(
-                              `Hello ${b.customerName}, this is Udan Enterprises Galle regarding your scheduled service booking (#${b.id}) for ${b.servicePackage} on ${b.preferredDate} (${b.preferredTime}). Our certified technician team is ready for your vehicle.`
-                            )}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-[11px] transition-colors"
-                          >
-                            <MessageSquare className="w-3 h-3" />
-                            <span>WhatsApp</span>
-                          </a>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4">
+                {[
+                  { path: "/media/showcase/1.png", name: "EX008 Cutout" },
+                  { path: "/media/showcase/2.png", name: "The Tank Lime" },
+                  { path: "/media/showcase/3.png", name: "T3 Sport White" },
+                  { path: "/media/showcase/4.png", name: "Paris Mint Retro" },
+                  { path: "/media/showcase/5.png", name: "The Tank Desert" },
+                  { path: "/media/showcase/6.png", name: "Mini Pastel Basket" },
+                ].map((item, idx) => (
+                  <div
+                    key={idx}
+                    className="p-3 bg-slate-950 border border-slate-800 rounded-2xl flex flex-col items-center group"
+                  >
+                    <div className="w-full h-24 bg-white/5 rounded-xl p-2 flex items-center justify-center mb-2">
+                      <Image
+                        src={item.path}
+                        alt={item.name}
+                        width={80}
+                        height={60}
+                        className="object-contain max-h-full"
+                      />
+                    </div>
+                    <div className="text-[11px] font-bold text-white text-center truncate w-full">
+                      {item.name}
+                    </div>
+                    <code className="text-[9px] text-slate-500 mt-1 font-mono">{item.path}</code>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
         )}
-      </main>
 
-      {/* Add Walk-In Lead Modal */}
-      {isAddLeadModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in">
-          <div className="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl border border-[#E0E8EC] space-y-5">
-            <div className="flex items-center justify-between pb-3 border-b border-[#E0E8EC]">
-              <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-lg bg-[#E8F1F5] text-[#346C83] flex items-center justify-center">
-                  <Plus className="w-4 h-4" />
-                </div>
-                <div>
-                  <h3 className="font-heading font-bold text-sm text-[#111820] uppercase">
-                    Add Walk-In / Phone Lead
-                  </h3>
-                  <p className="text-[11px] text-[#667780]">Galle Showroom Direct Entry</p>
-                </div>
-              </div>
-              <button
-                onClick={() => setIsAddLeadModalOpen(false)}
-                className="p-1 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100"
-              >
-                <X className="w-5 h-5" />
-              </button>
+        {/* TAB 7: HOMEPAGE CMS */}
+        {activeTab === "cms" && (
+          <form onSubmit={handleSaveCms} className="bg-slate-900 border border-slate-800 p-6 sm:p-8 rounded-3xl space-y-6 max-w-4xl shadow-xl">
+            <div>
+              <h3 className="text-base font-extrabold text-white">Homepage Content Editor</h3>
+              <p className="text-xs text-slate-400 mt-1">
+                Update top headlines, banners, and showroom highlights in Cloud Firestore.
+              </p>
             </div>
 
-            <form onSubmit={handleAddWalkInLead} className="space-y-4 text-xs">
+            <div className="space-y-4 text-xs">
               <div>
-                <label className="block font-bold text-[#111820] uppercase tracking-wider mb-1">
-                  Customer Full Name *
+                <label className="block text-slate-300 font-bold uppercase tracking-wider mb-1">
+                  Hero Headline
                 </label>
                 <input
                   type="text"
-                  required
-                  value={newLeadForm.customerName}
-                  onChange={(e) =>
-                    setNewLeadForm({ ...newLeadForm, customerName: e.target.value })
-                  }
-                  placeholder="e.g. Ruwan Wickramasinghe"
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-[#E0E8EC] bg-[#F7F9FA] focus:outline-none focus:border-[#346C83] focus:bg-white font-medium"
+                  value={cmsContent.heroHeadline}
+                  onChange={(e) => setCmsContent({ ...cmsContent, heroHeadline: e.target.value })}
+                  className="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-white outline-none focus:border-[#FF5E14]"
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="block font-bold text-[#111820] uppercase tracking-wider mb-1">
-                    Phone Number *
-                  </label>
-                  <input
-                    type="tel"
-                    required
-                    value={newLeadForm.phoneNumber}
-                    onChange={(e) =>
-                      setNewLeadForm({ ...newLeadForm, phoneNumber: e.target.value })
-                    }
-                    placeholder="07x xxxxxxx"
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-[#E0E8EC] bg-[#F7F9FA] focus:outline-none focus:border-[#346C83] focus:bg-white font-medium"
-                  />
-                </div>
-                <div>
-                  <label className="block font-bold text-[#111820] uppercase tracking-wider mb-1">
-                    City / Town
-                  </label>
-                  <input
-                    type="text"
-                    value={newLeadForm.locationCity}
-                    onChange={(e) =>
-                      setNewLeadForm({ ...newLeadForm, locationCity: e.target.value })
-                    }
-                    placeholder="e.g. Galle, Hikkaduwa"
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-[#E0E8EC] bg-[#F7F9FA] focus:outline-none focus:border-[#346C83] focus:bg-white font-medium"
-                  />
-                </div>
-              </div>
-
               <div>
-                <label className="block font-bold text-[#111820] uppercase tracking-wider mb-1">
-                  Interested Zuboo Model
-                </label>
-                <select
-                  value={newLeadForm.bikeModelId}
-                  onChange={(e) => {
-                    const selId = e.target.value;
-                    const item = inventory.find((i) => i.id === selId);
-                    setNewLeadForm({
-                      ...newLeadForm,
-                      bikeModelId: selId,
-                      bikeModelName: item ? `${item.name} (${item.motorPower})` : selId,
-                    });
-                  }}
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-[#E0E8EC] bg-[#F7F9FA] focus:outline-none focus:border-[#346C83] focus:bg-white font-semibold"
-                >
-                  {inventory.map((bike) => (
-                    <option key={bike.id} value={bike.id}>
-                      {bike.name} ({bike.motorPower} - {bike.stockStatus})
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="block font-bold text-[#111820] uppercase tracking-wider mb-1">
-                    Preferred Date
-                  </label>
-                  <input
-                    type="date"
-                    value={newLeadForm.preferredDate}
-                    onChange={(e) =>
-                      setNewLeadForm({ ...newLeadForm, preferredDate: e.target.value })
-                    }
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-[#E0E8EC] bg-[#F7F9FA] focus:outline-none focus:border-[#346C83] focus:bg-white font-medium"
-                  />
-                </div>
-                <div>
-                  <label className="block font-bold text-[#111820] uppercase tracking-wider mb-1">
-                    Time Window
-                  </label>
-                  <select
-                    value={newLeadForm.preferredTimeSlot}
-                    onChange={(e) =>
-                      setNewLeadForm({ ...newLeadForm, preferredTimeSlot: e.target.value })
-                    }
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-[#E0E8EC] bg-[#F7F9FA] focus:outline-none focus:border-[#346C83] focus:bg-white font-medium"
-                  >
-                    <option value="Morning (9:30 AM)">Morning (9:30 AM)</option>
-                    <option value="Morning (11:00 AM)">Morning (11:00 AM)</option>
-                    <option value="Afternoon (2:30 PM)">Afternoon (2:30 PM)</option>
-                    <option value="Evening (4:30 PM)">Evening (4:30 PM)</option>
-                  </select>
-                </div>
-              </div>
-
-              <div>
-                <label className="block font-bold text-[#111820] uppercase tracking-wider mb-1">
-                  Showroom Staff Notes
+                <label className="block text-slate-300 font-bold uppercase tracking-wider mb-1">
+                  Hero Subtitle
                 </label>
                 <textarea
-                  rows={2}
-                  value={newLeadForm.notes}
-                  onChange={(e) => setNewLeadForm({ ...newLeadForm, notes: e.target.value })}
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-[#E0E8EC] bg-[#F7F9FA] focus:outline-none focus:border-[#346C83] focus:bg-white font-medium"
-                  placeholder="e.g. Came with family, tested step-through frame, interested in monthly leasing."
+                  rows={3}
+                  value={cmsContent.heroSubtitle}
+                  onChange={(e) => setCmsContent({ ...cmsContent, heroSubtitle: e.target.value })}
+                  className="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-white outline-none focus:border-[#FF5E14]"
                 />
               </div>
 
-              <div className="flex items-center justify-end gap-2 pt-2">
+              <div>
+                <label className="block text-slate-300 font-bold uppercase tracking-wider mb-1">
+                  Top Announcement Ticker
+                </label>
+                <input
+                  type="text"
+                  value={cmsContent.announcementText}
+                  onChange={(e) => setCmsContent({ ...cmsContent, announcementText: e.target.value })}
+                  className="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-white outline-none focus:border-[#FF5E14]"
+                />
+              </div>
+
+              <div>
+                <label className="block text-slate-300 font-bold uppercase tracking-wider mb-1">
+                  Showcase Title
+                </label>
+                <input
+                  type="text"
+                  value={cmsContent.showcaseHeading}
+                  onChange={(e) => setCmsContent({ ...cmsContent, showcaseHeading: e.target.value })}
+                  className="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-white outline-none focus:border-[#FF5E14]"
+                />
+              </div>
+
+              <div>
+                <label className="block text-slate-300 font-bold uppercase tracking-wider mb-1">
+                  Technology Heading
+                </label>
+                <input
+                  type="text"
+                  value={cmsContent.techHeading}
+                  onChange={(e) => setCmsContent({ ...cmsContent, techHeading: e.target.value })}
+                  className="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-white outline-none focus:border-[#FF5E14]"
+                />
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              className="px-6 py-3 rounded-xl bg-[#FF5E14] hover:bg-[#e04d09] text-white text-xs font-bold uppercase tracking-wider transition-all shadow-md shadow-orange-500/25 cursor-pointer"
+            >
+              Save Homepage Content
+            </button>
+          </form>
+        )}
+
+        {/* TAB 8: SHOWROOM SETTINGS */}
+        {activeTab === "settings" && (
+          <form onSubmit={handleSaveSettings} className="bg-slate-900 border border-slate-800 p-6 sm:p-8 rounded-3xl space-y-6 max-w-4xl shadow-xl">
+            <div>
+              <h3 className="text-base font-extrabold text-white">Showroom Business Profile</h3>
+              <p className="text-xs text-slate-400 mt-1">
+                Hotlines, WhatsApp direct links, Google Maps destination, and operating hours.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+              <div>
+                <label className="block text-slate-300 font-bold uppercase tracking-wider mb-1">
+                  Showroom Name
+                </label>
+                <input
+                  type="text"
+                  value={settings.showroomName}
+                  onChange={(e) => setSettings({ ...settings, showroomName: e.target.value })}
+                  className="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-white outline-none focus:border-[#FF5E14]"
+                />
+              </div>
+
+              <div>
+                <label className="block text-slate-300 font-bold uppercase tracking-wider mb-1">
+                  Brand Partner
+                </label>
+                <input
+                  type="text"
+                  value={settings.brandPartner}
+                  onChange={(e) => setSettings({ ...settings, brandPartner: e.target.value })}
+                  className="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-white outline-none focus:border-[#FF5E14]"
+                />
+              </div>
+
+              <div>
+                <label className="block text-slate-300 font-bold uppercase tracking-wider mb-1">
+                  Direct Hotline Phone
+                </label>
+                <input
+                  type="text"
+                  value={settings.hotline}
+                  onChange={(e) => setSettings({ ...settings, hotline: e.target.value })}
+                  className="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-white outline-none focus:border-[#FF5E14]"
+                />
+              </div>
+
+              <div>
+                <label className="block text-slate-300 font-bold uppercase tracking-wider mb-1">
+                  WhatsApp Number (with country code)
+                </label>
+                <input
+                  type="text"
+                  value={settings.whatsappNumber}
+                  onChange={(e) => setSettings({ ...settings, whatsappNumber: e.target.value })}
+                  className="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-white outline-none focus:border-[#FF5E14]"
+                />
+              </div>
+
+              <div className="sm:col-span-2">
+                <label className="block text-slate-300 font-bold uppercase tracking-wider mb-1">
+                  Google Maps URL
+                </label>
+                <input
+                  type="url"
+                  value={settings.googleMapsUrl}
+                  onChange={(e) => setSettings({ ...settings, googleMapsUrl: e.target.value })}
+                  className="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-white outline-none focus:border-[#FF5E14]"
+                />
+              </div>
+
+              <div className="sm:col-span-2">
+                <label className="block text-slate-300 font-bold uppercase tracking-wider mb-1">
+                  Showroom Address
+                </label>
+                <input
+                  type="text"
+                  value={settings.address}
+                  onChange={(e) => setSettings({ ...settings, address: e.target.value })}
+                  className="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-white outline-none focus:border-[#FF5E14]"
+                />
+              </div>
+
+              <div className="sm:col-span-2">
+                <label className="block text-slate-300 font-bold uppercase tracking-wider mb-1">
+                  Opening Hours
+                </label>
+                <input
+                  type="text"
+                  value={settings.openingHours}
+                  onChange={(e) => setSettings({ ...settings, openingHours: e.target.value })}
+                  className="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-white outline-none focus:border-[#FF5E14]"
+                />
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              className="px-6 py-3 rounded-xl bg-[#FF5E14] hover:bg-[#e04d09] text-white text-xs font-bold uppercase tracking-wider transition-all shadow-md shadow-orange-500/25 cursor-pointer"
+            >
+              Update Showroom Settings
+            </button>
+          </form>
+        )}
+
+        {/* TAB 9: SEO */}
+        {activeTab === "seo" && (
+          <form onSubmit={handleSaveSettings} className="bg-slate-900 border border-slate-800 p-6 sm:p-8 rounded-3xl space-y-6 max-w-4xl shadow-xl">
+            <div>
+              <h3 className="text-base font-extrabold text-white">Search Engine Optimization</h3>
+              <p className="text-xs text-slate-400 mt-1">
+                Configure default title and description rendered on social cards and Google search indexing.
+              </p>
+            </div>
+
+            <div className="space-y-4 text-xs">
+              <div>
+                <label className="block text-slate-300 font-bold uppercase tracking-wider mb-1">
+                  Default Meta Title
+                </label>
+                <input
+                  type="text"
+                  value={settings.defaultSeoTitle}
+                  onChange={(e) => setSettings({ ...settings, defaultSeoTitle: e.target.value })}
+                  className="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-white outline-none focus:border-[#FF5E14]"
+                />
+              </div>
+
+              <div>
+                <label className="block text-slate-300 font-bold uppercase tracking-wider mb-1">
+                  Default Meta Description
+                </label>
+                <textarea
+                  rows={3}
+                  value={settings.defaultSeoDescription}
+                  onChange={(e) => setSettings({ ...settings, defaultSeoDescription: e.target.value })}
+                  className="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-white outline-none focus:border-[#FF5E14]"
+                />
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              className="px-6 py-3 rounded-xl bg-[#FF5E14] hover:bg-[#e04d09] text-white text-xs font-bold uppercase tracking-wider transition-all shadow-md shadow-orange-500/25 cursor-pointer"
+            >
+              Save SEO Settings
+            </button>
+          </form>
+        )}
+
+        {/* TAB 10: STAFF & ROLES (OWNER ONLY) */}
+        {activeTab === "staff" && (
+          <div className="space-y-4">
+            <div className="bg-slate-900 border border-slate-800 p-6 rounded-3xl">
+              <h3 className="text-base font-extrabold text-white mb-2">Showroom Staff Management</h3>
+              <p className="text-xs text-slate-400 mb-6">
+                Role-based access control (RBAC). Only the verified showroom owner (<code>pibida17udan4131@gmail.com</code>) can assign administrator privileges.
+              </p>
+
+              <div className="space-y-3">
+                {staffProfiles.map((p) => (
+                  <div
+                    key={p.uid}
+                    className="p-4 rounded-2xl bg-slate-950 border border-slate-800 flex items-center justify-between text-xs"
+                  >
+                    <div>
+                      <div className="font-extrabold text-white flex items-center gap-2">
+                        <span>{p.email}</span>
+                        <span
+                          className={`text-[10px] px-2 py-0.5 rounded-md font-bold uppercase ${
+                            p.role === "owner" ? "bg-orange-500/20 text-[#FF5E14]" : "bg-blue-500/20 text-blue-400"
+                          }`}
+                        >
+                          {p.role}
+                        </span>
+                      </div>
+                      <div className="text-slate-500 text-[11px] mt-1">UID: {p.uid}</div>
+                    </div>
+
+                    {adminProfile?.role === "owner" && p.email !== "pibida17udan4131@gmail.com" && (
+                      <div className="flex items-center gap-2">
+                        <select
+                          value={p.role}
+                          onChange={async (e) => {
+                            const newRole = e.target.value as "owner" | "staff";
+                            await updateAdminRole(p.uid, newRole, newRole === "owner" ? ["all"] : ["view_leads"]);
+                            showToast(`Updated role for ${p.email} to ${newRole}`);
+                            refreshAllData();
+                          }}
+                          className="bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1 text-xs text-white"
+                        >
+                          <option value="staff">Staff</option>
+                          <option value="owner">Owner</option>
+                        </select>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* TAB 11: AUDIT TRAIL */}
+        {activeTab === "audit" && (
+          <div className="space-y-4">
+            <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-xl">
+              <h3 className="text-base font-extrabold text-white mb-1">Showroom Security &amp; Activity Log</h3>
+              <p className="text-xs text-slate-400 mb-6">
+                Immutable, append-only record of all administrative modifications, pricing changes, and lead status updates.
+              </p>
+
+              <div className="space-y-2.5">
+                {auditLogs.length === 0 ? (
+                  <div className="py-8 text-center text-slate-500 text-xs">
+                    No activity logs recorded yet. Actions taken across the dashboard will be logged here.
+                  </div>
+                ) : (
+                  auditLogs.map((log) => (
+                    <div
+                      key={log.id}
+                      className="p-3.5 rounded-2xl bg-slate-950 border border-slate-800/80 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs"
+                    >
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <span className="font-mono text-[10px] font-bold px-2 py-0.5 rounded bg-slate-800 text-slate-300">
+                            {log.action}
+                          </span>
+                          <span className="text-white font-semibold">{log.summary}</span>
+                        </div>
+                        <div className="text-[11px] text-slate-500 mt-1">
+                          Actor: {log.actorEmail} • Resource: <code>{log.resource}</code>
+                        </div>
+                      </div>
+
+                      <div className="text-[10px] text-slate-500 shrink-0 font-mono">
+                        {log.timestamp}
+                      </div>
+                    </div>
+                  ))
+                )}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* EDIT PRODUCT MODAL */}
+        {isProductModalOpen && editingProduct && (
+          <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
+            <div className="bg-slate-900 border border-slate-800 rounded-3xl max-w-2xl w-full p-6 sm:p-8 my-8 space-y-6 shadow-2xl">
+              <div className="flex items-center justify-between pb-4 border-b border-slate-800">
+                <h3 className="text-lg font-extrabold text-white">
+                  {editingProduct.id.includes("new") ? "Add Zuboo Model" : `Edit ${editingProduct.name}`}
+                </h3>
                 <button
-                  type="button"
-                  onClick={() => setIsAddLeadModalOpen(false)}
-                  className="px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-[#111820] font-bold"
+                  onClick={() => setIsProductModalOpen(false)}
+                  className="p-1 text-slate-400 hover:text-white"
                 >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="px-5 py-2.5 rounded-xl bg-[#346C83] hover:bg-[#275365] text-white font-heading font-bold uppercase tracking-wider shadow-sm"
-                >
-                  Save Lead to System
+                  <X className="w-5 h-5" />
                 </button>
               </div>
-            </form>
+
+              <form onSubmit={handleSaveProduct} className="space-y-4 text-xs">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-slate-300 font-bold mb-1">Model Name</label>
+                    <input
+                      type="text"
+                      value={editingProduct.name}
+                      onChange={(e) => setEditingProduct({ ...editingProduct, name: e.target.value })}
+                      required
+                      className="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-white outline-none"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-slate-300 font-bold mb-1">Model Code</label>
+                    <input
+                      type="text"
+                      value={editingProduct.modelCode}
+                      onChange={(e) => setEditingProduct({ ...editingProduct, modelCode: e.target.value })}
+                      required
+                      className="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-white outline-none"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-slate-300 font-bold mb-1">Category</label>
+                    <input
+                      type="text"
+                      value={editingProduct.category}
+                      onChange={(e) => setEditingProduct({ ...editingProduct, category: e.target.value })}
+                      required
+                      className="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-white outline-none"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-slate-300 font-bold mb-1">Advertised Price (LKR)</label>
+                    <input
+                      type="number"
+                      value={editingProduct.priceLKR}
+                      onChange={(e) => setEditingProduct({ ...editingProduct, priceLKR: Number(e.target.value) })}
+                      required
+                      className="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-white outline-none"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-slate-300 font-bold mb-1">Motor Power</label>
+                    <input
+                      type="text"
+                      value={editingProduct.motorPower}
+                      onChange={(e) => setEditingProduct({ ...editingProduct, motorPower: e.target.value })}
+                      required
+                      className="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-white outline-none"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-slate-300 font-bold mb-1">Battery Pack</label>
+                    <input
+                      type="text"
+                      value={editingProduct.battery}
+                      onChange={(e) => setEditingProduct({ ...editingProduct, battery: e.target.value })}
+                      required
+                      className="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-white outline-none"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-slate-300 font-bold mb-1">Top Speed</label>
+                    <input
+                      type="text"
+                      value={editingProduct.topSpeed}
+                      onChange={(e) => setEditingProduct({ ...editingProduct, topSpeed: e.target.value })}
+                      required
+                      className="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-white outline-none"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-slate-300 font-bold mb-1">Advertised Range</label>
+                    <input
+                      type="text"
+                      value={editingProduct.advertisedRange}
+                      onChange={(e) => setEditingProduct({ ...editingProduct, advertisedRange: e.target.value })}
+                      required
+                      className="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-white outline-none"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-slate-300 font-bold mb-1">Stock Status</label>
+                    <select
+                      value={editingProduct.stockStatus}
+                      onChange={(e) => setEditingProduct({ ...editingProduct, stockStatus: e.target.value as BikeStockStatus })}
+                      className="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-white outline-none"
+                    >
+                      <option value="In Showroom">In Showroom</option>
+                      <option value="Low Stock">Low Stock</option>
+                      <option value="Out of Stock">Out of Stock</option>
+                      <option value="Pre-Order">Pre-Order</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block text-slate-300 font-bold mb-1">Publish Status</label>
+                    <select
+                      value={editingProduct.status}
+                      onChange={(e) => setEditingProduct({ ...editingProduct, status: e.target.value as BikePublishStatus })}
+                      className="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-white outline-none"
+                    >
+                      <option value="published">Published</option>
+                      <option value="draft">Draft</option>
+                      <option value="archived">Archived</option>
+                    </select>
+                  </div>
+
+                  <div className="sm:col-span-2">
+                    <label className="block text-slate-300 font-bold mb-1">Main Image Path or URL</label>
+                    <input
+                      type="text"
+                      value={editingProduct.mainImage}
+                      onChange={(e) => setEditingProduct({ ...editingProduct, mainImage: e.target.value })}
+                      required
+                      className="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-white outline-none font-mono"
+                    />
+                  </div>
+
+                  <div className="sm:col-span-2">
+                    <label className="block text-slate-300 font-bold mb-1">Description</label>
+                    <textarea
+                      rows={3}
+                      value={editingProduct.description}
+                      onChange={(e) => setEditingProduct({ ...editingProduct, description: e.target.value })}
+                      className="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-white outline-none"
+                    />
+                  </div>
+                </div>
+
+                <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-800">
+                  <button
+                    type="button"
+                    onClick={() => setIsProductModalOpen(false)}
+                    className="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className="px-5 py-2.5 rounded-xl bg-[#FF5E14] hover:bg-[#e04d09] text-white text-xs font-bold uppercase tracking-wider"
+                  >
+                    Save Changes
+                  </button>
+                </div>
+              </form>
+            </div>
           </div>
-        </div>
-      )}
+        )}
+
+        {/* EDIT OFFER MODAL */}
+        {isOfferModalOpen && editingOffer && (
+          <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
+            <div className="bg-slate-900 border border-slate-800 rounded-3xl max-w-xl w-full p-6 sm:p-8 space-y-6 shadow-2xl">
+              <div className="flex items-center justify-between pb-4 border-b border-slate-800">
+                <h3 className="text-lg font-extrabold text-white">Edit Promotional Offer</h3>
+                <button
+                  onClick={() => setIsOfferModalOpen(false)}
+                  className="p-1 text-slate-400 hover:text-white"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              <form onSubmit={handleSaveOffer} className="space-y-4 text-xs">
+                <div>
+                  <label className="block text-slate-300 font-bold mb-1">Offer Title</label>
+                  <input
+                    type="text"
+                    value={editingOffer.title}
+                    onChange={(e) => setEditingOffer({ ...editingOffer, title: e.target.value })}
+                    required
+                    className="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-white outline-none"
+                  />
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-slate-300 font-bold mb-1">Promo Price (LKR)</label>
+                    <input
+                      type="number"
+                      value={editingOffer.promoPriceLKR}
+                      onChange={(e) => setEditingOffer({ ...editingOffer, promoPriceLKR: Number(e.target.value) })}
+                      required
+                      className="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-white outline-none"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-slate-300 font-bold mb-1">Regular Price (LKR)</label>
+                    <input
+                      type="number"
+                      value={editingOffer.regularPriceLKR || ""}
+                      onChange={(e) => setEditingOffer({ ...editingOffer, regularPriceLKR: Number(e.target.value) })}
+                      className="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-white outline-none"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-slate-300 font-bold mb-1">Badge Text</label>
+                    <input
+                      type="text"
+                      value={editingOffer.badge}
+                      onChange={(e) => setEditingOffer({ ...editingOffer, badge: e.target.value })}
+                      required
+                      className="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-white outline-none"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-slate-300 font-bold mb-1">Expiry Date</label>
+                    <input
+                      type="date"
+                      value={editingOffer.expiryDate || ""}
+                      onChange={(e) => setEditingOffer({ ...editingOffer, expiryDate: e.target.value })}
+                      className="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-white outline-none"
+                    />
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-3 pt-2">
+                  <input
+                    type="checkbox"
+                    id="offerActive"
+                    checked={editingOffer.isActive}
+                    onChange={(e) => setEditingOffer({ ...editingOffer, isActive: e.target.checked })}
+                    className="w-4 h-4 rounded text-[#FF5E14]"
+                  />
+                  <label htmlFor="offerActive" className="text-slate-300 font-bold">
+                    Mark as Active on Website
+                  </label>
+                </div>
+
+                <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-800">
+                  <button
+                    type="button"
+                    onClick={() => setIsOfferModalOpen(false)}
+                    className="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className="px-5 py-2.5 rounded-xl bg-[#FF5E14] hover:bg-[#e04d09] text-white text-xs font-bold uppercase tracking-wider"
+                  >
+                    Save Offer
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
+      </main>
     </div>
   );
 }

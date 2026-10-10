@@ -1,0 +1,101 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Helper functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isAdminUser() {
+      return isAuthenticated() &&
+        exists(/databases/$(database)/documents/admin_profiles/$(request.auth.uid));
+    }
+
+    function getAdminData() {
+      return get(/databases/$(database)/documents/admin_profiles/$(request.auth.uid)).data;
+    }
+
+    function isOwner() {
+      return isAdminUser() && getAdminData().role == 'owner';
+    }
+
+    function isStaff() {
+      return isAdminUser() && (getAdminData().role == 'staff' || getAdminData().role == 'owner');
+    }
+
+    // 1. PUBLIC PRODUCTS COLLECTION
+    match /products/{productId} {
+      // Anyone can read published products; staff/owner can read drafts and archived
+      allow read: if resource.data.status == 'published' || isStaff();
+      // Only staff and owner can create/edit products; only owner can delete
+      allow create, update: if isStaff();
+      allow delete: if isOwner();
+    }
+
+    // 2. OFFERS & PROMOTIONS
+    match /offers/{offerId} {
+      // Public can read active offers
+      allow read: if resource.data.isActive == true || isStaff();
+      allow create, update, delete: if isOwner();
+    }
+
+    // 3. TEST RIDE BOOKINGS (Public write, Staff read/update)
+    match /test_ride_bookings/{bookingId} {
+      allow create: if request.resource.data.customerName is string &&
+                       request.resource.data.phoneNumber is string &&
+                       request.resource.data.phoneNumber.size() >= 9;
+      allow read, update: if isStaff();
+      allow delete: if isOwner();
+    }
+
+    // 4. CONTACT INQUIRIES (Public write, Staff read/update)
+    match /contact_inquiries/{inquiryId} {
+      allow create: if request.resource.data.fullName is string &&
+                       request.resource.data.phone is string &&
+                       request.resource.data.phone.size() >= 9;
+      allow read, update: if isStaff();
+      allow delete: if isOwner();
+    }
+
+    // 5. SERVICE BOOKINGS
+    match /service_bookings/{bookingId} {
+      allow create: if request.resource.data.customerName is string &&
+                       request.resource.data.phone is string;
+      allow read, update: if isStaff();
+      allow delete: if isOwner();
+    }
+
+    // 6. NEWSLETTER SUBSCRIBERS
+    match /newsletter_subscribers/{subscriberId} {
+      allow create: if request.resource.data.email is string;
+      allow read, delete: if isStaff();
+    }
+
+    // 7. SHOWROOM SETTINGS & MINI CMS
+    match /settings/{docId} {
+      allow read: if true;
+      allow write: if isOwner();
+    }
+
+    match /site_content/{docId} {
+      allow read: if true;
+      allow write: if isOwner();
+    }
+
+    // 8. ADMIN PROFILES (Owner full access, users can read their own profile)
+    match /admin_profiles/{uid} {
+      allow read: if isAuthenticated() && (request.auth.uid == uid || isOwner());
+      allow create: if isAuthenticated() && (request.auth.uid == uid || isOwner());
+      allow update: if isOwner();
+      allow delete: if isOwner() && request.auth.uid != uid; // Prevent self-deletion
+    }
+
+    // 9. AUDIT LOGS (Immutable: Append-only, never modified or deleted)
+    match /audit_logs/{logId} {
+      allow create: if isAuthenticated();
+      allow read: if isOwner();
+      allow update, delete: if false; // Strict immutability
+    }
+  }
+}
