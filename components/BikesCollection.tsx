@@ -22,17 +22,23 @@ export default function BikesCollection({ onSelectModelForTestRide }: BikesColle
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      gsap.from(".collection-card", {
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top 75%",
-        },
-        y: 40,
-        opacity: 0,
-        stagger: 0.15,
-        duration: 0.8,
-        ease: "power2.out",
-      });
+      gsap.fromTo(
+        ".collection-card",
+        { y: 40, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          stagger: 0.15,
+          duration: 0.8,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "top 80%",
+            end: "bottom 15%",
+            toggleActions: "play reverse play reverse",
+          },
+        }
+      );
     }, sectionRef);
 
     return () => ctx.revert();

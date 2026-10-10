@@ -2605,3 +2605,47 @@ footer.oem-footer {
   animation-delay: calc(var(--char-index, 0) * 0.022s);
 }
 
+/* ==========================================================================
+   BIDIRECTIONAL SCROLL TRIGGER & GPU ACCELERATION SYSTEM
+   ========================================================================== */
+
+.smooth-scroll {
+  scroll-behavior: smooth;
+}
+
+.reveal-section,
+.reveal-on-scroll,
+.stagger-grid,
+.stagger-card,
+[data-scroll-section],
+.gpu-accelerated,
+.gpu-accel {
+  will-change: transform, opacity;
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto !important;
+  }
+
+  .reveal-section,
+  .reveal-on-scroll,
+  .stagger-grid,
+  .stagger-card,
+  [data-scroll-section],
+  .gpu-accelerated,
+  .gpu-accel {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+    animation: none !important;
+    will-change: auto !important;
+  }
+}
+
+

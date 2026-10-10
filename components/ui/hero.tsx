@@ -176,6 +176,7 @@ export default function Hero({
       if (sectionRef.current && contentRef.current) {
         gsap.to(contentRef.current, {
           y: "25%",
+          opacity: 0.15,
           ease: "none",
           scrollTrigger: {
             trigger: sectionRef.current,

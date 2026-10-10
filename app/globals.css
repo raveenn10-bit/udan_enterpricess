@@ -1518,3 +1518,46 @@ footer.oem-footer {
   animation: logoTextBounce 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) infinite;
 }
 
+/* ==========================================================================
+   BIDIRECTIONAL SCROLL TRIGGER & GPU ACCELERATION SYSTEM
+   ========================================================================== */
+
+.smooth-scroll {
+  scroll-behavior: smooth;
+}
+
+.reveal-section,
+.reveal-on-scroll,
+.stagger-grid,
+.stagger-card,
+[data-scroll-section],
+.gpu-accelerated,
+.gpu-accel {
+  will-change: transform, opacity;
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto !important;
+  }
+
+  .reveal-section,
+  .reveal-on-scroll,
+  .stagger-grid,
+  .stagger-card,
+  [data-scroll-section],
+  .gpu-accelerated,
+  .gpu-accel {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+    animation: none !important;
+    will-change: auto !important;
+  }
+}
+

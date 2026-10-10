@@ -244,7 +244,86 @@
   }
 
   // =========================================================================
-  // --- 4. GSAP SCROLLTRIGGER FOR FOOTER REVEAL ---
+  // --- 4. GLOBAL BIDIRECTIONAL SCROLL ANIMATIONS ENGINE ---
+  // =========================================================================
+  function initGlobalScrollAnimations() {
+    if (typeof window === "undefined") return;
+
+    // Respect reduced-motion preferences
+    const prefersReducedMotion =
+      window.matchMedia &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    const elements = document.querySelectorAll(
+      ".reveal-on-scroll, section:not(.hero-section)"
+    );
+    if (!elements || elements.length === 0) return;
+
+    if (prefersReducedMotion) {
+      elements.forEach((el) => {
+        el.style.opacity = "1";
+        el.style.transform = "none";
+      });
+      return;
+    }
+
+    if (typeof gsap !== "undefined" && typeof ScrollTrigger !== "undefined") {
+      gsap.registerPlugin(ScrollTrigger);
+
+      elements.forEach((el) => {
+        gsap.fromTo(
+          el,
+          { opacity: 0, y: 30 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.8,
+            ease: "power2.out",
+            scrollTrigger: {
+              trigger: el,
+              start: "top 88%",
+              end: "bottom 12%",
+              toggleActions: "play reverse play reverse",
+            },
+          }
+        );
+      });
+    } else if ("IntersectionObserver" in window) {
+      // High-performance fallback when GSAP is not loaded
+      elements.forEach((el) => {
+        el.style.opacity = "0";
+        el.style.transform = "translate3d(0, 30px, 0)";
+        el.style.transition =
+          "opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1)";
+      });
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.style.opacity = "1";
+              entry.target.style.transform = "translate3d(0, 0, 0)";
+            } else {
+              entry.target.style.opacity = "0";
+              entry.target.style.transform = "translate3d(0, 30px, 0)";
+            }
+          });
+        },
+        {
+          threshold: 0.12,
+          rootMargin: "0px 0px -12% 0px",
+        }
+      );
+
+      elements.forEach((el) => observer.observe(el));
+    }
+  }
+
+  // Expose globally
+  window.initGlobalScrollAnimations = initGlobalScrollAnimations;
+
+  // =========================================================================
+  // --- 5. GSAP SCROLLTRIGGER FOR FOOTER REVEAL ---
   // =========================================================================
   function initFooterGSAP() {
     if (typeof window === "undefined") return;
@@ -437,11 +516,13 @@
   // --- INITIALIZE ON DOM READY ---
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", () => {
+      initGlobalScrollAnimations();
       initFooterGSAP();
       initBackToTop();
       initEmbersCanvas();
     });
   } else {
+    initGlobalScrollAnimations();
     initFooterGSAP();
     initBackToTop();
     initEmbersCanvas();

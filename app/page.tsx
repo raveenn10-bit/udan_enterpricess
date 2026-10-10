@@ -55,33 +55,48 @@ export default function ZubooHomePage() {
         delay: 0.2
       });
 
-      // 2. Sections Reveal
-      gsap.utils.toArray<HTMLElement>(".reveal-section").forEach((section) => {
-        gsap.from(section, {
-          scrollTrigger: {
-            trigger: section,
-            start: "top 85%",
-          },
-          y: 40,
-          opacity: 0,
-          duration: 1,
-          ease: "power3.out"
-        });
+      // 2. Sections Reveal (Bidirectional)
+      gsap.utils.toArray<HTMLElement>(".reveal-section, [data-scroll-section]").forEach((section) => {
+        gsap.fromTo(
+          section,
+          { y: 35, opacity: 0 },
+          {
+            y: 0,
+            opacity: 1,
+            duration: 0.85,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: section,
+              start: "top 88%",
+              end: "bottom 12%",
+              toggleActions: "play reverse play reverse",
+            },
+          }
+        );
       });
 
-      // 3. Staggered Cards
+      // 3. Staggered Cards (Bidirectional)
       gsap.utils.toArray<HTMLElement>(".stagger-grid").forEach((grid) => {
-        gsap.from(grid.querySelectorAll(".stagger-card"), {
-          scrollTrigger: {
-            trigger: grid,
-            start: "top 80%",
-          },
-          y: 30,
-          opacity: 0,
-          duration: 0.8,
-          stagger: 0.1,
-          ease: "power2.out"
-        });
+        const cards = grid.querySelectorAll(".stagger-card");
+        if (cards.length > 0) {
+          gsap.fromTo(
+            cards,
+            { y: 30, opacity: 0 },
+            {
+              y: 0,
+              opacity: 1,
+              duration: 0.8,
+              stagger: 0.1,
+              ease: "power2.out",
+              scrollTrigger: {
+                trigger: grid,
+                start: "top 82%",
+                end: "bottom 15%",
+                toggleActions: "play reverse play reverse",
+              },
+            }
+          );
+        }
       });
 
       // 4. Parallax Image
@@ -214,12 +229,17 @@ export default function ZubooHomePage() {
         subtitle="Empowering businesses and communities to thrive in a low-carbon world through tailored clean energy solutions."
         buttonText="Explore Zuboo Fleet"
         onCtaClick={() => {
-          document.getElementById("showroom-fleet")?.scrollIntoView({ behavior: "smooth" });
+          (document.getElementById("fleet") || document.getElementById("showroom-fleet"))?.scrollIntoView({ behavior: "smooth" });
         }}
       />
 
       {/* 3. SHOWROOM FLEET & FLAGSHIP SHOWCASE (Zuboo Clean Transparent Glassmorphic Showcase - Paris, Mini & The Tank) */}
-      <section id="showroom-fleet" className="relative bg-gradient-to-b from-slate-50 via-orange-50/20 to-slate-50 border-b border-slate-200/70 py-12 lg:py-20 overflow-hidden">
+      <section
+        id="fleet"
+        data-scroll-section
+        className="reveal-section relative bg-gradient-to-b from-slate-50 via-orange-50/20 to-slate-50 border-b border-slate-200/70 py-12 lg:py-20 overflow-hidden"
+      >
+        <span id="showroom-fleet" className="sr-only" />
         {/* Subtle background ambient glow for glassmorphism */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
           <div className="absolute -top-32 right-1/4 w-[500px] h-[500px] bg-orange-300/20 rounded-full blur-3xl" />
@@ -410,9 +430,9 @@ export default function ZubooHomePage() {
       </section>
 
       {/* 4. MAIN PRODUCT CLASSIFICATION (Exact Zuboo OEM Showcase) */}
-      <section id="categories" className="py-20 bg-white border-b border-slate-100">
+      <section id="categories" data-scroll-section className="reveal-section py-20 bg-white border-b border-slate-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <FadeIn className="text-center mb-16">
+          <FadeIn bidirectional className="text-center mb-16">
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-normal text-slate-950 uppercase tracking-tight text-center font-collection">
               MAIN PRODUCT CLASSIFICATION
             </h2>
@@ -463,9 +483,11 @@ export default function ZubooHomePage() {
                 slug: "ex008",
                 highlight: false,
               },
-            ].map((item) => (
-              <div
+            ].map((item, idx) => (
+              <FadeIn
                 key={item.slug}
+                bidirectional
+                delay={idx * 0.08}
                 className="group flex flex-col items-center text-center bg-white rounded-2xl p-4 transition-all duration-300"
               >
                 <Link
@@ -500,16 +522,16 @@ export default function ZubooHomePage() {
                 >
                   View More
                 </Link>
-              </div>
+              </FadeIn>
             ))}
           </div>
         </div>
       </section>
 
       {/* 5. "EXCELLENT PRODUCTS" / ALL 8 ZUBOO MODELS SHOWCASE */}
-      <section id="featured-models" className="py-24 bg-white border-b border-slate-50">
+      <section id="featured-models" data-scroll-section className="reveal-section py-24 bg-white border-b border-slate-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <FadeIn className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16">
+          <FadeIn bidirectional className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16">
             <div>
               <TextReveal as="h2" className="text-2xl sm:text-3xl font-medium text-slate-900 tracking-tight font-collection">
                 Our Collection
@@ -542,37 +564,43 @@ export default function ZubooHomePage() {
 
           {/* Clean 3-Column Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {filteredBikes.map((bike) => (
-              <Link
+            {filteredBikes.map((bike, idx) => (
+              <FadeIn
                 key={bike.id}
-                href={`/bikes/${bike.slug}`}
-                className="group block bg-white rounded-2xl border border-slate-100 hover:border-[#FF5E14] transition-all duration-500 hover:shadow-xl hover:-translate-y-1 overflow-hidden"
+                bidirectional
+                delay={(idx % 3) * 0.08}
+                className="h-full"
               >
-                {/* Image Container */}
-                <div className="relative aspect-square p-8 flex items-center justify-center bg-white">
-                  <div className="relative w-full h-full group-hover:scale-105 transition-transform duration-700 ease-out">
-                    <Image
-                      src={bike.mainImage}
-                      alt={bike.name}
-                      fill
-                      loading="lazy"
-                      decoding="async"
-                      className="object-contain"
-                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                    />
+                <Link
+                  href={`/bikes/${bike.slug}`}
+                  className="group block h-full bg-white rounded-2xl border border-slate-100 hover:border-[#FF5E14] transition-all duration-500 hover:shadow-xl hover:-translate-y-1 overflow-hidden"
+                >
+                  {/* Image Container */}
+                  <div className="relative aspect-square p-8 flex items-center justify-center bg-white">
+                    <div className="relative w-full h-full group-hover:scale-105 transition-transform duration-700 ease-out">
+                      <Image
+                        src={bike.mainImage}
+                        alt={bike.name}
+                        fill
+                        loading="lazy"
+                        decoding="async"
+                        className="object-contain"
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                      />
+                    </div>
                   </div>
-                </div>
 
-                {/* Info Container */}
-                <div className="p-5 text-center border-t border-slate-50 bg-white">
-                  <h3 className="text-sm font-medium text-slate-800 transition-colors group-hover:text-[#FF5E14]">
-                    {bike.name}
-                  </h3>
-                  <p className="text-xs text-slate-400 mt-1 line-clamp-1">
-                    {bike.tagline}
-                  </p>
-                </div>
-              </Link>
+                  {/* Info Container */}
+                  <div className="p-5 text-center border-t border-slate-50 bg-white">
+                    <h3 className="text-sm font-medium text-slate-800 transition-colors group-hover:text-[#FF5E14]">
+                      {bike.name}
+                    </h3>
+                    <p className="text-xs text-slate-400 mt-1 line-clamp-1">
+                      {bike.tagline}
+                    </p>
+                  </div>
+                </Link>
+              </FadeIn>
             ))}
           </div>
 
@@ -586,9 +614,9 @@ export default function ZubooHomePage() {
       </section>
 
       {/* 6. ZUBOO ADVANTAGES & CORE TECHNOLOGY (Like Zuboo.com OEM Tech Section) */}
-      <section id="technology" className="py-20 bg-white border-b border-slate-200">
+      <section id="technology" data-scroll-section className="reveal-section py-20 bg-white border-b border-slate-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <FadeIn className="text-center max-w-2xl mx-auto mb-16">
+          <FadeIn bidirectional className="text-center max-w-2xl mx-auto mb-16">
             <span className="text-xs font-medium tracking-widest text-[#FF5E14] uppercase block mb-2">
               WHY CHOOSE ZUBOO
             </span>
@@ -602,7 +630,7 @@ export default function ZubooHomePage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {/* 1. Smart BMS */}
-            <FadeIn delay={0} className="bg-white rounded-2xl p-6 border border-slate-100 hover:border-[#FF5E14] transition-all duration-300 hover:shadow-lg">
+            <FadeIn bidirectional delay={0} className="bg-white rounded-2xl p-6 border border-slate-100 hover:border-[#FF5E14] transition-all duration-300 hover:shadow-lg">
               <div className="w-10 h-10 rounded-lg bg-orange-50 text-[#FF5E14] flex items-center justify-center mb-5">
                 <Cpu className="w-5 h-5" />
               </div>
@@ -615,7 +643,7 @@ export default function ZubooHomePage() {
             </FadeIn>
 
             {/* 2. Waterproof Motor */}
-            <FadeIn delay={0.1} className="bg-white rounded-2xl p-6 border border-slate-100 hover:border-[#FF5E14] transition-all duration-300 hover:shadow-lg">
+            <FadeIn bidirectional delay={0.1} className="bg-white rounded-2xl p-6 border border-slate-100 hover:border-[#FF5E14] transition-all duration-300 hover:shadow-lg">
               <div className="w-10 h-10 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center mb-5">
                 <Droplets className="w-5 h-5" />
               </div>
@@ -628,7 +656,7 @@ export default function ZubooHomePage() {
             </FadeIn>
 
             {/* 3. Fuel Economy */}
-            <FadeIn delay={0.2} className="bg-white rounded-2xl p-6 border border-slate-100 hover:border-[#FF5E14] transition-all duration-300 hover:shadow-lg">
+            <FadeIn bidirectional delay={0.2} className="bg-white rounded-2xl p-6 border border-slate-100 hover:border-[#FF5E14] transition-all duration-300 hover:shadow-lg">
               <div className="w-10 h-10 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center mb-5">
                 <DollarSign className="w-5 h-5" />
               </div>
@@ -641,7 +669,7 @@ export default function ZubooHomePage() {
             </FadeIn>
 
             {/* 4. Showroom & Genuine Parts */}
-            <FadeIn delay={0.3} className="bg-white rounded-2xl p-6 border border-slate-100 hover:border-[#FF5E14] transition-all duration-300 hover:shadow-lg">
+            <FadeIn bidirectional delay={0.3} className="bg-white rounded-2xl p-6 border border-slate-100 hover:border-[#FF5E14] transition-all duration-300 hover:shadow-lg">
               <div className="w-10 h-10 rounded-lg bg-purple-50 text-purple-600 flex items-center justify-center mb-5">
                 <Wrench className="w-5 h-5" />
               </div>
@@ -657,20 +685,18 @@ export default function ZubooHomePage() {
       </section>
 
       {/* 7. INTERACTIVE FUEL SAVINGS CALCULATOR (Sri Lankan Rupees) */}
-      <section id="savings-calculator" className="py-20 bg-slate-900 text-white relative overflow-hidden">
+      <section id="savings-calculator" data-scroll-section className="reveal-section py-20 bg-slate-900 text-white relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
             {/* Left: Explanations */}
-            <div className="lg:col-span-6 space-y-6">
+            <FadeIn bidirectional direction="left" className="lg:col-span-6 space-y-6">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-400 text-xs font-bold uppercase tracking-wider border border-emerald-500/30">
                 <DollarSign className="w-3.5 h-3.5" />
                 <span>SRI LANKA PETROL VS ELECTRIC SAVINGS</span>
               </div>
-              <FadeIn direction="left">
-                <h2 className="text-3xl sm:text-5xl font-normal tracking-tight leading-tight font-editorial">
-                  STOP BURNING MONEY AT PETROL SHEDS.
-                </h2>
-              </FadeIn>
+              <h2 className="text-3xl sm:text-5xl font-normal tracking-tight leading-tight font-editorial">
+                STOP BURNING MONEY AT PETROL SHEDS.
+              </h2>
               <p className="text-slate-300 text-sm sm:text-base leading-relaxed">
                 With Sri Lankan petrol priced at Rs 370/L, switching to a Zuboo electric scooter puts tens of thousands of rupees back into your pocket every month.
               </p>
@@ -695,10 +721,10 @@ export default function ZubooHomePage() {
                   <span>90 km (Southern Intercity)</span>
                 </div>
               </div>
-            </div>
+            </FadeIn>
 
             {/* Right: Calculated Results Card */}
-            <div className="lg:col-span-6">
+            <FadeIn bidirectional direction="right" className="lg:col-span-6">
               <div className="bg-slate-800 rounded-3xl p-8 border border-slate-700 shadow-2xl space-y-6">
                 <h3 className="text-lg font-bold text-slate-300 uppercase tracking-wider">
                   Monthly Fuel Comparison
@@ -752,17 +778,17 @@ export default function ZubooHomePage() {
                   <span>Get Financing Quotation on WhatsApp</span>
                 </a>
               </div>
-            </div>
+            </FadeIn>
           </div>
         </div>
       </section>
 
       {/* 8. SHOWROOM LOCATION & CONTACT SECTION */}
-      <section id="showroom-location" className="py-20 bg-white border-b border-slate-200">
+      <section id="showroom-location" data-scroll-section className="reveal-section py-20 bg-white border-b border-slate-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
             {/* Showroom Details */}
-            <div className="lg:col-span-5 space-y-6">
+            <FadeIn bidirectional direction="left" className="lg:col-span-5 space-y-6">
               <div>
                 <span className="text-xs font-black tracking-widest text-[#FF5E14] uppercase block mb-2 font-manrope">
                   OFFICIAL GALLE SHOWROOM
@@ -845,10 +871,10 @@ export default function ZubooHomePage() {
                   <span>Chat on WhatsApp Directly</span>
                 </a>
               </div>
-            </div>
+            </FadeIn>
 
             {/* Quick Test Ride Form */}
-            <div className="lg:col-span-7 bg-slate-50 p-8 sm:p-10 rounded-3xl border border-slate-200 shadow-sm">
+            <FadeIn bidirectional direction="right" className="lg:col-span-7 bg-slate-50 p-8 sm:p-10 rounded-3xl border border-slate-200 shadow-sm">
               <span className="text-xs font-black uppercase tracking-wider text-[#FF5E14] block mb-1">
                 FREE TEST RIDE BOOKING
               </span>
@@ -958,7 +984,7 @@ export default function ZubooHomePage() {
                   </button>
                 </form>
               )}
-            </div>
+            </FadeIn>
           </div>
         </div>
       </section>

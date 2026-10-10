@@ -1,9 +1,6 @@
 "use client";
 import { useEffect, useRef } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-
-gsap.registerPlugin(ScrollTrigger);
+import { gsap } from "@/lib/gsap";
 
 interface TextRevealProps {
   children: string;
@@ -24,14 +21,28 @@ export default function TextReveal({ children, as: Tag = 'h2', className = '', d
       `<span style="display:inline-block;overflow:hidden"><span class="reveal-unit" style="display:inline-block">${u === ' ' ? '&nbsp;' : u}</span></span>${splitBy === 'words' ? ' ' : ''}`
     ).join('');
     const spans = el.querySelectorAll('.reveal-unit');
-    gsap.fromTo(spans, 
-      { y: '110%', opacity: 0 },
-      { y: '0%', opacity: 1, duration: 0.6, stagger: splitBy === 'words' ? 0.04 : 0.02, 
-        ease: 'power3.out', delay,
-        scrollTrigger: { trigger: el, start: 'top 85%', once: true }
-      }
-    );
-    return () => ScrollTrigger.getAll().forEach(t => t.kill());
+    const ctx = gsap.context(() => {
+      gsap.fromTo(spans, 
+        { y: '110%', opacity: 0 },
+        {
+          y: '0%',
+          opacity: 1,
+          duration: 0.6,
+          stagger: splitBy === 'words' ? 0.04 : 0.02, 
+          ease: 'power3.out',
+          delay,
+          scrollTrigger: {
+            trigger: el,
+            start: 'top 85%',
+            end: 'bottom 12%',
+            toggleActions: 'play reverse play reverse',
+          },
+        }
+      );
+    }, containerRef);
+
+    return () => ctx.revert();
   }, [children, delay, splitBy]);
   return <Tag ref={containerRef as any} className={className}>{children}</Tag>;
 }
+

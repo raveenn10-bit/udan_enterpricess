@@ -50,7 +50,8 @@ export default function Footer() {
             scrollTrigger: {
               trigger: footerRef.current,
               start: "top 88%",
-              toggleActions: "play none none none",
+              end: "bottom 10%",
+              toggleActions: "play reverse play reverse",
             },
           }
         );

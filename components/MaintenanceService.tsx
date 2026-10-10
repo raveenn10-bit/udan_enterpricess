@@ -10,17 +10,23 @@ export default function MaintenanceService() {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      gsap.from(".service-card", {
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top 75%",
-        },
-        y: 30,
-        opacity: 0,
-        stagger: 0.15,
-        duration: 0.7,
-        ease: "power2.out",
-      });
+      gsap.fromTo(
+        ".service-card",
+        { y: 30, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          stagger: 0.15,
+          duration: 0.7,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "top 80%",
+            end: "bottom 15%",
+            toggleActions: "play reverse play reverse",
+          },
+        }
+      );
     }, sectionRef);
 
     return () => ctx.revert();
