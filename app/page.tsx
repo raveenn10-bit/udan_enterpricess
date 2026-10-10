@@ -475,107 +475,97 @@ export default function ZubooHomePage() {
         </div>
       </section>
 
-      {/* 4. ZUBOO PRODUCT CATEGORIES CLASSIFICATION (Directly inspired by Zuboo.com) */}
-      <section id="categories" className="py-16 bg-white border-b border-slate-50">
+      {/* 4. MAIN PRODUCT CLASSIFICATION (Exact Zuboo OEM Showcase) */}
+      <section id="categories" className="py-20 bg-white border-b border-slate-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <FadeIn className="text-center max-w-2xl mx-auto mb-12">
-            <span className="text-xs font-medium tracking-widest text-slate-400 uppercase block mb-2">
-              ZUBOO PRODUCT CLASSIFICATION
-            </span>
-            <TextReveal as="h2" className="text-2xl sm:text-3xl font-medium text-slate-900 tracking-tight">
-              FIND YOUR PERFECT RIDE
-            </TextReveal>
+          <FadeIn className="text-center mb-16">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-slate-950 uppercase tracking-tight text-center">
+              MAIN PRODUCT CLASSIFICATION
+            </h2>
           </FadeIn>
 
-          {/* 4 Category Cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {/* 1. E-Scooter */}
-            <div
-              onClick={() => {
-                setActiveCategory("commuter");
-                document.getElementById("featured-models")?.scrollIntoView({ behavior: "smooth" });
-              }}
-              className="group cursor-pointer bg-white rounded-2xl border border-slate-100 hover:border-[#FF5E14] p-6 transition-all duration-300 hover:shadow-lg flex flex-col items-center text-center"
-            >
-              <div className="relative h-32 w-full mb-4 flex items-center justify-center">
-                <Image
-                  src="/media/bikes/mini/main.webp"
-                  alt="E-Scooters"
-                  fill
-                  className="object-contain group-hover:scale-105 transition-transform duration-500 ease-out"
-                />
-              </div>
-              <h3 className="text-sm font-medium text-slate-800 group-hover:text-[#FF5E14] transition-colors">
-                E-Scooter Series
-              </h3>
-              <p className="text-xs text-slate-400 mt-1">Daily Commuting</p>
-            </div>
+          {/* 6 Models in 3-Column Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-16 gap-x-10 max-w-6xl mx-auto">
+            {[
+              {
+                classification: "Electric Motorcycle",
+                name: "Zuboo T3 (2000W)",
+                image: "/bikes/t3/t3.webp",
+                slug: "t3",
+                highlight: false,
+              },
+              {
+                classification: "Electric Bike",
+                name: "Zuboo Mini (City Commuter)",
+                image: "/bikes/mini/mini.webp",
+                slug: "mini",
+                highlight: true,
+              },
+              {
+                classification: "Electric Motorcycle",
+                name: "Zuboo T11 (Commercial Cargo)",
+                image: "/bikes/t11/t11.webp",
+                slug: "t11",
+                highlight: false,
+              },
+              {
+                classification: "Retro Electric Scooter",
+                name: "Zuboo Paris (European Classic)",
+                image: "/bikes/paris/paris.webp",
+                slug: "paris",
+                highlight: false,
+              },
+              {
+                classification: "Electric Utility Scooter",
+                name: "Zuboo The Tank (Dual Suspension)",
+                image: "/bikes/tank/tank.webp",
+                slug: "the-tank",
+                highlight: false,
+              },
+              {
+                classification: "Electric City Bike",
+                name: "Zuboo EX008 (Urban Vintage)",
+                image: "/bikes/ex008/ex008.webp",
+                slug: "ex008",
+                highlight: false,
+              },
+            ].map((item) => (
+              <div
+                key={item.slug}
+                className="group flex flex-col items-center text-center bg-white rounded-2xl p-4 transition-all duration-300"
+              >
+                <Link
+                  href={`/bikes/${item.slug}`}
+                  className="relative h-64 sm:h-72 w-full flex items-center justify-center p-4 bg-white"
+                >
+                  <Image
+                    src={item.image}
+                    alt={item.name}
+                    fill
+                    className="object-contain transition-transform duration-500 ease-out group-hover:scale-105"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                  />
+                </Link>
 
-            {/* 2. E-Motorcycle / High Performance */}
-            <div
-              onClick={() => {
-                setActiveCategory("touring");
-                document.getElementById("featured-models")?.scrollIntoView({ behavior: "smooth" });
-              }}
-              className="group cursor-pointer bg-white rounded-2xl border border-slate-100 hover:border-[#FF5E14] p-6 transition-all duration-300 hover:shadow-lg flex flex-col items-center text-center"
-            >
-              <div className="relative h-32 w-full mb-4 flex items-center justify-center">
-                <Image
-                  src="/bikes/t3/t3-black.webp"
-                  alt="E-Motorcycle Series"
-                  fill
-                  className="object-contain group-hover:scale-105 transition-transform duration-500 ease-out"
-                />
-              </div>
-              <h3 className="text-sm font-medium text-slate-800 group-hover:text-[#FF5E14] transition-colors">
-                E-Motorcycle Series
-              </h3>
-              <p className="text-xs text-slate-400 mt-1">High Performance</p>
-            </div>
+                <h3 className="text-lg sm:text-xl font-bold text-slate-900 mt-6 tracking-tight">
+                  {item.classification}
+                </h3>
+                <p className="text-xs text-slate-500 font-semibold tracking-wide uppercase mt-1 mb-5">
+                  {item.name}
+                </p>
 
-            {/* 3. Heavy-Duty Utility */}
-            <div
-              onClick={() => {
-                setActiveCategory("heavyduty");
-                document.getElementById("featured-models")?.scrollIntoView({ behavior: "smooth" });
-              }}
-              className="group cursor-pointer bg-white rounded-2xl border border-slate-100 hover:border-[#FF5E14] p-6 transition-all duration-300 hover:shadow-lg flex flex-col items-center text-center"
-            >
-              <div className="relative h-32 w-full mb-4 flex items-center justify-center">
-                <Image
-                  src="/media/bikes/the-tank/main.webp"
-                  alt="Heavy-Duty Utility"
-                  fill
-                  className="object-contain group-hover:scale-105 transition-transform duration-500 ease-out"
-                />
+                <Link
+                  href={`/bikes/${item.slug}`}
+                  className={`inline-block px-9 py-2.5 rounded-md text-xs sm:text-sm font-semibold tracking-wider transition-colors duration-300 shadow-sm ${
+                    item.highlight
+                      ? "bg-[#E51937] hover:bg-[#c4122d] text-white"
+                      : "bg-[#222222] hover:bg-[#E51937] text-white"
+                  }`}
+                >
+                  View More
+                </Link>
               </div>
-              <h3 className="text-sm font-medium text-slate-800 group-hover:text-[#FF5E14] transition-colors">
-                Heavy-Duty & Cargo
-              </h3>
-              <p className="text-xs text-slate-400 mt-1">Commercial Grade</p>
-            </div>
-
-            {/* 4. Retro Classics */}
-            <div
-              onClick={() => {
-                setActiveCategory("retro");
-                document.getElementById("featured-models")?.scrollIntoView({ behavior: "smooth" });
-              }}
-              className="group cursor-pointer bg-white rounded-2xl border border-slate-100 hover:border-[#FF5E14] p-6 transition-all duration-300 hover:shadow-lg flex flex-col items-center text-center"
-            >
-              <div className="relative h-32 w-full mb-4 flex items-center justify-center">
-                <Image
-                  src="/media/bikes/paris/main.webp"
-                  alt="Retro Classics"
-                  fill
-                  className="object-contain group-hover:scale-105 transition-transform duration-500 ease-out"
-                />
-              </div>
-              <h3 className="text-sm font-medium text-slate-800 group-hover:text-[#FF5E14] transition-colors">
-                Retro Lifestyle
-              </h3>
-              <p className="text-xs text-slate-400 mt-1">European Aesthetics</p>
-            </div>
+            ))}
           </div>
         </div>
       </section>
