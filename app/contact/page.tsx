@@ -22,11 +22,14 @@ import {
   HelpCircle,
   ExternalLink,
 } from "lucide-react";
-import { BIKE_MODELS } from "@/data/bikes";
 import { db } from "@/lib/firebase";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
+import { useShowroomSettings, useDynamicProducts } from "@/lib/site-data";
 
 export default function ContactPage() {
+  const { settings } = useShowroomSettings();
+  const { products: dynamicBikes } = useDynamicProducts();
+
   const [fullName, setFullName] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
@@ -35,6 +38,11 @@ export default function ContactPage() {
   const [message, setMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+
+  const rawPhone = settings.whatsappNumber || "0784969652";
+  const cleanPhone = rawPhone.replace(/[^0-9]/g, "");
+  const whatsappIntl = cleanPhone.startsWith("0") ? `94${cleanPhone.slice(1)}` : cleanPhone;
+  const hotlineClean = (settings.hotline || "078 496 9652").replace(/[^0-9+]/g, "");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -63,9 +71,9 @@ export default function ContactPage() {
 
   const getWhatsAppDirectLink = () => {
     const text = encodeURIComponent(
-      `Hi Udan Enterprises,\nMy name is ${fullName || "Customer"}.\nPhone: ${phone || "N/A"}\nTopic: ${subject}\nModel: ${selectedModel}\nMessage: ${message || "I would like to inquire about Zuboo electric bikes."}`
+      `Hi ${settings.showroomName || "Udan Enterprises"},\nMy name is ${fullName || "Customer"}.\nPhone: ${phone || "N/A"}\nTopic: ${subject}\nModel: ${selectedModel}\nMessage: ${message || "I would like to inquire about Zuboo electric bikes."}`
     );
-    return `https://wa.me/94784969652?text=${text}`;
+    return `https://wa.me/${whatsappIntl}?text=${text}`;
   };
 
   return (
@@ -106,7 +114,7 @@ export default function ContactPage() {
                 </div>
                 <div>
                   <span className="text-xs font-bold uppercase tracking-wider text-emerald-950 block">
-                    Verified Showroom Facility: Udugama Road, Kurunduwatta, Galle
+                    Verified Showroom Facility: {settings.address}
                   </span>
                   <p className="text-xs text-emerald-800 mt-0.5 leading-relaxed">
                     Official Zuboo Electric Vehicles Dealership &amp; Service Center in Southern Province. Showroom test rides, consultations, and genuine spare parts available.
@@ -130,14 +138,14 @@ export default function ContactPage() {
                 <div className="relative rounded-3xl overflow-hidden aspect-[16/10] border border-[#E0E8EC] shadow-md group">
                   <Image
                     src="/media/showroom/galle-showroom.jpg"
-                    alt="Udan Enterprises Kurunduwatta Galle Showroom"
+                    alt={`${settings.showroomName} Galle Showroom`}
                     fill
                     sizes="(max-width: 1024px) 100vw, 60vw"
                     className="object-cover group-hover:scale-105 transition-transform duration-500"
                   />
                   <div className="absolute bottom-3 left-3 bg-[#111820]/85 backdrop-blur-md text-white text-[11px] font-bold px-3.5 py-2 rounded-xl border border-white/20 flex items-center gap-2 shadow-sm">
                     <MapPin className="w-4 h-4 text-[#FF5E14]" />
-                    <span>Udan Enterprises Showroom • Udugama Road, Kurunduwatta, Galle</span>
+                    <span>{settings.showroomName} Showroom • {settings.address}</span>
                   </div>
                 </div>
               </div>
@@ -149,11 +157,11 @@ export default function ContactPage() {
                   Experience Zuboo Electric Bikes Live
                 </h3>
                 <p className="text-xs sm:text-sm text-[#667780] leading-relaxed">
-                  Visit our primary dealership in Kurunduwatta, Galle. Our showroom floor houses all 8 Zuboo models, complete with high-speed DC charging stations, workshop bays, and certified technical support.
+                  Visit our primary dealership in {settings.city || "Galle"}. Our showroom floor houses all 8 Zuboo models, complete with high-speed DC charging stations, workshop bays, and certified technical support.
                 </p>
                 <div className="pt-2 flex flex-wrap gap-3">
                   <a
-                    href="https://maps.app.goo.gl/GyJCSSS7p6Bd18xM8"
+                    href={settings.googleMapsUrl || "https://maps.app.goo.gl/GyJCSSS7p6Bd18xM8"}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold uppercase tracking-wider transition-colors shadow-sm shadow-blue-600/20"
@@ -163,14 +171,14 @@ export default function ContactPage() {
                     <ExternalLink className="w-3.5 h-3.5 opacity-80" />
                   </a>
                   <a
-                    href="tel:0784969652"
+                    href={`tel:${hotlineClean}`}
                     className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#111820] hover:bg-[#346C83] text-white text-xs font-bold uppercase tracking-wider transition-colors"
                   >
                     <Phone className="w-3.5 h-3.5 text-[#FF5E14]" />
-                    <span>078 496 9652</span>
+                    <span>{settings.hotline}</span>
                   </a>
                   <a
-                    href="https://wa.me/94784969652"
+                    href={`https://wa.me/${whatsappIntl}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#25D366] hover:bg-[#20ba5a] text-white text-xs font-bold uppercase tracking-wider transition-colors"
@@ -198,7 +206,7 @@ export default function ContactPage() {
                     Direct Telephone Hotline
                   </span>
                   <h3 className="font-heading font-bold text-lg text-[#111820]">
-                    078 496 9652
+                    {settings.hotline}
                   </h3>
                   <p className="text-xs text-[#667780] mt-2 leading-relaxed">
                     Available during opening hours for stock inquiries, test ride slots, and spare parts availability.
@@ -206,7 +214,7 @@ export default function ContactPage() {
                 </div>
                 <div className="pt-4">
                   <a
-                    href="tel:+94784969652"
+                    href={`tel:${hotlineClean}`}
                     className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-[#346C83] hover:text-[#111820] transition-colors"
                   >
                     <span>Call Hotline Now</span>
@@ -225,7 +233,7 @@ export default function ContactPage() {
                     WhatsApp Direct Chat
                   </span>
                   <h3 className="font-heading font-bold text-lg text-[#111820]">
-                    078 496 9652
+                    {settings.whatsappNumber}
                   </h3>
                   <p className="text-xs text-[#667780] mt-2 leading-relaxed">
                     Fast response channel. Receive live photos of bike colorways, spec sheets, and quotation PDFs.
@@ -233,7 +241,7 @@ export default function ContactPage() {
                 </div>
                 <div className="pt-4">
                   <a
-                    href="https://wa.me/94784969652?text=Hi%20Udan%20Enterprises,%20I%20would%20like%20to%20inquire%20about%20Zuboo%20electric%20bikes."
+                    href={`https://wa.me/${whatsappIntl}?text=${encodeURIComponent(`Hi ${settings.showroomName || "Udan Enterprises"}, I would like to inquire about Zuboo electric bikes.`)}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-emerald-700 hover:text-emerald-900 transition-colors"
@@ -254,15 +262,15 @@ export default function ContactPage() {
                     Operating Schedule
                   </span>
                   <h3 className="font-heading font-bold text-base text-[#111820]">
-                    Mon – Sat: 8:30 AM – 6:00 PM
+                    {settings.openingHours}
                   </h3>
                   <div className="text-xs text-[#667780] mt-2 space-y-1">
-                    <div>Saturday: 9:00 AM – 5:00 PM</div>
-                    <div>Sunday & Poya: Appointment Only</div>
+                    <div>Showroom Test Rides &amp; Consultations</div>
+                    <div>Sunday: Appointment &amp; Inquiries</div>
                   </div>
                 </div>
                 <div className="pt-4 text-[11px] font-medium text-[#667780]">
-                  Galle, Southern Province Time (IST)
+                  {settings.city || "Galle"}, Southern Province Time (IST)
                 </div>
               </div>
 
@@ -276,7 +284,7 @@ export default function ContactPage() {
                     Showroom Hub
                   </span>
                   <h3 className="font-heading font-bold text-base text-[#111820]">
-                    Udugama Road, Kurunduwatta, Galle
+                    {settings.address}
                   </h3>
                   <p className="text-xs text-[#667780] mt-2 leading-relaxed">
                     Southern Province customer experience center & genuine Zuboo spare parts warehouse.
@@ -284,7 +292,7 @@ export default function ContactPage() {
                 </div>
                 <div className="pt-4 flex flex-col gap-2">
                   <a
-                    href="https://maps.app.goo.gl/GyJCSSS7p6Bd18xM8"
+                    href={settings.googleMapsUrl || "https://maps.app.goo.gl/GyJCSSS7p6Bd18xM8"}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-blue-600 hover:text-blue-800 transition-colors"
@@ -293,7 +301,7 @@ export default function ContactPage() {
                     <ExternalLink className="w-3.5 h-3.5" />
                   </a>
                   <a
-                    href="https://wa.me/94784969652?text=Hi%20Udan%20Enterprises,%20please%20send%20me%20directions%20to%20your%20Galle%20showroom."
+                    href={`https://wa.me/${whatsappIntl}?text=${encodeURIComponent(`Hi ${settings.showroomName || "Udan Enterprises"}, please send me directions to your showroom.`)}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-[#346C83] hover:text-[#111820] transition-colors"
@@ -403,9 +411,9 @@ export default function ContactPage() {
                         className="w-full px-4 py-3 rounded-xl border border-[#E0E8EC] bg-[#F7F9FA] text-[#111820] text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#346C83] focus:bg-white transition-all"
                       >
                         <option value="general">None / General Question</option>
-                        {BIKE_MODELS.map((bike) => (
+                        {(dynamicBikes || []).map((bike) => (
                           <option key={bike.id} value={bike.name}>
-                            {bike.name} ({bike.badge} • {bike.formattedPrice})
+                            {bike.name} ({bike.badge || bike.category} • {bike.formattedPrice})
                           </option>
                         ))}
                       </select>

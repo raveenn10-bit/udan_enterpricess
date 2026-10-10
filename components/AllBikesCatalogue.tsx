@@ -4,7 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { ZUBOO_COLLECTION, BikeModel } from "@/data/bikes";
-import { useDynamicProducts } from "@/lib/site-data";
+import { useDynamicProducts, useShowroomSettings } from "@/lib/site-data";
 import { Gauge, Battery, Zap, Calendar, MessageSquare, ArrowRight, Search, ShieldCheck } from "lucide-react";
 
 interface AllBikesCatalogueProps {
@@ -17,9 +17,14 @@ export default function AllBikesCatalogue({
   showSearch = true,
 }: AllBikesCatalogueProps) {
   const { products: dynamicBikes } = useDynamicProducts();
+  const { settings } = useShowroomSettings();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [selectedColorForT3, setSelectedColorForT3] = useState<string>("/bikes/t3/t3-black.webp");
+
+  const rawPhone = settings.whatsappNumber || "0784969652";
+  const cleanPhone = rawPhone.replace(/[^0-9]/g, "");
+  const whatsappIntl = cleanPhone.startsWith("0") ? `94${cleanPhone.slice(1)}` : cleanPhone;
 
   const filteredBikes = (dynamicBikes || ZUBOO_COLLECTION).filter((bike) => {
     const matchesSearch =
@@ -42,9 +47,9 @@ export default function AllBikesCatalogue({
 
   const getWhatsAppLink = (bike: BikeModel) => {
     const text = encodeURIComponent(
-      `Hi Udan Enterprises, I would like to inquire about the ${bike.name} (${bike.modelCode}) advertised at ${bike.formattedPrice}.`
+      `Hi ${settings.showroomName || "Udan Enterprises"}, I would like to inquire about the ${bike.name} (${bike.modelCode}) advertised at ${bike.formattedPrice}.`
     );
-    return `https://wa.me/94784969652?text=${text}`;
+    return `https://wa.me/${whatsappIntl}?text=${text}`;
   };
 
   return (

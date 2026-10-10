@@ -48,6 +48,7 @@ function writeLocal<T>(key: string, data: T): void {
   if (typeof window === "undefined") return;
   try {
     localStorage.setItem(key, JSON.stringify(data));
+    window.dispatchEvent(new Event("udan-data-updated"));
   } catch (e) {
     console.warn(`localStorage write failed for ${key}:`, e);
   }

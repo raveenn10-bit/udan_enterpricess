@@ -4,6 +4,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { BikeModel, BikeColor } from "@/data/bikes";
+import { useDynamicProducts, useShowroomSettings } from "@/lib/site-data";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import TestRideModal from "@/components/TestRideModal";
@@ -37,7 +38,17 @@ interface BikeDetailViewProps {
   relatedBikes: BikeModel[];
 }
 
-export default function BikeDetailView({ bike, relatedBikes }: BikeDetailViewProps) {
+export default function BikeDetailView({ bike: initialBike, relatedBikes }: BikeDetailViewProps) {
+  const { products: dynamicBikes } = useDynamicProducts();
+  const { settings } = useShowroomSettings();
+
+  const bike = dynamicBikes.find((b) => b.slug === initialBike.slug || b.id === initialBike.id) || initialBike;
+
+  const rawPhone = settings.whatsappNumber || "0784969652";
+  const cleanPhone = rawPhone.replace(/[^0-9]/g, "");
+  const whatsappIntl = cleanPhone.startsWith("0") ? `94${cleanPhone.slice(1)}` : cleanPhone;
+  const hotlineClean = (settings.hotline || "078 496 9652").replace(/[^0-9+]/g, "");
+
   const [testRideModalOpen, setTestRideModalOpen] = useState(false);
 
   // Gallery images with fallback
@@ -109,11 +120,11 @@ export default function BikeDetailView({ bike, relatedBikes }: BikeDetailViewPro
 
   const getWhatsAppMessage = () => {
     return encodeURIComponent(
-      `Hi Udan Enterprises, I would like to inquire about the ${bike.name} (${bike.modelCode}) advertised at ${bike.formattedPrice}.\n\nCould you please confirm showroom availability and test ride scheduling at your Galle location?`
+      `Hi ${settings.showroomName || "Udan Enterprises"}, I would like to inquire about the ${bike.name} (${bike.modelCode}) advertised at ${bike.formattedPrice}.\n\nCould you please confirm showroom availability and test ride scheduling at your ${settings.city || "Galle"} location?`
     );
   };
 
-  const whatsAppUrl = `https://wa.me/94784969652?text=${getWhatsAppMessage()}`;
+  const whatsAppUrl = `https://wa.me/${whatsappIntl}?text=${getWhatsAppMessage()}`;
 
   const specRows = [
     {
@@ -206,7 +217,7 @@ export default function BikeDetailView({ bike, relatedBikes }: BikeDetailViewPro
           <div className="editorial-container flex flex-wrap items-center justify-center gap-2 text-xs text-amber-950 font-medium">
             <Info className="w-4 h-4 text-amber-800 shrink-0" />
             <span>
-              <strong>Showroom Advisory:</strong> Specifications &amp; price ({bike.formattedPrice}) are provisional transcriptions from promotional materials and will be confirmed upon showroom inspection in Galle.
+              <strong>Showroom Advisory:</strong> Specifications &amp; price ({bike.formattedPrice}) are provisional transcriptions from promotional materials and will be confirmed upon showroom inspection in {settings.city || "Galle"}.
             </span>
           </div>
         </div>
@@ -441,14 +452,14 @@ export default function BikeDetailView({ bike, relatedBikes }: BikeDetailViewPro
                 <div className="mt-4 flex items-center justify-between text-xs text-[#667780] px-1">
                   <span className="flex items-center gap-1.5">
                     <ShieldCheck className="w-4 h-4 text-emerald-600" />
-                    <span>Official Galle Showroom Inspection</span>
+                    <span>Official {settings.city || "Galle"} Showroom Inspection</span>
                   </span>
                   <a
-                    href="tel:0784969652"
+                    href={`tel:${hotlineClean}`}
                     className="font-bold text-[#111820] hover:text-[#346C83] flex items-center gap-1"
                   >
                     <Phone className="w-3.5 h-3.5" />
-                    <span>Hotline: 078 496 9652</span>
+                    <span>Hotline: {settings.hotline}</span>
                   </a>
                 </div>
               </div>

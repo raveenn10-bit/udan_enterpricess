@@ -34,6 +34,7 @@ import {
   DollarSign
 } from "lucide-react";
 import { BIKE_MODELS, BikeModel } from "@/data/bikes";
+import { useShowroomSettings, useHomepageContent, useDynamicProducts } from "@/lib/site-data";
 import Hero from "@/components/ui/hero";
 import FadeIn from "@/components/FadeIn";
 import TextReveal from "@/components/TextReveal";
@@ -176,6 +177,9 @@ const SHOWROOM_PHOTOS = [
 
 export default function ZubooHomePage() {
   const containerRef = useRef<HTMLDivElement>(null);
+  const { settings } = useShowroomSettings();
+  const { cms } = useHomepageContent();
+  const { products: dynamicBikes } = useDynamicProducts();
 
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
@@ -346,7 +350,7 @@ export default function ZubooHomePage() {
 
   const currentHero = heroModelsData[selectedHeroModel];
 
-  const filteredBikes = BIKE_MODELS.filter((bike) => {
+  const filteredBikes = dynamicBikes.filter((bike) => {
     if (activeCategory === "all") return true;
     if (activeCategory === "commuter") return bike.category.toLowerCase().includes("commuter") || bike.slug === "mini" || bike.slug === "kb1";
     if (activeCategory === "touring") return bike.category.toLowerCase().includes("touring") || bike.slug === "gt" || bike.slug === "t3";
@@ -379,11 +383,19 @@ export default function ZubooHomePage() {
       {/* Centered Navigation Navbar */}
       <Navbar onOpenTestRide={() => openBookingModal("Zuboo T3")} />
 
+      {/* Top CMS Announcement Ticker */}
+      {cms.announcementText && (
+        <div className="bg-[#0F172A] border-b border-orange-500/20 py-2.5 px-4 text-center text-xs font-semibold text-slate-300">
+          <span className="text-[#FF5E14] font-black mr-2">⚡</span>
+          <span>{cms.announcementText}</span>
+        </div>
+      )}
+
       {/* AERO-HERO-3 INTEGRATION */}
       <Hero
-        title="Sustainable Solutions for a Better Future"
-        subtitle="Empowering businesses and communities to thrive in a low-carbon world through tailored clean energy solutions."
-        buttonText="Explore Zuboo Fleet"
+        title={cms.heroHeadline || "Sustainable Solutions for a Better Future"}
+        subtitle={cms.heroSubtitle || "Empowering businesses and communities to thrive in a low-carbon world through tailored clean energy solutions."}
+        buttonText={cms.heroCtaText || "Explore Zuboo Fleet"}
         onCtaClick={() => {
           (document.getElementById("fleet") || document.getElementById("showroom-fleet"))?.scrollIntoView({ behavior: "smooth" });
         }}
@@ -1036,10 +1048,10 @@ export default function ZubooHomePage() {
                   <div className="flex-1 min-w-0">
                     <span className="text-[10px] font-extrabold tracking-[1.5px] uppercase text-slate-400 block font-manrope">SHOWROOM ADDRESS</span>
                     <p className="text-xs sm:text-sm font-semibold text-slate-900 leading-snug mt-1">
-                      Udugama Road, Kurunduwatta, Galle, Sri Lanka
+                      {settings.address || "Udugama Road, Kurunduwatta, Galle, Sri Lanka"}
                     </p>
                     <a
-                      href="https://maps.app.goo.gl/GyJCSSS7p6Bd18xM8"
+                      href={settings.googleMapsUrl || "https://maps.app.goo.gl/GyJCSSS7p6Bd18xM8"}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="inline-flex items-center gap-1.5 text-xs font-bold text-[#FF5E14] hover:text-[#e04d09] mt-2 group-hover:underline"
@@ -1058,10 +1070,10 @@ export default function ZubooHomePage() {
                   <div className="min-w-0">
                     <span className="text-[10px] font-extrabold tracking-[1.5px] uppercase text-slate-400 block font-manrope">DIRECT HOTLINE</span>
                     <a
-                      href="tel:0784969652"
+                      href={`tel:${(settings.hotline || "0784969652").replace(/\s+/g, '')}`}
                       className="text-sm sm:text-base font-extrabold text-slate-900 hover:text-[#FF5E14] mt-1 block tracking-tight font-manrope"
                     >
-                      078 496 9652
+                      {settings.hotline || "078 496 9652"}
                     </a>
                   </div>
                 </div>
@@ -1074,8 +1086,7 @@ export default function ZubooHomePage() {
                   <div>
                     <span className="text-[10px] font-extrabold tracking-[1.5px] uppercase text-slate-400 block font-manrope">OPENING HOURS</span>
                     <p className="text-xs font-medium text-slate-600 mt-1 leading-relaxed">
-                      Mon–Sat: 8:30 AM – 6:00 PM<br />
-                      Sun: 9:00 AM – 2:00 PM
+                      {settings.openingHours || "Mon–Sat: 8:30 AM – 6:00 PM | Sun: 9:00 AM – 2:00 PM"}
                     </p>
                   </div>
                 </div>
@@ -1088,10 +1099,10 @@ export default function ZubooHomePage() {
                   <div className="min-w-0">
                     <span className="text-[10px] font-extrabold tracking-[1.5px] uppercase text-slate-400 block font-manrope">OFFICIAL INQUIRIES</span>
                     <a
-                      href="mailto:Pibida17udan4131@gmail.com"
+                      href={`mailto:${settings.email || "Pibida17udan4131@gmail.com"}`}
                       className="text-xs font-semibold text-slate-700 hover:text-[#FF5E14] mt-1 block truncate"
                     >
-                      Pibida17udan4131@gmail.com
+                      {settings.email || "Pibida17udan4131@gmail.com"}
                     </a>
                   </div>
                 </div>
@@ -1110,7 +1121,7 @@ export default function ZubooHomePage() {
 
                 {/* 2. WhatsApp Direct */}
                 <a
-                  href="https://wa.me/94784969652"
+                  href={`https://wa.me/${(settings.whatsappNumber || "94784969652").replace(/[^0-9]/g, '')}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-xl bg-[#25D366] hover:bg-[#20ba5a] text-white text-xs font-bold uppercase tracking-wider transition-all shadow-md shadow-green-500/20 hover:shadow-lg hover:-translate-y-0.5"
@@ -1121,7 +1132,7 @@ export default function ZubooHomePage() {
 
                 {/* 3. Google Maps Directions */}
                 <a
-                  href="https://maps.app.goo.gl/GyJCSSS7p6Bd18xM8"
+                  href={settings.googleMapsUrl || "https://maps.app.goo.gl/GyJCSSS7p6Bd18xM8"}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-xl bg-slate-900 hover:bg-black text-white text-xs font-bold uppercase tracking-wider transition-all shadow-sm hover:shadow-md hover:-translate-y-0.5"
@@ -1133,11 +1144,11 @@ export default function ZubooHomePage() {
 
                 {/* 4. Direct Call Hotline */}
                 <a
-                  href="tel:0784969652"
+                  href={`tel:${(settings.hotline || "0784969652").replace(/\s+/g, '')}`}
                   className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-xl bg-white hover:bg-slate-50 text-slate-900 border border-slate-300 hover:border-slate-900 text-xs font-bold uppercase tracking-wider transition-all shadow-xs hover:shadow-sm"
                 >
                   <Phone className="w-4 h-4 text-[#FF5E14]" />
-                  <span>078 496 9652</span>
+                  <span>{settings.hotline || "078 496 9652"}</span>
                 </a>
               </div>
             </FadeIn>
@@ -1176,7 +1187,7 @@ export default function ZubooHomePage() {
                 </p>
                 <div className="pt-2 flex flex-col sm:flex-row gap-2 justify-center">
                   <a
-                    href={`https://wa.me/94784969652?text=${encodeURIComponent(
+                    href={`https://wa.me/${(settings.whatsappNumber || "94784969652").replace(/[^0-9]/g, '')}?text=${encodeURIComponent(
                       `Hello Udan Enterprises, I would like to book a test ride for ${bookingDetails.bike} on ${bookingDetails.date}. My name is ${bookingDetails.name} (${bookingDetails.phone}).`
                     )}`}
                     target="_blank"

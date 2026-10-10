@@ -25,6 +25,7 @@ import {
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import BrandBounceText from "@/components/BrandBounceText";
 import { useTranslation } from "@/lib/i18n";
+import { useShowroomSettings } from "@/lib/site-data";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -34,10 +35,18 @@ interface NavbarProps {
 
 export default function Navbar({ onOpenTestRide }: NavbarProps) {
   const { t } = useTranslation();
+  const { settings } = useShowroomSettings();
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [mobileAccordion, setMobileAccordion] = useState<string | null>(null);
+
+  const rawPhone = settings.whatsappNumber || "0784969652";
+  const cleanPhone = rawPhone.replace(/[^0-9]/g, "");
+  const whatsappIntl = cleanPhone.startsWith("0") ? `94${cleanPhone.slice(1)}` : cleanPhone;
+  const whatsappInquiryUrl = `https://wa.me/${whatsappIntl}?text=${encodeURIComponent(
+    `Hi ${settings.showroomName || "Udan Enterprises"}, I would like to inquire about Zuboo electric bikes.`
+  )}`;
 
   const headerRef = useRef<HTMLElement>(null);
   const navRef = useRef<HTMLDivElement>(null);
@@ -597,7 +606,7 @@ export default function Navbar({ onOpenTestRide }: NavbarProps) {
 
                     <div className="mt-2.5 pt-2 border-t border-slate-100 flex items-center justify-between px-3 text-xs">
                       <span className="text-[11px] font-medium text-slate-500 whitespace-nowrap">
-                        Kurunduwatta Galle Physical Showroom
+                        {settings.city || "Kurunduwatta Galle"} Physical Showroom
                       </span>
                       <Link
                         href="/contact"
@@ -621,7 +630,7 @@ export default function Navbar({ onOpenTestRide }: NavbarProps) {
             <LanguageSwitcher />
 
             <a
-              href="https://wa.me/94784969652?text=Hi%20Udan%20Enterprises,%20I%20would%20like%20to%20inquire%20about%20Zuboo%20electric%20bikes."
+              href={whatsappInquiryUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-bold text-[#111820] bg-[#E8F1F5] hover:bg-[#d8e7ee] transition-all border border-[#E0E8EC] whitespace-nowrap active:scale-95"
@@ -892,7 +901,7 @@ export default function Navbar({ onOpenTestRide }: NavbarProps) {
             {/* Mobile CTAs */}
             <div className="pt-3 mt-1.5 border-t border-slate-200/80 flex flex-col gap-2">
               <a
-                href="https://wa.me/94784969652?text=Hi%20Udan%20Enterprises,%20I%20would%20like%20to%20inquire%20about%20Zuboo%20electric%20bikes."
+                href={whatsappInquiryUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="min-h-[44px] flex items-center justify-center gap-2 rounded-xl bg-[#E8F1F5] text-[#111820] text-xs font-bold uppercase tracking-wider whitespace-nowrap active:scale-98 transition-transform"

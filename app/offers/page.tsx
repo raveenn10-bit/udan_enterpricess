@@ -20,6 +20,7 @@ import {
   Truck,
   HelpCircle,
 } from "lucide-react";
+import { useDynamicOffers, useShowroomSettings, useDynamicProducts } from "@/lib/site-data";
 
 interface OfferItem {
   id: string;
@@ -278,10 +279,47 @@ const ANALYZED_CAMPAIGN_PACKAGES = [
 ];
 
 export default function OffersPage() {
+  const { offers: dynamicOffers } = useDynamicOffers();
+  const { settings } = useShowroomSettings();
+  const { products: dynamicBikes } = useDynamicProducts();
+
+  const rawPhone = settings.whatsappNumber || "0784969652";
+  const cleanPhone = rawPhone.replace(/[^0-9]/g, "");
+  const whatsappIntl = cleanPhone.startsWith("0") ? `94${cleanPhone.slice(1)}` : cleanPhone;
 
   const getWhatsAppLink = (message: string) => {
-    return `https://wa.me/94784969652?text=${encodeURIComponent(message)}`;
+    return `https://wa.me/${whatsappIntl}?text=${encodeURIComponent(message)}`;
   };
+
+  // Merge dynamic offers with fallback
+  const displayOffers: OfferItem[] = (dynamicOffers && dynamicOffers.length > 0)
+    ? dynamicOffers.map((o) => {
+        const bike = dynamicBikes.find((b) => b.id === o.associatedBikeId || b.slug === o.associatedBikeId);
+        return {
+          id: o.id,
+          badge: o.badge || "Special Offer",
+          badgeColor: o.badgeColor || "bg-red-50 text-red-600 border-red-200",
+          title: o.title,
+          modelCode: o.modelCode || (bike ? bike.modelCode : "Zuboo Special"),
+          regularPrice: o.regularPriceLKR ? `LKR ${o.regularPriceLKR.toLocaleString()}` : undefined,
+          promoPrice: `LKR ${o.promoPriceLKR.toLocaleString()}`,
+          savings: o.savingsLKR ? `Save LKR ${o.savingsLKR.toLocaleString()}` : undefined,
+          image: o.image || (bike ? bike.mainImage : "/bikes/t3/t3.webp"),
+          highlights: o.highlights && o.highlights.length > 0 ? o.highlights : [
+            "Official factory warranty included",
+            "Showroom test ride inspection available in Galle",
+            "Genuine Zuboo battery pack and intelligent controller",
+          ],
+          specs: {
+            motor: bike ? bike.motorPower : "High-Efficiency Torque",
+            range: bike ? bike.advertisedRange : "80 - 100 km",
+            battery: bike ? bike.battery : "72V Power Pack",
+          },
+          whatsAppText: o.whatsAppText || `Hi ${settings.showroomName || "Udan Enterprises"}, I would like to inquire about the ${o.title} offer (Promo Price: LKR ${o.promoPriceLKR.toLocaleString()}).`,
+          isPopular: o.isPopular,
+        };
+      })
+    : CURRENT_OFFERS;
 
   return (
     <div className="min-h-screen flex flex-col bg-[#F7F9FA] text-[#111820] selection:bg-[#346C83] selection:text-white">
@@ -305,7 +343,7 @@ export default function OffersPage() {
 
               <p className="text-base sm:text-lg text-[#667780] leading-relaxed max-w-2xl font-normal">
                 Take advantage of limited-allotment introductory pricing, instant cash discounts, free accessory
-                bundles, and our official petrol-to-electric exchange program at our Galle showroom.
+                bundles, and our official petrol-to-electric exchange program at our {settings.city || "Galle"} showroom.
               </p>
             </div>
           </div>
@@ -323,8 +361,8 @@ export default function OffersPage() {
                 <p className="leading-relaxed text-amber-900/90 text-xs sm:text-[13px]">
                   All prices, cash discounts (such as the KB1 promotion), free accessory packages, and battery specifications
                   displayed on this page are transcribed from active marketing campaigns and are provisional. Final retail
-                  pricing, live inventory status, and on-road documentation costs must be verified directly with our Galle
-                  showroom sales team prior to payment.
+                  pricing, live inventory status, and on-road documentation costs must be verified directly with our {settings.city || "Galle"}
+                  {" "}showroom sales team prior to payment.
                 </p>
               </div>
             </div>
@@ -349,7 +387,7 @@ export default function OffersPage() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {CURRENT_OFFERS.map((offer) => (
+              {displayOffers.map((offer) => (
                 <div
                   key={offer.id}
                   className={`rounded-3xl border transition-all duration-300 flex flex-col justify-between overflow-hidden bg-[#F7F9FA] ${

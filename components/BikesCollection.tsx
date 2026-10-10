@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { BIKE_MODELS, BikeModel } from "@/data/bikes";
+import { useDynamicProducts, useShowroomSettings } from "@/lib/site-data";
 import { Gauge, Battery, Zap, Clock, Check, MessageSquare, Calendar, ChevronRight } from "lucide-react";
 import { gsap } from "@/lib/gsap";
 
@@ -11,6 +12,13 @@ interface BikesCollectionProps {
 }
 
 export default function BikesCollection({ onSelectModelForTestRide }: BikesCollectionProps) {
+  const { products: dynamicBikes } = useDynamicProducts();
+  const { settings } = useShowroomSettings();
+
+  const rawPhone = settings.whatsappNumber || "0784969652";
+  const cleanPhone = rawPhone.replace(/[^0-9]/g, "");
+  const whatsappIntl = cleanPhone.startsWith("0") ? `94${cleanPhone.slice(1)}` : cleanPhone;
+
   const sectionRef = useRef<HTMLElement>(null);
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [selectedColorForT3, setSelectedColorForT3] = useState<string>(
@@ -44,16 +52,18 @@ export default function BikesCollection({ onSelectModelForTestRide }: BikesColle
     return () => ctx.revert();
   }, []);
 
+  const allBikes = dynamicBikes && dynamicBikes.length > 0 ? dynamicBikes : BIKE_MODELS;
+
   const filteredModels =
     selectedCategory === "all"
-      ? BIKE_MODELS
-      : BIKE_MODELS.filter((model) => model.id === selectedCategory);
+      ? allBikes
+      : allBikes.filter((model) => model.id === selectedCategory || model.slug === selectedCategory);
 
   const getWhatsAppLink = (bike: BikeModel) => {
     const text = encodeURIComponent(
-      `Hi Udan Enterprises, I would like to inquire about the pricing and availability of the ${bike.name}.`
+      `Hi ${settings.showroomName || "Udan Enterprises"}, I would like to inquire about the pricing and availability of the ${bike.name}.`
     );
-    return `https://wa.me/94784969652?text=${text}`;
+    return `https://wa.me/${whatsappIntl}?text=${text}`;
   };
 
   return (

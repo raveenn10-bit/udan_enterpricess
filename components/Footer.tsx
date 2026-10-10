@@ -9,9 +9,11 @@ import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import { useTranslation } from "@/lib/i18n";
 import { gsap, ScrollTrigger } from "@/lib/gsap";
 import BrandBounceText from "@/components/BrandBounceText";
+import { useShowroomSettings } from "@/lib/site-data";
 
 export default function Footer() {
   const { t } = useTranslation();
+  const { settings } = useShowroomSettings();
   const [email, setEmail] = useState("");
   const [subscribed, setSubscribed] = useState(false);
   const footerRef = useRef<HTMLElement | null>(null);
@@ -479,28 +481,28 @@ export default function Footer() {
 
               <div className="showroom-quick-card p-3 rounded-xl bg-white/[0.03] border border-white/10 space-y-1.5 text-xs">
                 <div className="font-heading font-bold text-[#FF5E14] text-xs tracking-wide">
-                  {t.slogan_charge}
+                  {settings.footerTagline || t.slogan_charge}
                 </div>
                 <div className="text-slate-300">
                   <span className="text-slate-500 block text-[10px] uppercase font-semibold">
                     Showroom Address:
                   </span>
-                  {t.showroom_address}
+                  {settings.address || t.showroom_address}
                 </div>
                 <div className="text-slate-300">
                   <span className="text-slate-500 block text-[10px] uppercase font-semibold">
                     Hotline & WhatsApp:
                   </span>
                   <a
-                    href="tel:+94784969652"
+                    href={`tel:${(settings.hotline || "+94784969652").replace(/\s+/g, '')}`}
                     className="text-white hover:text-[#FF5E14] font-bold transition-colors"
                   >
-                    {t.phone_label}
+                    {settings.hotline || t.phone_label}
                   </a>
                 </div>
                 <div className="pt-0.5">
                   <a
-                    href="https://maps.app.goo.gl/GyJCSSS7p6Bd18xM8"
+                    href={settings.googleMapsUrl || "https://maps.app.goo.gl/GyJCSSS7p6Bd18xM8"}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-1.5 text-[11px] font-bold text-white bg-white/10 hover:bg-[#FF5E14] px-3 py-1.5 rounded-lg border border-white/15 transition-all mt-1.5"
@@ -515,7 +517,7 @@ export default function Footer() {
               {/* Social Media Cluster with Animated Rings */}
               <div className="footer-social-cluster flex items-center gap-2 pt-1">
                 <a
-                  href="https://facebook.com"
+                  href={settings.facebookUrl || "https://facebook.com"}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="social-circle-btn w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-slate-400 hover:text-white hover:border-[#FF5E14] hover:bg-[#FF5E14]/20 transition-all"
@@ -526,7 +528,7 @@ export default function Footer() {
                   </svg>
                 </a>
                 <a
-                  href="https://wa.me/94784969652"
+                  href={`https://wa.me/${(settings.whatsappNumber || "94784969652").replace(/[^0-9]/g, '')}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="social-circle-btn w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-slate-400 hover:text-emerald-400 hover:border-emerald-500 hover:bg-emerald-500/20 transition-all"
@@ -537,7 +539,7 @@ export default function Footer() {
                   </svg>
                 </a>
                 <a
-                  href="https://instagram.com"
+                  href={settings.instagramUrl || "https://instagram.com"}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="social-circle-btn w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-slate-400 hover:text-pink-400 hover:border-pink-500 hover:bg-pink-500/20 transition-all"

@@ -5,6 +5,7 @@ import { X, Calendar, User, Phone, CheckCircle2, Loader2, MessageSquare } from "
 import { BIKE_MODELS } from "@/data/bikes";
 import { db } from "@/lib/firebase";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
+import { useDynamicProducts, useShowroomSettings } from "@/lib/site-data";
 
 interface TestRideModalProps {
   isOpen: boolean;
@@ -17,8 +18,11 @@ export default function TestRideModal({
   onClose,
   preSelectedModelId,
 }: TestRideModalProps) {
+  const { products: dynamicBikes } = useDynamicProducts();
+  const { settings } = useShowroomSettings();
+
   const [selectedModel, setSelectedModel] = useState<string>(
-    preSelectedModelId || BIKE_MODELS[0].id
+    preSelectedModelId || (dynamicBikes[0] ? dynamicBikes[0].id : BIKE_MODELS[0].id)
   );
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
@@ -27,9 +31,14 @@ export default function TestRideModal({
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
 
+  const rawPhone = settings.whatsappNumber || "0784969652";
+  const cleanPhone = rawPhone.replace(/[^0-9]/g, "");
+  const whatsappIntl = cleanPhone.startsWith("0") ? `94${cleanPhone.slice(1)}` : cleanPhone;
+
   if (!isOpen) return null;
 
-  const selectedBikeObj = BIKE_MODELS.find((b) => b.id === selectedModel) || BIKE_MODELS[0];
+  const activeBikes = dynamicBikes && dynamicBikes.length > 0 ? dynamicBikes : BIKE_MODELS;
+  const selectedBikeObj = activeBikes.find((b) => b.id === selectedModel || b.slug === selectedModel) || activeBikes[0];
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -60,9 +69,9 @@ export default function TestRideModal({
 
   const getWhatsAppConfirmationLink = () => {
     const text = encodeURIComponent(
-      `Hi Udan Enterprises, I booked a Test Ride on your website:\n- Name: ${name}\n- Phone: ${phone}\n- Model: ${selectedBikeObj.name}\n- Date: ${preferredDate || "Anytime this week"}`
+      `Hi ${settings.showroomName || "Udan Enterprises"}, I booked a Test Ride on your website:\n- Name: ${name}\n- Phone: ${phone}\n- Model: ${selectedBikeObj.name}\n- Date: ${preferredDate || "Anytime this week"}`
     );
-    return `https://wa.me/94784969652?text=${text}`;
+    return `https://wa.me/${whatsappIntl}?text=${text}`;
   };
 
   return (
@@ -102,9 +111,9 @@ export default function TestRideModal({
                   onChange={(e) => setSelectedModel(e.target.value)}
                   className="w-full px-4 py-3 rounded-xl border border-slate-300 bg-slate-50 text-slate-900 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-red-500"
                 >
-                  {BIKE_MODELS.map((bike) => (
+                  {activeBikes.map((bike) => (
                     <option key={bike.id} value={bike.id}>
-                      {bike.name} ({bike.badge})
+                      {bike.name} ({bike.badge || bike.category})
                     </option>
                   ))}
                 </select>

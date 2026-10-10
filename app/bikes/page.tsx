@@ -8,6 +8,7 @@ import Footer from "@/components/Footer";
 import TestRideModal from "@/components/TestRideModal";
 import AllBikesCatalogue from "@/components/AllBikesCatalogue";
 import { ZUBOO_COLLECTION, BikeModel } from "@/data/bikes";
+import { useDynamicProducts, useShowroomSettings } from "@/lib/site-data";
 import {
   Zap,
   Battery,
@@ -26,16 +27,23 @@ import {
 } from "lucide-react";
 
 export default function BikesCataloguePage() {
+  const { products: dynamicBikes } = useDynamicProducts();
+  const { settings } = useShowroomSettings();
+
   const [testRideModalOpen, setTestRideModalOpen] = useState(false);
   const [selectedBikeId, setSelectedBikeId] = useState<string>("t3");
   const [activeComparisonCategory, setActiveComparisonCategory] = useState<string>("all");
+
+  const rawPhone = settings.whatsappNumber || "0784969652";
+  const cleanPhone = rawPhone.replace(/[^0-9]/g, "");
+  const whatsappIntl = cleanPhone.startsWith("0") ? `94${cleanPhone.slice(1)}` : cleanPhone;
 
   const handleOpenTestRide = (modelId: string = "t3") => {
     setSelectedBikeId(modelId);
     setTestRideModalOpen(true);
   };
 
-  const filteredComparisonBikes = ZUBOO_COLLECTION.filter((bike) => {
+  const filteredComparisonBikes = (dynamicBikes || ZUBOO_COLLECTION).filter((bike) => {
     if (activeComparisonCategory === "all") return true;
     if (activeComparisonCategory === "commuters")
       return ["mini", "t3", "kb1"].includes(bike.slug);
@@ -50,9 +58,9 @@ export default function BikesCataloguePage() {
 
   const getWhatsAppLink = (bike: BikeModel) => {
     const text = encodeURIComponent(
-      `Hi Udan Enterprises, I would like to inquire about the ${bike.name} (${bike.modelCode}) advertised at ${bike.formattedPrice}.`
+      `Hi ${settings.showroomName || "Udan Enterprises"}, I would like to inquire about the ${bike.name} (${bike.modelCode}) advertised at ${bike.formattedPrice}.`
     );
-    return `https://wa.me/94784969652?text=${text}`;
+    return `https://wa.me/${whatsappIntl}?text=${text}`;
   };
 
   return (
@@ -76,7 +84,7 @@ export default function BikesCataloguePage() {
             <div className="max-w-4xl">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-widest text-[#346C83] bg-[#E8F1F5] border border-[#346C83]/20 mb-4">
                 <Sparkles className="w-3.5 h-3.5 text-[#346C83]" />
-                <span>Authorized Zuboo Dealership • Udugama Road, Kurunduwatta, Galle, Sri Lanka</span>
+                <span>Authorized Zuboo Dealership • {settings.address}</span>
               </div>
 
               <h1 className="font-collection text-4xl sm:text-5xl lg:text-6xl font-normal tracking-tight text-[#111820] leading-[1.08]">
