@@ -120,6 +120,8 @@ export default function HeroSection({ onOpenTestRide }: HeroSectionProps) {
               <video
                 ref={videoRef}
                 src="/media/hero/hero-video.mp4"
+                preload="none"
+                poster="/media/hero/hero-poster.webp"
                 autoPlay
                 loop
                 muted={isMuted}

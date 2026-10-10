@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import {
@@ -81,7 +82,7 @@ export default function ContactPage() {
                 <span>Showroom Locator & Client Concierge</span>
               </div>
 
-              <h1 className="font-heading font-extrabold text-3xl sm:text-5xl lg:text-6xl tracking-tight text-[#111820] leading-[1.1] mb-6 uppercase">
+              <h1 className="font-story font-normal text-3xl sm:text-5xl lg:text-6xl tracking-tight text-[#111820] leading-[1.1] mb-6">
                 Contact & <br />
                 <span className="text-[#346C83]">Showroom Center</span>
               </h1>
@@ -115,6 +116,58 @@ export default function ContactPage() {
                 <span className="inline-block px-3 py-1 text-[11px] font-bold uppercase tracking-wider bg-emerald-100 text-emerald-800 border border-emerald-300 rounded-full">
                   Status: Verified Showroom
                 </span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Real Showroom Photo & Direct Visiting Strip */}
+        <section className="bg-white border-b border-[#E0E8EC] py-8">
+          <div className="editorial-container">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+              <div className="lg:col-span-7">
+                <div className="relative rounded-3xl overflow-hidden aspect-[16/10] border border-[#E0E8EC] shadow-md group">
+                  <Image
+                    src="/media/showroom/galle-showroom.jpg"
+                    alt="Udan Enterprises Kurunduwatta Galle Showroom"
+                    fill
+                    sizes="(max-width: 1024px) 100vw, 60vw"
+                    className="object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                  <div className="absolute bottom-3 left-3 bg-[#111820]/85 backdrop-blur-md text-white text-[11px] font-bold px-3.5 py-2 rounded-xl border border-white/20 flex items-center gap-2 shadow-sm">
+                    <MapPin className="w-4 h-4 text-[#FF5E14]" />
+                    <span>Udan Enterprises Showroom • Udugama Road, Kurunduwatta, Galle</span>
+                  </div>
+                </div>
+              </div>
+              <div className="lg:col-span-5 space-y-4">
+                <span className="text-xs font-bold uppercase tracking-wider text-[#346C83]">
+                  Direct Showroom Visit
+                </span>
+                <h3 className="font-story text-2xl sm:text-3xl font-normal text-[#111820]">
+                  Experience Zuboo Electric Bikes Live
+                </h3>
+                <p className="text-xs sm:text-sm text-[#667780] leading-relaxed">
+                  Visit our primary dealership in Kurunduwatta, Galle. Our showroom floor houses all 8 Zuboo models, complete with high-speed DC charging stations, workshop bays, and certified technical support.
+                </p>
+                <div className="pt-2 flex flex-wrap gap-3">
+                  <a
+                    href="tel:0784969652"
+                    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#111820] hover:bg-[#346C83] text-white text-xs font-bold uppercase tracking-wider transition-colors"
+                  >
+                    <Phone className="w-3.5 h-3.5 text-[#FF5E14]" />
+                    <span>078 496 9652</span>
+                  </a>
+                  <a
+                    href="https://wa.me/94784969652"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#25D366] hover:bg-[#20ba5a] text-white text-xs font-bold uppercase tracking-wider transition-colors"
+                  >
+                    <MessageSquare className="w-3.5 h-3.5" />
+                    <span>WhatsApp Inquiry</span>
+                  </a>
+                </div>
               </div>
             </div>
           </div>

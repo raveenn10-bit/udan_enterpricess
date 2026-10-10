@@ -48,7 +48,7 @@ export default function AboutPage() {
                 <span>The Udan Story • Galle, Sri Lanka</span>
               </div>
 
-              <h1 className="font-heading font-extrabold text-3xl sm:text-5xl lg:text-6xl tracking-tight text-[#111820] leading-[1.1] mb-6 uppercase">
+              <h1 className="font-story font-normal text-3xl sm:text-5xl lg:text-6xl tracking-tight text-[#111820] leading-[1.1] mb-6">
                 Driving Sustainable <br />
                 <span className="text-[#346C83]">Zero-Emission</span> Mobility
               </h1>

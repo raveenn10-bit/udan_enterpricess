@@ -612,6 +612,7 @@ export default function BikeDetailView({ bike, relatedBikes }: BikeDetailViewPro
                             src={rel.mainImage}
                             alt={rel.name}
                             fill
+                            loading="lazy"
                             className="object-contain"
                             sizes="(max-width: 768px) 100vw, 33vw"
                           />

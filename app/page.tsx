@@ -99,18 +99,17 @@ export default function ZubooHomePage() {
     return () => ctx.revert();
   }, []);
 
-  const [selectedHeroModel, setSelectedHeroModel] = useState<"t3" | "gt" | "the-tank" | "kb1">("t3");
-  const [t3Color, setT3Color] = useState<string>("/bikes/t3/t3-black.webp");
+  const [selectedHeroModel, setSelectedHeroModel] = useState<"paris" | "mini" | "the-tank">("paris");
   const [activeCategory, setActiveCategory] = useState<string>("all");
   const [isTestRideOpen, setIsTestRideOpen] = useState<boolean>(false);
-  const [testRideBike, setTestRideBike] = useState<string>("Zuboo T3");
+  const [testRideBike, setTestRideBike] = useState<string>("Zuboo Paris");
   const [dailyKm, setDailyKm] = useState<number>(35);
   const [bookingSuccess, setBookingSuccess] = useState<boolean>(false);
   const [bookingDetails, setBookingDetails] = useState<{ name: string; phone: string; date: string; bike: string }>({
     name: "",
     phone: "",
     date: "",
-    bike: "Zuboo T3"
+    bike: "Zuboo Paris"
   });
 
   // Fuel calculation values
@@ -122,73 +121,53 @@ export default function ZubooHomePage() {
   const yearlySavings = monthlySavings * 12;
 
   const heroModelsData = {
-    t3: {
-      name: "Zuboo T3",
-      code: "T3-2000W",
-      tagline: "Smart Urban High-Power Electric Scooter",
-      badge: "Flagship Performance",
-      desc: "Designed for premium urban mobility. Features a 2000W high-torque motor, dual hydraulic disc brakes, full digital smart telemetry dashboard, and automotive-grade lithium battery with intelligent BMS.",
-      motor: "2000W High Torque",
-      speed: "65 km/h",
-      range: "110 km",
-      battery: "72V 35Ah High Capacity",
-      charging: "5 - 7 Hours",
-      price: "LKR 465,000",
-      colors: [
-        { name: "Matte Black", img: "/bikes/t3/t3-black.webp", hex: "#1e1e1e" },
-        { name: "Pearl White", img: "/bikes/t3/t3-white.webp", hex: "#f0f0f0" },
-        { name: "Nardo Grey", img: "/bikes/t3/t3-grey.webp", hex: "#7a8288" },
-        { name: "Mint Green", img: "/bikes/t3/t3-mint.webp", hex: "#7bc4b2" },
-        { name: "Desert Cream", img: "/bikes/t3/t3-cream.webp", hex: "#dfd2be" },
-      ]
+    paris: {
+      name: "Zuboo Paris",
+      code: "PARIS-1200W",
+      tagline: "Timeless European Retro Classic Electric Scooter",
+      badge: "Retro Classic & Luxury",
+      desc: "Inspired by classic European luxury with gentle curves, cushioned passenger backrest, aerodynamic front windscreen, and smooth whisper-quiet electric drive. The ideal urban cruiser for effortless everyday travel in Galle.",
+      motor: "1200W Smooth Torque",
+      speed: "60 km/h",
+      range: "≥ 80 km",
+      battery: "72V 23Ah High Efficiency",
+      charging: "4 - 6 Hours",
+      warranty: "3 Years",
+      price: "LKR 330,000",
+      image: "/bikes/paris/paris.webp",
+      highlight: "Retro Style & Windscreen"
     },
-    gt: {
-      name: "Zuboo GT",
-      code: "GT-1800W",
-      tagline: "Heavy-Duty Dual-Sport Adventure Utility",
-      badge: "Touring & Adventure",
-      desc: "Engineered for maximum endurance and rough Southern terrain. High-strength tubular steel frame, heavy-duty rear tail carrier rack with secure top-box, and dual airbag rear shocks.",
-      motor: "1800W High Torque",
-      speed: "58 km/h",
-      range: "100 km",
-      battery: "72V 32Ah High Capacity",
-      charging: "6 - 8 Hours",
-      price: "LKR 445,000",
-      colors: [
-        { name: "Adventure Yellow / Black", img: "/bikes/gt/gt-adventure.webp", hex: "#eab308" }
-      ]
+    mini: {
+      name: "Zuboo Mini",
+      code: "MINI-490W",
+      tagline: "Lightweight Urban Commuter with Deep Cargo Basket",
+      badge: "Compact City Commuter",
+      desc: "Ultra-agile, lightweight step-through electric commuter bike featuring a deep front shopping basket, plush passenger pillion seat, dual shock absorbers, and low running costs. Perfect for daily local trips.",
+      motor: "490W Eco Motor",
+      speed: "30 - 35 km/h",
+      range: "≥ 35 km",
+      battery: "48V 12Ah Lithium Ready",
+      charging: "4 - 6 Hours",
+      warranty: "2 Years",
+      price: "LKR 195,000",
+      image: "/bikes/mini/mini.webp",
+      highlight: "Front Basket & Compact Frame"
     },
     "the-tank": {
       name: "Zuboo The Tank",
-      code: "TANK-1200W",
-      tagline: "Long-Range Heavy-Duty Utility Scooter",
-      badge: "Commercial & Utility",
-      desc: "The ultimate workhorse for Sri Lankan business and delivery. Reinforced dual suspension, wide heavy-duty footrest, high load capacity, and dependable long-range battery system.",
-      motor: "1200W Brushless",
-      speed: "50 km/h",
-      range: "90 km",
-      battery: "72V 26Ah Long Life",
+      code: "TANK-3000W",
+      tagline: "Heavy-Duty All-Terrain Commercial & Utility Electric Scooter",
+      badge: "Heavy-Duty Utility Flagship",
+      desc: "Built with extreme structural reinforcement, twin circular projector spotlights, steel perimeter crash bars, inverted hydraulic forks, and unstoppable high-torque motor engineered to haul heavy cargo across Southern terrain.",
+      motor: "3000W Peak Performance",
+      speed: "65 - 75 km/h",
+      range: "≥ 80 km",
+      battery: "72V 32Ah High Discharge",
       charging: "6 - 8 Hours",
-      price: "LKR 425,000",
-      colors: [
-        { name: "Titanium Silver", img: "/media/bikes/the-tank/main.webp", hex: "#64748b" }
-      ]
-    },
-    kb1: {
-      name: "Zuboo KB1",
-      code: "KB1-1000W",
-      tagline: "Smart Everyday Urban Commuter",
-      badge: "Value Leader",
-      desc: "Lightweight, extremely agile, and easy to handle for riders of all ages. Integrated front shopping basket, plush passenger pillion seat with backrest, and low running costs.",
-      motor: "1000W High Efficiency",
-      speed: "45 km/h",
-      range: "75 km",
-      battery: "60V 20Ah Lithium Ready",
-      charging: "5 - 6 Hours",
-      price: "LKR 335,000",
-      colors: [
-        { name: "Electric Blue", img: "/media/bikes/kb1/main.webp", hex: "#0284c7" }
-      ]
+      warranty: "3 Years",
+      price: "LKR 515,000",
+      image: "/bikes/tank/tank.webp",
+      highlight: "Crash Bars & Twin Projectors"
     }
   };
 
@@ -270,6 +249,7 @@ export default function ZubooHomePage() {
                   alt="Udan Enterprises"
                   fill
                   priority
+                  sizes="64px"
                   className="object-contain"
                 />
               </div>
@@ -292,6 +272,7 @@ export default function ZubooHomePage() {
                   src="/zuboo-logo.webp"
                   alt="Zuboo Electric"
                   fill
+                  sizes="144px"
                   className="object-contain"
                 />
               </div>
@@ -358,184 +339,192 @@ export default function ZubooHomePage() {
         }}
       />
 
-      {/* 3. SHOWROOM FLEET & FLAGSHIP SHOWCASE (Zuboo OEM Clean Flagship Banner) */}
-      <section id="showroom-fleet" className="relative bg-gradient-to-b from-slate-50 via-white to-slate-50 border-b border-slate-100 py-12 lg:py-20 overflow-hidden">
-        {/* Subtle background graphics */}
-        <div className="absolute inset-0 pointer-events-none opacity-40">
-          <div className="absolute -top-24 right-1/4 w-96 h-96 bg-orange-100/50 rounded-full blur-3xl" />
-          <div className="absolute bottom-0 left-10 w-80 h-80 bg-slate-100 rounded-full blur-2xl" />
+      {/* 3. SHOWROOM FLEET & FLAGSHIP SHOWCASE (Zuboo Clean Transparent Glassmorphic Showcase - Paris, Mini & The Tank) */}
+      <section id="showroom-fleet" className="relative bg-gradient-to-b from-slate-50 via-orange-50/20 to-slate-50 border-b border-slate-200/70 py-12 lg:py-20 overflow-hidden">
+        {/* Subtle background ambient glow for glassmorphism */}
+        <div className="absolute inset-0 pointer-events-none overflow-hidden">
+          <div className="absolute -top-32 right-1/4 w-[500px] h-[500px] bg-orange-300/20 rounded-full blur-3xl" />
+          <div className="absolute bottom-0 left-10 w-[450px] h-[450px] bg-sky-200/25 rounded-full blur-3xl" />
         </div>
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          {/* Top Slogan & Eyebrow */}
+          {/* Top Slogan & Flagship Tabs */}
           <div className="flex flex-wrap items-center justify-between gap-4 mb-8">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-orange-50 border border-orange-200/60 text-[#FF5E14] text-xs font-bold tracking-wider uppercase">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/60 backdrop-blur-md border border-white/80 text-[#FF5E14] text-xs font-black tracking-wider uppercase shadow-sm">
               <Sparkles className="w-3.5 h-3.5" />
-              <span>JOIN US & CHARGE YOUR RIDE ⚡ • GALLE SHOWROOM</span>
+              <span>FLAGSHIP 3-BIKE PERFORMANCE SHOWCASE • GALLE SHOWROOM</span>
             </div>
 
-            {/* Flagship Model Selector Tabs */}
-            <div className="flex items-center bg-white p-1 rounded-xl border border-slate-200 shadow-sm text-xs font-bold">
-              {(["t3", "gt", "the-tank", "kb1"] as const).map((key) => (
+            {/* Flagship 3-Model Selector Tabs */}
+            <div className="flex items-center bg-white/50 backdrop-blur-md p-1.5 rounded-2xl border border-white/80 shadow-sm text-xs font-black">
+              {(["paris", "mini", "the-tank"] as const).map((key) => (
                 <button
                   key={key}
-                  onClick={() => {
-                    setSelectedHeroModel(key);
-                    if (key === "t3") setT3Color("/bikes/t3/t3-black.webp");
-                  }}
-                  className={`px-3 sm:px-4 py-2 rounded-lg transition-all ${
+                  onClick={() => setSelectedHeroModel(key)}
+                  className={`px-4 sm:px-5 py-2 rounded-xl transition-all flex items-center gap-2 ${
                     selectedHeroModel === key
-                      ? "bg-[#0F172A] text-white shadow-sm"
-                      : "text-slate-600 hover:text-slate-900 hover:bg-slate-50"
+                      ? "bg-[#0F172A] text-white shadow-md shadow-slate-900/25 scale-[1.02]"
+                      : "text-slate-700 hover:text-slate-950 hover:bg-white/60"
                   }`}
                 >
-                  {heroModelsData[key].name}
+                  <span>{heroModelsData[key].name}</span>
+                  <span className={`text-[10px] px-1.5 py-0.5 rounded font-extrabold ${
+                    selectedHeroModel === key ? "bg-[#FF5E14] text-white" : "bg-slate-200/70 text-slate-600"
+                  }`}>
+                    {key === "paris" ? "Retro" : key === "mini" ? "Commuter" : "Utility"}
+                  </span>
                 </button>
               ))}
             </div>
           </div>
 
-          {/* Main Hero Grid */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-            {/* Left Column: Headlines & Spec Cards */}
-            <div className="lg:col-span-6 space-y-6">
-              <div>
-                <span className="text-xs font-black uppercase tracking-widest text-[#FF5E14] block mb-2">
-                  {currentHero.badge}
-                </span>
-                <h1 className="text-4xl sm:text-6xl font-black text-slate-900 tracking-tight leading-[1.05]">
-                  {currentHero.name}
-                  <span className="block text-2xl sm:text-3xl font-semibold text-slate-500 mt-1">
-                    {currentHero.tagline}
+          {/* Main Hero Card in Ultra-Clean Transparent Glassmorphism */}
+          <div className="bg-white/40 backdrop-blur-md border border-white/60 rounded-3xl p-6 sm:p-10 shadow-xl shadow-slate-900/5 relative overflow-hidden">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
+              {/* Left Column: Headlines & Spec Cards */}
+              <div className="lg:col-span-6 space-y-6">
+                <div>
+                  <span className="text-xs font-black uppercase tracking-widest text-[#FF5E14] block mb-2">
+                    {currentHero.badge}
                   </span>
-                </h1>
-              </div>
+                  <h2 className="text-4xl sm:text-6xl font-normal text-slate-950 tracking-tight leading-[1.05] font-hero">
+                    {currentHero.name}
+                    <span className="block text-xl sm:text-2xl font-bold text-slate-600 mt-1 font-manrope">
+                      {currentHero.tagline}
+                    </span>
+                  </h2>
+                </div>
 
-              <p className="text-slate-600 text-sm sm:text-base leading-relaxed max-w-xl">
-                {currentHero.desc}
-              </p>
+                <p className="text-slate-600 text-sm sm:text-base leading-relaxed max-w-xl">
+                  {currentHero.desc}
+                </p>
 
-              {/* Color Switcher (For T3) */}
-              {selectedHeroModel === "t3" && (
-                <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm max-w-md">
-                  <span className="text-xs font-bold text-slate-500 uppercase tracking-wider block mb-2.5">
-                    Available Showroom Colors:
-                  </span>
-                  <div className="flex items-center gap-3">
-                    {heroModelsData.t3.colors.map((color) => (
-                      <button
-                        key={color.img}
-                        onClick={() => setT3Color(color.img)}
-                        className={`group relative flex items-center gap-2 px-3 py-1.5 rounded-lg border text-xs font-bold transition-all ${
-                          t3Color === color.img
-                            ? "border-[#FF5E14] bg-orange-50/50 text-slate-900 ring-2 ring-orange-200"
-                            : "border-slate-200 hover:border-slate-300 text-slate-600 bg-white"
-                        }`}
-                        title={color.name}
-                      >
-                        <span
-                          className="w-3.5 h-3.5 rounded-full border border-slate-300 shadow-inner"
-                          style={{ backgroundColor: color.hex }}
-                        />
-                        <span className="hidden sm:inline">{color.name}</span>
-                      </button>
-                    ))}
+                {/* Technical Spec Matrix (Ultra-Clean Glassmorphism) */}
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-white/50 backdrop-blur-md p-4 rounded-2xl border border-white/70 shadow-sm">
+                  <div className="p-2">
+                    <div className="flex items-center gap-1.5 text-[#FF5E14] mb-1">
+                      <Zap className="w-4 h-4" />
+                      <span className="text-[11px] font-bold uppercase text-slate-500">Motor Power</span>
+                    </div>
+                    <div className="text-base font-black text-slate-950">{currentHero.motor}</div>
+                  </div>
+                  <div className="p-2">
+                    <div className="flex items-center gap-1.5 text-[#FF5E14] mb-1">
+                      <Gauge className="w-4 h-4" />
+                      <span className="text-[11px] font-bold uppercase text-slate-500">Max Speed</span>
+                    </div>
+                    <div className="text-base font-black text-slate-950">{currentHero.speed}</div>
+                  </div>
+                  <div className="p-2">
+                    <div className="flex items-center gap-1.5 text-[#FF5E14] mb-1">
+                      <BatteryCharging className="w-4 h-4" />
+                      <span className="text-[11px] font-bold uppercase text-slate-500">Range</span>
+                    </div>
+                    <div className="text-base font-black text-slate-950">{currentHero.range}</div>
+                  </div>
+                  <div className="p-2">
+                    <div className="flex items-center gap-1.5 text-[#FF5E14] mb-1">
+                      <ShieldCheck className="w-4 h-4" />
+                      <span className="text-[11px] font-bold uppercase text-slate-500">Warranty</span>
+                    </div>
+                    <div className="text-base font-black text-slate-950">{currentHero.warranty}</div>
                   </div>
                 </div>
-              )}
 
-              {/* Technical Spec Matrix (Clean OEM Style) */}
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
-                <div className="p-2">
-                  <div className="flex items-center gap-1.5 text-[#FF5E14] mb-1">
-                    <Zap className="w-4 h-4" />
-                    <span className="text-[11px] font-bold uppercase text-slate-500">Motor Power</span>
-                  </div>
-                  <div className="text-base font-black text-slate-900">{currentHero.motor}</div>
-                </div>
-                <div className="p-2">
-                  <div className="flex items-center gap-1.5 text-[#FF5E14] mb-1">
-                    <Gauge className="w-4 h-4" />
-                    <span className="text-[11px] font-bold uppercase text-slate-500">Max Speed</span>
-                  </div>
-                  <div className="text-base font-black text-slate-900">{currentHero.speed}</div>
-                </div>
-                <div className="p-2">
-                  <div className="flex items-center gap-1.5 text-[#FF5E14] mb-1">
-                    <BatteryCharging className="w-4 h-4" />
-                    <span className="text-[11px] font-bold uppercase text-slate-500">Range</span>
-                  </div>
-                  <div className="text-base font-black text-slate-900">{currentHero.range}</div>
-                </div>
-                <div className="p-2">
-                  <div className="flex items-center gap-1.5 text-[#FF5E14] mb-1">
-                    <ShieldCheck className="w-4 h-4" />
-                    <span className="text-[11px] font-bold uppercase text-slate-500">Warranty</span>
-                  </div>
-                  <div className="text-base font-black text-slate-900">3 Years</div>
+                {/* Action Buttons */}
+                <div className="flex flex-wrap items-center gap-4 pt-2">
+                  <button
+                    onClick={() => openBookingModal(currentHero.name)}
+                    className="inline-flex items-center gap-2.5 px-7 py-3.5 rounded-xl bg-[#FF5E14] hover:bg-[#E04D09] text-white font-black text-xs uppercase tracking-wider transition-all shadow-lg shadow-orange-500/25 active:scale-95"
+                  >
+                    <Calendar className="w-4 h-4" />
+                    <span>Book Test Ride Slot</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </button>
+
+                  <a
+                    href={`https://wa.me/94784969652?text=${encodeURIComponent(`Hello Udan Enterprises, I would like to inquire about the ${currentHero.name} (${currentHero.code}) advertised at ${currentHero.price}.`)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2.5 px-7 py-3.5 rounded-xl border border-white/80 hover:border-slate-800 bg-white/70 backdrop-blur-md text-slate-900 font-bold text-xs uppercase tracking-wider transition-colors shadow-sm"
+                  >
+                    <MessageSquare className="w-4 h-4 text-[#25D366]" />
+                    <span>Inquire on WhatsApp</span>
+                  </a>
                 </div>
               </div>
 
-              {/* Action Buttons */}
-              <div className="flex flex-wrap items-center gap-4 pt-2">
-                <button
-                  onClick={() => openBookingModal(currentHero.name)}
-                  className="inline-flex items-center gap-2.5 px-7 py-3.5 rounded-xl bg-[#FF5E14] hover:bg-[#E04D09] text-white font-black text-xs uppercase tracking-wider transition-all shadow-lg shadow-orange-500/25 active:scale-95"
-                >
-                  <Calendar className="w-4 h-4" />
-                  <span>Book Test Ride Slot</span>
-                  <ArrowRight className="w-4 h-4" />
-                </button>
+              {/* Right Column: Hero High-Res Studio Cutout Image */}
+              <div className="lg:col-span-6 relative flex flex-col items-center justify-center">
+                <div className="relative w-full h-[360px] sm:h-[460px] flex items-center justify-center bg-radial from-white/40 via-white/10 to-transparent rounded-3xl p-4">
+                  <div className="relative w-full h-full transition-transform duration-500 hover:scale-105">
+                    <Image
+                      src={currentHero.image}
+                      alt={currentHero.name}
+                      fill
+                      priority
+                      className="object-contain drop-shadow-2xl"
+                      sizes="(max-width: 1024px) 100vw, 50vw"
+                    />
+                  </div>
+                </div>
 
-                <a
-                  href={`https://wa.me/94784969652?text=${encodeURIComponent(`Hello Udan Enterprises, I would like to inquire about the ${currentHero.name} (${currentHero.code}) advertised at ${currentHero.price}.`)}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2.5 px-7 py-3.5 rounded-xl border border-slate-300 hover:border-slate-800 bg-white text-slate-800 font-bold text-xs uppercase tracking-wider transition-colors shadow-sm"
-                >
-                  <MessageSquare className="w-4 h-4 text-[#25D366]" />
-                  <span>Inquire on WhatsApp</span>
-                </a>
+                {/* Floating Verified Badge */}
+                <div className="flex items-center gap-3 bg-white/70 backdrop-blur-md px-5 py-3 rounded-2xl border border-white/80 shadow-lg -mt-6 z-20">
+                  <div className="w-9 h-9 rounded-full bg-emerald-500/10 text-emerald-600 flex items-center justify-center font-bold">
+                    ✓
+                  </div>
+                  <div>
+                    <div className="text-xs font-black text-slate-900">Showroom Ready in Galle</div>
+                    <div className="text-[11px] text-slate-500">Zero petrol required • 100% Electric</div>
+                  </div>
+                  <div className="ml-4 pl-4 border-l border-slate-300/60 text-right">
+                    <div className="text-[10px] uppercase font-bold text-slate-400">Advertised</div>
+                    <div className="text-sm font-black text-[#FF5E14]">{currentHero.price}</div>
+                  </div>
+                </div>
               </div>
             </div>
 
-            {/* Right Column: Hero High-Res Studio Image */}
-            <div className="lg:col-span-6 relative flex flex-col items-center justify-center">
-              <div className="relative w-full h-[360px] sm:h-[460px] flex items-center justify-center bg-radial from-slate-100 to-transparent rounded-3xl p-6">
-                <div className="relative w-full h-full transition-transform duration-500 hover:scale-105">
-                  <Image
-                    src={
-                      selectedHeroModel === "t3"
-                        ? t3Color
-                        : selectedHeroModel === "gt"
-                        ? "/bikes/gt/gt-adventure.webp"
-                        : selectedHeroModel === "the-tank"
-                        ? "/media/bikes/the-tank/main.webp"
-                        : "/media/bikes/kb1/main.webp"
-                    }
-                    alt={currentHero.name}
-                    fill
-                    priority
-                    className="object-contain drop-shadow-2xl"
-                    sizes="(max-width: 1024px) 100vw, 50vw"
-                  />
-                </div>
-              </div>
-
-              {/* Floating Verified Badge */}
-              <div className="flex items-center gap-3 bg-white px-5 py-3 rounded-2xl border border-slate-200 shadow-md -mt-6 z-20">
-                <div className="w-9 h-9 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold">
-                  ✓
-                </div>
-                <div>
-                  <div className="text-xs font-black text-slate-900">Showroom Ready in Galle</div>
-                  <div className="text-[11px] text-slate-500">Zero petrol required • 100% Electric</div>
-                </div>
-                <div className="ml-4 pl-4 border-l border-slate-200 text-right">
-                  <div className="text-[10px] uppercase font-bold text-slate-400">Advertised</div>
-                  <div className="text-sm font-black text-[#FF5E14]">{currentHero.price}</div>
-                </div>
-              </div>
+            {/* 3 Quick Transparent Model Cards */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8 pt-8 border-t border-white/60">
+              {(["paris", "mini", "the-tank"] as const).map((key) => {
+                const m = heroModelsData[key];
+                const isSel = selectedHeroModel === key;
+                return (
+                  <div
+                    key={key}
+                    onClick={() => setSelectedHeroModel(key)}
+                    className={`cursor-pointer rounded-2xl p-4 transition-all duration-300 flex items-center gap-4 ${
+                      isSel
+                        ? "bg-white/80 backdrop-blur-md border-2 border-[#FF5E14] shadow-lg shadow-orange-500/10 scale-[1.01]"
+                        : "bg-white/30 backdrop-blur-md border border-white/60 hover:bg-white/60 hover:border-white shadow-sm"
+                    }`}
+                  >
+                    <div className="relative w-20 h-20 shrink-0 flex items-center justify-center">
+                      <Image
+                        src={m.image}
+                        alt={m.name}
+                        fill
+                        loading="lazy"
+                        sizes="80px"
+                        className="object-contain drop-shadow-md"
+                      />
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <span className="text-[10px] font-black uppercase tracking-wider text-[#FF5E14] block">
+                        {m.badge}
+                      </span>
+                      <h4 className="text-sm font-black text-slate-900 truncate">{m.name}</h4>
+                      <div className="flex items-center gap-2 mt-0.5">
+                        <span className="text-xs font-extrabold text-slate-800">{m.price}</span>
+                        <span className="text-[10px] text-slate-500">• {m.motor}</span>
+                      </div>
+                    </div>
+                    <ChevronRight className={`w-4 h-4 shrink-0 transition-transform ${isSel ? "text-[#FF5E14] translate-x-1" : "text-slate-400"}`} />
+                  </div>
+                );
+              })}
             </div>
           </div>
         </div>
@@ -545,7 +534,7 @@ export default function ZubooHomePage() {
       <section id="categories" className="py-20 bg-white border-b border-slate-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <FadeIn className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-slate-950 uppercase tracking-tight text-center">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-normal text-slate-950 uppercase tracking-tight text-center font-collection">
               MAIN PRODUCT CLASSIFICATION
             </h2>
           </FadeIn>
@@ -608,6 +597,8 @@ export default function ZubooHomePage() {
                     src={item.image}
                     alt={item.name}
                     fill
+                    loading="lazy"
+                    decoding="async"
                     className="object-contain transition-transform duration-500 ease-out group-hover:scale-105"
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                   />
@@ -641,7 +632,7 @@ export default function ZubooHomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <FadeIn className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16">
             <div>
-              <TextReveal as="h2" className="text-2xl sm:text-3xl font-medium text-slate-900 tracking-tight">
+              <TextReveal as="h2" className="text-2xl sm:text-3xl font-medium text-slate-900 tracking-tight font-collection">
                 Our Collection
               </TextReveal>
             </div>
@@ -685,6 +676,8 @@ export default function ZubooHomePage() {
                       src={bike.mainImage}
                       alt={bike.name}
                       fill
+                      loading="lazy"
+                      decoding="async"
                       className="object-contain"
                       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     />
@@ -720,7 +713,7 @@ export default function ZubooHomePage() {
             <span className="text-xs font-medium tracking-widest text-[#FF5E14] uppercase block mb-2">
               WHY CHOOSE ZUBOO
             </span>
-            <TextReveal as="h2" className="text-2xl sm:text-3xl font-medium text-slate-900 tracking-tight">
+            <TextReveal as="h2" className="text-2xl sm:text-3xl font-normal text-slate-900 tracking-tight font-tech">
               ENGINEERED FOR SRI LANKAN ROADS
             </TextReveal>
             <p className="mt-3 text-sm text-slate-500">
@@ -795,7 +788,7 @@ export default function ZubooHomePage() {
                 <span>SRI LANKA PETROL VS ELECTRIC SAVINGS</span>
               </div>
               <FadeIn direction="left">
-                <h2 className="text-3xl sm:text-5xl font-black tracking-tight leading-tight">
+                <h2 className="text-3xl sm:text-5xl font-normal tracking-tight leading-tight font-editorial">
                   STOP BURNING MONEY AT PETROL SHEDS.
                 </h2>
               </FadeIn>
@@ -892,15 +885,30 @@ export default function ZubooHomePage() {
             {/* Showroom Details */}
             <div className="lg:col-span-5 space-y-6">
               <div>
-                <span className="text-xs font-black tracking-widest text-[#FF5E14] uppercase block mb-2">
+                <span className="text-xs font-black tracking-widest text-[#FF5E14] uppercase block mb-2 font-manrope">
                   OFFICIAL GALLE SHOWROOM
                 </span>
-                <h2 className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">
+                <h2 className="text-3xl sm:text-4xl font-normal text-slate-900 tracking-tight font-story">
                   VISIT UDAN ENTERPRISES
                 </h2>
-                <p className="mt-2 text-sm text-slate-600">
+                <p className="mt-2 text-sm text-slate-600 font-manrope">
                   Step inside our modern showroom, inspect all 8 Zuboo models in person, speak with certified technicians, and experience a live test ride.
                 </p>
+              </div>
+
+              {/* Authentic Galle Showroom Photo */}
+              <div className="relative rounded-2xl overflow-hidden aspect-[16/10] border border-slate-200 shadow-md group">
+                <Image
+                  src="/media/showroom/galle-showroom.jpg"
+                  alt="Udan Enterprises Kurunduwatta Galle Showroom"
+                  fill
+                  sizes="(max-width: 1024px) 100vw, 40vw"
+                  className="object-cover group-hover:scale-105 transition-transform duration-500"
+                />
+                <div className="absolute bottom-3 left-3 bg-slate-900/85 backdrop-blur-md text-white text-[11px] font-bold px-3 py-1.5 rounded-lg border border-white/20 flex items-center gap-1.5 shadow-sm">
+                  <MapPin className="w-3.5 h-3.5 text-[#FF5E14]" />
+                  <span>Udan Enterprises Showroom • Kurunduwatta, Galle</span>
+                </div>
               </div>
 
               <div className="space-y-4 pt-2">

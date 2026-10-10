@@ -76,7 +76,7 @@ export default function Footer() {
           if (!canvas) return;
           const rect = canvas.getBoundingClientRect();
           width = canvas.width = rect.width || window.innerWidth;
-          height = canvas.height = rect.height || 260;
+          height = canvas.height = rect.height || 150;
         };
         resize();
 
@@ -94,8 +94,8 @@ export default function Footer() {
         const createParticle = (initial = false): Particle => ({
           x: Math.random() * (width || 1200),
           y: initial
-            ? Math.random() * (height || 260)
-            : (height || 260) + Math.random() * 20,
+            ? Math.random() * (height || 150)
+            : (height || 150) + Math.random() * 20,
           radius: Math.random() * 1.6 + 0.6,
           alpha: Math.random() * 0.7 + 0.2,
           speedY: -(Math.random() * 0.8 + 0.4),
@@ -205,7 +205,7 @@ export default function Footer() {
       <div className="skyline-neon-edge" aria-hidden="true" />
 
       {/* 2. ANIMATED MOTORCYCLE SKYLINE HORIZON STAGE */}
-      <div className="skyline-canvas-wrapper relative w-full overflow-hidden bg-[#090104] z-10" aria-hidden="true">
+      <div className="skyline-canvas-wrapper relative w-full h-[150px] max-h-[150px] max-sm:h-[100px] max-sm:max-h-[100px] overflow-hidden bg-[#090104] z-10" aria-hidden="true">
         {/* Floating Particles Canvas */}
         <canvas
           ref={canvasRef}
@@ -214,7 +214,7 @@ export default function Footer() {
         />
 
         <svg
-          className="motorcycle-skyline-svg w-full block"
+          className="motorcycle-skyline-svg w-full h-[150px] max-h-[150px] max-sm:h-[100px] max-sm:max-h-[100px] block"
           viewBox="0 0 1600 300"
           preserveAspectRatio="xMidYMid meet"
           xmlns="http://www.w3.org/2000/svg"
@@ -422,29 +422,31 @@ export default function Footer() {
       </div>
 
       {/* 3. MAIN FOOTER BODY (Deep Onyx / Carbon with Tire Tread Accents) */}
-      <div className="footer-body-wrapper relative bg-[#070709] px-6 py-12 lg:px-12 z-20">
+      <div className="footer-body-wrapper relative bg-[#070709] px-6 pt-7 pb-5 lg:px-12 z-20">
         <div className="tire-tread-glow-left" aria-hidden="true" />
         <div className="tire-tread-glow-right" aria-hidden="true" />
 
         <div className="footer-main-container max-w-7xl mx-auto">
-          {/* 5-Column Responsive Grid */}
-          <div className="footer-columns-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 pb-12 border-b border-white/10">
+          {/* 5-Column Responsive Grid - Sleek & Compact Spacing */}
+          <div className="footer-columns-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 lg:gap-8 pb-6 border-b border-white/10">
             {/* Col 1: Brand & Socials */}
-            <div className="footer-col brand-col lg:col-span-2 space-y-4">
-              <div className="footer-brand-header flex items-center gap-3.5">
-                <div className="relative h-12 w-12 shrink-0">
+            <div className="footer-col brand-col lg:col-span-2 space-y-3">
+              <div className="footer-brand-header flex items-center gap-3">
+                <div className="relative h-11 w-11 shrink-0">
                   <Image
                     src="/media/branding/udan-logo.png"
                     alt="Udan Enterprises"
                     fill
+                    loading="lazy"
+                    sizes="44px"
                     className="object-contain"
                   />
                 </div>
                 <div className="flex flex-col">
-                  <span className="font-heading font-black text-lg tracking-tight text-white leading-none uppercase">
+                  <span className="font-heading font-black text-base tracking-tight text-white leading-none uppercase">
                     UDAN <span className="text-[#FF5E14]">ENTERPRISES</span>
                   </span>
-                  <span className="text-[10px] text-slate-400 uppercase tracking-widest mt-1 font-semibold">
+                  <span className="text-[9px] text-[#FF4D4D] uppercase tracking-widest mt-1 font-bold">
                     {t.brand_subtitle}
                   </span>
                 </div>
@@ -454,7 +456,7 @@ export default function Footer() {
                 {t.footer_desc}
               </p>
 
-              <div className="p-3.5 rounded-xl bg-white/5 border border-white/10 space-y-1.5 text-xs">
+              <div className="showroom-quick-card p-3 rounded-xl bg-white/[0.03] border border-white/10 space-y-1.5 text-xs">
                 <div className="font-heading font-bold text-[#FF5E14] text-xs tracking-wide">
                   {t.slogan_charge}
                 </div>
@@ -470,15 +472,15 @@ export default function Footer() {
                   </span>
                   <a
                     href="tel:+94784969652"
-                    className="text-white hover:text-[#FF5E14] font-bold"
+                    className="text-white hover:text-[#FF5E14] font-bold transition-colors"
                   >
                     {t.phone_label}
                   </a>
                 </div>
               </div>
 
-              {/* Social Media Cluster */}
-              <div className="footer-social-cluster flex items-center gap-2.5 pt-2">
+              {/* Social Media Cluster with Animated Rings */}
+              <div className="footer-social-cluster flex items-center gap-2 pt-1">
                 <a
                   href="https://facebook.com"
                   target="_blank"
@@ -527,70 +529,80 @@ export default function Footer() {
             </div>
 
             {/* Col 2: Quick Links */}
-            <div className="footer-col links-col space-y-3">
-              <h4 className="text-[11px] font-bold uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
-                <span className="text-[#FF5E14]">/</span> {t.footer_quick_links}
+            <div className="footer-col links-col space-y-2.5">
+              <h4 className="footer-col-title text-[11px] font-extrabold uppercase tracking-[1.5px] text-[#E2E8F0] flex items-center gap-1.5">
+                <span className="footer-slash text-[#FF5E14]">/</span> {t.footer_quick_links}
               </h4>
-              <ul className="space-y-2 text-xs font-medium text-slate-300">
+              <ul className="footer-nav-list space-y-1.5 text-xs font-medium text-slate-300">
                 <li>
-                  <Link href="/" className="hover:text-white transition-colors">
-                    {t.nav_overview}
+                  <Link href="/" className="footer-nav-link group hover:text-white transition-all flex items-center gap-1.5">
+                    <span className="arrow-bullet text-[#FF2222] font-black text-xs transition-transform duration-200 group-hover:translate-x-1">›</span>
+                    <span>{t.nav_overview}</span>
                   </Link>
                 </li>
                 <li>
-                  <Link href="/bikes" className="hover:text-white transition-colors">
-                    {t.nav_bikes}
+                  <Link href="/bikes" className="footer-nav-link group hover:text-white transition-all flex items-center gap-1.5">
+                    <span className="arrow-bullet text-[#FF2222] font-black text-xs transition-transform duration-200 group-hover:translate-x-1">›</span>
+                    <span>{t.nav_bikes}</span>
                   </Link>
                 </li>
                 <li>
                   <Link
                     href="/calculator"
-                    className="hover:text-white text-amber-300 transition-colors flex items-center gap-1.5 font-semibold"
+                    className="footer-nav-link group hover:text-white text-amber-300 transition-all flex items-center gap-1.5 font-semibold"
                   >
-                    <Calculator className="w-3.5 h-3.5 text-amber-400" />
+                    <span className="arrow-bullet text-[#FF2222] font-black text-xs transition-transform duration-200 group-hover:translate-x-1">›</span>
+                    <Calculator className="w-3.5 h-3.5 text-amber-400 shrink-0" />
                     <span>{t.nav_calculator}</span>
                   </Link>
                 </li>
                 <li>
                   <Link
                     href="/parts"
-                    className="hover:text-white transition-colors flex items-center gap-1.5"
+                    className="footer-nav-link group hover:text-white transition-all flex items-center gap-1.5"
                   >
-                    <Wrench className="w-3.5 h-3.5 text-slate-400" />
+                    <span className="arrow-bullet text-[#FF2222] font-black text-xs transition-transform duration-200 group-hover:translate-x-1">›</span>
+                    <Wrench className="w-3.5 h-3.5 text-slate-400 shrink-0" />
                     <span>{t.nav_parts}</span>
                   </Link>
                 </li>
                 <li>
-                  <Link href="/offers" className="hover:text-white transition-colors">
-                    {t.nav_offers}
+                  <Link href="/offers" className="footer-nav-link group hover:text-white transition-all flex items-center gap-1.5">
+                    <span className="arrow-bullet text-[#FF2222] font-black text-xs transition-transform duration-200 group-hover:translate-x-1">›</span>
+                    <span>{t.nav_offers}</span>
                   </Link>
                 </li>
                 <li>
-                  <Link href="/about" className="hover:text-white transition-colors">
-                    {t.nav_about}
+                  <Link href="/about" className="footer-nav-link group hover:text-white transition-all flex items-center gap-1.5">
+                    <span className="arrow-bullet text-[#FF2222] font-black text-xs transition-transform duration-200 group-hover:translate-x-1">›</span>
+                    <span>{t.nav_about}</span>
                   </Link>
                 </li>
                 <li>
-                  <Link href="/service" className="hover:text-white transition-colors">
-                    After-Sales Service Bay
+                  <Link href="/service" className="footer-nav-link group hover:text-white transition-all flex items-center gap-1.5">
+                    <span className="arrow-bullet text-[#FF2222] font-black text-xs transition-transform duration-200 group-hover:translate-x-1">›</span>
+                    <span>After-Sales Service Bay</span>
                   </Link>
                 </li>
                 <li>
-                  <Link href="/warranty" className="hover:text-white transition-colors">
-                    Digital VIN Warranty
+                  <Link href="/warranty" className="footer-nav-link group hover:text-white transition-all flex items-center gap-1.5">
+                    <span className="arrow-bullet text-[#FF2222] font-black text-xs transition-transform duration-200 group-hover:translate-x-1">›</span>
+                    <span>Digital VIN Warranty</span>
                   </Link>
                 </li>
                 <li>
-                  <Link href="/contact" className="hover:text-white transition-colors">
-                    {t.nav_showroom}
+                  <Link href="/contact" className="footer-nav-link group hover:text-white transition-all flex items-center gap-1.5">
+                    <span className="arrow-bullet text-[#FF2222] font-black text-xs transition-transform duration-200 group-hover:translate-x-1">›</span>
+                    <span>{t.nav_showroom}</span>
                   </Link>
                 </li>
                 <li>
                   <Link
                     href="/admin"
-                    className="hover:text-amber-400 text-slate-400 transition-colors text-[11px] flex items-center gap-1 pt-1"
+                    className="footer-nav-link group hover:text-amber-400 text-slate-400 transition-all text-[11px] flex items-center gap-1.5 pt-0.5"
                   >
-                    <Lock className="w-3 h-3 text-amber-400" />
+                    <span className="arrow-bullet text-amber-400 font-black text-xs transition-transform duration-200 group-hover:translate-x-1">›</span>
+                    <Lock className="w-3 h-3 text-amber-400 shrink-0" />
                     <span>Showroom CMS Admin</span>
                   </Link>
                 </li>
@@ -598,50 +610,71 @@ export default function Footer() {
             </div>
 
             {/* Col 3: Zuboo Featured Models */}
-            <div className="footer-col bikes-col space-y-3">
-              <h4 className="text-[11px] font-bold uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
-                <span className="text-[#FF5E14]">/</span> {t.footer_models}
+            <div className="footer-col bikes-col space-y-2.5">
+              <h4 className="footer-col-title text-[11px] font-extrabold uppercase tracking-[1.5px] text-[#E2E8F0] flex items-center gap-1.5">
+                <span className="footer-slash text-[#FF5E14]">/</span> {t.footer_models}
               </h4>
-              <ul className="space-y-2 text-xs font-medium text-slate-300">
+              <ul className="footer-nav-list space-y-1.5 text-xs font-medium text-slate-300">
                 <li>
-                  <Link href="/bikes/t3" className="hover:text-white transition-colors flex items-center justify-between">
-                    <span>Zuboo T3</span>
+                  <Link href="/bikes/t3" className="footer-nav-link group hover:text-white transition-all flex items-center justify-between">
+                    <span className="flex items-center gap-1.5">
+                      <span className="arrow-bullet text-[#FF2222] font-black text-xs transition-transform duration-200 group-hover:translate-x-1">›</span>
+                      <span>Zuboo T3</span>
+                    </span>
                     <span className="text-[10px] px-1.5 py-0.5 rounded bg-[#FF5E14]/15 text-[#FF5E14] font-bold border border-[#FF5E14]/30">2000W</span>
                   </Link>
                 </li>
                 <li>
-                  <Link href="/bikes/gt" className="hover:text-white transition-colors flex items-center justify-between">
-                    <span>Zuboo GT</span>
+                  <Link href="/bikes/gt" className="footer-nav-link group hover:text-white transition-all flex items-center justify-between">
+                    <span className="flex items-center gap-1.5">
+                      <span className="arrow-bullet text-[#FF2222] font-black text-xs transition-transform duration-200 group-hover:translate-x-1">›</span>
+                      <span>Zuboo GT</span>
+                    </span>
                     <span className="text-[10px] px-1.5 py-0.5 rounded bg-white/10 text-slate-300 font-bold">1800W</span>
                   </Link>
                 </li>
                 <li>
-                  <Link href="/bikes/the-tank" className="hover:text-white transition-colors flex items-center justify-between">
-                    <span>Zuboo The Tank</span>
+                  <Link href="/bikes/the-tank" className="footer-nav-link group hover:text-white transition-all flex items-center justify-between">
+                    <span className="flex items-center gap-1.5">
+                      <span className="arrow-bullet text-[#FF2222] font-black text-xs transition-transform duration-200 group-hover:translate-x-1">›</span>
+                      <span>Zuboo The Tank</span>
+                    </span>
                     <span className="text-[10px] px-1.5 py-0.5 rounded bg-[#FF5E14]/15 text-[#FF5E14] font-bold border border-[#FF5E14]/30">3000W</span>
                   </Link>
                 </li>
                 <li>
-                  <Link href="/bikes/paris" className="hover:text-white transition-colors flex items-center justify-between">
-                    <span>Zuboo Paris</span>
+                  <Link href="/bikes/paris" className="footer-nav-link group hover:text-white transition-all flex items-center justify-between">
+                    <span className="flex items-center gap-1.5">
+                      <span className="arrow-bullet text-[#FF2222] font-black text-xs transition-transform duration-200 group-hover:translate-x-1">›</span>
+                      <span>Zuboo Paris</span>
+                    </span>
                     <span className="text-[10px] px-1.5 py-0.5 rounded bg-white/10 text-slate-300 font-bold">Retro</span>
                   </Link>
                 </li>
                 <li>
-                  <Link href="/bikes/t11" className="hover:text-white transition-colors flex items-center justify-between">
-                    <span>Zuboo T11</span>
+                  <Link href="/bikes/t11" className="footer-nav-link group hover:text-white transition-all flex items-center justify-between">
+                    <span className="flex items-center gap-1.5">
+                      <span className="arrow-bullet text-[#FF2222] font-black text-xs transition-transform duration-200 group-hover:translate-x-1">›</span>
+                      <span>Zuboo T11</span>
+                    </span>
                     <span className="text-[10px] px-1.5 py-0.5 rounded bg-white/10 text-slate-300 font-bold">Sport</span>
                   </Link>
                 </li>
                 <li>
-                  <Link href="/bikes/mini" className="hover:text-white transition-colors flex items-center justify-between">
-                    <span>Zuboo Mini</span>
+                  <Link href="/bikes/mini" className="footer-nav-link group hover:text-white transition-all flex items-center justify-between">
+                    <span className="flex items-center gap-1.5">
+                      <span className="arrow-bullet text-[#FF2222] font-black text-xs transition-transform duration-200 group-hover:translate-x-1">›</span>
+                      <span>Zuboo Mini</span>
+                    </span>
                     <span className="text-[10px] px-1.5 py-0.5 rounded bg-white/10 text-slate-300 font-bold">City</span>
                   </Link>
                 </li>
                 <li>
-                  <Link href="/bikes/kb1" className="hover:text-white transition-colors flex items-center justify-between">
-                    <span>Zuboo KB1</span>
+                  <Link href="/bikes/kb1" className="footer-nav-link group hover:text-white transition-all flex items-center justify-between">
+                    <span className="flex items-center gap-1.5">
+                      <span className="arrow-bullet text-[#FF2222] font-black text-xs transition-transform duration-200 group-hover:translate-x-1">›</span>
+                      <span>Zuboo KB1</span>
+                    </span>
                     <span className="text-[10px] px-1.5 py-0.5 rounded bg-white/10 text-slate-300 font-bold">Utility</span>
                   </Link>
                 </li>
@@ -649,9 +682,9 @@ export default function Footer() {
             </div>
 
             {/* Col 4: Newsletter & Priority List */}
-            <div className="footer-col newsletter-col space-y-3">
-              <h4 className="text-[11px] font-bold uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
-                <span className="text-[#FF5E14]">/</span> {t.footer_stay_informed}
+            <div className="footer-col newsletter-col space-y-2.5">
+              <h4 className="footer-col-title text-[11px] font-extrabold uppercase tracking-[1.5px] text-[#E2E8F0] flex items-center gap-1.5">
+                <span className="footer-slash text-[#FF5E14]">/</span> {t.footer_stay_informed}
               </h4>
               <p className="text-xs text-slate-400 leading-relaxed">
                 {t.footer_newsletter_desc}
@@ -666,19 +699,19 @@ export default function Footer() {
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       placeholder="Enter email address"
-                      className="w-full px-3.5 py-2.5 rounded-lg border border-white/10 bg-white/5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-[#FF5E14] focus:ring-1 focus:ring-[#FF5E14]"
+                      className="w-full px-3 py-2 rounded-lg border border-white/10 bg-white/5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-[#FF5E14] focus:ring-1 focus:ring-[#FF5E14]"
                     />
                   </div>
                   <button
                     type="submit"
-                    className="w-full px-4 py-2.5 rounded-lg bg-gradient-to-r from-[#FF5E14] to-[#ef4444] hover:from-[#e04d09] hover:to-[#dc2626] text-white text-xs font-bold uppercase tracking-wider transition-all shadow-md hover:shadow-lg hover:shadow-[#FF5E14]/20 flex items-center justify-center gap-1.5"
+                    className="w-full px-4 py-2 rounded-lg bg-gradient-to-r from-[#FF5E14] to-[#ef4444] hover:from-[#e04d09] hover:to-[#dc2626] text-white text-xs font-bold uppercase tracking-wider transition-all shadow-md hover:shadow-lg hover:shadow-[#FF5E14]/20 flex items-center justify-center gap-1.5"
                   >
                     <span>{t.footer_join_btn}</span>
                     <ArrowRight className="w-3.5 h-3.5" />
                   </button>
                 </form>
               ) : (
-                <div className="flex items-center gap-2 text-xs font-bold text-emerald-400 bg-emerald-950/40 p-3 rounded-lg border border-emerald-800">
+                <div className="flex items-center gap-2 text-xs font-bold text-emerald-400 bg-emerald-950/40 p-2.5 rounded-lg border border-emerald-800">
                   <CheckCircle2 className="w-4 h-4 shrink-0" />
                   <span>Thank you. You are on the priority update list.</span>
                 </div>
@@ -686,12 +719,12 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* 4. VALUE BADGES RIBBON (4 High-Performance Badges) */}
-          <div className="footer-value-ribbon py-8 border-b border-white/10">
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              <div className="value-badge-item flex items-center gap-3.5 p-3 rounded-xl bg-white/5 border border-white/10 hover:border-[#FF5E14]/40 hover:bg-[#FF5E14]/10 transition-all">
-                <div className="badge-icon-box w-10 h-10 rounded-lg bg-[#FF5E14]/15 border border-[#FF5E14]/30 flex items-center justify-center text-[#FF5E14] shrink-0">
-                  <ShieldCheck className="w-5 h-5" />
+          {/* 4. VALUE BADGES RIBBON (4 High-Performance Badges with iconGlowPulse) */}
+          <div className="footer-value-ribbon py-4 border-b border-white/10">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+              <div className="value-badge-item flex items-center gap-3 p-2.5 rounded-xl bg-white/[0.03] border border-white/10 hover:border-[#FF5E14]/40 hover:bg-[#FF5E14]/10 transition-all">
+                <div className="badge-icon-box w-9 h-9 rounded-lg bg-[#FF5E14]/15 border border-[#FF5E14]/30 flex items-center justify-center text-[#FF5E14] shrink-0">
+                  <ShieldCheck className="w-4.5 h-4.5" />
                 </div>
                 <div className="badge-text-box">
                   <div className="badge-title font-heading font-bold text-xs uppercase tracking-wide text-white">
@@ -703,9 +736,9 @@ export default function Footer() {
                 </div>
               </div>
 
-              <div className="value-badge-item flex items-center gap-3.5 p-3 rounded-xl bg-white/5 border border-white/10 hover:border-[#FF5E14]/40 hover:bg-[#FF5E14]/10 transition-all">
-                <div className="badge-icon-box w-10 h-10 rounded-lg bg-[#FF5E14]/15 border border-[#FF5E14]/30 flex items-center justify-center text-[#FF5E14] shrink-0">
-                  <Truck className="w-5 h-5" />
+              <div className="value-badge-item flex items-center gap-3 p-2.5 rounded-xl bg-white/[0.03] border border-white/10 hover:border-[#FF5E14]/40 hover:bg-[#FF5E14]/10 transition-all">
+                <div className="badge-icon-box w-9 h-9 rounded-lg bg-[#FF5E14]/15 border border-[#FF5E14]/30 flex items-center justify-center text-[#FF5E14] shrink-0">
+                  <Truck className="w-4.5 h-4.5" />
                 </div>
                 <div className="badge-text-box">
                   <div className="badge-title font-heading font-bold text-xs uppercase tracking-wide text-white">
@@ -717,9 +750,9 @@ export default function Footer() {
                 </div>
               </div>
 
-              <div className="value-badge-item flex items-center gap-3.5 p-3 rounded-xl bg-white/5 border border-white/10 hover:border-[#FF5E14]/40 hover:bg-[#FF5E14]/10 transition-all">
-                <div className="badge-icon-box w-10 h-10 rounded-lg bg-[#FF5E14]/15 border border-[#FF5E14]/30 flex items-center justify-center text-[#FF5E14] shrink-0">
-                  <Wrench className="w-5 h-5" />
+              <div className="value-badge-item flex items-center gap-3 p-2.5 rounded-xl bg-white/[0.03] border border-white/10 hover:border-[#FF5E14]/40 hover:bg-[#FF5E14]/10 transition-all">
+                <div className="badge-icon-box w-9 h-9 rounded-lg bg-[#FF5E14]/15 border border-[#FF5E14]/30 flex items-center justify-center text-[#FF5E14] shrink-0">
+                  <Wrench className="w-4.5 h-4.5" />
                 </div>
                 <div className="badge-text-box">
                   <div className="badge-title font-heading font-bold text-xs uppercase tracking-wide text-white">
@@ -731,9 +764,9 @@ export default function Footer() {
                 </div>
               </div>
 
-              <div className="value-badge-item flex items-center gap-3.5 p-3 rounded-xl bg-white/5 border border-white/10 hover:border-[#FF5E14]/40 hover:bg-[#FF5E14]/10 transition-all">
-                <div className="badge-icon-box w-10 h-10 rounded-lg bg-[#FF5E14]/15 border border-[#FF5E14]/30 flex items-center justify-center text-[#FF5E14] shrink-0">
-                  <Zap className="w-5 h-5" />
+              <div className="value-badge-item flex items-center gap-3 p-2.5 rounded-xl bg-white/[0.03] border border-white/10 hover:border-[#FF5E14]/40 hover:bg-[#FF5E14]/10 transition-all">
+                <div className="badge-icon-box w-9 h-9 rounded-lg bg-[#FF5E14]/15 border border-[#FF5E14]/30 flex items-center justify-center text-[#FF5E14] shrink-0">
+                  <Zap className="w-4.5 h-4.5" />
                 </div>
                 <div className="badge-text-box">
                   <div className="badge-title font-heading font-bold text-xs uppercase tracking-wide text-white">
@@ -748,7 +781,7 @@ export default function Footer() {
           </div>
 
           {/* 5. BOTTOM DISCLAIMER, CREDITS & BACK TO TOP */}
-          <div className="footer-bottom-bar pt-8 flex flex-col sm:flex-row items-center justify-between text-[11px] text-slate-500 gap-4">
+          <div className="footer-bottom-bar pt-4 flex flex-col sm:flex-row items-center justify-between text-[11px] text-slate-500 gap-3">
             <div className="copyright-text text-center sm:text-left">
               © {new Date().getFullYear()} Udan Enterprises (Pvt) Ltd. {t.footer_all_rights}
             </div>
@@ -761,11 +794,11 @@ export default function Footer() {
               <span>Crafted by <strong className="text-slate-300">Harsh Apex Digital Solutions</strong></span>
             </div>
 
-            {/* Smooth Back-to-Top Button */}
+            {/* Smooth Back-to-Top Button with Breathing Pulse */}
             <button
               type="button"
               onClick={scrollToTop}
-              className="back-to-top-circle w-10 h-10 rounded-full bg-white/5 border-2 border-[#FF2222] text-[#FF2222] hover:bg-[#FF2222] hover:text-white flex items-center justify-center transition-all shadow-[0_0_12px_rgba(255,34,34,0.3)] hover:shadow-[0_0_20px_rgba(255,34,34,0.8)] hover:-translate-y-1 cursor-pointer shrink-0"
+              className="back-to-top-circle w-9 h-9 rounded-full bg-white/5 border-2 border-[#FF2222] text-[#FF2222] hover:bg-[#FF2222] hover:text-white flex items-center justify-center transition-all cursor-pointer shrink-0"
               aria-label="Back to Top"
               title="Back to Top"
             >

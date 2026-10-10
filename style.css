@@ -1,4 +1,6 @@
 /* UDAN ENTERPRISES - ZUBOO OFFICIAL DEALERSHIP (OEM STYLING) */
+@import url('https://fonts.googleapis.com/css2?family=Alice&family=DM+Serif+Display:ital@0;1&family=Della+Respira&family=EB+Garamond:ital,wght@0,400..700;1,400..700&family=Fraunces:ital,opsz,wght@0,9..144,300..800;1,9..144,300..800&family=Manrope:wght@300;400;500;600;700;800&display=swap');
+
 :root {
   --primary: #FF5E14;
   --primary-hover: #E04D09;
@@ -8,7 +10,56 @@
   --bg-light: #F8FAFC;
   --bg-white: #FFFFFF;
   --border-color: #E2E8F0;
-  --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-manrope: 'Manrope', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-dm-serif: 'DM Serif Display', Georgia, serif;
+  --font-fraunces: 'Fraunces', Georgia, serif;
+  --font-della-respira: 'Della Respira', Georgia, serif;
+  --font-alice: 'Alice', Georgia, serif;
+  --font-eb-garamond: 'EB Garamond', Garamond, Georgia, serif;
+  --font-family: var(--font-manrope);
+}
+
+/* Luxury Automotive Editorial Typography Classes */
+.font-hero, .font-dm-serif { font-family: var(--font-dm-serif); letter-spacing: -0.025em; }
+.font-collection, .font-fraunces { font-family: var(--font-fraunces); letter-spacing: -0.02em; }
+.font-tech, .font-della-respira { font-family: var(--font-della-respira); letter-spacing: 0.005em; }
+.font-story, .font-alice { font-family: var(--font-alice); letter-spacing: -0.01em; }
+.font-editorial, .font-eb-garamond { font-family: var(--font-eb-garamond); letter-spacing: -0.01em; }
+.font-quote, .font-times { font-family: 'Times New Roman', Times, serif; font-style: italic; }
+.font-manrope { font-family: var(--font-manrope); }
+
+.display-hero {
+  font-family: var(--font-dm-serif);
+  font-size: clamp(2.5rem, 5.5vw + 1rem, 5.25rem);
+  line-height: 1.05;
+  letter-spacing: -0.025em;
+}
+
+.heading-collection {
+  font-family: var(--font-fraunces);
+  font-size: clamp(1.85rem, 3.8vw + 0.5rem, 3.25rem);
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+
+.heading-tech {
+  font-family: var(--font-della-respira);
+  font-size: clamp(1.65rem, 3.2vw + 0.25rem, 2.75rem);
+  line-height: 1.2;
+  letter-spacing: 0.005em;
+}
+
+.heading-story {
+  font-family: var(--font-alice);
+  font-size: clamp(1.65rem, 3vw + 0.5rem, 2.75rem);
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+}
+
+.heading-editorial {
+  font-family: var(--font-eb-garamond);
+  font-size: clamp(1.5rem, 2.4vw + 0.5rem, 2.25rem);
+  line-height: 1.3;
 }
 
 * {
@@ -825,7 +876,7 @@ footer.oem-footer {
 .skyline-stage {
   position: relative;
   width: 100%;
-  height: 220px;
+  height: 150px;
   overflow: hidden;
   background: 
     radial-gradient(ellipse 90% 80% at 50% 100%, rgba(153, 27, 27, 0.5) 0%, rgba(88, 16, 32, 0.4) 35%, rgba(20, 10, 18, 0.95) 75%, #06080e 100%),
@@ -1663,7 +1714,7 @@ footer.oem-footer {
   margin-top: 60px;
 }
 
-/* Skyline Canvas Wrapper */
+/* Skyline Canvas Wrapper - Compact 150px Stage */
 .skyline-canvas-wrapper {
   position: relative;
   width: 100%;
@@ -1671,18 +1722,21 @@ footer.oem-footer {
   overflow: hidden;
   z-index: 2;
   border-bottom: none;
+  height: 150px;
+  max-height: 150px;
 }
 
 .motorcycle-skyline-svg {
   width: 100%;
-  height: auto;
-  min-height: 180px;
-  max-height: 280px;
+  height: 150px;
+  min-height: 140px;
+  max-height: 150px;
   display: block;
   transform: translateZ(0);
+  object-fit: cover;
 }
 
-/* Traveling Motorcycle Animation */
+/* Traveling Motorcycle Animation - Smooth 60fps */
 @keyframes rideAcrossDesktop {
   0% {
     transform: translate(-180px, 20px) rotate(-1.5deg);
@@ -1704,6 +1758,7 @@ footer.oem-footer {
 .traveling-motorcycle-carrier {
   animation: rideAcrossDesktop 12s cubic-bezier(0.35, 0, 0.25, 1) infinite;
   will-change: transform;
+  transform: translateZ(0);
 }
 
 /* Wheel rotation animation */
@@ -1715,6 +1770,7 @@ footer.oem-footer {
 .wheel-spoke {
   transform-origin: center;
   animation: wheelSpinFast 0.3s linear infinite;
+  will-change: transform;
 }
 
 /* Headlight Beam Pulsing */
@@ -1725,13 +1781,14 @@ footer.oem-footer {
 
 .headlight-beam-group {
   animation: headlightPulse 2.4s ease-in-out infinite;
+  will-change: opacity;
 }
 
-/* Footer Body Wrapper */
+/* Footer Body Wrapper - Compact 28px top / 20px bottom */
 .footer-body-wrapper {
   position: relative;
   background: #070709;
-  padding: 48px 24px 28px;
+  padding: 28px 24px 20px;
   z-index: 3;
 }
 
@@ -1763,12 +1820,12 @@ footer.oem-footer {
   z-index: 2;
 }
 
-/* 5-Column Grid */
+/* 5-Column Grid - Sleek & Compact Spacing */
 .footer-columns-grid {
   display: grid;
   grid-template-columns: 2.2fr 1.1fr 1.3fr 1.8fr 1.6fr;
-  gap: 36px;
-  padding-bottom: 40px;
+  gap: 24px;
+  padding-bottom: 22px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
@@ -1776,15 +1833,15 @@ footer.oem-footer {
 .footer-brand-header {
   display: flex;
   align-items: center;
-  gap: 14px;
-  margin-bottom: 16px;
+  gap: 12px;
+  margin-bottom: 12px;
 }
 
 .footer-brand-logo {
-  width: 54px;
-  height: 54px;
+  width: 48px;
+  height: 48px;
   object-fit: contain;
-  filter: drop-shadow(0 0 12px rgba(255, 34, 34, 0.35));
+  filter: drop-shadow(0 0 10px rgba(255, 34, 34, 0.35));
 }
 
 .footer-brand-titles {
@@ -1793,11 +1850,12 @@ footer.oem-footer {
 }
 
 .brand-name {
-  font-size: 17px;
+  font-size: 16px;
   font-weight: 900;
   letter-spacing: 0.5px;
   color: #FFFFFF;
   text-transform: uppercase;
+  line-height: 1.1;
 }
 
 .brand-accent {
@@ -1805,7 +1863,7 @@ footer.oem-footer {
 }
 
 .brand-subtitle {
-  font-size: 9.5px;
+  font-size: 9px;
   font-weight: 800;
   letter-spacing: 1.5px;
   color: #FF4D4D;
@@ -1814,50 +1872,89 @@ footer.oem-footer {
 }
 
 .brand-description {
-  font-size: 12.5px;
+  font-size: 12px;
   color: #94A3B8;
-  line-height: 1.65;
-  margin-bottom: 20px;
+  line-height: 1.6;
+  margin-bottom: 14px;
   max-width: 320px;
+  letter-spacing: 0.1px;
 }
 
-/* Social Buttons Cluster */
+/* Social Buttons Cluster with Spinning Neon Ring / Red Glow */
 .footer-social-cluster {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
+}
+
+@keyframes socialRingSpin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 
 .social-circle-btn {
-  width: 38px;
-  height: 38px;
+  position: relative;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
   border: 1.5px solid rgba(255, 34, 34, 0.35);
   background: rgba(255, 34, 34, 0.05);
-  color: #FFFFFF;
+  color: #CBD5E1;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.3s cubic-bezier(0.2, 1, 0.3, 1);
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.25s ease, border-color 0.25s ease, color 0.25s ease, box-shadow 0.25s ease;
   text-decoration: none;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.social-circle-btn svg {
+  width: 15px;
+  height: 15px;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  position: relative;
+  z-index: 2;
+}
+
+.social-circle-btn::before {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  border-radius: 50%;
+  background: conic-gradient(from 0deg, transparent 0%, #FF2222 50%, transparent 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  animation: socialRingSpin 2s linear infinite;
+  z-index: 0;
 }
 
 .social-circle-btn:hover {
   background: #FF2222;
   border-color: #FF2222;
   color: #FFFFFF;
-  box-shadow: 0 0 16px rgba(255, 34, 34, 0.7);
-  transform: translateY(-3px);
+  box-shadow: 0 0 18px rgba(255, 34, 34, 0.8), 0 0 30px rgba(255, 34, 34, 0.35);
+  transform: translateY(-2px) scale(1.1);
 }
 
-/* Column Headings */
-.footer-col-title {
-  font-size: 13px;
-  font-weight: 900;
-  letter-spacing: 1px;
+.social-circle-btn:hover::before {
+  opacity: 0.6;
+}
+
+.social-circle-btn:hover svg {
+  transform: scale(1.12) rotate(4deg);
+}
+
+/* Professional Clean Uppercase Column Headings */
+.footer-col-title,
+.udan-footer-col h4,
+.footer-col h4 {
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  font-weight: 800;
+  color: #E2E8F0;
   text-transform: uppercase;
-  color: #FFFFFF;
-  margin-bottom: 18px;
+  margin-bottom: 14px;
   display: flex;
   align-items: center;
   gap: 6px;
@@ -1868,7 +1965,7 @@ footer.oem-footer {
   font-weight: 900;
 }
 
-/* Navigation Lists */
+/* Navigation Lists & Elegant Links with Arrow Bounce */
 .footer-nav-list,
 .footer-contact-list {
   list-style: none;
@@ -1877,48 +1974,67 @@ footer.oem-footer {
 }
 
 .footer-nav-list li {
-  margin-bottom: 10px;
+  margin-bottom: 8px;
 }
 
 .footer-nav-link {
   color: #94A3B8;
-  font-size: 13px;
-  font-weight: 600;
+  font-size: 12.5px;
+  font-weight: 500;
   text-decoration: none;
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  transition: all 0.25s ease;
+  gap: 7px;
+  transition: color 0.2s cubic-bezier(0.2, 1, 0.3, 1), transform 0.25s cubic-bezier(0.2, 1, 0.3, 1);
+  padding: 1px 0;
 }
 
 .footer-nav-link .arrow-bullet {
   color: #FF2222;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 900;
-  transition: transform 0.25s ease;
+  line-height: 1;
+  display: inline-block;
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), color 0.2s ease;
 }
 
 .footer-nav-link .bike-nav-icon {
   color: #FF3B30;
   flex-shrink: 0;
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), color 0.2s ease;
+}
+
+@keyframes navArrowBounce {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(3px);
+  }
 }
 
 .footer-nav-link:hover {
   color: #FFFFFF;
-  transform: translateX(4px);
+  transform: translateX(3px);
 }
 
 .footer-nav-link:hover .arrow-bullet {
-  transform: translateX(2px);
+  color: #FF5E14;
+  animation: navArrowBounce 0.65s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+}
+
+.footer-nav-link:hover .bike-nav-icon {
+  color: #FF5E14;
+  transform: translateX(2px) scale(1.1);
 }
 
 /* Contact List */
 .footer-contact-list li {
   display: flex;
   align-items: flex-start;
-  gap: 10px;
-  margin-bottom: 12px;
-  font-size: 12.5px;
+  gap: 9px;
+  margin-bottom: 10px;
+  font-size: 12px;
   color: #94A3B8;
   line-height: 1.5;
 }
@@ -1926,7 +2042,7 @@ footer.oem-footer {
 .footer-contact-list a {
   color: #94A3B8;
   text-decoration: none;
-  transition: color 0.25s ease;
+  transition: color 0.2s ease;
 }
 
 .footer-contact-list a:hover {
@@ -1936,7 +2052,12 @@ footer.oem-footer {
 .contact-icon {
   color: #FF3B30;
   flex-shrink: 0;
-  margin-top: 2px;
+  margin-top: 1px;
+  transition: transform 0.25s ease;
+}
+
+.footer-contact-list li:hover .contact-icon {
+  transform: scale(1.15);
 }
 
 .contact-icon.whatsapp-green {
@@ -1947,8 +2068,8 @@ footer.oem-footer {
 .newsletter-description {
   font-size: 12px;
   color: #94A3B8;
-  line-height: 1.6;
-  margin-bottom: 14px;
+  line-height: 1.55;
+  margin-bottom: 12px;
 }
 
 .footer-newsletter-form {
@@ -1958,10 +2079,10 @@ footer.oem-footer {
 .newsletter-input-wrap {
   display: flex;
   align-items: center;
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 10px;
-  padding: 4px;
+  border-radius: 8px;
+  padding: 3px;
   transition: border-color 0.25s ease, box-shadow 0.25s ease;
 }
 
@@ -1974,9 +2095,9 @@ footer.oem-footer {
   flex: 1;
   background: transparent;
   border: none;
-  padding: 10px 12px;
+  padding: 8px 10px;
   color: #FFFFFF;
-  font-size: 12.5px;
+  font-size: 12px;
   outline: none;
 }
 
@@ -1987,9 +2108,9 @@ footer.oem-footer {
 .newsletter-submit-btn {
   background: #FF2222;
   border: none;
-  border-radius: 8px;
-  width: 38px;
-  height: 38px;
+  border-radius: 6px;
+  width: 34px;
+  height: 34px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -2005,12 +2126,25 @@ footer.oem-footer {
   transform: scale(1.05);
 }
 
-/* Value Badges Ribbon */
+/* Value Badges Ribbon - Sleek & Compact with iconGlowPulse */
+@keyframes iconGlowPulse {
+  0%, 100% {
+    box-shadow: 0 0 6px rgba(255, 94, 20, 0.25), inset 0 0 4px rgba(255, 94, 20, 0.1);
+    border-color: rgba(255, 94, 20, 0.3);
+    transform: translateY(0);
+  }
+  50% {
+    box-shadow: 0 0 16px rgba(255, 94, 20, 0.65), 0 0 24px rgba(239, 68, 68, 0.3), inset 0 0 8px rgba(255, 94, 20, 0.25);
+    border-color: rgba(255, 94, 20, 0.7);
+    transform: translateY(-2px);
+  }
+}
+
 .footer-value-ribbon {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 24px;
-  padding: 28px 0;
+  gap: 16px;
+  padding: 16px 0;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
@@ -2018,26 +2152,47 @@ footer.oem-footer {
   display: flex;
   align-items: center;
   gap: 12px;
+  padding: 8px 12px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  transition: all 0.25s cubic-bezier(0.2, 1, 0.3, 1);
+}
+
+.value-badge-item:hover {
+  background: rgba(255, 94, 20, 0.08);
+  border-color: rgba(255, 94, 20, 0.35);
+  transform: translateY(-2px);
 }
 
 .badge-icon-box {
-  width: 44px;
-  height: 44px;
+  width: 40px;
+  height: 40px;
   border-radius: 10px;
-  background: rgba(255, 34, 34, 0.08);
-  border: 1px solid rgba(255, 34, 34, 0.25);
-  color: #FF2222;
+  background: rgba(255, 94, 20, 0.12);
+  border: 1px solid rgba(255, 94, 20, 0.3);
+  color: #FF5E14;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  animation: iconGlowPulse 3.2s ease-in-out infinite;
+  will-change: transform, box-shadow;
   transition: all 0.25s ease;
 }
 
+.value-badge-item:nth-child(1) .badge-icon-box { animation-delay: 0s; }
+.value-badge-item:nth-child(2) .badge-icon-box { animation-delay: 0.8s; }
+.value-badge-item:nth-child(3) .badge-icon-box { animation-delay: 1.6s; }
+.value-badge-item:nth-child(4) .badge-icon-box { animation-delay: 2.4s; }
+
 .value-badge-item:hover .badge-icon-box {
   background: #FF2222;
+  border-color: #FF2222;
   color: #FFFFFF;
-  box-shadow: 0 0 16px rgba(255, 34, 34, 0.6);
+  box-shadow: 0 0 18px rgba(255, 34, 34, 0.75);
+  transform: translateY(-2px) scale(1.05);
+  animation: none;
 }
 
 .badge-text-box {
@@ -2046,29 +2201,29 @@ footer.oem-footer {
 }
 
 .badge-title {
-  font-size: 12px;
+  font-size: 11.5px;
   font-weight: 800;
   color: #FFFFFF;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.6px;
   text-transform: uppercase;
 }
 
 .badge-sub {
-  font-size: 11px;
+  font-size: 10.5px;
   color: #64748B;
   margin-top: 1px;
 }
 
-/* Bottom Bar */
+/* Bottom Bar - Clean & Compact */
 .footer-bottom-bar {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding-top: 24px;
-  font-size: 12px;
+  padding-top: 18px;
+  font-size: 11.5px;
   color: #64748B;
   flex-wrap: wrap;
-  gap: 16px;
+  gap: 14px;
 }
 
 .footer-legal-links {
@@ -2096,10 +2251,23 @@ footer.oem-footer {
   font-weight: 700;
 }
 
-/* Back To Top Button */
+/* Back To Top Button - Breathing Neon Red Ring Animation */
+@keyframes topBtnPulse {
+  0%, 100% {
+    box-shadow: 0 0 8px rgba(255, 34, 34, 0.4), inset 0 0 4px rgba(255, 34, 34, 0.2);
+    border-color: rgba(255, 34, 34, 0.65);
+    transform: translateY(0);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(255, 34, 34, 0.85), 0 0 35px rgba(255, 34, 34, 0.45), inset 0 0 8px rgba(255, 34, 34, 0.3);
+    border-color: #FF2222;
+    transform: translateY(-2px);
+  }
+}
+
 .back-to-top-circle {
-  width: 42px;
-  height: 42px;
+  width: 38px;
+  height: 38px;
   border-radius: 50%;
   background: #0B0B0E;
   border: 2px solid #FF2222;
@@ -2108,15 +2276,24 @@ footer.oem-footer {
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.2, 1, 0.3, 1);
-  box-shadow: 0 0 12px rgba(255, 34, 34, 0.3);
+  animation: topBtnPulse 2.8s ease-in-out infinite;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.2s ease, color 0.2s ease;
 }
 
 .back-to-top-circle:hover {
   background: #FF2222;
   color: #FFFFFF;
-  box-shadow: 0 0 20px rgba(255, 34, 34, 0.8);
-  transform: translateY(-4px);
+  transform: translateY(-3px) scale(1.1);
+  box-shadow: 0 0 26px rgba(255, 34, 34, 0.95), 0 0 40px rgba(255, 34, 34, 0.4);
+  animation: none;
+}
+
+.back-to-top-circle svg {
+  transition: transform 0.25s ease;
+}
+
+.back-to-top-circle:hover svg {
+  transform: translateY(-2px);
 }
 
 /* ==========================================================================
@@ -2127,11 +2304,13 @@ footer.oem-footer {
 /* 1440px+: Ultra-wide Displays */
 @media (min-width: 1440px) {
   .skyline-canvas-wrapper {
-    height: 300px;
+    height: 160px;
+    max-height: 160px;
   }
   .motorcycle-skyline-svg {
-    min-height: 280px;
-    max-height: 320px;
+    height: 160px;
+    min-height: 150px;
+    max-height: 160px;
   }
   .footer-main-container {
     max-width: 1440px;
@@ -2139,63 +2318,72 @@ footer.oem-footer {
     padding-right: 36px;
   }
   .footer-columns-grid {
-    gap: 48px;
+    gap: 32px;
   }
 }
 
 /* 1024px: Desktop / Large Tablets */
 @media (max-width: 1024px) {
   .skyline-canvas-wrapper {
-    height: 220px;
+    height: 140px;
+    max-height: 140px;
   }
   .motorcycle-skyline-svg {
-    min-height: 200px;
-    max-height: 240px;
+    height: 140px;
+    min-height: 130px;
+    max-height: 140px;
   }
   .footer-columns-grid {
     grid-template-columns: 1fr 1fr;
-    gap: 36px;
+    gap: 24px;
+    padding-bottom: 20px;
   }
   .brand-col {
     grid-column: span 2;
   }
   .footer-value-ribbon {
     grid-template-columns: repeat(2, 1fr);
-    gap: 18px;
+    gap: 14px;
+    padding: 14px 0;
   }
 }
 
 /* 768px: Tablets & Large Mobile */
 @media (max-width: 768px) {
   .skyline-canvas-wrapper {
-    height: 180px;
+    height: 120px;
+    max-height: 120px;
   }
   .motorcycle-skyline-svg {
-    min-height: 170px;
-    max-height: 190px;
+    height: 120px;
+    min-height: 110px;
+    max-height: 120px;
   }
   .traveling-motorcycle-carrier {
     transform-origin: center;
-    transform: scale(0.9);
+    transform: scale(0.85);
   }
   .footer-body-wrapper {
-    padding: 40px 20px 24px;
+    padding: 22px 18px 16px;
   }
   .footer-columns-grid {
     grid-template-columns: 1fr;
-    gap: 32px;
+    gap: 20px;
+    padding-bottom: 18px;
   }
   .brand-col {
     grid-column: span 1;
   }
   .footer-value-ribbon {
     grid-template-columns: 1fr 1fr;
-    gap: 14px;
+    gap: 12px;
+    padding: 12px 0;
   }
   .footer-bottom-bar {
     flex-direction: column;
     align-items: flex-start;
-    gap: 16px;
+    gap: 14px;
+    padding-top: 14px;
   }
   .back-to-top-circle {
     align-self: flex-end;
@@ -2205,104 +2393,111 @@ footer.oem-footer {
 /* 430px: iPhone 14/15/16 Pro Max */
 @media (max-width: 430px) {
   .skyline-canvas-wrapper {
-    height: 155px;
+    height: 100px;
+    max-height: 100px;
   }
   .motorcycle-skyline-svg {
-    min-height: 150px;
-    max-height: 160px;
+    height: 100px;
+    min-height: 95px;
+    max-height: 100px;
   }
   .traveling-motorcycle-carrier {
-    transform: scale(0.8);
+    transform: scale(0.75);
   }
   .footer-body-wrapper {
-    padding: 34px 18px 22px;
+    padding: 20px 16px 14px;
   }
   .footer-value-ribbon {
     grid-template-columns: 1fr;
-    gap: 12px;
+    gap: 10px;
+    padding: 12px 0;
   }
   .value-badge-item {
-    min-height: 48px; /* Comfortable touch target */
-    padding: 10px 14px;
+    min-height: 44px;
+    padding: 8px 12px;
   }
   .newsletter-input-wrap {
     flex-direction: column;
-    gap: 10px;
+    gap: 8px;
   }
   .newsletter-input {
     width: 100%;
-    min-height: 46px; /* Touch target */
+    min-height: 42px;
   }
   .newsletter-submit-btn {
     width: 100%;
-    min-height: 46px;
+    min-height: 42px;
     justify-content: center;
   }
   .social-circle-btn {
-    width: 44px;
-    height: 44px; /* Touch target */
+    width: 38px;
+    height: 38px;
   }
   .back-to-top-circle {
-    width: 46px;
-    height: 46px; /* Touch target */
+    width: 42px;
+    height: 42px;
   }
 }
 
 /* 390px: iPhone 12/13/14/15 */
 @media (max-width: 390px) {
   .skyline-canvas-wrapper {
-    height: 140px;
+    height: 100px;
+    max-height: 100px;
   }
   .motorcycle-skyline-svg {
-    min-height: 135px;
-    max-height: 145px;
+    height: 100px;
+    min-height: 95px;
+    max-height: 100px;
   }
   .traveling-motorcycle-carrier {
-    transform: scale(0.75);
+    transform: scale(0.7);
   }
   .footer-body-wrapper {
-    padding: 30px 16px 20px;
+    padding: 18px 14px 14px;
   }
   .brand-name {
-    font-size: 16px;
+    font-size: 15px;
   }
   .brand-description {
-    font-size: 12px;
+    font-size: 11.5px;
   }
   .footer-nav-link,
   .footer-contact-list li {
-    font-size: 13px;
+    font-size: 12px;
   }
   .badge-icon-box {
-    width: 38px;
-    height: 38px;
+    width: 36px;
+    height: 36px;
   }
 }
 
 /* 375px: iPhone SE & Small Devices */
 @media (max-width: 375px) {
   .skyline-canvas-wrapper {
-    height: 130px;
+    height: 100px;
+    max-height: 100px;
   }
   .motorcycle-skyline-svg {
-    min-height: 125px;
-    max-height: 135px;
+    height: 100px;
+    min-height: 95px;
+    max-height: 100px;
   }
   .traveling-motorcycle-carrier {
-    transform: scale(0.7);
+    transform: scale(0.65);
   }
   .footer-body-wrapper {
-    padding: 28px 14px 18px;
+    padding: 18px 12px 14px;
   }
   .footer-columns-grid {
-    gap: 26px;
+    gap: 16px;
   }
   .footer-col-title {
-    font-size: 12px;
+    font-size: 11px;
   }
   .footer-nav-link,
   .footer-contact-list li {
-    font-size: 12px;
+    font-size: 11.5px;
   }
   .badge-title {
     font-size: 11px;
@@ -2315,33 +2510,35 @@ footer.oem-footer {
 /* 320px: Ultra-Narrow Compact Devices */
 @media (max-width: 320px) {
   .skyline-canvas-wrapper {
-    height: 120px;
+    height: 100px;
+    max-height: 100px;
   }
   .motorcycle-skyline-svg {
-    min-height: 115px;
-    max-height: 125px;
+    height: 100px;
+    min-height: 95px;
+    max-height: 100px;
   }
   .traveling-motorcycle-carrier {
-    transform: scale(0.65);
+    transform: scale(0.6);
   }
   .footer-body-wrapper {
-    padding: 24px 12px 16px;
+    padding: 16px 10px 12px;
   }
   .brand-name {
-    font-size: 14px;
+    font-size: 13.5px;
   }
   .brand-subtitle {
     font-size: 8px;
   }
   .footer-columns-grid {
-    gap: 22px;
+    gap: 14px;
   }
   .value-badge-item {
-    padding: 8px 10px;
+    padding: 6px 8px;
   }
   .footer-bottom-bar {
-    font-size: 11px;
-    padding-top: 18px;
+    font-size: 10.5px;
+    padding-top: 12px;
   }
 }
 

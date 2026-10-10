@@ -84,7 +84,7 @@ Suppose the retail price of the **Zuboo T3** changes from **Rs 395,000** to **Rs
 
 ### 4.1 Inbound WhatsApp Inquiries
 Every bike card features an **"Inquire"** button that connects directly to your showroom WhatsApp hotline:  
-`https://wa.me/94771234567` *(Replace with your showroom's active WhatsApp Business number in `components/Navbar.tsx`, `components/ContactBar.tsx`, `components/AllBikesCatalogue.tsx`, and `components/FeaturedModels.tsx`)*.
+`https://wa.me/94784969652` *(Udan Enterprises active WhatsApp Hotline configured across all pages)*.
 
 When a customer clicks the button, WhatsApp opens automatically with a pre-written message, for example:
 > *"Hi Udan Enterprises, I would like to inquire about the Zuboo GT (GT-1800W) advertised at LKR 445,000."*

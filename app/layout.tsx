@@ -1,8 +1,56 @@
 import type { Metadata } from "next";
-import { Inter, Space_Grotesk } from "next/font/google";
+import { 
+  DM_Serif_Display, 
+  Fraunces, 
+  Della_Respira, 
+  Alice, 
+  EB_Garamond, 
+  Manrope,
+  Inter, 
+  Space_Grotesk 
+} from "next/font/google";
 import "./globals.css";
 import SmoothScroll from "@/components/SmoothScroll";
 import { LanguageProvider } from "@/lib/i18n";
+
+const dmSerifDisplay = DM_Serif_Display({
+  weight: "400",
+  subsets: ["latin"],
+  variable: "--font-dm-serif",
+  display: "swap",
+});
+
+const fraunces = Fraunces({
+  subsets: ["latin"],
+  variable: "--font-fraunces",
+  display: "swap",
+});
+
+const dellaRespira = Della_Respira({
+  weight: "400",
+  subsets: ["latin"],
+  variable: "--font-della-respira",
+  display: "swap",
+});
+
+const alice = Alice({
+  weight: "400",
+  subsets: ["latin"],
+  variable: "--font-alice",
+  display: "swap",
+});
+
+const ebGaramond = EB_Garamond({
+  subsets: ["latin"],
+  variable: "--font-eb-garamond",
+  display: "swap",
+});
+
+const manrope = Manrope({
+  subsets: ["latin"],
+  variable: "--font-manrope",
+  display: "swap",
+});
 
 const inter = Inter({
   subsets: ["latin"],
@@ -32,7 +80,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${inter.variable} ${spaceGrotesk.variable}`}>
+    <html 
+      lang="en" 
+      className={`${manrope.variable} ${dmSerifDisplay.variable} ${fraunces.variable} ${dellaRespira.variable} ${alice.variable} ${ebGaramond.variable} ${inter.variable} ${spaceGrotesk.variable}`}
+    >
       <body className="antialiased selection:bg-[#346C83] selection:text-white">
         <LanguageProvider>
           <SmoothScroll>{children}</SmoothScroll>

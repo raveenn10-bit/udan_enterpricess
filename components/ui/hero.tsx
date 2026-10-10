@@ -32,6 +32,27 @@ export default function Hero({
   const subtitleRef = useRef<HTMLParagraphElement>(null);
   const ctaRef = useRef<HTMLDivElement>(null);
   const gridLinesRef = useRef<(HTMLDivElement | null)[]>([]);
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    // Lazy defer video playback until after DOM load to ensure ultrafast FCP / LCP
+    const video = videoRef.current;
+    if (video) {
+      const playVideo = () => {
+        video.play().catch(() => {});
+      };
+      if (document.readyState === "complete") {
+        playVideo();
+      } else {
+        window.addEventListener("load", playVideo, { once: true });
+        const timer = setTimeout(playVideo, 1200);
+        return () => {
+          window.removeEventListener("load", playVideo);
+          clearTimeout(timer);
+        };
+      }
+    }
+  }, []);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -143,6 +164,9 @@ export default function Hero({
       {/* Hero background video with dark overlay */}
       <div className="absolute inset-0">
         <video
+          ref={videoRef}
+          preload="none"
+          poster="/media/hero/hero-poster.webp"
           autoPlay
           muted
           loop
@@ -162,7 +186,7 @@ export default function Hero({
           <span>JOIN US &amp; CHARGE YOUR RIDE ⚡</span>
         </div>
 
-        <h1 ref={titleRef} className="text-center font-normal text-4xl text-white tracking-tight sm:text-6xl lg:text-7xl xl:text-8xl leading-[1.08] flex flex-wrap justify-center overflow-hidden">
+        <h1 ref={titleRef} className="text-center font-normal text-4xl text-white tracking-tight sm:text-6xl lg:text-7xl xl:text-8xl leading-[1.08] flex flex-wrap justify-center overflow-hidden font-hero">
           {titleWords.map((word, i) => (
             <span key={i} className="word inline-block mr-[0.25em] last:mr-0">
               {word}

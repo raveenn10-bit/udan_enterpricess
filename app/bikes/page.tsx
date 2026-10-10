@@ -79,7 +79,7 @@ export default function BikesCataloguePage() {
                 <span>Authorized Zuboo Dealership • Udugama Road, Kurunduwatta, Galle, Sri Lanka</span>
               </div>
 
-              <h1 className="font-heading text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-[#111820] leading-[1.08]">
+              <h1 className="font-collection text-4xl sm:text-5xl lg:text-6xl font-normal tracking-tight text-[#111820] leading-[1.08]">
                 THE 2026 ZUBOO <br className="hidden sm:block" />
                 <span className="text-[#346C83]">ELECTRIC MOTORCYCLE</span> FLEET
               </h1>

@@ -32,13 +32,24 @@ import {
   ExternalLink,
   Edit3,
   X,
+  Mail,
+  LogIn,
+  Loader2,
+  UserCheck,
 } from "lucide-react";
 import { INITIAL_LEADS, TestRideLead, LeadStatus, generateWhatsAppLink, exportLeadsToCSV } from "@/data/leads";
 import { INITIAL_INVENTORY, InventoryItem } from "@/data/inventory";
 import { SERVICE_PACKAGES } from "@/data/services";
 import { BUSINESS_CONFIG } from "@/data/business";
-import { db } from "@/lib/firebase";
+import { auth, db } from "@/lib/firebase";
+import {
+  signInWithEmailAndPassword,
+  signOut,
+  onAuthStateChanged,
+  User as FirebaseUser,
+} from "firebase/auth";
 import { collection, getDocs, query, orderBy, limit } from "firebase/firestore";
+
 
 interface ServiceBookingRecord {
   id: string;
@@ -95,6 +106,11 @@ const DEFAULT_SERVICE_BOOKINGS: ServiceBookingRecord[] = [
 export default function AdminPage() {
   // Authentication states
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const [currentUser, setCurrentUser] = useState<FirebaseUser | null>(null);
+  const [authMode, setAuthMode] = useState<"firebase" | "pin">("firebase");
+  const [authEmail, setAuthEmail] = useState<string>("");
+  const [authPassword, setAuthPassword] = useState<string>("");
+  const [isAuthLoading, setIsAuthLoading] = useState<boolean>(false);
   const [pinInput, setPinInput] = useState<string>("");
   const [loginError, setLoginError] = useState<string>("");
   const [activeTab, setActiveTab] = useState<"leads" | "inventory" | "service">("leads");
@@ -123,8 +139,26 @@ export default function AdminPage() {
   // Service Bookings State
   const [serviceBookings, setServiceBookings] = useState<ServiceBookingRecord[]>(DEFAULT_SERVICE_BOOKINGS);
 
-  // Sync / Load on mount from localStorage
+  // Sync / Load on mount from localStorage & Firebase Auth
   useEffect(() => {
+    // 1. Firebase Auth listener
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setCurrentUser(user);
+        setIsAuthenticated(true);
+        localStorage.setItem("udan_admin_auth", "true");
+        if (user.email) {
+          localStorage.setItem("udan_admin_email", user.email);
+        }
+      } else {
+        const savedAuth = localStorage.getItem("udan_admin_auth");
+        if (savedAuth !== "true") {
+          setIsAuthenticated(false);
+          setCurrentUser(null);
+        }
+      }
+    });
+
     const savedAuth = localStorage.getItem("udan_admin_auth");
     if (savedAuth === "true") {
       setIsAuthenticated(true);
@@ -201,6 +235,10 @@ export default function AdminPage() {
     };
 
     fetchFirestoreBookings();
+
+    return () => {
+      unsubscribe();
+    };
   }, []);
 
   const triggerToast = (msg: string) => {
@@ -210,24 +248,79 @@ export default function AdminPage() {
     }, 3500);
   };
 
-  // Auth Handler
-  const handleLogin = (e: React.FormEvent) => {
+  // Firebase Auth Login Handler
+  const handleFirebaseLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoginError("");
+    setIsAuthLoading(true);
+
+    try {
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        authEmail.trim(),
+        authPassword
+      );
+      setCurrentUser(userCredential.user);
+      setIsAuthenticated(true);
+      localStorage.setItem("udan_admin_auth", "true");
+      if (userCredential.user.email) {
+        localStorage.setItem("udan_admin_email", userCredential.user.email);
+      }
+      triggerToast(`Welcome back, ${userCredential.user.email || "Admin"}! Firebase authentication confirmed.`);
+    } catch (err: any) {
+      console.error("Firebase Login Error:", err);
+      let message = "Firebase sign-in failed. Please verify email and password.";
+      if (
+        err.code === "auth/invalid-credential" ||
+        err.code === "auth/user-not-found" ||
+        err.code === "auth/wrong-password"
+      ) {
+        message = "Incorrect email or password. Please verify the user added in Firebase Authentication.";
+      } else if (err.code === "auth/invalid-email") {
+        message = "Please enter a valid email address.";
+      } else if (err.code === "auth/too-many-requests") {
+        message = "Access temporarily limited. Try again shortly or use the emergency showroom PIN.";
+      } else if (err.code === "auth/network-request-failed") {
+        message = "Network error connecting to Firebase. You can switch to emergency PIN (4131) bypass.";
+      } else if (err.message) {
+        message = err.message;
+      }
+      setLoginError(message);
+    } finally {
+      setIsAuthLoading(false);
+    }
+  };
+
+  // Emergency PIN Bypass Login Handler
+  const handlePinLogin = (e: React.FormEvent) => {
     e.preventDefault();
     if (pinInput === "4131" || pinInput === "udan2026" || pinInput === "4131#") {
       setIsAuthenticated(true);
       localStorage.setItem("udan_admin_auth", "true");
+      localStorage.setItem("udan_admin_email", "showroom-staff@udan.lk");
       setLoginError("");
-      triggerToast("Welcome back! Showroom staff verified.");
+      triggerToast("Welcome back! Showroom staff PIN bypass verified.");
     } else {
-      setLoginError("Invalid staff PIN. Use demo showroom PIN: 4131");
+      setLoginError("Invalid staff PIN. Use demo showroom PIN: 4131 or sign in with Firebase.");
     }
   };
 
-  const handleLogout = () => {
+  // Logout Handler (signs out from Firebase Auth and clears storage)
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+    } catch (err) {
+      console.warn("Sign out error:", err);
+    }
     setIsAuthenticated(false);
+    setCurrentUser(null);
     localStorage.removeItem("udan_admin_auth");
+    localStorage.removeItem("udan_admin_email");
     setPinInput("");
+    setAuthPassword("");
+    triggerToast("Signed out from Showroom CMS.");
   };
+
 
   // Leads Actions
   const handleUpdateLeadStatus = (leadId: string, newStatus: LeadStatus) => {
@@ -403,7 +496,7 @@ export default function AdminPage() {
   const convertedLeadsCount = leads.filter((l) => l.status === "Converted").length;
   const showroomUnitsTotal = inventory.reduce((acc, curr) => acc + curr.showroomUnits, 0);
 
-  // If NOT authenticated, render the Showroom Staff PIN Lock screen
+  // If NOT authenticated, render the Showroom Staff Login screen
   if (!isAuthenticated) {
     return (
       <div className="min-h-screen bg-[#F7F9FA] text-[#111820] flex flex-col justify-between py-12 px-4 sm:px-6 lg:px-8 selection:bg-[#346C83] selection:text-white">
@@ -431,64 +524,171 @@ export default function AdminPage() {
 
           {/* Login Card */}
           <div className="bg-white rounded-2xl shadow-xl border border-[#E0E8EC] p-8 space-y-6">
-            <div className="flex items-center gap-3 pb-4 border-b border-[#E0E8EC]">
-              <div className="w-10 h-10 rounded-xl bg-[#E8F1F5] flex items-center justify-center text-[#346C83]">
-                <KeyRound className="w-5 h-5" />
-              </div>
-              <div>
-                <h2 className="font-heading font-bold text-sm text-[#111820] uppercase tracking-wide">
-                  Staff Access Verification
-                </h2>
-                <p className="text-xs text-[#667780]">
-                  Galle Kurunduwatta Authorized Terminal
-                </p>
+            {/* Header / Mode Switcher */}
+            <div className="flex items-center justify-between pb-4 border-b border-[#E0E8EC]">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-[#E8F1F5] flex items-center justify-center text-[#346C83]">
+                  {authMode === "firebase" ? <Mail className="w-5 h-5" /> : <KeyRound className="w-5 h-5" />}
+                </div>
+                <div>
+                  <h2 className="font-heading font-bold text-sm text-[#111820] uppercase tracking-wide">
+                    {authMode === "firebase" ? "Firebase Admin Login" : "Staff PIN Verification"}
+                  </h2>
+                  <p className="text-xs text-[#667780]">
+                    {authMode === "firebase" ? "Official Firebase Credentials" : "Offline Showroom Terminal PIN"}
+                  </p>
+                </div>
               </div>
             </div>
 
-            <form onSubmit={handleLogin} className="space-y-5">
-              <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-[#111820] mb-2">
-                  Showroom Staff PIN / Password
-                </label>
-                <div className="relative">
-                  <input
-                    type="password"
-                    inputMode="numeric"
-                    autoFocus
-                    value={pinInput}
-                    onChange={(e) => setPinInput(e.target.value)}
-                    placeholder="Enter 4-digit PIN (e.g. 4131)"
-                    className="w-full px-4 py-3.5 rounded-xl border border-[#E0E8EC] bg-[#F7F9FA] text-[#111820] font-mono text-center text-lg tracking-widest focus:outline-none focus:border-[#346C83] focus:bg-white transition-all shadow-inner"
-                  />
-                  <Lock className="w-4 h-4 text-slate-400 absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none" />
-                </div>
-                {loginError && (
-                  <p className="text-xs font-semibold text-rose-600 mt-2 flex items-center gap-1.5 animate-in fade-in">
-                    <AlertCircle className="w-3.5 h-3.5 shrink-0" />
-                    <span>{loginError}</span>
-                  </p>
-                )}
-              </div>
-
-              {/* Demo Hint Banner for Pair Evaluator / Showroom */}
-              <div className="p-3.5 rounded-xl bg-[#E8F1F5]/80 border border-[#346C83]/20 flex items-start gap-2.5 text-xs text-[#111820]">
-                <ShieldCheck className="w-4 h-4 text-[#346C83] shrink-0 mt-0.5" />
-                <div>
-                  <span className="font-bold text-[#346C83] block">Demo Access PIN: 4131</span>
-                  <span className="text-[11px] text-[#667780]">
-                    Showroom verification PIN registered for Udan Enterprises Galle staff.
-                  </span>
-                </div>
-              </div>
-
+            {/* Auth Mode Tabs */}
+            <div className="grid grid-cols-2 p-1 rounded-xl bg-[#F7F9FA] border border-[#E0E8EC] text-xs font-bold">
               <button
-                type="submit"
-                className="w-full py-3.5 px-4 rounded-xl bg-[#111820] hover:bg-[#346C83] text-white font-heading font-bold text-xs uppercase tracking-wider transition-all duration-200 flex items-center justify-center gap-2 shadow-md hover:shadow-lg active:scale-[0.99]"
+                type="button"
+                onClick={() => {
+                  setAuthMode("firebase");
+                  setLoginError("");
+                }}
+                className={`py-2 px-3 rounded-lg flex items-center justify-center gap-1.5 transition-all ${
+                  authMode === "firebase"
+                    ? "bg-[#111820] text-white shadow-xs"
+                    : "text-[#667780] hover:text-[#111820]"
+                }`}
               >
-                <Unlock className="w-4 h-4" />
-                <span>Verify & Enter Dashboard</span>
+                <Mail className="w-3.5 h-3.5" />
+                <span>Firebase Auth</span>
               </button>
-            </form>
+              <button
+                type="button"
+                onClick={() => {
+                  setAuthMode("pin");
+                  setLoginError("");
+                }}
+                className={`py-2 px-3 rounded-lg flex items-center justify-center gap-1.5 transition-all ${
+                  authMode === "pin"
+                    ? "bg-[#111820] text-white shadow-xs"
+                    : "text-[#667780] hover:text-[#111820]"
+                }`}
+              >
+                <KeyRound className="w-3.5 h-3.5" />
+                <span>PIN Bypass (4131)</span>
+              </button>
+            </div>
+
+            {/* Error Message */}
+            {loginError && (
+              <div className="p-3 rounded-xl bg-rose-50 border border-rose-200 text-xs font-semibold text-rose-700 flex items-start gap-2 animate-in fade-in">
+                <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
+                <span>{loginError}</span>
+              </div>
+            )}
+
+            {/* MODE 1: Firebase Email & Password Form */}
+            {authMode === "firebase" ? (
+              <form onSubmit={handleFirebaseLogin} className="space-y-4">
+                <div>
+                  <label className="block text-xs font-bold uppercase tracking-wider text-[#111820] mb-1.5">
+                    Admin Email Address
+                  </label>
+                  <div className="relative">
+                    <input
+                      type="email"
+                      required
+                      autoFocus
+                      value={authEmail}
+                      onChange={(e) => setAuthEmail(e.target.value)}
+                      placeholder="admin@udan.lk"
+                      className="w-full px-4 py-3 rounded-xl border border-[#E0E8EC] bg-[#F7F9FA] text-[#111820] text-xs font-medium focus:outline-none focus:border-[#346C83] focus:bg-white transition-all pl-10"
+                    />
+                    <Mail className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold uppercase tracking-wider text-[#111820] mb-1.5">
+                    Password
+                  </label>
+                  <div className="relative">
+                    <input
+                      type="password"
+                      required
+                      value={authPassword}
+                      onChange={(e) => setAuthPassword(e.target.value)}
+                      placeholder="••••••••••••"
+                      className="w-full px-4 py-3 rounded-xl border border-[#E0E8EC] bg-[#F7F9FA] text-[#111820] text-xs font-medium focus:outline-none focus:border-[#346C83] focus:bg-white transition-all pl-10"
+                    />
+                    <Lock className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                  </div>
+                </div>
+
+                <div className="p-3 rounded-xl bg-[#E8F1F5]/80 border border-[#346C83]/20 text-[11px] text-[#111820] space-y-1">
+                  <div className="font-bold text-[#346C83] flex items-center gap-1.5">
+                    <ShieldCheck className="w-3.5 h-3.5" />
+                    <span>Firebase Authentication Connected</span>
+                  </div>
+                  <p className="text-[#667780]">
+                    Sign in with the user credentials added in your Firebase Console project.
+                  </p>
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={isAuthLoading}
+                  className="w-full py-3.5 px-4 rounded-xl bg-[#111820] hover:bg-[#346C83] text-white font-heading font-bold text-xs uppercase tracking-wider transition-all duration-200 flex items-center justify-center gap-2 shadow-md hover:shadow-lg active:scale-[0.99] disabled:opacity-60 cursor-pointer"
+                >
+                  {isAuthLoading ? (
+                    <>
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                      <span>Verifying Firebase Account...</span>
+                    </>
+                  ) : (
+                    <>
+                      <LogIn className="w-4 h-4" />
+                      <span>Log In with Firebase</span>
+                    </>
+                  )}
+                </button>
+              </form>
+            ) : (
+              /* MODE 2: Emergency PIN Bypass Form */
+              <form onSubmit={handlePinLogin} className="space-y-4">
+                <div>
+                  <label className="block text-xs font-bold uppercase tracking-wider text-[#111820] mb-1.5">
+                    Showroom Staff PIN / Code
+                  </label>
+                  <div className="relative">
+                    <input
+                      type="password"
+                      inputMode="numeric"
+                      autoFocus
+                      value={pinInput}
+                      onChange={(e) => setPinInput(e.target.value)}
+                      placeholder="Enter 4-digit PIN (e.g. 4131)"
+                      className="w-full px-4 py-3 rounded-xl border border-[#E0E8EC] bg-[#F7F9FA] text-[#111820] font-mono text-center text-lg tracking-widest focus:outline-none focus:border-[#346C83] focus:bg-white transition-all shadow-inner"
+                    />
+                    <Lock className="w-4 h-4 text-slate-400 absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none" />
+                  </div>
+                </div>
+
+                <div className="p-3.5 rounded-xl bg-[#E8F1F5]/80 border border-[#346C83]/20 flex items-start gap-2.5 text-xs text-[#111820]">
+                  <ShieldCheck className="w-4 h-4 text-[#346C83] shrink-0 mt-0.5" />
+                  <div>
+                    <span className="font-bold text-[#346C83] block">Showroom Demo PIN: 4131</span>
+                    <span className="text-[11px] text-[#667780]">
+                      Emergency showroom terminal bypass registered for Udan Enterprises Galle staff.
+                    </span>
+                  </div>
+                </div>
+
+                <button
+                  type="submit"
+                  className="w-full py-3.5 px-4 rounded-xl bg-[#111820] hover:bg-[#346C83] text-white font-heading font-bold text-xs uppercase tracking-wider transition-all duration-200 flex items-center justify-center gap-2 shadow-md hover:shadow-lg active:scale-[0.99] cursor-pointer"
+                >
+                  <Unlock className="w-4 h-4" />
+                  <span>Verify PIN & Enter Dashboard</span>
+                </button>
+              </form>
+            )}
 
             <div className="pt-2 text-center border-t border-[#E0E8EC]">
               <Link
@@ -543,9 +743,16 @@ export default function AdminPage() {
                   <span className="px-2 py-0.5 rounded-full bg-[#E8F1F5] text-[#346C83] text-[10px] font-extrabold uppercase tracking-wider border border-[#346C83]/20">
                     CMS Admin v3.2
                   </span>
+                  <span className="hidden sm:inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 text-[10px] font-bold border border-emerald-200">
+                    <UserCheck className="w-3 h-3" />
+                    <span>{currentUser ? "Firebase Auth" : "Staff Verified"}</span>
+                  </span>
                 </div>
                 <p className="text-[11px] text-[#667780]">
-                  Galle Kurunduwatta Showroom • Terminal Operator: Pibida Udan
+                  Galle Kurunduwatta Showroom • Operator:{" "}
+                  <span className="font-bold text-[#111820]">
+                    {currentUser?.email || (typeof window !== "undefined" && localStorage.getItem("udan_admin_email")) || "Showroom Staff"}
+                  </span>
                 </p>
               </div>
             </div>
@@ -555,6 +762,7 @@ export default function AdminPage() {
               <Link
                 href="/"
                 target="_blank"
+
                 className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-[#111820] bg-[#F7F9FA] hover:bg-[#E8F1F5] border border-[#E0E8EC] transition-colors"
               >
                 <span>Live Website</span>

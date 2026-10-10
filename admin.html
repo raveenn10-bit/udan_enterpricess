@@ -442,7 +442,7 @@
   <!-- TOAST NOTIFICATION -->
   <div id="toast"></div>
 
-  <!-- AUTH SCREEN (PIN 4131) -->
+  <!-- AUTH SCREEN (Firebase Auth + PIN 4131 Bypass) -->
   <div id="auth-screen">
     <div class="login-card">
       <div class="brand-logo" style="margin: 0 auto 12px; width: 44px; height: 44px; font-size: 20px;">U</div>
@@ -451,19 +451,58 @@
         Showroom CMS & Inventory Terminal
       </p>
 
-      <form id="login-form">
-        <label style="display: block; text-align: left; font-size: 11px; font-weight: 700; text-transform: uppercase; margin-top: 24px;">
+      <!-- Auth Switcher Tabs -->
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin: 20px 0 16px; background: var(--bg-primary); padding: 4px; border-radius: 10px; border: 1px solid var(--border-color);">
+        <button type="button" id="tab-auth-firebase" class="btn btn-dark" style="padding: 8px; font-size: 11px; justify-content: center;" onclick="setAuthTab('firebase')">
+          ✉ Firebase Auth
+        </button>
+        <button type="button" id="tab-auth-pin" class="btn" style="padding: 8px; font-size: 11px; justify-content: center;" onclick="setAuthTab('pin')">
+          🔑 PIN (4131)
+        </button>
+      </div>
+
+      <!-- Mode 1: Firebase Email & Password Form -->
+      <form id="firebase-login-form" onsubmit="handleFirebaseSubmit(event)">
+        <div style="text-align: left; margin-bottom: 12px;">
+          <label style="display: block; font-size: 10px; font-weight: 800; text-transform: uppercase; margin-bottom: 4px;">
+            Admin Email Address
+          </label>
+          <input id="firebase-email-input" type="email" class="search-input" style="width: 100%; padding: 10px 14px; font-size: 13px;" placeholder="admin@udan.lk" required autofocus>
+        </div>
+
+        <div style="text-align: left; margin-bottom: 14px;">
+          <label style="display: block; font-size: 10px; font-weight: 800; text-transform: uppercase; margin-bottom: 4px;">
+            Password
+          </label>
+          <input id="firebase-password-input" type="password" class="search-input" style="width: 100%; padding: 10px 14px; font-size: 13px;" placeholder="••••••••••••" required>
+        </div>
+
+        <div class="hint-box">
+          <strong>⚡ Firebase Authentication Connected</strong><br>
+          Sign in with your registered Firebase console user credentials.
+        </div>
+
+        <div id="firebase-auth-error" style="display: none; color: var(--rose); font-size: 11px; font-weight: 700; margin-bottom: 12px; text-align: left; padding: 8px 12px; background: var(--rose-bg); border-radius: 8px; border: 1px solid #fecdd3;"></div>
+
+        <button type="submit" id="firebase-submit-btn" class="btn btn-dark" style="width: 100%; padding: 12px; font-size: 12px; justify-content: center;">
+          Log In with Firebase →
+        </button>
+      </form>
+
+      <!-- Mode 2: PIN Bypass Form -->
+      <form id="login-form" style="display: none;">
+        <label style="display: block; text-align: left; font-size: 10px; font-weight: 800; text-transform: uppercase; margin-top: 14px;">
           Staff Security PIN
         </label>
-        <input id="pin-input" type="password" maxlength="8" class="pin-input" placeholder="••••" autofocus required>
+        <input id="pin-input" type="password" maxlength="8" class="pin-input" placeholder="••••">
         
         <div class="hint-box">
           <strong>Showroom Demo PIN: 4131</strong><br>
-          Authorized for Galle Kurunduwatta showroom staff and evaluation.
+          Authorized emergency terminal bypass for Galle Kurunduwatta showroom staff.
         </div>
 
-        <button type="submit" class="btn btn-dark" style="width: 100%; padding: 12px; font-size: 12px;">
-          Unlock Dashboard →
+        <button type="submit" class="btn btn-dark" style="width: 100%; padding: 12px; font-size: 12px; justify-content: center;">
+          Unlock Dashboard (PIN) →
         </button>
       </form>
     </div>
@@ -479,9 +518,10 @@
             <div style="display: flex; align-items: center; gap: 8px;">
               <span class="font-heading" style="font-weight: 900; font-size: 14px; text-transform: uppercase;">UDAN ENTERPRISES</span>
               <span class="badge-cms">CMS Admin v3.2</span>
+              <span id="auth-status-badge" style="font-size: 10px; font-weight: 800; padding: 2px 8px; border-radius: 99px; background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0;">Firebase Active</span>
             </div>
-            <div style="font-size: 11px; color: var(--text-secondary);">
-              Galle Kurunduwatta Showroom • Terminal Officer
+            <div id="operator-info-line" style="font-size: 11px; color: var(--text-secondary);">
+              Galle Kurunduwatta Showroom • Operator: Showroom Staff
             </div>
           </div>
         </div>
@@ -746,17 +786,55 @@
       setTimeout(() => { t.style.display = 'none'; }, 3200);
     }
 
-    // AUTH
+    // AUTHENTICATION LOGIC
     const authScreen = document.getElementById('auth-screen');
     const dashboard = document.getElementById('dashboard');
-    const loginForm = document.getElementById('login-form');
+    const firebaseLoginForm = document.getElementById('firebase-login-form');
+    const pinLoginForm = document.getElementById('login-form');
     const pinInput = document.getElementById('pin-input');
     const logoutBtn = document.getElementById('logout-btn');
+    const authStatusBadge = document.getElementById('auth-status-badge');
+    const operatorInfoLine = document.getElementById('operator-info-line');
+
+    function setAuthTab(tab) {
+      const fbBtn = document.getElementById('tab-auth-firebase');
+      const pinBtn = document.getElementById('tab-auth-pin');
+      if (tab === 'firebase') {
+        firebaseLoginForm.style.display = 'block';
+        pinLoginForm.style.display = 'none';
+        fbBtn.className = 'btn btn-dark';
+        pinBtn.className = 'btn';
+        document.getElementById('firebase-email-input').focus();
+      } else {
+        firebaseLoginForm.style.display = 'none';
+        pinLoginForm.style.display = 'block';
+        fbBtn.className = 'btn';
+        pinBtn.className = 'btn btn-dark';
+        pinInput.focus();
+      }
+    }
+    window.setAuthTab = setAuthTab;
 
     function checkAuth() {
-      if (localStorage.getItem('udan_admin_auth') === 'true') {
+      const isAuth = localStorage.getItem('udan_admin_auth') === 'true';
+      const userEmail = localStorage.getItem('udan_admin_email');
+      if (isAuth) {
         authScreen.style.display = 'none';
         dashboard.style.display = 'block';
+        if (operatorInfoLine) {
+          operatorInfoLine.textContent = `Galle Kurunduwatta Showroom • Operator: ${userEmail || 'Showroom Staff'}`;
+        }
+        if (authStatusBadge) {
+          if (userEmail && userEmail.includes('@') && !userEmail.includes('showroom-staff')) {
+            authStatusBadge.textContent = 'Firebase Auth Active';
+            authStatusBadge.style.background = '#ecfdf5';
+            authStatusBadge.style.color = '#059669';
+          } else {
+            authStatusBadge.textContent = 'Staff PIN Verified';
+            authStatusBadge.style.background = '#fffbeb';
+            authStatusBadge.style.color = '#d97706';
+          }
+        }
         renderAll();
       } else {
         authScreen.style.display = 'grid';
@@ -764,23 +842,83 @@
       }
     }
 
-    loginForm.onsubmit = (e) => {
+    pinLoginForm.onsubmit = (e) => {
       e.preventDefault();
       const val = pinInput.value.trim();
-      if (val === '4131' || val === 'udan2026') {
+      if (val === '4131' || val === 'udan2026' || val === '4131#') {
         localStorage.setItem('udan_admin_auth', 'true');
-        showToast('Showroom staff authentication successful.');
+        localStorage.setItem('udan_admin_email', 'showroom-staff@udan.lk');
+        showToast('Showroom staff PIN verification successful.');
         checkAuth();
       } else {
-        alert('Invalid PIN. Use showroom demo PIN: 4131');
+        alert('Invalid PIN. Use showroom demo PIN: 4131 or log in with Firebase credentials.');
       }
     };
 
     logoutBtn.onclick = () => {
+      if (window.firebaseSignOutUser) {
+        window.firebaseSignOutUser();
+      }
       localStorage.removeItem('udan_admin_auth');
+      localStorage.removeItem('udan_admin_email');
       pinInput.value = '';
+      showToast('Logged out from Showroom CMS.');
       checkAuth();
     };
+
+    function handleFirebaseSubmit(e) {
+      e.preventDefault();
+      const email = document.getElementById('firebase-email-input').value.trim();
+      const password = document.getElementById('firebase-password-input').value;
+      const errBox = document.getElementById('firebase-auth-error');
+      const submitBtn = document.getElementById('firebase-submit-btn');
+
+      errBox.style.display = 'none';
+      submitBtn.textContent = 'Verifying Account...';
+      submitBtn.disabled = true;
+
+      if (window.firebaseSignInUser) {
+        window.firebaseSignInUser(email, password)
+          .then((user) => {
+            localStorage.setItem('udan_admin_auth', 'true');
+            localStorage.setItem('udan_admin_email', user.email || email);
+            showToast(`Welcome back, ${user.email}! Firebase login verified.`);
+            checkAuth();
+          })
+          .catch((err) => {
+            console.error('Firebase Auth Error:', err);
+            errBox.style.display = 'block';
+            let msg = 'Authentication failed. Please verify email and password.';
+            if (err.code === 'auth/invalid-credential' || err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password') {
+              msg = 'Incorrect email or password. Verify the user added in Firebase Console.';
+            } else if (err.code === 'auth/invalid-email') {
+              msg = 'Please enter a valid email address.';
+            } else if (err.code === 'auth/network-request-failed') {
+              msg = 'Network connection issue. You may use the emergency PIN (4131) bypass.';
+            } else if (err.message) {
+              msg = err.message;
+            }
+            errBox.textContent = msg;
+          })
+          .finally(() => {
+            submitBtn.textContent = 'Log In with Firebase →';
+            submitBtn.disabled = false;
+          });
+      } else {
+        // Fallback if module is still loading
+        setTimeout(() => {
+          if (window.firebaseSignInUser) {
+            handleFirebaseSubmit(e);
+          } else {
+            errBox.style.display = 'block';
+            errBox.textContent = 'Firebase module loading... please try again in a moment or use PIN 4131.';
+            submitBtn.textContent = 'Log In with Firebase →';
+            submitBtn.disabled = false;
+          }
+        }, 800);
+      }
+    }
+    window.handleFirebaseSubmit = handleFirebaseSubmit;
 
     // TABS
     function switchTab(tab) {
@@ -1129,6 +1267,48 @@
 
     // INIT
     checkAuth();
+  </script>
+
+  <!-- FIREBASE AUTH WEB SDK -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCAnOAmGW5K5Oma-I6ODV0jzShfVxNiqwU",
+      authDomain: "udan-enterprises-zuboo.firebaseapp.com",
+      projectId: "udan-enterprises-zuboo",
+      storageBucket: "udan-enterprises-zuboo.firebasestorage.app",
+      messagingSenderId: "895480239204",
+      appId: "1:895480239204:web:853a4895f0b4304c7abb71"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    window.firebaseSignInUser = async (email, password) => {
+      const userCred = await signInWithEmailAndPassword(auth, email, password);
+      return userCred.user;
+    };
+
+    window.firebaseSignOutUser = async () => {
+      try {
+        await signOut(auth);
+      } catch (e) {
+        console.warn('Firebase signout note:', e);
+      }
+    };
+
+    // Firebase Auth State Listener
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        localStorage.setItem('udan_admin_auth', 'true');
+        localStorage.setItem('udan_admin_email', user.email);
+        if (typeof checkAuth === 'function') {
+          checkAuth();
+        }
+      }
+    });
   </script>
 </body>
 </html>

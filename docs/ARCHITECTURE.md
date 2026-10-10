@@ -195,7 +195,7 @@ Stores inbound test-ride bookings generated via the web modal:
 ```json
 {
   "customerName": "Kasun Perera",
-  "phoneNumber": "0771234567",
+  "phoneNumber": "0778899123",
   "bikeModelId": "t3",
   "bikeModelName": "Zuboo T3",
   "preferredDate": "2026-10-15",
