@@ -516,34 +516,24 @@
   // --- 10. EXCELLENT PRODUCTS SHOWCASE & SHOWROOM GALLERY ENGINE ---
   const showcaseBikesData = [
     {
-      name: "Zuboo Mini",
-      badge: "Compact City Commuter",
-      power: "490W Eco Motor",
-      speed: "35 km/h",
-      range: "≥ 35 km",
-      price: "LKR 195,000",
-      image: "bikes/mini/mini.webp",
-      desc: "Ultra-agile step-through commuter with deep front basket"
+      name: "Zuboo EX008",
+      badge: "Aerodynamic Urban Sport",
+      power: "1000W Urban Motor",
+      speed: "45 km/h",
+      range: "≥ 60 km",
+      price: "LKR 295,000",
+      image: "media/showcase/1.png",
+      desc: "Sleek sport aerodynamic commuter scooter with comfortable seating and dependable urban range"
     },
     {
-      name: "Zuboo Paris",
-      badge: "European Retro Classic",
-      power: "1200W Smooth Torque",
-      speed: "60 km/h",
-      range: "≥ 80 km",
-      price: "LKR 330,000",
-      image: "bikes/paris/paris.webp",
-      desc: "Timeless European retro luxury with front windscreen and plush backrest"
-    },
-    {
-      name: "Zuboo The Tank",
-      badge: "Heavy-Duty Utility Flagship",
+      name: "Zuboo The Tank (Lime)",
+      badge: "Heavy-Duty Dual Headlights",
       power: "3000W Peak Performance",
       speed: "75 km/h",
       range: "≥ 80 km",
       price: "LKR 515,000",
-      image: "bikes/tank/tank.webp",
-      desc: "Reinforced steel crash bars & twin projector headlights for Southern terrain"
+      image: "media/showcase/2.png",
+      desc: "Lime green dual headlights with heavy-duty steel crash bars for Southern terrain"
     },
     {
       name: "Zuboo T3",
@@ -552,28 +542,38 @@
       speed: "65 km/h",
       range: "≥ 110 km",
       price: "LKR 480,000",
-      image: "bikes/t3/t3.webp",
-      desc: "Aggressive sport aerodynamics with smart LCD console and highway range"
+      image: "media/showcase/3.png",
+      desc: "White sport commuter styling with 110km extended highway range and smart digital cockpit"
     },
     {
-      name: "Zuboo T11",
-      badge: "Commercial Logistics Cargo",
-      power: "1500W Commercial Motor",
-      speed: "55 km/h",
-      range: "≥ 90 km",
-      price: "LKR 420,000",
-      image: "bikes/t11/t11.webp",
-      desc: "Heavy-duty extended cargo rack for enterprise delivery fleets"
+      name: "Zuboo Paris",
+      badge: "European Retro Classic",
+      power: "1200W Smooth Torque",
+      speed: "60 km/h",
+      range: "≥ 80 km",
+      price: "LKR 330,000",
+      image: "media/showcase/4.png",
+      desc: "Mint green classic retro luxury with front windscreen and plush backrest"
     },
     {
-      name: "Zuboo EX008",
-      badge: "Modern Urban Commuter",
-      power: "1000W Urban Motor",
-      speed: "45 km/h",
-      range: "≥ 60 km",
-      price: "LKR 295,000",
-      image: "bikes/ex008/ex008.webp",
-      desc: "Streamlined aerodynamic styling with durable hydraulic suspension"
+      name: "Zuboo The Tank (Desert Cargo)",
+      badge: "Heavy-Duty Utility Cargo",
+      power: "3000W Peak Performance",
+      speed: "75 km/h",
+      range: "≥ 85 km",
+      price: "LKR 525,000",
+      image: "media/showcase/5.png",
+      desc: "Desert sand finish utility scooter equipped with rear cargo box for heavy deliveries"
+    },
+    {
+      name: "Zuboo Mini",
+      badge: "Compact City Commuter",
+      power: "490W Eco Motor",
+      speed: "35 km/h",
+      range: "≥ 35 km",
+      price: "LKR 195,000",
+      image: "media/showcase/6.png",
+      desc: "Pastel blue step-through commuter with deep front basket and passenger pillion"
     }
   ];
 
@@ -692,7 +692,6 @@
       setTimeout(() => {
         img.src = bike.image;
         img.alt = bike.name;
-        img.style.mixBlendMode = "multiply";
         img.style.opacity = "1";
         img.style.transform = "scale(1)";
       }, 150);

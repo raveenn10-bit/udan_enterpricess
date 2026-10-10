@@ -429,11 +429,8 @@
       <div class="excellent-products-box" style="background: #ffffff; border: none; padding: 0; box-shadow: none;">
         <!-- Center Bike Display Stage on Pure White -->
         <div id="showcase-bike-stage-container" class="showcase-bike-display" style="background: #ffffff; border: none; padding: 10px 0; margin-bottom: 30px; position: relative; max-width: 900px; margin-left: auto; margin-right: auto;">
-          <button onclick="switchShowcaseBike((currentShowcaseIdx - 1 + 6) % 6)" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); z-index: 10; width: 44px; height: 44px; border-radius: 50%; background: #ffffff; border: 1px solid #e2e8f0; box-shadow: 0 4px 12px rgba(0,0,0,0.08); cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; transition: all 0.2s;" aria-label="Previous bike">❮</button>
-          <button onclick="switchShowcaseBike((currentShowcaseIdx + 1) % 6)" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); z-index: 10; width: 44px; height: 44px; border-radius: 50%; background: #ffffff; border: 1px solid #e2e8f0; box-shadow: 0 4px 12px rgba(0,0,0,0.08); cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; transition: all 0.2s;" aria-label="Next bike">❯</button>
-
           <div class="bike-image-stage" style="min-height: 400px; display: flex; align-items: center; justify-content: center; margin: 10px 0; background: #ffffff;">
-            <img id="showcase-image" src="bikes/mini/mini.webp" alt="Zuboo Mini" style="max-height: 440px; width: auto; object-fit: contain; mix-blend-mode: multiply; filter: drop-shadow(0 20px 35px rgba(0,0,0,0.08)); transition: opacity 0.4s ease, transform 0.4s ease;">
+            <img id="showcase-image" src="media/showcase/1.png" alt="Zuboo EX008" style="max-height: 440px; width: auto; object-fit: contain; filter: drop-shadow(0 20px 35px rgba(0,0,0,0.08)); transition: opacity 0.4s ease, transform 0.4s ease;">
           </div>
         </div>
 
@@ -465,49 +462,80 @@
           Inspect all 8 Zuboo models in person and experience an exhilarating test ride at our dedicated Galle facility.
         </p>
 
-        <div class="info-item">
-          <span>📍</span>
-          <div>
-            <strong>Physical Address</strong>
-            <span>Udugama Road, Kurunduwatta, Galle, Sri Lanka</span>
-            <div style="margin-top: 4px;">
-              <a href="https://maps.app.goo.gl/GyJCSSS7p6Bd18xM8" target="_blank" rel="noopener noreferrer" style="color: #2563eb; font-weight: 700; font-size: 12px; text-decoration: underline;">
-                Open in Google Maps ↗
+        <div class="showroom-cards-grid">
+          <!-- 1. Address -->
+          <div class="showroom-luxury-card">
+            <div class="showroom-card-icon-badge">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+            </div>
+            <div style="flex:1; min-width:0;">
+              <span class="showroom-card-label">SHOWROOM ADDRESS</span>
+              <span class="showroom-card-val">Udugama Road, Kurunduwatta, Galle, Sri Lanka</span>
+              <a href="https://maps.app.goo.gl/GyJCSSS7p6Bd18xM8" target="_blank" rel="noopener noreferrer" class="showroom-card-link">
+                <span>View on Google Maps</span>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>
               </a>
+            </div>
+          </div>
+
+          <!-- 2. Hotline -->
+          <div class="showroom-luxury-card">
+            <div class="showroom-card-icon-badge">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            </div>
+            <div style="flex:1; min-width:0;">
+              <span class="showroom-card-label">DIRECT HOTLINE</span>
+              <a href="tel:0784969652" class="showroom-card-val hotline-val" style="text-decoration:none;">078 496 9652</a>
+            </div>
+          </div>
+
+          <!-- 3. Opening Hours -->
+          <div class="showroom-luxury-card">
+            <div class="showroom-card-icon-badge">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            </div>
+            <div style="flex:1; min-width:0;">
+              <span class="showroom-card-label">OPENING HOURS</span>
+              <span class="showroom-card-val">Mon–Sat: 8:30 AM – 6:00 PM<br>Sun: 9:00 AM – 2:00 PM</span>
+            </div>
+          </div>
+
+          <!-- 4. Email -->
+          <div class="showroom-luxury-card">
+            <div class="showroom-card-icon-badge">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+            </div>
+            <div style="flex:1; min-width:0;">
+              <span class="showroom-card-label">OFFICIAL INQUIRIES</span>
+              <a href="mailto:Pibida17udan4131@gmail.com" class="showroom-card-val email-val" style="text-decoration:none; word-break:break-all;">Pibida17udan4131@gmail.com</a>
             </div>
           </div>
         </div>
 
-        <div class="info-item">
-          <span>📞</span>
-          <div>
-            <strong>Direct Showroom Hotline</strong>
-            <a href="tel:0784969652" style="color:var(--primary); font-weight:bold;">078 496 9652</a>
-          </div>
-        </div>
-
-        <div class="info-item">
-          <span>✉</span>
-          <div>
-            <strong>Official Email</strong>
-            <span>Pibida17udan4131@gmail.com</span>
-          </div>
-        </div>
-
-        <div class="info-item">
-          <span>🕒</span>
-          <div>
-            <strong>Operating Hours</strong>
-            <span>Mon – Sat: 8:30 AM – 6:00 PM | Sun: 9:00 AM – 2:00 PM</span>
-          </div>
-        </div>
-
-        <div style="margin-top:24px; display:flex; flex-wrap:wrap; gap:12px;">
-          <a href="https://maps.app.goo.gl/GyJCSSS7p6Bd18xM8" target="_blank" rel="noopener noreferrer" class="btn-primary" style="background:#2563eb; color:#ffffff; display:inline-flex; align-items:center; gap:8px; text-decoration:none;">
-            📍 View on Google Maps ↗
+        <div class="showroom-cta-bar">
+          <!-- 1. Primary: Book Test Ride -->
+          <a href="#testride" class="showroom-btn-testride">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>
+            <span>Book Free Test Ride</span>
           </a>
-          <a href="https://wa.me/94784969652" target="_blank" rel="noopener noreferrer" class="btn-primary" style="background:#25D366; text-decoration:none;">
-            💬 Open WhatsApp Direct Chat
+
+          <!-- 2. WhatsApp Direct -->
+          <a href="https://wa.me/94784969652" target="_blank" rel="noopener noreferrer" class="showroom-btn-whatsapp">
+            <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.79.47 3.53 1.37 5.08L2 22l5.17-1.36c1.49.81 3.17 1.25 4.87 1.25 5.46 0 9.91-4.45 9.91-9.91A9.91 9.91 0 0 0 12.04 2zm0 16.33c-1.5 0-2.98-.4-4.26-1.16l-.31-.18-3.16.83.84-3.08-.2-.32a8.03 8.03 0 0 1-1.23-4.47c0-4.47 3.64-8.11 8.12-8.11 2.17 0 4.21.85 5.75 2.38a8.07 8.07 0 0 1 2.37 5.73c0 4.47-3.64 8.11-8.12 8.11z"/></svg>
+            <span>WhatsApp Chat</span>
+          </a>
+
+          <!-- 3. Google Maps Directions -->
+          <a href="https://maps.app.goo.gl/GyJCSSS7p6Bd18xM8" target="_blank" rel="noopener noreferrer" class="showroom-btn-maps">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FF5E14" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+            <span>Google Maps</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.7;"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>
+          </a>
+
+          <!-- 4. Direct Call Hotline -->
+          <a href="tel:0784969652" class="showroom-btn-hotline">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FF5E14" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            <span>078 496 9652</span>
           </a>
         </div>
       </div>

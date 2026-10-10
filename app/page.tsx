@@ -43,40 +43,28 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 const SHOWCASE_BIKES = [
   {
-    name: "Zuboo Mini",
-    badge: "Compact City Commuter",
-    power: "490W Eco Motor",
-    speed: "35 km/h",
-    range: "≥ 35 km",
-    battery: "48V 12Ah",
-    price: "LKR 195,000",
-    image: "/bikes/mini/mini.webp",
-    tagline: "Ultra-agile step-through commuter with deep front basket",
-    desc: "Lightweight city mobility with shopping basket, passenger pillion, and minimal recharge costs."
+    name: "Zuboo EX008",
+    badge: "Aerodynamic Urban Sport",
+    power: "1000W Urban Motor",
+    speed: "45 km/h",
+    range: "≥ 60 km",
+    battery: "60V 20Ah",
+    price: "LKR 295,000",
+    image: "/media/showcase/1.png",
+    tagline: "Streamlined aerodynamic sport styling with durable hydraulic suspension",
+    desc: "Sleek sport aerodynamic commuter scooter with comfortable seating and dependable urban range."
   },
   {
-    name: "Zuboo Paris",
-    badge: "European Retro Classic",
-    power: "1200W Smooth Torque",
-    speed: "60 km/h",
-    range: "≥ 80 km",
-    battery: "72V 23Ah",
-    price: "LKR 330,000",
-    image: "/bikes/paris/paris.webp",
-    tagline: "Timeless European retro luxury with front windscreen",
-    desc: "Plush passenger backrest, aerodynamic windscreen, and smooth whisper-quiet drive."
-  },
-  {
-    name: "Zuboo The Tank",
-    badge: "Heavy-Duty Utility Flagship",
+    name: "Zuboo The Tank (Lime)",
+    badge: "Heavy-Duty Dual Headlights",
     power: "3000W Peak Performance",
     speed: "75 km/h",
     range: "≥ 80 km",
     battery: "72V 32Ah",
     price: "LKR 515,000",
-    image: "/bikes/tank/tank.webp",
-    tagline: "Reinforced steel crash bars & twin projector headlights",
-    desc: "High-torque climbing power built to conquer heavy commercial transport across the South."
+    image: "/media/showcase/2.png",
+    tagline: "Lime green dual headlights with heavy-duty steel crash bars",
+    desc: "Distinctive lime green finish with twin projector headlights and reinforced steel frame for Southern terrain."
   },
   {
     name: "Zuboo T3",
@@ -86,33 +74,45 @@ const SHOWCASE_BIKES = [
     range: "≥ 110 km",
     battery: "72V 32Ah",
     price: "LKR 480,000",
-    image: "/bikes/t3/t3.webp",
+    image: "/media/showcase/3.png",
     tagline: "Aggressive sport aerodynamics with smart LCD console",
-    desc: "Premium electric motorcycle styling with 110km extended highway range."
+    desc: "White sport commuter styling with 110km extended highway range and smart digital cockpit."
   },
   {
-    name: "Zuboo T11",
-    badge: "Commercial Logistics Cargo",
-    power: "1500W Commercial Motor",
-    speed: "55 km/h",
-    range: "≥ 90 km",
-    battery: "72V 26Ah",
-    price: "LKR 420,000",
-    image: "/bikes/t11/t11.webp",
-    tagline: "Heavy-duty extended cargo rack for enterprise fleets",
-    desc: "Engineered specifically for delivery boxes, couriers, and high-frequency commercial haulage."
+    name: "Zuboo Paris",
+    badge: "European Retro Classic",
+    power: "1200W Smooth Torque",
+    speed: "60 km/h",
+    range: "≥ 80 km",
+    battery: "72V 23Ah",
+    price: "LKR 330,000",
+    image: "/media/showcase/4.png",
+    tagline: "Mint green classic retro luxury with front windscreen",
+    desc: "Plush passenger backrest, aerodynamic windscreen, and smooth whisper-quiet drive."
   },
   {
-    name: "Zuboo EX008",
-    badge: "Modern Urban Commuter",
-    power: "1000W Urban Motor",
-    speed: "45 km/h",
-    range: "≥ 60 km",
-    battery: "60V 20Ah",
-    price: "LKR 295,000",
-    image: "/bikes/ex008/ex008.webp",
-    tagline: "Streamlined aerodynamic styling with durable hydraulic forks",
-    desc: "Effortless commuter scooter with comfortable seating and dependable urban range."
+    name: "Zuboo The Tank (Desert Cargo)",
+    badge: "Heavy-Duty Utility Cargo",
+    power: "3000W Peak Performance",
+    speed: "75 km/h",
+    range: "≥ 85 km",
+    battery: "72V 32Ah",
+    price: "LKR 525,000",
+    image: "/media/showcase/5.png",
+    tagline: "Desert sand finish with heavy rear cargo carrier",
+    desc: "Commercial-grade utility scooter equipped with rear cargo box for heavy deliveries and Southern haulage."
+  },
+  {
+    name: "Zuboo Mini",
+    badge: "Compact City Commuter",
+    power: "490W Eco Motor",
+    speed: "35 km/h",
+    range: "≥ 35 km",
+    battery: "48V 12Ah",
+    price: "LKR 195,000",
+    image: "/media/showcase/6.png",
+    tagline: "Pastel blue step-through commuter with deep front basket",
+    desc: "Ultra-agile city mobility with front shopping basket, passenger pillion, and minimal recharge costs."
   }
 ];
 
@@ -867,25 +867,12 @@ export default function ZubooHomePage() {
             </h2>
           </div>
 
-          {/* Center Stage: Large Bike Model Cutout on Seamless Pure White with Prev / Next Arrows */}
+          {/* Center Stage: Large Bike Model Cutout on Seamless Pure White (Smooth Auto-Cycle) */}
           <div
             className="relative w-full max-w-4xl mx-auto flex items-center justify-center mb-10 sm:mb-14"
             onMouseEnter={() => setIsBikeHovered(true)}
             onMouseLeave={() => setIsBikeHovered(false)}
           >
-            {/* Previous Bike Button */}
-            <button
-              onClick={() =>
-                setSelectedShowcaseBike(
-                  (prev) => (prev - 1 + SHOWCASE_BIKES.length) % SHOWCASE_BIKES.length
-                )
-              }
-              className="absolute left-0 sm:-left-6 lg:-left-8 top-1/2 -translate-y-1/2 z-20 w-11 h-11 sm:w-13 sm:h-13 rounded-full bg-white/90 hover:bg-white text-slate-800 border border-slate-200 shadow-md hover:shadow-xl flex items-center justify-center transition-all cursor-pointer hover:scale-105 active:scale-95"
-              aria-label="Previous bike model"
-            >
-              <ChevronLeft className="w-6 h-6" />
-            </button>
-
             {/* Bike Horizontal Slide Track */}
             <div className="w-full overflow-hidden bg-white">
               <div
@@ -903,8 +890,7 @@ export default function ZubooHomePage() {
                         alt={bike.name}
                         fill
                         sizes="(max-width: 1024px) 100vw, 850px"
-                        className="object-contain mix-blend-multiply select-none drop-shadow-[0_20px_35px_rgba(0,0,0,0.08)] hover:scale-105 transition-transform duration-500"
-                        style={{ mixBlendMode: "multiply" }}
+                        className="object-contain select-none drop-shadow-[0_20px_35px_rgba(0,0,0,0.08)] hover:scale-105 transition-transform duration-500"
                         priority={idx === 0}
                       />
                     </div>
@@ -912,17 +898,6 @@ export default function ZubooHomePage() {
                 ))}
               </div>
             </div>
-
-            {/* Next Bike Button */}
-            <button
-              onClick={() =>
-                setSelectedShowcaseBike((prev) => (prev + 1) % SHOWCASE_BIKES.length)
-              }
-              className="absolute right-0 sm:-right-6 lg:-right-8 top-1/2 -translate-y-1/2 z-20 w-11 h-11 sm:w-13 sm:h-13 rounded-full bg-white/90 hover:bg-white text-slate-800 border border-slate-200 shadow-md hover:shadow-xl flex items-center justify-center transition-all cursor-pointer hover:scale-105 active:scale-95"
-              aria-label="Next bike model"
-            >
-              <ChevronRight className="w-6 h-6" />
-            </button>
           </div>
 
           {/* Lower Stage: 4 Clean Showroom Photo Thumbnails Directly Below Bike (Matching zuboo.com) */}
@@ -1054,43 +1029,51 @@ export default function ZubooHomePage() {
               {/* 4 Contact Info Cards */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                 {/* 1. Address */}
-                <div className="flex items-start gap-3.5 p-4 bg-slate-50 rounded-2xl border border-slate-200">
-                  <MapPin className="w-5 h-5 text-[#FF5E14] shrink-0 mt-0.5" />
-                  <div className="flex-1">
-                    <h4 className="text-xs font-black uppercase text-slate-900">Showroom Address</h4>
-                    <p className="text-xs text-slate-600 mt-1 leading-relaxed">
+                <div className="bg-white rounded-2xl border border-slate-200/90 shadow-[0_2px_12px_rgba(0,0,0,0.03)] hover:shadow-[0_8px_25px_rgba(0,0,0,0.06)] hover:border-slate-300 transition-all duration-300 p-4 sm:p-5 group flex items-start gap-3.5">
+                  <div className="w-10 h-10 rounded-xl bg-orange-50 border border-orange-100 flex items-center justify-center text-[#FF5E14] shrink-0 group-hover:scale-105 group-hover:bg-[#FF5E14] group-hover:text-white transition-all duration-300">
+                    <MapPin className="w-5 h-5 transition-colors" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <span className="text-[10px] font-extrabold tracking-[1.5px] uppercase text-slate-400 block font-manrope">SHOWROOM ADDRESS</span>
+                    <p className="text-xs sm:text-sm font-semibold text-slate-900 leading-snug mt-1">
                       Udugama Road, Kurunduwatta, Galle, Sri Lanka
                     </p>
                     <a
                       href="https://maps.app.goo.gl/GyJCSSS7p6Bd18xM8"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1.5 text-xs font-bold text-blue-600 hover:text-blue-700 mt-2 transition-colors group"
+                      className="inline-flex items-center gap-1.5 text-xs font-bold text-[#FF5E14] hover:text-[#e04d09] mt-2 group-hover:underline"
                     >
-                      <MapPin className="w-3.5 h-3.5 text-blue-600" />
-                      <span>Open in Google Maps</span>
-                      <ExternalLink className="w-3 h-3 opacity-80 group-hover:translate-x-0.5 transition-transform" />
+                      <span>View on Google Maps</span>
+                      <ExternalLink className="w-3 h-3 opacity-80" />
                     </a>
                   </div>
                 </div>
 
                 {/* 2. Hotline */}
-                <div className="flex items-start gap-3.5 p-4 bg-slate-50 rounded-2xl border border-slate-200">
-                  <Phone className="w-5 h-5 text-[#FF5E14] shrink-0 mt-0.5" />
-                  <div>
-                    <h4 className="text-xs font-black uppercase text-slate-900">Direct Hotline</h4>
-                    <a href="tel:0784969652" className="text-xs font-black text-slate-900 hover:text-[#FF5E14] mt-1 block">
+                <div className="bg-white rounded-2xl border border-slate-200/90 shadow-[0_2px_12px_rgba(0,0,0,0.03)] hover:shadow-[0_8px_25px_rgba(0,0,0,0.06)] hover:border-slate-300 transition-all duration-300 p-4 sm:p-5 group flex items-start gap-3.5">
+                  <div className="w-10 h-10 rounded-xl bg-orange-50 border border-orange-100 flex items-center justify-center text-[#FF5E14] shrink-0 group-hover:scale-105 group-hover:bg-[#FF5E14] group-hover:text-white transition-all duration-300">
+                    <Phone className="w-5 h-5 transition-colors" />
+                  </div>
+                  <div className="min-w-0">
+                    <span className="text-[10px] font-extrabold tracking-[1.5px] uppercase text-slate-400 block font-manrope">DIRECT HOTLINE</span>
+                    <a
+                      href="tel:0784969652"
+                      className="text-sm sm:text-base font-extrabold text-slate-900 hover:text-[#FF5E14] mt-1 block tracking-tight font-manrope"
+                    >
                       078 496 9652
                     </a>
                   </div>
                 </div>
 
                 {/* 3. Opening Hours */}
-                <div className="flex items-start gap-3.5 p-4 bg-slate-50 rounded-2xl border border-slate-200">
-                  <Clock className="w-5 h-5 text-[#FF5E14] shrink-0 mt-0.5" />
+                <div className="bg-white rounded-2xl border border-slate-200/90 shadow-[0_2px_12px_rgba(0,0,0,0.03)] hover:shadow-[0_8px_25px_rgba(0,0,0,0.06)] hover:border-slate-300 transition-all duration-300 p-4 sm:p-5 group flex items-start gap-3.5">
+                  <div className="w-10 h-10 rounded-xl bg-orange-50 border border-orange-100 flex items-center justify-center text-[#FF5E14] shrink-0 group-hover:scale-105 group-hover:bg-[#FF5E14] group-hover:text-white transition-all duration-300">
+                    <Clock className="w-5 h-5 transition-colors" />
+                  </div>
                   <div>
-                    <h4 className="text-xs font-black uppercase text-slate-900">Opening Hours</h4>
-                    <p className="text-xs text-slate-600 mt-1 leading-relaxed">
+                    <span className="text-[10px] font-extrabold tracking-[1.5px] uppercase text-slate-400 block font-manrope">OPENING HOURS</span>
+                    <p className="text-xs font-medium text-slate-600 mt-1 leading-relaxed">
                       Mon–Sat: 8:30 AM – 6:00 PM<br />
                       Sun: 9:00 AM – 2:00 PM
                     </p>
@@ -1098,55 +1081,64 @@ export default function ZubooHomePage() {
                 </div>
 
                 {/* 4. Email */}
-                <div className="flex items-start gap-3.5 p-4 bg-slate-50 rounded-2xl border border-slate-200">
-                  <Mail className="w-5 h-5 text-[#FF5E14] shrink-0 mt-0.5" />
+                <div className="bg-white rounded-2xl border border-slate-200/90 shadow-[0_2px_12px_rgba(0,0,0,0.03)] hover:shadow-[0_8px_25px_rgba(0,0,0,0.06)] hover:border-slate-300 transition-all duration-300 p-4 sm:p-5 group flex items-start gap-3.5">
+                  <div className="w-10 h-10 rounded-xl bg-orange-50 border border-orange-100 flex items-center justify-center text-[#FF5E14] shrink-0 group-hover:scale-105 group-hover:bg-[#FF5E14] group-hover:text-white transition-all duration-300">
+                    <Mail className="w-5 h-5 transition-colors" />
+                  </div>
                   <div className="min-w-0">
-                    <h4 className="text-xs font-black uppercase text-slate-900">Official Inquiries</h4>
-                    <a href="mailto:Pibida17udan4131@gmail.com" className="text-xs text-slate-600 hover:text-[#FF5E14] mt-1 block truncate">
+                    <span className="text-[10px] font-extrabold tracking-[1.5px] uppercase text-slate-400 block font-manrope">OFFICIAL INQUIRIES</span>
+                    <a
+                      href="mailto:Pibida17udan4131@gmail.com"
+                      className="text-xs font-semibold text-slate-700 hover:text-[#FF5E14] mt-1 block truncate"
+                    >
                       Pibida17udan4131@gmail.com
                     </a>
                   </div>
                 </div>
               </div>
 
-              {/* Direct CTA Buttons */}
-              <div className="flex flex-wrap items-center gap-3 pt-2">
-                <a
-                  href="https://maps.app.goo.gl/GyJCSSS7p6Bd18xM8"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold uppercase tracking-wider transition-colors shadow-md shadow-blue-600/20"
+              {/* Cohesive Luxury CTA Buttons Bar */}
+              <div className="flex flex-wrap items-center gap-3 pt-3">
+                {/* 1. Primary: Book Test Ride */}
+                <button
+                  onClick={() => setIsTestRideOpen(true)}
+                  className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-gradient-to-r from-[#FF5E14] to-[#FF3B30] hover:from-[#e04d09] hover:to-[#dc2626] text-white text-xs font-bold uppercase tracking-wider transition-all shadow-md shadow-orange-500/25 hover:shadow-lg hover:shadow-orange-500/35 hover:-translate-y-0.5 cursor-pointer"
                 >
-                  <MapPin className="w-4 h-4" />
-                  <span>Google Maps</span>
-                  <ExternalLink className="w-3.5 h-3.5 opacity-80" />
-                </a>
+                  <Calendar className="w-4 h-4" />
+                  <span>Book Free Test Ride</span>
+                </button>
 
+                {/* 2. WhatsApp Direct */}
                 <a
                   href="https://wa.me/94784969652"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-xl bg-[#25D366] hover:bg-[#20ba5a] text-white text-xs font-bold uppercase tracking-wider transition-colors shadow-md shadow-green-500/20"
+                  className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-xl bg-[#25D366] hover:bg-[#20ba5a] text-white text-xs font-bold uppercase tracking-wider transition-all shadow-md shadow-green-500/20 hover:shadow-lg hover:-translate-y-0.5"
                 >
                   <MessageSquare className="w-4 h-4" />
                   <span>WhatsApp Chat</span>
                 </a>
 
+                {/* 3. Google Maps Directions */}
                 <a
-                  href="tel:0784969652"
-                  className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold uppercase tracking-wider transition-colors shadow-sm"
+                  href="https://maps.app.goo.gl/GyJCSSS7p6Bd18xM8"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-xl bg-slate-900 hover:bg-black text-white text-xs font-bold uppercase tracking-wider transition-all shadow-sm hover:shadow-md hover:-translate-y-0.5"
                 >
-                  <Phone className="w-4 h-4 text-[#FF5E14]" />
-                  <span>Call 078 496 9652</span>
+                  <MapPin className="w-4 h-4 text-[#FF5E14]" />
+                  <span>Google Maps</span>
+                  <ExternalLink className="w-3.5 h-3.5 opacity-70" />
                 </a>
 
-                <button
-                  onClick={() => setIsTestRideOpen(true)}
-                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-[#FF5E14] hover:bg-[#E04D09] text-white text-xs font-bold uppercase tracking-wider transition-colors shadow-md shadow-orange-500/20 cursor-pointer"
+                {/* 4. Direct Call Hotline */}
+                <a
+                  href="tel:0784969652"
+                  className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-xl bg-white hover:bg-slate-50 text-slate-900 border border-slate-300 hover:border-slate-900 text-xs font-bold uppercase tracking-wider transition-all shadow-xs hover:shadow-sm"
                 >
-                  <Calendar className="w-4 h-4" />
-                  <span>Book Test Ride</span>
-                </button>
+                  <Phone className="w-4 h-4 text-[#FF5E14]" />
+                  <span>078 496 9652</span>
+                </a>
               </div>
             </FadeIn>
           </div>

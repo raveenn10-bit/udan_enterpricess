@@ -738,6 +738,210 @@ nav.main-nav a:hover, nav.main-nav a.active {
   color: #0F172A;
 }
 
+/* LUXURY SHOWROOM CARDS & COHESIVE BUTTONS */
+.showroom-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 14px;
+  margin: 20px 0 24px;
+}
+
+.showroom-luxury-card {
+  background: #ffffff;
+  border: 1px solid rgba(226, 232, 240, 0.9);
+  border-radius: 16px;
+  padding: 18px 20px;
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.03);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.showroom-luxury-card:hover {
+  border-color: #cbd5e1;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.06);
+  transform: translateY(-2px);
+}
+
+.showroom-card-icon-badge {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: #fff7ed;
+  border: 1px solid #ffedd5;
+  color: #FF5E14;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.3s ease;
+}
+
+.showroom-luxury-card:hover .showroom-card-icon-badge {
+  background: #FF5E14;
+  color: #ffffff;
+  transform: scale(1.05);
+}
+
+.showroom-card-label {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: #94a3b8;
+  display: block;
+  font-family: inherit;
+}
+
+.showroom-card-val {
+  font-size: 13px;
+  font-weight: 600;
+  color: #0f172a;
+  line-height: 1.4;
+  margin-top: 4px;
+  display: block;
+}
+
+.showroom-card-val.hotline-val {
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+
+.showroom-card-val.hotline-val:hover,
+.showroom-card-val.email-val:hover {
+  color: #FF5E14;
+}
+
+.showroom-card-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #FF5E14;
+  text-decoration: none;
+  margin-top: 8px;
+  transition: color 0.2s ease;
+}
+
+.showroom-card-link:hover {
+  color: #e04d09;
+  text-decoration: underline;
+}
+
+.showroom-cta-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  padding-top: 12px;
+}
+
+.showroom-btn-testride {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 14px 24px;
+  border-radius: 12px;
+  background: linear-gradient(to right, #FF5E14, #FF3B30);
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  text-decoration: none;
+  box-shadow: 0 4px 14px rgba(255, 94, 20, 0.25);
+  transition: all 0.25s ease;
+  border: none;
+  cursor: pointer;
+}
+
+.showroom-btn-testride:hover {
+  background: linear-gradient(to right, #e04d09, #dc2626);
+  box-shadow: 0 8px 20px rgba(255, 94, 20, 0.35);
+  transform: translateY(-2px);
+  color: #ffffff;
+}
+
+.showroom-btn-whatsapp {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 14px 20px;
+  border-radius: 12px;
+  background: #25D366;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  text-decoration: none;
+  box-shadow: 0 4px 14px rgba(37, 211, 102, 0.2);
+  transition: all 0.25s ease;
+}
+
+.showroom-btn-whatsapp:hover {
+  background: #20ba5a;
+  box-shadow: 0 8px 20px rgba(37, 211, 102, 0.3);
+  transform: translateY(-2px);
+  color: #ffffff;
+}
+
+.showroom-btn-maps {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 14px 20px;
+  border-radius: 12px;
+  background: #0f172a;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  text-decoration: none;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.15);
+  transition: all 0.25s ease;
+}
+
+.showroom-btn-maps:hover {
+  background: #000000;
+  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.25);
+  transform: translateY(-2px);
+  color: #ffffff;
+}
+
+.showroom-btn-hotline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 14px 20px;
+  border-radius: 12px;
+  background: #ffffff;
+  color: #0f172a;
+  border: 1px solid #cbd5e1;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  text-decoration: none;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  transition: all 0.25s ease;
+}
+
+.showroom-btn-hotline:hover {
+  background: #f8fafc;
+  border-color: #0f172a;
+  color: #0f172a;
+  transform: translateY(-2px);
+}
+
 .booking-box {
   background: white;
   border: 1px solid var(--border-color);
