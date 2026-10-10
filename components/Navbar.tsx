@@ -269,7 +269,7 @@ export default function Navbar({ onOpenTestRide }: NavbarProps) {
               <div className="flex flex-col justify-center">
                 <BrandBounceText sizeClassName="text-base sm:text-lg" className="animate-bounce-subtle" />
                 <span className="text-[9px] sm:text-[10px] tracking-wider text-slate-500 uppercase font-bold mt-1 whitespace-nowrap">
-                  Authorized Zuboo Dealership • Galle
+                  Authorized Zuboo Dealership • Galle, Pinnaduwa
                 </span>
               </div>
               <div className="hidden sm:block h-7 w-px bg-slate-300/80 mx-2" />
