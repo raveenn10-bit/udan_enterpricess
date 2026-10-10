@@ -151,7 +151,9 @@ export function useDynamicProducts() {
       const items = getCachedProducts();
       const published = items.filter((p) => p.status === "published");
       if (published.length > 0) {
-        return published.map(mapProductToBike);
+        const existingSlugs = new Set(published.map((p) => p.slug || p.id));
+        const missingStatic = ZUBOO_COLLECTION.filter((b) => !existingSlugs.has(b.slug) && !existingSlugs.has(b.id));
+        return [...published.map(mapProductToBike), ...missingStatic];
       }
       return ZUBOO_COLLECTION;
     };

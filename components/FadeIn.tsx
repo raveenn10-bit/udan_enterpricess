@@ -42,11 +42,12 @@ export default function FadeIn({
           duration,
           delay,
           ease: 'power3.out',
+          clearProps: 'opacity,transform',
           scrollTrigger: {
             trigger: ref.current,
-            start: threshold || "top 88%",
-            end: endThreshold || "bottom 10%",
-            toggleActions: bidirectional ? "play reverse play reverse" : "play none none none",
+            start: threshold || "top 92%",
+            toggleActions: "play none none none",
+            once: true,
           },
         }
       );

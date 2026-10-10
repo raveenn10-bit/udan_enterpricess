@@ -18,11 +18,12 @@ export default function WhyZuboo() {
           opacity: 1,
           duration: 0.8,
           ease: "power2.out",
+          clearProps: "opacity,transform",
           scrollTrigger: {
             trigger: sectionRef.current,
-            start: "top 80%",
-            end: "bottom 15%",
-            toggleActions: "play reverse play reverse",
+            start: "top 85%",
+            toggleActions: "play none none none",
+            once: true,
           },
         }
       );
@@ -33,31 +34,33 @@ export default function WhyZuboo() {
         {
           x: 0,
           opacity: 1,
-          stagger: 0.2,
+          stagger: 0.15,
           duration: 0.7,
           ease: "power2.out",
+          clearProps: "opacity,transform",
           scrollTrigger: {
             trigger: ".why-features-list",
-            start: "top 80%",
-            end: "bottom 15%",
-            toggleActions: "play reverse play reverse",
+            start: "top 85%",
+            toggleActions: "play none none none",
+            once: true,
           },
         }
       );
 
       gsap.fromTo(
         ".why-spec-card",
-        { y: 40, opacity: 0 },
+        { y: 30, opacity: 0 },
         {
           y: 0,
           opacity: 1,
           duration: 0.8,
           ease: "power2.out",
+          clearProps: "opacity,transform",
           scrollTrigger: {
             trigger: ".why-spec-card",
-            start: "top 85%",
-            end: "bottom 15%",
-            toggleActions: "play reverse play reverse",
+            start: "top 88%",
+            toggleActions: "play none none none",
+            once: true,
           },
         }
       );

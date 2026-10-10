@@ -31,11 +31,12 @@ export default function TextReveal({ children, as: Tag = 'h2', className = '', d
           stagger: splitBy === 'words' ? 0.04 : 0.02, 
           ease: 'power3.out',
           delay,
+          clearProps: 'opacity,transform',
           scrollTrigger: {
             trigger: el,
-            start: 'top 85%',
-            end: 'bottom 12%',
-            toggleActions: 'play reverse play reverse',
+            start: 'top 88%',
+            toggleActions: 'play none none none',
+            once: true,
           },
         }
       );

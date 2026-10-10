@@ -39,11 +39,12 @@ export default function BikesCollection({ onSelectModelForTestRide }: BikesColle
           stagger: 0.15,
           duration: 0.8,
           ease: "power2.out",
+          clearProps: "opacity,transform",
           scrollTrigger: {
             trigger: sectionRef.current,
-            start: "top 80%",
-            end: "bottom 15%",
-            toggleActions: "play reverse play reverse",
+            start: "top 85%",
+            toggleActions: "play none none none",
+            once: true,
           },
         }
       );

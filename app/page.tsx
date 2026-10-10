@@ -185,44 +185,46 @@ export default function ZubooHomePage() {
     gsap.registerPlugin(ScrollTrigger);
     
     let ctx = gsap.context(() => {
-      // 1. Sections Reveal (Bidirectional)
+      // 1. Sections Reveal (Clean, permanent, never disappear on scroll)
       gsap.utils.toArray<HTMLElement>(".reveal-section, [data-scroll-section]").forEach((section) => {
         gsap.fromTo(
           section,
-          { y: 35, opacity: 0 },
+          { y: 30, opacity: 0 },
           {
             y: 0,
             opacity: 1,
-            duration: 0.85,
-            ease: "power3.out",
+            duration: 0.75,
+            ease: "power2.out",
+            clearProps: "opacity,transform",
             scrollTrigger: {
               trigger: section,
-              start: "top 88%",
-              end: "bottom 12%",
-              toggleActions: "play reverse play reverse",
+              start: "top 92%",
+              toggleActions: "play none none none",
+              once: true,
             },
           }
         );
       });
 
-      // 3. Staggered Cards (Bidirectional)
+      // 2. Staggered Cards
       gsap.utils.toArray<HTMLElement>(".stagger-grid").forEach((grid) => {
         const cards = grid.querySelectorAll(".stagger-card");
         if (cards.length > 0) {
           gsap.fromTo(
             cards,
-            { y: 30, opacity: 0 },
+            { y: 25, opacity: 0 },
             {
               y: 0,
               opacity: 1,
-              duration: 0.8,
-              stagger: 0.1,
+              duration: 0.7,
+              stagger: 0.08,
               ease: "power2.out",
+              clearProps: "opacity,transform",
               scrollTrigger: {
                 trigger: grid,
-                start: "top 82%",
-                end: "bottom 15%",
-                toggleActions: "play reverse play reverse",
+                start: "top 88%",
+                toggleActions: "play none none none",
+                once: true,
               },
             }
           );
@@ -352,9 +354,9 @@ export default function ZubooHomePage() {
 
   const filteredBikes = dynamicBikes.filter((bike) => {
     if (activeCategory === "all") return true;
-    if (activeCategory === "commuter") return bike.category.toLowerCase().includes("commuter") || bike.slug === "mini" || bike.slug === "kb1";
-    if (activeCategory === "touring") return bike.category.toLowerCase().includes("touring") || bike.slug === "gt" || bike.slug === "t3";
-    if (activeCategory === "heavyduty") return bike.slug === "the-tank" || bike.slug === "t11";
+    if (activeCategory === "commuter") return bike.category.toLowerCase().includes("commuter") || bike.slug === "mini" || bike.slug === "kb1" || bike.slug === "t16";
+    if (activeCategory === "touring") return bike.category.toLowerCase().includes("touring") || bike.slug === "gt" || bike.slug === "t3" || bike.slug === "t16";
+    if (activeCategory === "heavyduty") return bike.slug === "the-tank" || bike.slug === "t11" || bike.slug === "t16" || bike.category.toLowerCase().includes("sports");
     if (activeCategory === "retro") return bike.category.toLowerCase().includes("retro") || bike.slug === "paris" || bike.slug === "ex008";
     return true;
   });
@@ -621,9 +623,23 @@ export default function ZubooHomePage() {
             <span>👈 Swipe to explore all models 👉</span>
           </div>
 
-          {/* 6 Models in Responsive Horizontal Snap Carousel on Mobile / 3-Column Grid on Desktop */}
-          <div className="flex overflow-x-auto snap-x snap-mandatory pb-4 gap-4 scrollbar-none sm:grid sm:grid-cols-2 lg:grid-cols-3 sm:gap-y-16 sm:gap-x-10 max-w-6xl mx-auto -mx-4 px-4 sm:mx-auto sm:px-0">
+          {/* Models in Responsive Horizontal Snap Carousel on Mobile / Grid on Desktop */}
+          <div className="flex overflow-x-auto snap-x snap-mandatory pb-4 gap-4 scrollbar-none sm:grid sm:grid-cols-2 lg:grid-cols-4 sm:gap-y-12 sm:gap-x-6 max-w-7xl mx-auto -mx-4 px-4 sm:mx-auto sm:px-0">
             {[
+              {
+                classification: "Heavy-Duty Commuter",
+                name: "Zuboo T16 (1500W)",
+                image: "/bikes/t16/t16.webp",
+                slug: "t16",
+                highlight: true,
+              },
+              {
+                classification: "Dual-Sport Touring",
+                name: "Zuboo GT (1800W)",
+                image: "/bikes/gt/gt.webp",
+                slug: "gt",
+                highlight: false,
+              },
               {
                 classification: "Electric Motorcycle",
                 name: "Zuboo T3 (2000W)",
@@ -636,7 +652,7 @@ export default function ZubooHomePage() {
                 name: "Zuboo Mini (City Commuter)",
                 image: "/bikes/mini/mini.webp",
                 slug: "mini",
-                highlight: true,
+                highlight: false,
               },
               {
                 classification: "Electric Motorcycle",

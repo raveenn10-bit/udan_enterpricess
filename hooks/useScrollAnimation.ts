@@ -24,11 +24,12 @@ export function useScrollReveal() {
             duration: 0.8,
             delay: delay + i * 0.08,
             ease: 'power3.out',
+            clearProps: 'opacity,transform',
             scrollTrigger: {
               trigger: el,
-              start: 'top 88%',
-              end: 'bottom 12%',
-              toggleActions: 'play reverse play reverse',
+              start: 'top 90%',
+              toggleActions: 'play none none none',
+              once: true,
             },
           }
         );
@@ -52,7 +53,8 @@ export function useCountUp(target: number, duration = 2) {
       scrollTrigger: {
         trigger: ref.current,
         start: 'top 90%',
-        toggleActions: 'play reverse play reverse',
+        toggleActions: 'play none none none',
+        once: true,
       },
       onUpdate: () => {
         if (ref.current) ref.current.textContent = Math.round(obj.val).toLocaleString();

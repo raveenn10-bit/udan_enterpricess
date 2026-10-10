@@ -279,11 +279,12 @@
             y: 0,
             duration: 0.8,
             ease: "power2.out",
+            clearProps: "all",
             scrollTrigger: {
               trigger: el,
               start: "top 88%",
-              end: "bottom 12%",
-              toggleActions: "play reverse play reverse",
+              toggleActions: "play none none none",
+              once: true,
             },
           }
         );

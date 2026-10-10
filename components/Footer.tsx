@@ -34,11 +34,12 @@ export default function Footer() {
             duration: 0.85,
             stagger: 0.12,
             ease: "power2.out",
+            clearProps: "opacity,transform",
             scrollTrigger: {
               trigger: footerRef.current,
-              start: "top 88%",
-              end: "bottom 10%",
-              toggleActions: "play reverse play reverse",
+              start: "top 90%",
+              toggleActions: "play none none none",
+              once: true,
             },
           }
         );

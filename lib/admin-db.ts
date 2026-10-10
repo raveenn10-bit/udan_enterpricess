@@ -782,7 +782,22 @@ export function getCachedHomepageContent(): SiteContentHomepage {
 }
 
 export function getCachedProducts(): ProductItem[] {
-  return readLocal<ProductItem[]>("udan_products_cache", ZUBOO_COLLECTION.map(mapStaticBikeToProduct));
+  const staticProducts = ZUBOO_COLLECTION.map(mapStaticBikeToProduct);
+  const cached = readLocal<ProductItem[]>("udan_products_cache", staticProducts);
+
+  // Guarantee newly added static bikes (like T16) are automatically merged into cached array
+  const existingSlugs = new Set(cached.map((p) => p.slug || p.id));
+  let hasMissing = false;
+  for (const sp of staticProducts) {
+    if (!existingSlugs.has(sp.slug) && !existingSlugs.has(sp.id)) {
+      cached.push(sp);
+      hasMissing = true;
+    }
+  }
+  if (hasMissing) {
+    writeLocal("udan_products_cache", cached);
+  }
+  return cached;
 }
 
 export function getCachedOffers(): OfferItem[] {
