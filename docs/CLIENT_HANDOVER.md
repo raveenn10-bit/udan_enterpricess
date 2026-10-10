@@ -98,54 +98,79 @@ When a customer clicks the button, WhatsApp opens automatically with a pre-writt
 
 ---
 
-## 5. Accessing Test Ride Bookings in Firebase Console
+## 5. Live Admin Dashboard, Mini CMS & Lead Management System
 
-When a customer submits a test ride request through the web modal, the details are automatically saved to your cloud database in Google Firebase.
+Your digital platform is now equipped with a custom-engineered **Admin Dashboard & Content Management System** accessible at:  
+👉 **`https://yourdomain.com/admin/login`** (or `/admin`)
 
-### 5.1 How to View Your Bookings
-1. Visit the [Firebase Console](https://console.firebase.google.com/).
-2. Log in with your Google account.
-3. Select the project: **`udan-enterprises-zuboo`**.
-4. In the left sidebar, click **Firestore Database**.
-5. Click on the collection named **`test_ride_bookings`**.
-6. You will see every submission with:
-   * `customerName`
-   * `phoneNumber`
-   * `bikeModelName`
-   * `preferredDate`
-   * `createdAt` timestamp
+### 5.1 Showroom Owner Login Credentials
+* **Login URL:** `/admin/login`
+* **Authorized Owner Email:** `pibida17udan4131@gmail.com`
+* **Default Security Password:** `Pibi@2003`
+* **Access Level:** Showroom Owner (Full Administrative Privileges & RBAC Master)
+
+### 5.2 Dashboard Features & Capabilities
+
+```
++-----------------------------------------------------------------------------------------+
+|                    UDAN ENTERPRISES — DASHBOARD MODULES OVERVIEW                        |
++----------------------+------------------------------------------------------------------+
+| Module               | Features & Actions                                               |
++----------------------+------------------------------------------------------------------+
+| 1. Overview          | Real-time stats (Total Bikes, Published, Out-of-Stock, Leads)    |
+| 2. Bike Fleet CRUD   | Add models, update prices (LKR), edit specs, draft/publish       |
+| 3. Test Ride Bookings| Pipeline (Pending -> Contacted -> Confirmed -> Done), WhatsApp   |
+| 4. Inquiries CRM     | Lead tracking, follow-up status, direct WhatsApp chat, CSV export|
+| 5. Offers & Deals    | Create promotional discounts, cash rebates, active toggles       |
+| 6. Media Library     | Curated transparent PNGs & WebP cutouts (Zero-cost Spark plan)   |
+| 7. Homepage CMS      | Edit Hero headline, subtitle, announcement ticker, section copy  |
+| 8. Showroom Settings | Update Hotline (078 496 9652), WhatsApp, Google Maps URL, hours  |
+| 9. SEO Management    | Configure meta title and search descriptions                     |
+| 10. Staff RBAC       | Grant or revoke Staff permissions (Owner only)                   |
+| 11. Audit Trail      | Immutable activity log tracking all changes with timestamps      |
++----------------------+------------------------------------------------------------------+
+```
+
+### 5.3 Step-by-Step Guide: Updating Bike Prices via Dashboard
+1. Log in at `/admin/login` with your credentials.
+2. Click **Bike Fleet CRUD** in the sidebar.
+3. Click the **Edit (Pencil)** icon next to any model (e.g. *Zuboo T3* or *Zuboo GT*).
+4. Update the **Advertised Price (LKR)** or **Stock Status** (In Showroom, Low Stock, Out of Stock).
+5. Click **Save Changes**. The update is written directly to Cloud Firestore and reflected across the showroom catalogue!
+
+### 5.4 Step-by-Step Guide: Managing Incoming Test Ride Bookings
+1. Click **Test Ride Bookings** in the sidebar.
+2. Review new customer submissions with phone number, selected bike, and preferred date.
+3. Click the green **WhatsApp** button to immediately open a pre-filled chat with the customer.
+4. Update the booking status dropdown from **Pending** to **Contacted** or **Confirmed**.
+5. When exporting records for monthly reviews, click **Export CSV**.
 
 ---
 
-## 6. Production Deployment & Domain Setup
+## 6. Cloud Firestore Security Rules (Production Certified)
 
-To make your website accessible to the public on your own custom domain (e.g., `www.udanenterprises.lk` or `www.zuboobikes.lk`):
-
-### 6.1 Recommended Hosting: Vercel
-Next.js is developed by Vercel, making it the fastest and most cost-effective hosting platform:
-1. Create a free account at [vercel.com](https://vercel.com).
-2. Connect your GitHub repository containing the `Udan Enterprices` project.
-3. Click **Deploy**. Vercel will automatically detect Next.js 16 and deploy your site to global high-speed edge servers in under 2 minutes.
-4. Under **Settings → Domains**, enter your custom domain (e.g., `udanenterprises.lk`) and follow the simple DNS record instructions.
+All customer inquiries and vehicle data are protected under strict Cloud Firestore Security Rules (`firestore.rules`):
+* **Public Access:** Can only read published bikes and active offers; can submit new inquiries and bookings.
+* **Staff Access:** Can view and manage test ride leads and customer inquiries.
+* **Owner Access:** Full control over bike pricing, CMS, showroom settings, staff roles, and audit trail.
+* **Audit Trail Immutability:** Audit records can never be edited or deleted by anyone.
 
 ---
 
-## 7. Looking Ahead: Preview of Phase 02
+## 7. Production Deployment & Domain Setup
 
-With Phase 01 complete and operational, Harsh Apex Digital Solutions has architected your platform to seamlessly expand into **Phase 02**:
-
-1. **Dedicated Model Pages (`/bikes/[slug]`):** Full-screen immersion pages for each of the 8 models with high-resolution photo galleries and detailed technical downloads.
-2. **Sri Lankan Rupee (LKR) Loan & EMI Calculator:** An interactive financing slider allowing customers to calculate monthly installments and compare them with monthly petrol savings.
-3. **Vehicle Comparison Matrix:** Side-by-side comparison of 2 or 3 Zuboo models.
-4. **Staff Admin Dashboard (Phase 03):** Update stock and prices directly from your smartphone or tablet without touching any code.
+To deploy your updated web application:
+1. Connect this GitHub repository (`https://github.com/raveenn10-bit/udan_enterpricess.git`) to [Vercel](https://vercel.com).
+2. All Firebase environment variables and Spark plan configurations are pre-wired.
+3. Once deployed, link your custom domain (e.g., `www.udanenterprises.lk`).
 
 ---
 
 ## 8. Support & Technical Assistance
 
-For technical support, code updates, or to commence Phase 02 development, contact:
+* **Showroom Dealership:** Udan Enterprises — Zuboo Electric Bikes  
+* **Location:** Udugama Road, Kurunduwatta, Galle, Sri Lanka  
+* **Direct Hotline:** 078 496 9652  
+* **WhatsApp Hotline:** +94 78 496 9652  
+* **Engineering Lead:** Senior Full-Stack Architect  
 
-* **Engineering Agency:** Harsh Apex Digital Solutions  
-* **Lead Engineer:** Digital Solutions Architect  
-* **Documentation Portal:** `/docs/`  
-* **Codebase Repository:** `f:\Udan Enterprices`  

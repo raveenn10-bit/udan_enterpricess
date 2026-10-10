@@ -4,6 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { ZUBOO_COLLECTION, BikeModel } from "@/data/bikes";
+import { useDynamicProducts } from "@/lib/site-data";
 import { Gauge, Battery, Zap, Calendar, MessageSquare, ArrowRight, Search, ShieldCheck } from "lucide-react";
 
 interface AllBikesCatalogueProps {
@@ -15,11 +16,12 @@ export default function AllBikesCatalogue({
   onSelectModelForTestRide,
   showSearch = true,
 }: AllBikesCatalogueProps) {
+  const { products: dynamicBikes } = useDynamicProducts();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [selectedColorForT3, setSelectedColorForT3] = useState<string>("/bikes/t3/t3-black.webp");
 
-  const filteredBikes = ZUBOO_COLLECTION.filter((bike) => {
+  const filteredBikes = (dynamicBikes || ZUBOO_COLLECTION).filter((bike) => {
     const matchesSearch =
       bike.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       bike.tagline.toLowerCase().includes(searchQuery.toLowerCase()) ||
