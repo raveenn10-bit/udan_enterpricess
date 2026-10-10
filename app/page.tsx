@@ -530,6 +530,7 @@ export default function ZubooHomePage() {
                       alt={currentHero.name}
                       fill
                       priority
+                      {...{ fetchPriority: "high" }}
                       className="object-contain drop-shadow-2xl"
                       sizes="(max-width: 1024px) 100vw, 50vw"
                     />
@@ -574,6 +575,7 @@ export default function ZubooHomePage() {
                         alt={m.name}
                         fill
                         loading="lazy"
+                        decoding="async"
                         sizes="80px"
                         className="object-contain drop-shadow-md"
                       />
@@ -901,9 +903,10 @@ export default function ZubooHomePage() {
                         src={bike.image}
                         alt={bike.name}
                         fill
+                        loading="lazy"
+                        decoding="async"
                         sizes="(max-width: 1024px) 100vw, 850px"
                         className="object-contain select-none drop-shadow-[0_20px_35px_rgba(0,0,0,0.08)] hover:scale-105 transition-transform duration-500"
-                        priority={idx === 0}
                       />
                     </div>
                   </div>
@@ -934,6 +937,8 @@ export default function ZubooHomePage() {
                       src={photo.src}
                       alt={photo.title}
                       fill
+                      loading="lazy"
+                      decoding="async"
                       sizes="(max-width: 640px) 50vw, 25vw"
                       className="object-cover group-hover:scale-105 transition-transform duration-500"
                     />
@@ -962,6 +967,8 @@ export default function ZubooHomePage() {
                   src="/media/showroom/galle-showroom.jpg"
                   alt="Udan Enterprises Kurunduwatta Galle Showroom"
                   fill
+                  loading="lazy"
+                  decoding="async"
                   sizes="(max-width: 1024px) 100vw, 50vw"
                   className="object-cover group-hover:scale-105 transition-transform duration-500"
                 />

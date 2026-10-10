@@ -23,7 +23,7 @@ export default function Hero({
   subtitle = "Empowering businesses and communities to thrive in a low-carbon world through tailored clean energy solutions.",
   buttonText = "Start a Project",
   onCtaClick,
-  videoSrc = "/media/hero/hero-video.mp4",
+  videoSrc = "/videos/hero.mp4",
 }: HeroProps) {
   const sectionRef = useRef<HTMLElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
@@ -69,22 +69,10 @@ export default function Hero({
   }, [wordsData]);
 
   useEffect(() => {
-    // Lazy defer video playback until after DOM load to ensure ultrafast FCP / LCP
+    // Ultra-fast instant playback with no artificial delay
     const video = videoRef.current;
     if (video) {
-      const playVideo = () => {
-        video.play().catch(() => {});
-      };
-      if (document.readyState === "complete") {
-        playVideo();
-      } else {
-        window.addEventListener("load", playVideo, { once: true });
-        const timer = setTimeout(playVideo, 1200);
-        return () => {
-          window.removeEventListener("load", playVideo);
-          clearTimeout(timer);
-        };
-      }
+      video.play().catch(() => {});
     }
   }, []);
 
@@ -222,15 +210,17 @@ export default function Hero({
       <div className="absolute inset-0">
         <video
           ref={videoRef}
-          preload="none"
-          poster="/media/hero/hero-poster.webp"
+          preload="auto"
+          poster="/media/branding/udan-hero-poster.webp"
           autoPlay
           muted
           loop
           playsInline
+          {...{ fetchPriority: "high" }}
           className="absolute inset-0 w-full h-full object-cover"
         >
           <source src={videoSrc} type="video/mp4" />
+          <source src="/media/hero/hero-video.mp4" type="video/mp4" />
         </video>
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-black/20 backdrop-blur-[1px]" />
       </div>

@@ -91,6 +91,12 @@ export default function HeroSection({
     return () => ctx.revert();
   }, [totalChars]);
 
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.play().catch(() => {});
+    }
+  }, []);
+
   const togglePlay = () => {
     if (videoRef.current) {
       if (isPlaying) {
@@ -238,15 +244,19 @@ export default function HeroSection({
             <div className="relative rounded-2xl overflow-hidden border border-[#E0E8EC] bg-[#111820] shadow-xl aspect-[4/3] sm:aspect-[16/11] lg:aspect-[4/5]">
               <video
                 ref={videoRef}
-                src="/media/hero/hero-video.mp4"
-                preload="none"
-                poster="/media/hero/hero-poster.webp"
+                src="/videos/hero.mp4"
+                preload="auto"
+                poster="/media/branding/udan-hero-poster.webp"
                 autoPlay
                 loop
                 muted={isMuted}
                 playsInline
+                {...{ fetchPriority: "high" }}
                 className="w-full h-full object-cover object-center"
-              />
+              >
+                <source src="/videos/hero.mp4" type="video/mp4" />
+                <source src="/media/hero/hero-video.mp4" type="video/mp4" />
+              </video>
 
               {/* Gradient Scrim */}
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/30 pointer-events-none" />

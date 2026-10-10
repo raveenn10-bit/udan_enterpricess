@@ -248,6 +248,32 @@ export default function Footer() {
               <stop offset="70%" stopColor="#e17055" stopOpacity="0.3" />
               <stop offset="100%" stopColor="#d63031" stopOpacity="0" />
             </radialGradient>
+            {/* Embedded Keyframes guaranteeing flawless animation across all mobile browsers (iOS Safari, Android Chrome) */}
+            <style>{`
+              @keyframes rideMotorcycleOnRoad {
+                0% {
+                  transform: translate(-160px, 160px) rotate(0deg);
+                }
+                25% {
+                  transform: translate(350px, 168px) rotate(0.8deg);
+                }
+                48% {
+                  transform: translate(740px, 140px) rotate(-1.5deg);
+                }
+                74% {
+                  transform: translate(1220px, 180px) rotate(1.5deg);
+                }
+                100% {
+                  transform: translate(1750px, 154px) rotate(-0.5deg);
+                }
+              }
+              .traveling-motorcycle-carrier {
+                animation: rideMotorcycleOnRoad 10s cubic-bezier(0.35, 0, 0.25, 1) infinite;
+                will-change: transform;
+                transform-box: view-box;
+                transform-origin: 0 0;
+              }
+            `}</style>
           </defs>
 
           {/* Sky Background */}
@@ -372,7 +398,7 @@ export default function Footer() {
           />
 
           {/* Traveling Motorcycle with Headlight Beam & Taillight Streak */}
-          <g className="traveling-motorcycle-carrier" id="traveling-motorcycle">
+          <g className="traveling-motorcycle-carrier" id="traveling-motorcycle-carrier">
             {/* Native SVG Translation along the exact Road Curve */}
             <animateTransform
               attributeName="transform"

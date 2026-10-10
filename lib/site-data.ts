@@ -1,6 +1,4 @@
 import { useState, useEffect } from "react";
-import { doc, onSnapshot, collection } from "firebase/firestore";
-import { db } from "@/lib/firebase";
 import { ZUBOO_COLLECTION, BikeModel } from "@/data/bikes";
 import {
   ShowroomSettings,
@@ -12,15 +10,16 @@ import {
   DEFAULT_SETTINGS,
   DEFAULT_HOMEPAGE_CONTENT,
   DEFAULT_OFFERS,
-  getShowroomSettings,
-  getHomepageContent,
-  getProducts,
-  getOffers,
+  getCachedShowroomSettings,
+  getCachedHomepageContent,
+  getCachedProducts,
+  getCachedOffers,
+  checkAndSyncWithRemote,
 } from "@/lib/admin-db";
 
 /**
  * Hook to retrieve live showroom settings (hotline, whatsapp, address, hours, maps)
- * Real-time updates via Cloud Firestore onSnapshot + instant local-first event listener
+ * Instant local cache + 15m throttled remote sync versioning (0 Firestore reads if unchanged)
  */
 export function useShowroomSettings() {
   const [settings, setSettings] = useState<ShowroomSettings>(DEFAULT_SETTINGS);
@@ -29,59 +28,30 @@ export function useShowroomSettings() {
   useEffect(() => {
     let isMounted = true;
 
-    // 1. Initial fast load from local cache or defaults
-    getShowroomSettings().then((cached) => {
-      if (isMounted && cached) {
-        setSettings(cached);
-        setLoading(false);
-      }
-    });
-
-    // 2. Real-time Cloud Firestore listener
-    let unsubscribeFirestore: (() => void) | null = null;
-    try {
-      unsubscribeFirestore = onSnapshot(
-        doc(db, "settings", "showroom"),
-        (snap) => {
-          if (snap.exists() && isMounted) {
-            const data = snap.data() as ShowroomSettings;
-            setSettings(data);
-            if (typeof window !== "undefined") {
-              try {
-                localStorage.setItem("udan_settings_cache", JSON.stringify(data));
-              } catch (e) {}
-            }
-          }
-        },
-        (error) => {
-          console.warn("Firestore settings onSnapshot notice:", error);
-        }
-      );
-    } catch (e) {
-      console.warn("Could not register settings onSnapshot:", e);
+    // 1. Initial fast load from local cache or defaults (0ms hydration)
+    const cached = getCachedShowroomSettings();
+    if (isMounted) {
+      setSettings(cached);
+      setLoading(false);
     }
+
+    // 2. Throttled remote sync check (0 reads if within 15 min cache)
+    checkAndSyncWithRemote();
 
     // 3. Local-first immediate cross-component & cross-tab sync
     const handleLocalUpdate = () => {
-      getShowroomSettings().then((updated) => {
-        if (isMounted && updated) {
-          setSettings(updated);
-        }
-      });
+      if (isMounted) {
+        setSettings(getCachedShowroomSettings());
+      }
     };
 
-    if (typeof window !== "undefined") {
-      window.addEventListener("udan-data-updated", handleLocalUpdate);
-      window.addEventListener("storage", handleLocalUpdate);
-    }
+    window.addEventListener("udan-data-updated", handleLocalUpdate);
+    window.addEventListener("storage", handleLocalUpdate);
 
     return () => {
       isMounted = false;
-      if (unsubscribeFirestore) unsubscribeFirestore();
-      if (typeof window !== "undefined") {
-        window.removeEventListener("udan-data-updated", handleLocalUpdate);
-        window.removeEventListener("storage", handleLocalUpdate);
-      }
+      window.removeEventListener("udan-data-updated", handleLocalUpdate);
+      window.removeEventListener("storage", handleLocalUpdate);
     };
   }, []);
 
@@ -90,7 +60,7 @@ export function useShowroomSettings() {
 
 /**
  * Hook to retrieve live homepage CMS headlines, ticker, and showcases
- * Real-time updates via Cloud Firestore onSnapshot + local-first event listener
+ * Instant local cache + 15m throttled remote sync versioning (0 Firestore reads if unchanged)
  */
 export function useHomepageContent() {
   const [cms, setCms] = useState<SiteContentHomepage>(DEFAULT_HOMEPAGE_CONTENT);
@@ -99,66 +69,37 @@ export function useHomepageContent() {
   useEffect(() => {
     let isMounted = true;
 
-    // 1. Initial fast load
-    getHomepageContent().then((cached) => {
-      if (isMounted && cached) {
-        setCms(cached);
-        setLoading(false);
-      }
-    });
-
-    // 2. Real-time Cloud Firestore listener
-    let unsubscribeFirestore: (() => void) | null = null;
-    try {
-      unsubscribeFirestore = onSnapshot(
-        doc(db, "site_content", "homepage"),
-        (snap) => {
-          if (snap.exists() && isMounted) {
-            const data = snap.data() as SiteContentHomepage;
-            setCms(data);
-            if (typeof window !== "undefined") {
-              try {
-                localStorage.setItem("udan_cms_cache", JSON.stringify(data));
-              } catch (e) {}
-            }
-          }
-        },
-        (error) => {
-          console.warn("Firestore CMS onSnapshot notice:", error);
-        }
-      );
-    } catch (e) {
-      console.warn("Could not register CMS onSnapshot:", e);
+    // 1. Initial fast load from local cache or defaults (0ms hydration)
+    const cached = getCachedHomepageContent();
+    if (isMounted) {
+      setCms(cached);
+      setLoading(false);
     }
 
-    // 3. Local-first immediate sync
+    // 2. Throttled remote sync check
+    checkAndSyncWithRemote();
+
+    // 3. Local-first immediate cross-component & cross-tab sync
     const handleLocalUpdate = () => {
-      getHomepageContent().then((updated) => {
-        if (isMounted && updated) {
-          setCms(updated);
-        }
-      });
+      if (isMounted) {
+        setCms(getCachedHomepageContent());
+      }
     };
 
-    if (typeof window !== "undefined") {
-      window.addEventListener("udan-data-updated", handleLocalUpdate);
-      window.addEventListener("storage", handleLocalUpdate);
-    }
+    window.addEventListener("udan-data-updated", handleLocalUpdate);
+    window.addEventListener("storage", handleLocalUpdate);
 
     return () => {
       isMounted = false;
-      if (unsubscribeFirestore) unsubscribeFirestore();
-      if (typeof window !== "undefined") {
-        window.removeEventListener("udan-data-updated", handleLocalUpdate);
-        window.removeEventListener("storage", handleLocalUpdate);
-      }
+      window.removeEventListener("udan-data-updated", handleLocalUpdate);
+      window.removeEventListener("storage", handleLocalUpdate);
     };
   }, []);
 
   return { cms, loading };
 }
 
-function mapProductToBike(data: ProductItem): BikeModel {
+export function mapProductToBike(data: ProductItem): BikeModel {
   return {
     id: data.id,
     slug: data.slug,
@@ -196,8 +137,8 @@ function mapProductToBike(data: ProductItem): BikeModel {
 }
 
 /**
- * Hook to retrieve live published bike models from Firestore
- * Real-time updates via Cloud Firestore onSnapshot + local-first event listener
+ * Hook to retrieve live published bike models from local cache
+ * Instant local cache + 15m throttled remote sync versioning (0 Firestore reads if unchanged)
  */
 export function useDynamicProducts() {
   const [products, setProducts] = useState<BikeModel[]>(ZUBOO_COLLECTION);
@@ -206,59 +147,37 @@ export function useDynamicProducts() {
   useEffect(() => {
     let isMounted = true;
 
-    // 1. Initial fast load
-    getProducts().then((items) => {
+    const loadProducts = () => {
+      const items = getCachedProducts();
       const published = items.filter((p) => p.status === "published");
-      if (published.length > 0 && isMounted) {
-        setProducts(published.map(mapProductToBike));
-        setLoading(false);
+      if (published.length > 0) {
+        return published.map(mapProductToBike);
       }
-    });
-
-    // 2. Real-time Cloud Firestore listener
-    let unsubscribeFirestore: (() => void) | null = null;
-    try {
-      unsubscribeFirestore = onSnapshot(
-        collection(db, "products"),
-        (snap) => {
-          if (!snap.empty && isMounted) {
-            const allItems = snap.docs.map((d) => d.data() as ProductItem);
-            const published = allItems.filter((p) => p.status === "published");
-            if (published.length > 0) {
-              setProducts(published.map(mapProductToBike));
-            }
-          }
-        },
-        (error) => {
-          console.warn("Firestore products onSnapshot notice:", error);
-        }
-      );
-    } catch (e) {
-      console.warn("Could not register products onSnapshot:", e);
-    }
-
-    // 3. Local-first update listener
-    const handleLocalUpdate = () => {
-      getProducts().then((items) => {
-        const published = items.filter((p) => p.status === "published");
-        if (published.length > 0 && isMounted) {
-          setProducts(published.map(mapProductToBike));
-        }
-      });
+      return ZUBOO_COLLECTION;
     };
 
-    if (typeof window !== "undefined") {
-      window.addEventListener("udan-data-updated", handleLocalUpdate);
-      window.addEventListener("storage", handleLocalUpdate);
+    if (isMounted) {
+      setProducts(loadProducts());
+      setLoading(false);
     }
+
+    // 2. Throttled remote sync check
+    checkAndSyncWithRemote();
+
+    // 3. Local-first immediate sync
+    const handleLocalUpdate = () => {
+      if (isMounted) {
+        setProducts(loadProducts());
+      }
+    };
+
+    window.addEventListener("udan-data-updated", handleLocalUpdate);
+    window.addEventListener("storage", handleLocalUpdate);
 
     return () => {
       isMounted = false;
-      if (unsubscribeFirestore) unsubscribeFirestore();
-      if (typeof window !== "undefined") {
-        window.removeEventListener("udan-data-updated", handleLocalUpdate);
-        window.removeEventListener("storage", handleLocalUpdate);
-      }
+      window.removeEventListener("udan-data-updated", handleLocalUpdate);
+      window.removeEventListener("storage", handleLocalUpdate);
     };
   }, []);
 
@@ -266,8 +185,8 @@ export function useDynamicProducts() {
 }
 
 /**
- * Hook to retrieve live active promotional offers
- * Real-time updates via Cloud Firestore onSnapshot + local-first event listener
+ * Hook to retrieve live active promotional offers from local cache
+ * Instant local cache + 15m throttled remote sync versioning (0 Firestore reads if unchanged)
  */
 export function useDynamicOffers() {
   const [offers, setOffers] = useState<OfferItem[]>(DEFAULT_OFFERS);
@@ -276,59 +195,37 @@ export function useDynamicOffers() {
   useEffect(() => {
     let isMounted = true;
 
-    // 1. Initial fast load
-    getOffers().then((items) => {
+    const loadOffers = () => {
+      const items = getCachedOffers();
       const active = items.filter((o) => o.isActive);
-      if (active.length > 0 && isMounted) {
-        setOffers(active);
-        setLoading(false);
+      if (active.length > 0) {
+        return active;
       }
-    });
+      return DEFAULT_OFFERS;
+    };
 
-    // 2. Real-time Cloud Firestore listener
-    let unsubscribeFirestore: (() => void) | null = null;
-    try {
-      unsubscribeFirestore = onSnapshot(
-        collection(db, "offers"),
-        (snap) => {
-          if (!snap.empty && isMounted) {
-            const allOffers = snap.docs.map((d) => d.data() as OfferItem);
-            const active = allOffers.filter((o) => o.isActive);
-            if (active.length > 0) {
-              setOffers(active);
-            }
-          }
-        },
-        (error) => {
-          console.warn("Firestore offers onSnapshot notice:", error);
-        }
-      );
-    } catch (e) {
-      console.warn("Could not register offers onSnapshot:", e);
+    if (isMounted) {
+      setOffers(loadOffers());
+      setLoading(false);
     }
+
+    // 2. Throttled remote sync check
+    checkAndSyncWithRemote();
 
     // 3. Local update listener
     const handleLocalUpdate = () => {
-      getOffers().then((items) => {
-        const active = items.filter((o) => o.isActive);
-        if (active.length > 0 && isMounted) {
-          setOffers(active);
-        }
-      });
+      if (isMounted) {
+        setOffers(loadOffers());
+      }
     };
 
-    if (typeof window !== "undefined") {
-      window.addEventListener("udan-data-updated", handleLocalUpdate);
-      window.addEventListener("storage", handleLocalUpdate);
-    }
+    window.addEventListener("udan-data-updated", handleLocalUpdate);
+    window.addEventListener("storage", handleLocalUpdate);
 
     return () => {
       isMounted = false;
-      if (unsubscribeFirestore) unsubscribeFirestore();
-      if (typeof window !== "undefined") {
-        window.removeEventListener("udan-data-updated", handleLocalUpdate);
-        window.removeEventListener("storage", handleLocalUpdate);
-      }
+      window.removeEventListener("udan-data-updated", handleLocalUpdate);
+      window.removeEventListener("storage", handleLocalUpdate);
     };
   }, []);
 

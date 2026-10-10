@@ -2274,14 +2274,6 @@ footer.oem-footer {
     animation: none;
     opacity: 1;
   }
-  .road-markings {
-    animation: none;
-  }
-  .traveling-motorcycle {
-    animation: none;
-    left: 48%;
-    transform: translateX(-50%);
-  }
   .motorcycle-chassis {
     animation: none;
   }
@@ -2355,8 +2347,8 @@ footer.oem-footer {
 .traveling-motorcycle-carrier {
   animation: rideMotorcycleOnRoad 10s cubic-bezier(0.35, 0, 0.25, 1) infinite;
   will-change: transform;
+  transform-box: view-box;
   transform-origin: 0 0;
-  transform: translateZ(0);
 }
 
 /* Wheel rotation animation */
@@ -3021,15 +3013,9 @@ footer.oem-footer {
 
 /* Accessibility: prefers-reduced-motion */
 @media (prefers-reduced-motion: reduce) {
-  .traveling-motorcycle-carrier,
-  .wheel-spoke,
-  .headlight-beam-group,
   .neon-pulse,
   .road-neon-edge {
     animation: none !important;
-  }
-  .traveling-motorcycle-carrier {
-    transform: translate(740px, 140px) !important;
   }
 }
 

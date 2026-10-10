@@ -627,6 +627,7 @@ footer.oem-footer {
 .traveling-motorcycle-carrier {
   animation: rideMotorcycleOnRoad 10s cubic-bezier(0.35, 0, 0.25, 1) infinite;
   will-change: transform;
+  transform-box: view-box;
   transform-origin: 0 0;
 }
 
@@ -1138,6 +1139,11 @@ footer.oem-footer {
 
 /* 768px: Tablets & Large Mobile */
 @media (max-width: 768px) {
+  .skyline-canvas-wrapper,
+  .motorcycle-skyline-svg {
+    height: 130px;
+    max-height: 130px;
+  }
   .skyline-stage {
     height: 170px;
   }
@@ -1377,23 +1383,6 @@ footer.oem-footer {
     animation: none;
     opacity: 1;
   }
-  .road-markings {
-    animation: none;
-  }
-  .traveling-motorcycle {
-    animation: none;
-    left: 48%;
-    transform: translateX(-50%);
-  }
-  .traveling-motorcycle-carrier {
-    animation: none !important;
-    transform: translate(740px, 140px) !important;
-  }
-  .wheel-spoke,
-  .headlight-beam-group,
-  .tail-light-streaks {
-    animation: none !important;
-  }
   .motorcycle-chassis {
     animation: none;
   }
@@ -1595,4 +1584,27 @@ footer.oem-footer {
     will-change: auto !important;
   }
 }
+
+/* ==========================================================================
+   ULTRA-FAST RENDERING & REDUCED JANK (Content Visibility)
+   ========================================================================== */
+
+.content-auto,
+.section-deferred {
+  content-visibility: auto;
+  contain-intrinsic-size: 800px;
+}
+
+/* Optimize heavy below-the-fold sections so initial viewport paints instantly */
+#categories,
+#featured-models,
+#technology,
+#excellent-products,
+#showroom-location,
+.udan-skyline-footer,
+footer.oem-footer {
+  content-visibility: auto;
+  contain-intrinsic-size: 800px;
+}
+
 

@@ -261,6 +261,7 @@ export default function Navbar({ onOpenTestRide }: NavbarProps) {
                   alt="Udan Enterprises"
                   fill
                   priority
+                  {...{ fetchPriority: "high" }}
                   sizes="48px"
                   className="object-contain transition-transform duration-300 group-hover:scale-105"
                 />
@@ -277,6 +278,8 @@ export default function Navbar({ onOpenTestRide }: NavbarProps) {
                   src="/zuboo-logo.webp"
                   alt="Zuboo Electric Bikes"
                   fill
+                  priority
+                  {...{ fetchPriority: "high" }}
                   sizes="96px"
                   className="object-contain"
                 />

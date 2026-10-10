@@ -34,7 +34,7 @@ import {
 // LOCAL STORAGE RESILIENT CACHE UTILITIES
 // ==========================================
 
-function readLocal<T>(key: string, fallback: T): T {
+export function readLocal<T>(key: string, fallback: T): T {
   if (typeof window === "undefined") return fallback;
   try {
     const item = localStorage.getItem(key);
@@ -44,7 +44,7 @@ function readLocal<T>(key: string, fallback: T): T {
   }
 }
 
-function writeLocal<T>(key: string, data: T): void {
+export function writeLocal<T>(key: string, data: T): void {
   if (typeof window === "undefined") return;
   try {
     localStorage.setItem(key, JSON.stringify(data));
@@ -54,8 +54,46 @@ function writeLocal<T>(key: string, data: T): void {
   }
 }
 
+export function safeSetLocal<T>(key: string, data: T): void {
+  if (typeof window === "undefined") return;
+  try {
+    localStorage.setItem(key, JSON.stringify(data));
+  } catch (e) {
+    console.warn(`localStorage setItem failed for ${key}:`, e);
+  }
+}
+
 // Track whether Firestore sync succeeded or has rules pending
 export let isCloudFirestoreSynced = true;
+
+/**
+ * Increment the remote sync version in Firestore and update local storage version.
+ * Called whenever Admin mutates settings, CMS content, products, or offers:
+ * 1. Immediately persists to localStorage and dispatches udan-data-updated (instant preview)
+ * 2. Writes doc to Firestore
+ * 3. Updates metadata/sync_version in Firestore
+ * 4. Updates udan_sync_version and udan_last_sync_check in localStorage
+ */
+export async function bumpSyncVersion(): Promise<number> {
+  const version = Date.now();
+  if (typeof window !== "undefined") {
+    try {
+      localStorage.setItem("udan_sync_version", String(version));
+      localStorage.setItem("udan_last_sync_check", String(version));
+    } catch (e) {
+      console.warn("Failed to set local sync version in localStorage:", e);
+    }
+  }
+
+  try {
+    const syncRef = doc(db, "metadata", "sync_version");
+    await setDoc(syncRef, { v: version, updatedAt: serverTimestamp() }, { merge: true });
+  } catch (err) {
+    console.warn("bumpSyncVersion firestore notice:", err);
+  }
+
+  return version;
+}
 
 // ==========================================
 // 1. ADMIN PROFILES & RBAC
@@ -347,6 +385,7 @@ export async function saveProduct(product: ProductItem, isNew = false): Promise<
     };
     await setDoc(ref, data, { merge: true });
     isCloudFirestoreSynced = true;
+    await bumpSyncVersion();
   } catch (err) {
     console.warn("saveProduct cloud sync notice:", err);
     isCloudFirestoreSynced = false;
@@ -359,6 +398,7 @@ export async function deleteProduct(productId: string): Promise<void> {
 
   try {
     await deleteDoc(doc(db, "products", productId));
+    await bumpSyncVersion();
   } catch (err) {
     console.warn("deleteProduct cloud notice:", err);
   }
@@ -596,6 +636,7 @@ export async function saveOffer(offer: OfferItem): Promise<void> {
       updatedAt: serverTimestamp(),
     }, { merge: true });
     isCloudFirestoreSynced = true;
+    await bumpSyncVersion();
   } catch (err) {
     console.warn("saveOffer cloud sync notice:", err);
     isCloudFirestoreSynced = false;
@@ -608,6 +649,7 @@ export async function deleteOffer(offerId: string): Promise<void> {
 
   try {
     await deleteDoc(doc(db, "offers", offerId));
+    await bumpSyncVersion();
   } catch (err) {
     console.warn("deleteOffer cloud notice:", err);
   }
@@ -666,6 +708,7 @@ export async function saveShowroomSettings(settings: ShowroomSettings): Promise<
       updatedAt: serverTimestamp(),
     }, { merge: true });
     isCloudFirestoreSynced = true;
+    await bumpSyncVersion();
   } catch (err) {
     console.warn("saveShowroomSettings cloud notice:", err);
     isCloudFirestoreSynced = false;
@@ -719,8 +762,148 @@ export async function saveHomepageContent(content: SiteContentHomepage): Promise
       updatedAt: serverTimestamp(),
     }, { merge: true });
     isCloudFirestoreSynced = true;
+    await bumpSyncVersion();
   } catch (err) {
     console.warn("saveHomepageContent cloud notice:", err);
     isCloudFirestoreSynced = false;
   }
+}
+
+// ==========================================
+// 9. INSTANT CACHE ACCESSORS & SYNC CHECK
+// ==========================================
+
+export function getCachedShowroomSettings(): ShowroomSettings {
+  return readLocal<ShowroomSettings>("udan_settings_cache", DEFAULT_SETTINGS);
+}
+
+export function getCachedHomepageContent(): SiteContentHomepage {
+  return readLocal<SiteContentHomepage>("udan_cms_cache", DEFAULT_HOMEPAGE_CONTENT);
+}
+
+export function getCachedProducts(): ProductItem[] {
+  return readLocal<ProductItem[]>("udan_products_cache", ZUBOO_COLLECTION.map(mapStaticBikeToProduct));
+}
+
+export function getCachedOffers(): OfferItem[] {
+  return readLocal<OfferItem[]>("udan_offers_cache", DEFAULT_OFFERS);
+}
+
+export function hasLocalDataCache(): boolean {
+  if (typeof window === "undefined") return false;
+  try {
+    const hasSettings = !!localStorage.getItem("udan_settings_cache");
+    const hasProducts = !!localStorage.getItem("udan_products_cache");
+    return hasSettings && hasProducts;
+  } catch (e) {
+    return false;
+  }
+}
+
+export const SYNC_THROTTLE_MS = 15 * 60 * 1000; // 15 minutes = 900,000 ms
+
+let activeSyncPromise: Promise<void> | null = null;
+
+/**
+ * Checks if the remote sync version is newer than the local cache.
+ * - If less than 15 minutes have passed since last check AND cache exists: 0 Firestore reads (instant).
+ * - If 15+ minutes have passed (or cache empty): reads ONLY doc(db, "metadata", "sync_version") (1 read).
+ * - If remoteVersion === localVersion: updates udan_last_sync_check and returns (0 collection reads).
+ * - ONLY if remoteVersion > localVersion: fetches updated collections/docs, updates cache & dispatches event.
+ */
+export async function checkAndSyncWithRemote(force = false): Promise<void> {
+  if (typeof window === "undefined") return;
+
+  if (activeSyncPromise) {
+    return activeSyncPromise;
+  }
+
+  activeSyncPromise = (async () => {
+    try {
+      const lastCheckStr = localStorage.getItem("udan_last_sync_check");
+      const lastCheck = lastCheckStr ? parseInt(lastCheckStr, 10) : 0;
+      const now = Date.now();
+      const hasCache = hasLocalDataCache();
+
+      // 1. Throttled skip: If !force, within 15 mins, and local cache exists: 0 Firestore reads
+      if (!force && hasCache && lastCheck > 0 && now - lastCheck < SYNC_THROTTLE_MS) {
+        return;
+      }
+
+      // 2. Read ONLY doc(db, "metadata", "sync_version") (cost: 1 single read)
+      const syncRef = doc(db, "metadata", "sync_version");
+      const syncSnap = await getDoc(syncRef);
+
+      const localVersionStr = localStorage.getItem("udan_sync_version");
+      const localVersion = localVersionStr ? parseInt(localVersionStr, 10) : 0;
+
+      let remoteVersion = 0;
+      if (syncSnap.exists()) {
+        const data = syncSnap.data();
+        remoteVersion = Number(data?.v || 0);
+      }
+
+      // 3. If remote version matches or is older than local, and we have local cached data:
+      if (!force && hasCache && remoteVersion <= localVersion) {
+        // No changes made in Admin. Refresh check timestamp and exit. 0 collection reads!
+        localStorage.setItem("udan_last_sync_check", String(now));
+        return;
+      }
+
+      // 4. Remote version > local version OR local cache empty:
+      // Fetch updated collections and documents
+      const [settingsSnap, cmsSnap, productsSnap, offersSnap] = await Promise.all([
+        getDoc(doc(db, "settings", "showroom")),
+        getDoc(doc(db, "site_content", "homepage")),
+        getDocs(collection(db, "products")),
+        getDocs(collection(db, "offers")),
+      ]);
+
+      if (settingsSnap.exists()) {
+        const remoteSettings = settingsSnap.data() as ShowroomSettings;
+        safeSetLocal("udan_settings_cache", remoteSettings);
+      } else if (!localStorage.getItem("udan_settings_cache")) {
+        safeSetLocal("udan_settings_cache", DEFAULT_SETTINGS);
+      }
+
+      if (cmsSnap.exists()) {
+        const remoteCms = cmsSnap.data() as SiteContentHomepage;
+        safeSetLocal("udan_cms_cache", remoteCms);
+      } else if (!localStorage.getItem("udan_cms_cache")) {
+        safeSetLocal("udan_cms_cache", DEFAULT_HOMEPAGE_CONTENT);
+      }
+
+      if (!productsSnap.empty) {
+        const remoteProducts = productsSnap.docs.map((d) => d.data() as ProductItem);
+        safeSetLocal("udan_products_cache", remoteProducts);
+      } else if (!localStorage.getItem("udan_products_cache")) {
+        safeSetLocal(
+          "udan_products_cache",
+          ZUBOO_COLLECTION.map(mapStaticBikeToProduct)
+        );
+      }
+
+      if (!offersSnap.empty) {
+        const remoteOffers = offersSnap.docs.map((d) => d.data() as OfferItem);
+        safeSetLocal("udan_offers_cache", remoteOffers);
+      } else if (!localStorage.getItem("udan_offers_cache")) {
+        safeSetLocal("udan_offers_cache", DEFAULT_OFFERS);
+      }
+
+      const syncedVersion = remoteVersion > 0 ? remoteVersion : now;
+      try {
+        localStorage.setItem("udan_sync_version", String(syncedVersion));
+        localStorage.setItem("udan_last_sync_check", String(now));
+      } catch (e) {}
+
+      // Dispatch event to re-render all active subscriber components immediately
+      window.dispatchEvent(new Event("udan-data-updated"));
+    } catch (err) {
+      console.warn("checkAndSyncWithRemote notice:", err);
+    } finally {
+      activeSyncPromise = null;
+    }
+  })();
+
+  return activeSyncPromise;
 }

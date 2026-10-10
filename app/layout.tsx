@@ -84,6 +84,27 @@ export default function RootLayout({
       lang="en" 
       className={`${manrope.variable} ${dmSerifDisplay.variable} ${fraunces.variable} ${dellaRespira.variable} ${alice.variable} ${ebGaramond.variable} ${inter.variable} ${spaceGrotesk.variable}`}
     >
+      <head>
+        {/* Preconnect & DNS-Prefetch for high-speed asset resolution */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+        <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
+
+        {/* Instant first-paint visual with hero poster and video stream buffering */}
+        <link
+          rel="preload"
+          href="/media/branding/udan-hero-poster.webp"
+          as="image"
+          type="image/webp"
+        />
+        <link
+          rel="preload"
+          href="/videos/hero.mp4"
+          as="video"
+          type="video/mp4"
+        />
+      </head>
       <body className="antialiased selection:bg-[#346C83] selection:text-white">
         <LanguageProvider>
           <SmoothScroll>{children}</SmoothScroll>
