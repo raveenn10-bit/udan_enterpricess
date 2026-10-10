@@ -761,6 +761,314 @@ nav.main-nav a:hover, nav.main-nav a.active {
   background: #F8FAFC;
 }
 
+/* EXCELLENT PRODUCTS & SHOWROOM GALLERY SHOWCASE */
+.excellent-products-box {
+  background: #FFFFFF;
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  padding: 24px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+}
+
+.showcase-header {
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.model-switcher-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+
+.model-pill {
+  padding: 6px 14px;
+  border-radius: 9999px;
+  font-size: 11px;
+  font-weight: 700;
+  background: #F1F5F9;
+  color: #334155;
+  border: 1px solid #E2E8F0;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.model-pill:hover {
+  background: #E2E8F0;
+  color: #0F172A;
+}
+
+.model-pill.active {
+  background: #0F172A;
+  color: #FFFFFF;
+  border-color: #0F172A;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.2);
+}
+
+.showcase-bike-display {
+  background: linear-gradient(180deg, #F8FAFC 0%, #FFFFFF 100%);
+  border: 1px solid #F1F5F9;
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 18px;
+}
+
+.bike-info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 8px;
+}
+
+.bike-image-stage {
+  min-height: 200px;
+  max-height: 240px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 12px 0;
+}
+
+.bike-image-stage img {
+  max-height: 220px;
+  width: auto;
+  max-width: 100%;
+  object-fit: contain;
+  transition: transform 0.4s ease;
+}
+
+.bike-image-stage img:hover {
+  transform: scale(1.05);
+}
+
+.bike-specs-bar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding-top: 14px;
+  border-top: 1px solid #E2E8F0;
+}
+
+.specs-mini-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.mini-spec {
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-size: 11px;
+  color: #475569;
+}
+
+.mini-spec strong {
+  color: #0F172A;
+}
+
+.showroom-gallery-strip {
+  padding-top: 16px;
+  border-top: 1px solid #E2E8F0;
+}
+
+.gallery-strip-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.gallery-nav-buttons {
+  display: flex;
+  gap: 6px;
+}
+
+.btn-nav {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  border: 1px solid #E2E8F0;
+  background: #FFFFFF;
+  color: #334155;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-nav:hover:not(:disabled) {
+  background: #F1F5F9;
+  color: #0F172A;
+  border-color: #CBD5E1;
+}
+
+.btn-nav:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.gallery-thumbs-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
+.gallery-thumb-item {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid #E2E8F0;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+  transition: all 0.3s ease;
+  background: #000;
+}
+
+.gallery-thumb-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.4s ease;
+}
+
+.gallery-thumb-item:hover {
+  border-color: var(--primary);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(255, 94, 20, 0.15);
+}
+
+.gallery-thumb-item:hover img {
+  transform: scale(1.08);
+}
+
+.gallery-thumb-badge {
+  position: absolute;
+  bottom: 4px;
+  right: 4px;
+  background: rgba(15, 23, 42, 0.75);
+  backdrop-filter: blur(4px);
+  color: #FFFFFF;
+  font-size: 9px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+/* Lightbox Modal */
+.showroom-lightbox-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(10, 10, 15, 0.92);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.lightbox-dialog {
+  max-width: 900px;
+  width: 100%;
+  background: #0F172A;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  overflow: hidden;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.75);
+  display: flex;
+  flex-direction: column;
+}
+
+.lightbox-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 20px;
+  background: rgba(15, 23, 42, 0.9);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.lightbox-close {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  color: #FFFFFF;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.lightbox-close:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.lightbox-body {
+  position: relative;
+  height: 60vh;
+  min-height: 350px;
+  background: #000000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.lightbox-body img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.lightbox-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #FFFFFF;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.lightbox-arrow:hover {
+  background: rgba(0, 0, 0, 0.9);
+  border-color: #FF5E14;
+  transform: translateY(-50%) scale(1.1);
+}
+
+.lightbox-arrow.left { left: 16px; }
+.lightbox-arrow.right { right: 16px; }
+
+.lightbox-footer {
+  padding: 14px 20px;
+  background: rgba(15, 23, 42, 0.9);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+
 /* ==========================================================================
    UDAN SKYLINE FOOTER - CINEMATIC MOTORCYCLE & GALLE SKYLINE
    ========================================================================== */
@@ -1827,11 +2135,11 @@ footer.oem-footer {
   z-index: 2;
 }
 
-/* 5-Column Grid - Sleek & Compact Spacing */
+/* 4-Column Grid - Sleek & Compact Spacing */
 .footer-columns-grid {
   display: grid;
-  grid-template-columns: 2.2fr 1.1fr 1.3fr 1.8fr 1.6fr;
-  gap: 24px;
+  grid-template-columns: 2fr 1.2fr 1.4fr 1.4fr;
+  gap: 28px;
   padding-bottom: 22px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
@@ -2133,93 +2441,6 @@ footer.oem-footer {
   transform: scale(1.05);
 }
 
-/* Value Badges Ribbon - Sleek & Compact with iconGlowPulse */
-@keyframes iconGlowPulse {
-  0%, 100% {
-    box-shadow: 0 0 6px rgba(255, 94, 20, 0.25), inset 0 0 4px rgba(255, 94, 20, 0.1);
-    border-color: rgba(255, 94, 20, 0.3);
-    transform: translateY(0);
-  }
-  50% {
-    box-shadow: 0 0 16px rgba(255, 94, 20, 0.65), 0 0 24px rgba(239, 68, 68, 0.3), inset 0 0 8px rgba(255, 94, 20, 0.25);
-    border-color: rgba(255, 94, 20, 0.7);
-    transform: translateY(-2px);
-  }
-}
-
-.footer-value-ribbon {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 16px;
-  padding: 16px 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.value-badge-item {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 8px 12px;
-  border-radius: 12px;
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  transition: all 0.25s cubic-bezier(0.2, 1, 0.3, 1);
-}
-
-.value-badge-item:hover {
-  background: rgba(255, 94, 20, 0.08);
-  border-color: rgba(255, 94, 20, 0.35);
-  transform: translateY(-2px);
-}
-
-.badge-icon-box {
-  width: 40px;
-  height: 40px;
-  border-radius: 10px;
-  background: rgba(255, 94, 20, 0.12);
-  border: 1px solid rgba(255, 94, 20, 0.3);
-  color: #FF5E14;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  animation: iconGlowPulse 3.2s ease-in-out infinite;
-  will-change: transform, box-shadow;
-  transition: all 0.25s ease;
-}
-
-.value-badge-item:nth-child(1) .badge-icon-box { animation-delay: 0s; }
-.value-badge-item:nth-child(2) .badge-icon-box { animation-delay: 0.8s; }
-.value-badge-item:nth-child(3) .badge-icon-box { animation-delay: 1.6s; }
-.value-badge-item:nth-child(4) .badge-icon-box { animation-delay: 2.4s; }
-
-.value-badge-item:hover .badge-icon-box {
-  background: #FF2222;
-  border-color: #FF2222;
-  color: #FFFFFF;
-  box-shadow: 0 0 18px rgba(255, 34, 34, 0.75);
-  transform: translateY(-2px) scale(1.05);
-  animation: none;
-}
-
-.badge-text-box {
-  display: flex;
-  flex-direction: column;
-}
-
-.badge-title {
-  font-size: 11.5px;
-  font-weight: 800;
-  color: #FFFFFF;
-  letter-spacing: 0.6px;
-  text-transform: uppercase;
-}
-
-.badge-sub {
-  font-size: 10.5px;
-  color: #64748B;
-  margin-top: 1px;
-}
 
 /* Bottom Bar - Clean & Compact */
 .footer-bottom-bar {
@@ -2348,11 +2569,6 @@ footer.oem-footer {
   .brand-col {
     grid-column: span 2;
   }
-  .footer-value-ribbon {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 14px;
-    padding: 14px 0;
-  }
 }
 
 /* 768px: Tablets & Large Mobile */
@@ -2376,11 +2592,6 @@ footer.oem-footer {
   }
   .brand-col {
     grid-column: span 1;
-  }
-  .footer-value-ribbon {
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-    padding: 12px 0;
   }
   .footer-bottom-bar {
     flex-direction: column;
@@ -2406,15 +2617,6 @@ footer.oem-footer {
   }
   .footer-body-wrapper {
     padding: 20px 16px 14px;
-  }
-  .footer-value-ribbon {
-    grid-template-columns: 1fr;
-    gap: 10px;
-    padding: 12px 0;
-  }
-  .value-badge-item {
-    min-height: 44px;
-    padding: 8px 12px;
   }
   .newsletter-input-wrap {
     flex-direction: column;
@@ -2463,10 +2665,6 @@ footer.oem-footer {
   .footer-contact-list li {
     font-size: 12px;
   }
-  .badge-icon-box {
-    width: 36px;
-    height: 36px;
-  }
 }
 
 /* 375px: iPhone SE & Small Devices */
@@ -2493,12 +2691,6 @@ footer.oem-footer {
   .footer-contact-list li {
     font-size: 11.5px;
   }
-  .badge-title {
-    font-size: 11px;
-  }
-  .badge-sub {
-    font-size: 10px;
-  }
 }
 
 /* 320px: Ultra-Narrow Compact Devices */
@@ -2523,9 +2715,6 @@ footer.oem-footer {
   }
   .footer-columns-grid {
     gap: 14px;
-  }
-  .value-badge-item {
-    padding: 6px 8px;
   }
   .footer-bottom-bar {
     font-size: 10.5px;

@@ -3,22 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import {
-  ArrowRight,
-  CheckCircle2,
-  Calculator,
-  Wrench,
-  ShieldCheck,
-  Zap,
-  Truck,
-  Phone,
-  Mail,
-  MapPin,
-  Clock,
-  Sparkles,
-  ArrowUp,
-  Lock,
-} from "lucide-react";
+import { ArrowRight, CheckCircle2, ArrowUp } from "lucide-react";
 import { db } from "@/lib/firebase";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import { useTranslation } from "@/lib/i18n";
@@ -38,7 +23,7 @@ export default function Footer() {
       if (footerRef.current && typeof ScrollTrigger !== "undefined") {
         gsap.fromTo(
           footerRef.current.querySelectorAll(
-            ".skyline-canvas-wrapper, .footer-value-ribbon, .footer-columns-grid > div, .footer-bottom-bar"
+            ".skyline-canvas-wrapper, .footer-columns-grid > div, .footer-bottom-bar"
           ),
           { opacity: 0, y: 32 },
           {
@@ -465,9 +450,9 @@ export default function Footer() {
         <div className="tire-tread-glow-right" aria-hidden="true" />
 
         <div className="footer-main-container max-w-7xl mx-auto">
-          {/* 5-Column Responsive Grid - Sleek & Compact Spacing */}
-          <div className="footer-columns-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 lg:gap-8 pb-6 border-b border-white/10">
-            {/* Col 1: Brand & Socials */}
+          {/* 4-Column Responsive Grid - Sleek & Compact Spacing */}
+          <div className="footer-columns-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-10 pb-6 border-b border-white/10">
+            {/* Col 1: Brand & Showroom */}
             <div className="footer-col brand-col lg:col-span-2 space-y-3">
               <div className="footer-brand-header flex items-center gap-3">
                 <div className="relative h-11 w-11 shrink-0">
@@ -564,89 +549,8 @@ export default function Footer() {
               </div>
             </div>
 
-            {/* Col 2: Quick Links */}
-            <div className="footer-col links-col space-y-2.5">
-              <h4 className="footer-col-title text-[11px] font-extrabold uppercase tracking-[1.5px] text-[#E2E8F0] flex items-center gap-1.5">
-                <span className="footer-slash text-[#FF5E14]">/</span> {t.footer_quick_links}
-              </h4>
-              <ul className="footer-nav-list space-y-1.5 text-xs font-medium text-slate-300">
-                <li>
-                  <Link href="/" className="footer-nav-link group hover:text-white transition-all flex items-center gap-1.5">
-                    <span className="arrow-bullet text-[#FF2222] font-black text-xs transition-transform duration-200 group-hover:translate-x-1">›</span>
-                    <span>{t.nav_overview}</span>
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/bikes" className="footer-nav-link group hover:text-white transition-all flex items-center gap-1.5">
-                    <span className="arrow-bullet text-[#FF2222] font-black text-xs transition-transform duration-200 group-hover:translate-x-1">›</span>
-                    <span>{t.nav_bikes}</span>
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/calculator"
-                    className="footer-nav-link group hover:text-white text-amber-300 transition-all flex items-center gap-1.5 font-semibold"
-                  >
-                    <span className="arrow-bullet text-[#FF2222] font-black text-xs transition-transform duration-200 group-hover:translate-x-1">›</span>
-                    <Calculator className="w-3.5 h-3.5 text-amber-400 shrink-0" />
-                    <span>{t.nav_calculator}</span>
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/parts"
-                    className="footer-nav-link group hover:text-white transition-all flex items-center gap-1.5"
-                  >
-                    <span className="arrow-bullet text-[#FF2222] font-black text-xs transition-transform duration-200 group-hover:translate-x-1">›</span>
-                    <Wrench className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-                    <span>{t.nav_parts}</span>
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/offers" className="footer-nav-link group hover:text-white transition-all flex items-center gap-1.5">
-                    <span className="arrow-bullet text-[#FF2222] font-black text-xs transition-transform duration-200 group-hover:translate-x-1">›</span>
-                    <span>{t.nav_offers}</span>
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/about" className="footer-nav-link group hover:text-white transition-all flex items-center gap-1.5">
-                    <span className="arrow-bullet text-[#FF2222] font-black text-xs transition-transform duration-200 group-hover:translate-x-1">›</span>
-                    <span>{t.nav_about}</span>
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/service" className="footer-nav-link group hover:text-white transition-all flex items-center gap-1.5">
-                    <span className="arrow-bullet text-[#FF2222] font-black text-xs transition-transform duration-200 group-hover:translate-x-1">›</span>
-                    <span>After-Sales Service Bay</span>
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/warranty" className="footer-nav-link group hover:text-white transition-all flex items-center gap-1.5">
-                    <span className="arrow-bullet text-[#FF2222] font-black text-xs transition-transform duration-200 group-hover:translate-x-1">›</span>
-                    <span>Digital VIN Warranty</span>
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/contact" className="footer-nav-link group hover:text-white transition-all flex items-center gap-1.5">
-                    <span className="arrow-bullet text-[#FF2222] font-black text-xs transition-transform duration-200 group-hover:translate-x-1">›</span>
-                    <span>{t.nav_showroom}</span>
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/admin"
-                    className="footer-nav-link group hover:text-amber-400 text-slate-400 transition-all text-[11px] flex items-center gap-1.5 pt-0.5"
-                  >
-                    <span className="arrow-bullet text-amber-400 font-black text-xs transition-transform duration-200 group-hover:translate-x-1">›</span>
-                    <Lock className="w-3 h-3 text-amber-400 shrink-0" />
-                    <span>Showroom CMS Admin</span>
-                  </Link>
-                </li>
-              </ul>
-            </div>
-
-            {/* Col 3: Zuboo Featured Models */}
-            <div className="footer-col bikes-col space-y-2.5">
+            {/* Col 2: Zuboo Featured Models */}
+            <div className="footer-col bikes-col lg:col-span-1 space-y-2.5">
               <h4 className="footer-col-title text-[11px] font-extrabold uppercase tracking-[1.5px] text-[#E2E8F0] flex items-center gap-1.5">
                 <span className="footer-slash text-[#FF5E14]">/</span> {t.footer_models}
               </h4>
@@ -717,8 +621,8 @@ export default function Footer() {
               </ul>
             </div>
 
-            {/* Col 4: Newsletter & Priority List */}
-            <div className="footer-col newsletter-col space-y-2.5">
+            {/* Col 3: Newsletter & Updates */}
+            <div className="footer-col newsletter-col lg:col-span-1 space-y-2.5">
               <h4 className="footer-col-title text-[11px] font-extrabold uppercase tracking-[1.5px] text-[#E2E8F0] flex items-center gap-1.5">
                 <span className="footer-slash text-[#FF5E14]">/</span> {t.footer_stay_informed}
               </h4>
@@ -755,68 +659,7 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* 4. VALUE BADGES RIBBON (4 High-Performance Badges with iconGlowPulse) */}
-          <div className="footer-value-ribbon py-4 border-b border-white/10">
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-              <div className="value-badge-item flex items-center gap-3 p-2.5 rounded-xl bg-white/[0.03] border border-white/10 hover:border-[#FF5E14]/40 hover:bg-[#FF5E14]/10 transition-all">
-                <div className="badge-icon-box w-9 h-9 rounded-lg bg-[#FF5E14]/15 border border-[#FF5E14]/30 flex items-center justify-center text-[#FF5E14] shrink-0">
-                  <ShieldCheck className="w-4.5 h-4.5" />
-                </div>
-                <div className="badge-text-box">
-                  <div className="badge-title font-heading font-bold text-xs uppercase tracking-wide text-white">
-                    GENUINE PRODUCTS
-                  </div>
-                  <div className="badge-sub text-[11px] text-slate-400">
-                    100% Certified Zuboo OEM
-                  </div>
-                </div>
-              </div>
-
-              <div className="value-badge-item flex items-center gap-3 p-2.5 rounded-xl bg-white/[0.03] border border-white/10 hover:border-[#FF5E14]/40 hover:bg-[#FF5E14]/10 transition-all">
-                <div className="badge-icon-box w-9 h-9 rounded-lg bg-[#FF5E14]/15 border border-[#FF5E14]/30 flex items-center justify-center text-[#FF5E14] shrink-0">
-                  <Truck className="w-4.5 h-4.5" />
-                </div>
-                <div className="badge-text-box">
-                  <div className="badge-title font-heading font-bold text-xs uppercase tracking-wide text-white">
-                    SAFE TRANSPORT
-                  </div>
-                  <div className="badge-sub text-[11px] text-slate-400">
-                    Island-wide Delivery
-                  </div>
-                </div>
-              </div>
-
-              <div className="value-badge-item flex items-center gap-3 p-2.5 rounded-xl bg-white/[0.03] border border-white/10 hover:border-[#FF5E14]/40 hover:bg-[#FF5E14]/10 transition-all">
-                <div className="badge-icon-box w-9 h-9 rounded-lg bg-[#FF5E14]/15 border border-[#FF5E14]/30 flex items-center justify-center text-[#FF5E14] shrink-0">
-                  <Wrench className="w-4.5 h-4.5" />
-                </div>
-                <div className="badge-text-box">
-                  <div className="badge-title font-heading font-bold text-xs uppercase tracking-wide text-white">
-                    RELIABLE SERVICE
-                  </div>
-                  <div className="badge-sub text-[11px] text-slate-400">
-                    Galle Expert Technicians
-                  </div>
-                </div>
-              </div>
-
-              <div className="value-badge-item flex items-center gap-3 p-2.5 rounded-xl bg-white/[0.03] border border-white/10 hover:border-[#FF5E14]/40 hover:bg-[#FF5E14]/10 transition-all">
-                <div className="badge-icon-box w-9 h-9 rounded-lg bg-[#FF5E14]/15 border border-[#FF5E14]/30 flex items-center justify-center text-[#FF5E14] shrink-0">
-                  <Zap className="w-4.5 h-4.5" />
-                </div>
-                <div className="badge-text-box">
-                  <div className="badge-title font-heading font-bold text-xs uppercase tracking-wide text-white">
-                    LITHIUM TORQUE
-                  </div>
-                  <div className="badge-sub text-[11px] text-slate-400">
-                    100% Zero Fuel Expense
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* 5. BOTTOM DISCLAIMER, CREDITS & BACK TO TOP */}
+          {/* 4. BOTTOM DISCLAIMER, CREDITS & BACK TO TOP */}
           <div className="footer-bottom-bar pt-4 flex flex-col sm:flex-row items-center justify-between text-[11px] text-slate-500 gap-3">
             <div className="copyright-text text-center sm:text-left">
               © {new Date().getFullYear()} Udan Enterprises (Pvt) Ltd. {t.footer_all_rights}

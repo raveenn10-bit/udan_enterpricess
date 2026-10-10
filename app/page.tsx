@@ -15,6 +15,7 @@ import {
   MapPin,
   Clock,
   Mail,
+  ChevronLeft,
   ChevronRight,
   ArrowRight,
   CheckCircle2,
@@ -27,6 +28,7 @@ import {
   Percent,
   X,
   ExternalLink,
+  ZoomIn,
   Cpu,
   Droplets,
   DollarSign
@@ -38,6 +40,139 @@ import TextReveal from "@/components/TextReveal";
 import BrandBounceText from "@/components/BrandBounceText";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+const SHOWCASE_BIKES = [
+  {
+    name: "Zuboo Mini",
+    badge: "Compact City Commuter",
+    power: "490W Eco Motor",
+    speed: "35 km/h",
+    range: "≥ 35 km",
+    battery: "48V 12Ah",
+    price: "LKR 195,000",
+    image: "/bikes/mini/mini.webp",
+    tagline: "Ultra-agile step-through commuter with deep front basket",
+    desc: "Lightweight city mobility with shopping basket, passenger pillion, and minimal recharge costs."
+  },
+  {
+    name: "Zuboo Paris",
+    badge: "European Retro Classic",
+    power: "1200W Smooth Torque",
+    speed: "60 km/h",
+    range: "≥ 80 km",
+    battery: "72V 23Ah",
+    price: "LKR 330,000",
+    image: "/bikes/paris/paris.webp",
+    tagline: "Timeless European retro luxury with front windscreen",
+    desc: "Plush passenger backrest, aerodynamic windscreen, and smooth whisper-quiet drive."
+  },
+  {
+    name: "Zuboo The Tank",
+    badge: "Heavy-Duty Utility Flagship",
+    power: "3000W Peak Performance",
+    speed: "75 km/h",
+    range: "≥ 80 km",
+    battery: "72V 32Ah",
+    price: "LKR 515,000",
+    image: "/bikes/tank/tank.webp",
+    tagline: "Reinforced steel crash bars & twin projector headlights",
+    desc: "High-torque climbing power built to conquer heavy commercial transport across the South."
+  },
+  {
+    name: "Zuboo T3",
+    badge: "Sport Motorcycle Flagship",
+    power: "2000W High Torque",
+    speed: "65 km/h",
+    range: "≥ 110 km",
+    battery: "72V 32Ah",
+    price: "LKR 480,000",
+    image: "/bikes/t3/t3.webp",
+    tagline: "Aggressive sport aerodynamics with smart LCD console",
+    desc: "Premium electric motorcycle styling with 110km extended highway range."
+  },
+  {
+    name: "Zuboo T11",
+    badge: "Commercial Logistics Cargo",
+    power: "1500W Commercial Motor",
+    speed: "55 km/h",
+    range: "≥ 90 km",
+    battery: "72V 26Ah",
+    price: "LKR 420,000",
+    image: "/bikes/t11/t11.webp",
+    tagline: "Heavy-duty extended cargo rack for enterprise fleets",
+    desc: "Engineered specifically for delivery boxes, couriers, and high-frequency commercial haulage."
+  },
+  {
+    name: "Zuboo EX008",
+    badge: "Modern Urban Commuter",
+    power: "1000W Urban Motor",
+    speed: "45 km/h",
+    range: "≥ 60 km",
+    battery: "60V 20Ah",
+    price: "LKR 295,000",
+    image: "/bikes/ex008/ex008.webp",
+    tagline: "Streamlined aerodynamic styling with durable hydraulic forks",
+    desc: "Effortless commuter scooter with comfortable seating and dependable urban range."
+  }
+];
+
+const SHOWROOM_PHOTOS = [
+  {
+    src: "/media/gallery/gallery-1.jpg",
+    title: "Opening Blessing Ceremony",
+    desc: "Venerable Maha Sangha invoking auspicious pirith blessings for Udan Enterprises Galle."
+  },
+  {
+    src: "/media/gallery/gallery-2.jpg",
+    title: "Traditional Oil Lamp Lighting",
+    desc: "Inauguration ceremony marking the official launch of the Zuboo dealership in Galle."
+  },
+  {
+    src: "/media/gallery/gallery-3.jpg",
+    title: "Showroom Launch & Community",
+    desc: "Welcoming Southern Province riders to the premier electric mobility showroom."
+  },
+  {
+    src: "/media/gallery/gallery-4.jpg",
+    title: "Official Showroom Entrance",
+    desc: "Grand Zuboo branded archway and front motorcycle showcase on Udugama Road, Kurunduwatta."
+  },
+  {
+    src: "/media/gallery/gallery-5.jpg",
+    title: "Showroom Glass Facade & Display",
+    desc: "Direct view into the modern air-conditioned Zuboo e-scooter showroom floor."
+  },
+  {
+    src: "/media/gallery/gallery-6.jpg",
+    title: "Zuboo Fleet Lineup Presentation",
+    desc: "Diverse range of Zuboo models ready for customer inspection and test rides."
+  },
+  {
+    src: "/media/gallery/gallery-7.jpg",
+    title: "Grand Opening Celebration",
+    desc: "Official dealership launch celebration at Kurunduwatta, Galle with guests and riders."
+  },
+  {
+    src: "/media/gallery/gallery-8.jpg",
+    title: "Showroom Customer Experience Desk",
+    desc: "Dedicated consultation area for test rides, leasing, and model guidance."
+  },
+  {
+    src: "/media/gallery/gallery-9.jpg",
+    title: "Electric Fleet Ready for Delivery",
+    desc: "Fully charged Zuboo motorcycles prepared for registration, handover, and delivery."
+  },
+  {
+    src: "/media/gallery/gallery-10.jpg",
+    title: "Certified Service & Technical Support",
+    desc: "Trained technician bay supporting battery warranty, diagnostics, and after-sales service."
+  },
+  {
+    src: "/media/gallery/gallery-11.jpg",
+    title: "Zuboo Premium Showroom Showcase",
+    desc: "Modern indoor display featuring top-tier electric models and original accessories."
+  }
+];
 
 export default function ZubooHomePage() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -128,6 +263,25 @@ export default function ZubooHomePage() {
     date: "",
     bike: "Zuboo Paris"
   });
+
+  const [selectedShowcaseBike, setSelectedShowcaseBike] = useState<number>(0);
+  const [galleryIndex, setGalleryIndex] = useState<number>(0);
+  const [lightboxPhotoIndex, setLightboxPhotoIndex] = useState<number | null>(null);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (lightboxPhotoIndex === null) return;
+      if (e.key === "Escape") {
+        setLightboxPhotoIndex(null);
+      } else if (e.key === "ArrowLeft") {
+        setLightboxPhotoIndex((prev) => (prev !== null ? (prev - 1 + SHOWROOM_PHOTOS.length) % SHOWROOM_PHOTOS.length : 0));
+      } else if (e.key === "ArrowRight") {
+        setLightboxPhotoIndex((prev) => (prev !== null ? (prev + 1) % SHOWROOM_PHOTOS.length : 0));
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [lightboxPhotoIndex]);
 
   // Fuel calculation values
   const petrolPricePerLiter = 370; // LKR
@@ -873,117 +1027,178 @@ export default function ZubooHomePage() {
               </div>
             </FadeIn>
 
-            {/* Quick Test Ride Form */}
-            <FadeIn bidirectional direction="right" className="lg:col-span-7 bg-slate-50 p-8 sm:p-10 rounded-3xl border border-slate-200 shadow-sm">
-              <span className="text-xs font-black uppercase tracking-wider text-[#FF5E14] block mb-1">
-                FREE TEST RIDE BOOKING
-              </span>
-              <h3 className="text-2xl font-black text-slate-900 tracking-tight mb-2">
-                EXPERIENCE THE POWER IN PERSON
-              </h3>
-              <p className="text-xs text-slate-600 mb-6">
-                Pick your preferred Zuboo model and date. We will prepare the bike fully charged for your arrival at our Galle showroom.
-              </p>
-
-              {bookingSuccess ? (
-                <div className="bg-emerald-50 border border-emerald-200 p-6 rounded-2xl text-center space-y-4">
-                  <div className="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto">
-                    <CheckCircle2 className="w-6 h-6" />
-                  </div>
-                  <h4 className="text-lg font-bold text-slate-900">Test Ride Request Ready!</h4>
-                  <p className="text-xs text-slate-600">
-                    Thank you <strong>{bookingDetails.name}</strong>! Your test ride for the{" "}
-                    <strong>{bookingDetails.bike}</strong> on <strong>{bookingDetails.date}</strong> is prepared.
+            {/* EXCELLENT PRODUCTS Showcase & Showroom Photo Gallery */}
+            <FadeIn bidirectional direction="right" className="lg:col-span-7 bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-sm flex flex-col justify-between">
+              <div>
+                {/* Showcase Header matching zuboo.com */}
+                <div className="text-center mb-5">
+                  <span className="text-[11px] font-black tracking-widest text-[#FF5E14] uppercase block mb-1 font-manrope">
+                    OFFICIAL FLEET SHOWCASE
+                  </span>
+                  <h3 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight uppercase font-manrope">
+                    EXCELLENT PRODUCTS
+                  </h3>
+                  <p className="text-xs text-slate-500 font-medium mt-1">
+                    Select any Zuboo model to preview • Authentic Galle showroom gallery below
                   </p>
-                  <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
-                    <a
-                      href={`https://wa.me/94784969652?text=${encodeURIComponent(
-                        `Hello Udan Enterprises, I would like to book a test ride for ${bookingDetails.bike} on ${bookingDetails.date}. My name is ${bookingDetails.name} (${bookingDetails.phone}).`
-                      )}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="px-6 py-3 bg-[#25D366] hover:bg-[#20ba5a] text-white rounded-xl text-xs font-bold uppercase tracking-wider inline-flex items-center gap-2"
+                </div>
+
+                {/* Bike Model Switcher Pills */}
+                <div className="flex flex-wrap items-center justify-center gap-2 mb-5">
+                  {SHOWCASE_BIKES.map((bike, idx) => (
+                    <button
+                      key={bike.name}
+                      onClick={() => setSelectedShowcaseBike(idx)}
+                      className={`px-3.5 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer ${
+                        selectedShowcaseBike === idx
+                          ? "bg-slate-900 text-white shadow-sm ring-2 ring-slate-900 ring-offset-2"
+                          : "bg-slate-100 hover:bg-slate-200 text-slate-700"
+                      }`}
                     >
-                      <MessageSquare className="w-4 h-4" />
-                      <span>Confirm on WhatsApp</span>
-                    </a>
-                    <a
-                      href="tel:0784969652"
-                      className="px-6 py-3 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-bold uppercase tracking-wider inline-flex items-center gap-2"
+                      {bike.name}
+                    </button>
+                  ))}
+                </div>
+
+                {/* Center Stage: Selected Bike Cutout Display */}
+                {(() => {
+                  const currentBike = SHOWCASE_BIKES[selectedShowcaseBike];
+                  return (
+                    <div className="relative bg-gradient-to-b from-slate-50 to-white rounded-2xl p-5 sm:p-6 border border-slate-100 flex flex-col">
+                      <div className="flex items-start justify-between w-full mb-1">
+                        <div>
+                          <span className="text-[10px] font-black uppercase tracking-wider text-[#FF5E14] bg-orange-50 px-2.5 py-1 rounded-md border border-orange-200/60 inline-block mb-1">
+                            {currentBike.badge}
+                          </span>
+                          <h4 className="text-lg sm:text-xl font-black text-slate-900">{currentBike.name}</h4>
+                          <p className="text-xs text-slate-500 mt-0.5 line-clamp-1">{currentBike.tagline}</p>
+                        </div>
+                        <div className="text-right shrink-0">
+                          <span className="text-[10px] uppercase font-bold text-slate-500 block">Motor</span>
+                          <span className="text-xs sm:text-sm font-black text-slate-900">{currentBike.power}</span>
+                        </div>
+                      </div>
+
+                      {/* Studio Cutout Bike Image */}
+                      <div className="relative w-full h-52 sm:h-64 my-2 flex items-center justify-center">
+                        <Image
+                          src={currentBike.image}
+                          alt={currentBike.name}
+                          fill
+                          sizes="(max-width: 1024px) 100vw, 50vw"
+                          className="object-contain drop-shadow-xl hover:scale-105 transition-transform duration-500"
+                          priority
+                        />
+                      </div>
+
+                      {/* Specs bar & Actions */}
+                      <div className="w-full flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-slate-100 mt-1">
+                        <div className="flex flex-wrap items-center gap-2 text-xs text-slate-600 font-medium">
+                          <span className="bg-white px-2.5 py-1 rounded-lg border border-slate-200 shadow-2xs">
+                            ⚡ Top Speed: <strong className="text-slate-900">{currentBike.speed}</strong>
+                          </span>
+                          <span className="bg-white px-2.5 py-1 rounded-lg border border-slate-200 shadow-2xs">
+                            🔋 Range: <strong className="text-slate-900">{currentBike.range}</strong>
+                          </span>
+                          <span className="bg-white px-2.5 py-1 rounded-lg border border-slate-200 shadow-2xs">
+                            💰 <strong className="text-[#FF5E14]">{currentBike.price}</strong>
+                          </span>
+                        </div>
+
+                        <div className="flex items-center gap-2">
+                          <button
+                            onClick={() => {
+                              setTestRideBike(currentBike.name);
+                              setIsTestRideOpen(true);
+                            }}
+                            className="px-3.5 py-2 rounded-xl bg-[#FF5E14] hover:bg-[#E04D09] text-white text-xs font-bold uppercase tracking-wider transition-all shadow-xs cursor-pointer"
+                          >
+                            Book Test Ride
+                          </button>
+                          <a
+                            href={`https://wa.me/94784969652?text=${encodeURIComponent(
+                              `Hello Udan Enterprises, I would like to inquire about the ${currentBike.name} (${currentBike.power}) at your Galle showroom.`
+                            )}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="px-3.5 py-2 rounded-xl border border-slate-200 hover:border-slate-400 bg-white text-slate-700 text-xs font-bold inline-flex items-center gap-1.5 transition-colors shadow-2xs"
+                          >
+                            <MessageSquare className="w-3.5 h-3.5 text-green-600" />
+                            <span>Inquire</span>
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })()}
+              </div>
+
+              {/* Showroom Photo Gallery Strip (4 Visible Thumbnails with slider) */}
+              <div className="mt-6 pt-5 border-t border-slate-200">
+                <div className="flex items-center justify-between mb-3">
+                  <div>
+                    <span className="text-[10px] font-black uppercase tracking-wider text-[#FF5E14] block">
+                      AUTHENTIC SHOWROOM EXPERIENCE
+                    </span>
+                    <h4 className="text-xs sm:text-sm font-bold text-slate-900">
+                      Galle Showroom Gallery ({galleryIndex + 1}–{Math.min(galleryIndex + 4, SHOWROOM_PHOTOS.length)} of {SHOWROOM_PHOTOS.length})
+                    </h4>
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    <button
+                      onClick={() => setGalleryIndex((prev) => Math.max(0, prev - 1))}
+                      disabled={galleryIndex === 0}
+                      className="p-1.5 rounded-lg border border-slate-200 hover:bg-slate-100 disabled:opacity-35 disabled:cursor-not-allowed text-slate-700 transition-colors cursor-pointer"
+                      aria-label="Previous gallery photos"
                     >
-                      <Phone className="w-4 h-4" />
-                      <span>Call Showroom</span>
-                    </a>
+                      <ChevronLeft className="w-4 h-4" />
+                    </button>
+                    <button
+                      onClick={() => setGalleryIndex((prev) => Math.min(SHOWROOM_PHOTOS.length - 4, prev + 1))}
+                      disabled={galleryIndex >= SHOWROOM_PHOTOS.length - 4}
+                      className="p-1.5 rounded-lg border border-slate-200 hover:bg-slate-100 disabled:opacity-35 disabled:cursor-not-allowed text-slate-700 transition-colors cursor-pointer"
+                      aria-label="Next gallery photos"
+                    >
+                      <ChevronRight className="w-4 h-4" />
+                    </button>
                   </div>
                 </div>
-              ) : (
-                <form onSubmit={handleBookingSubmit} className="space-y-4">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                      <label className="text-xs font-bold uppercase text-slate-600 block mb-1.5">
-                        Your Full Name *
-                      </label>
-                      <input
-                        name="name"
-                        required
-                        placeholder="e.g. Kasun Perera"
-                        className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-white text-xs font-medium focus:outline-none focus:border-[#FF5E14] focus:ring-1 focus:ring-[#FF5E14]"
-                      />
-                    </div>
-                    <div>
-                      <label className="text-xs font-bold uppercase text-slate-600 block mb-1.5">
-                        Phone Number *
-                      </label>
-                      <input
-                        name="phone"
-                        type="tel"
-                        required
-                        placeholder="07X XXX XXXX"
-                        className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-white text-xs font-medium focus:outline-none focus:border-[#FF5E14] focus:ring-1 focus:ring-[#FF5E14]"
-                      />
-                    </div>
-                  </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                      <label className="text-xs font-bold uppercase text-slate-600 block mb-1.5">
-                        Choose Model *
-                      </label>
-                      <select
-                        name="bike"
-                        defaultValue={testRideBike}
-                        className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-white text-xs font-medium focus:outline-none focus:border-[#FF5E14] focus:ring-1 focus:ring-[#FF5E14]"
+                {/* 4 Thumbnails Grid */}
+                <div className="grid grid-cols-4 gap-2 sm:gap-3">
+                  {SHOWROOM_PHOTOS.slice(galleryIndex, galleryIndex + 4).map((photo, sliceIdx) => {
+                    const originalIdx = galleryIndex + sliceIdx;
+                    return (
+                      <button
+                        key={photo.src}
+                        onClick={() => setLightboxPhotoIndex(originalIdx)}
+                        className="group relative aspect-[4/3] rounded-xl overflow-hidden border border-slate-200 hover:border-[#FF5E14] shadow-2xs hover:shadow-md transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#FF5E14] cursor-pointer"
+                        title={photo.title}
                       >
-                        {BIKE_MODELS.map((b) => (
-                          <option key={b.id} value={b.name}>
-                            {b.name} ({b.motorPower.split(" ")[0]})
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-                    <div>
-                      <label className="text-xs font-bold uppercase text-slate-600 block mb-1.5">
-                        Preferred Date *
-                      </label>
-                      <input
-                        name="date"
-                        type="date"
-                        required
-                        min={new Date().toISOString().split("T")[0]}
-                        defaultValue={new Date().toISOString().split("T")[0]}
-                        className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-white text-xs font-medium focus:outline-none focus:border-[#FF5E14] focus:ring-1 focus:ring-[#FF5E14]"
-                      />
-                    </div>
-                  </div>
+                        <Image
+                          src={photo.src}
+                          alt={photo.title}
+                          fill
+                          sizes="(max-width: 1024px) 25vw, 15vw"
+                          className="object-cover group-hover:scale-110 transition-transform duration-500"
+                        />
+                        <div className="absolute inset-0 bg-slate-900/0 group-hover:bg-slate-900/35 transition-colors flex items-center justify-center">
+                          <span className="opacity-0 group-hover:opacity-100 transition-opacity bg-white/95 text-slate-900 p-1.5 rounded-full shadow-sm">
+                            <ZoomIn className="w-3.5 h-3.5" />
+                          </span>
+                        </div>
+                        <span className="absolute bottom-1 right-1 bg-black/70 backdrop-blur-xs text-white text-[9px] font-bold px-1.5 py-0.5 rounded">
+                          #{originalIdx + 1}
+                        </span>
+                      </button>
+                    );
+                  })}
+                </div>
 
-                  <button
-                    type="submit"
-                    className="w-full py-4 rounded-xl bg-[#FF5E14] hover:bg-[#E04D09] text-white font-black text-xs uppercase tracking-wider transition-all shadow-md shadow-orange-500/20 mt-2"
-                  >
-                    Prepare Test Ride Appointment →
-                  </button>
-                </form>
-              )}
+                <p className="text-[11px] text-slate-500 text-center mt-2.5">
+                  💡 Click any photo above to inspect in high-resolution fullscreen lightbox
+                </p>
+              </div>
             </FadeIn>
           </div>
         </div>
@@ -1098,6 +1313,99 @@ export default function ZubooHomePage() {
                 </button>
               </form>
             )}
+          </div>
+        </div>
+      )}
+
+      {/* 9.1 FULLSCREEN SHOWROOM PHOTO LIGHTBOX MODAL */}
+      {lightboxPhotoIndex !== null && (
+        <div
+          className="fixed inset-0 z-50 bg-black/92 backdrop-blur-md flex items-center justify-center p-3 sm:p-6 animate-fade-in"
+          onClick={() => setLightboxPhotoIndex(null)}
+        >
+          <div
+            className="relative max-w-4xl w-full bg-slate-950 rounded-2xl sm:rounded-3xl overflow-hidden border border-white/10 shadow-2xl flex flex-col max-h-[92vh]"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Lightbox Header Bar */}
+            <div className="flex items-center justify-between px-4 sm:px-6 py-3.5 border-b border-white/10 bg-slate-900/90 shrink-0">
+              <div>
+                <span className="text-[10px] font-black text-[#FF5E14] uppercase tracking-wider block">
+                  Udan Enterprises Galle Showroom
+                </span>
+                <h4 className="text-xs sm:text-sm font-bold text-white">
+                  {SHOWROOM_PHOTOS[lightboxPhotoIndex].title} ({lightboxPhotoIndex + 1} of {SHOWROOM_PHOTOS.length})
+                </h4>
+              </div>
+              <button
+                onClick={() => setLightboxPhotoIndex(null)}
+                className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors cursor-pointer"
+                aria-label="Close Lightbox"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            {/* Lightbox Center Image View */}
+            <div className="relative w-full flex-1 min-h-[50vh] sm:min-h-[65vh] bg-black flex items-center justify-center overflow-hidden">
+              <Image
+                src={SHOWROOM_PHOTOS[lightboxPhotoIndex].src}
+                alt={SHOWROOM_PHOTOS[lightboxPhotoIndex].title}
+                fill
+                sizes="100vw"
+                className="object-contain"
+                priority
+              />
+
+              {/* Prev & Next Floating Navigation Buttons */}
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setLightboxPhotoIndex((prev) => (prev !== null ? (prev - 1 + SHOWROOM_PHOTOS.length) % SHOWROOM_PHOTOS.length : 0));
+                }}
+                className="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/60 hover:bg-black/90 text-white border border-white/20 flex items-center justify-center transition-all hover:scale-105 cursor-pointer z-10"
+                aria-label="Previous photo"
+              >
+                <ChevronLeft className="w-5 h-5" />
+              </button>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setLightboxPhotoIndex((prev) => (prev !== null ? (prev + 1) % SHOWROOM_PHOTOS.length : 0));
+                }}
+                className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/60 hover:bg-black/90 text-white border border-white/20 flex items-center justify-center transition-all hover:scale-105 cursor-pointer z-10"
+                aria-label="Next photo"
+              >
+                <ChevronRight className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Lightbox Caption & Action Footer */}
+            <div className="px-4 sm:px-6 py-3.5 bg-slate-900/95 border-t border-white/10 flex flex-wrap items-center justify-between gap-3 text-xs shrink-0">
+              <p className="text-slate-300 text-xs flex-1 min-w-[200px]">
+                {SHOWROOM_PHOTOS[lightboxPhotoIndex].desc}
+              </p>
+              <div className="flex items-center gap-2">
+                <a
+                  href={`https://wa.me/94784969652?text=${encodeURIComponent(
+                    `Hello Udan Enterprises, I am inquiring regarding the showroom photo: ${SHOWROOM_PHOTOS[lightboxPhotoIndex].title}`
+                  )}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-4 py-2 rounded-xl bg-[#25D366] hover:bg-[#20ba5a] text-white font-bold inline-flex items-center gap-1.5 transition-colors shadow-xs"
+                >
+                  <MessageSquare className="w-3.5 h-3.5" />
+                  <span>WhatsApp Inquiry</span>
+                </a>
+                <a
+                  href="tel:0784969652"
+                  className="px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold inline-flex items-center gap-1.5 transition-colors"
+                >
+                  <Phone className="w-3.5 h-3.5" />
+                  <span>Call Hotline</span>
+                </a>
+              </div>
+            </div>
           </div>
         </div>
       )}

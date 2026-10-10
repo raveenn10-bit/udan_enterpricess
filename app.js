@@ -337,7 +337,7 @@
 
         // Smooth scroll reveal for footer elements
         const elementsToAnimate = footer.querySelectorAll(
-          ".skyline-canvas-wrapper, .skyline-value-ribbon, .footer-value-ribbon, .skyline-stage, .footer-columns-grid, .udan-footer-grid, .udan-footer-col, .footer-col, .udan-footer-bottom, .footer-bottom, .footer-bottom-bar"
+          ".skyline-canvas-wrapper, .skyline-stage, .footer-columns-grid, .udan-footer-grid, .udan-footer-col, .footer-col, .udan-footer-bottom, .footer-bottom, .footer-bottom-bar"
         );
 
         if (elementsToAnimate.length > 0) {
@@ -513,6 +513,221 @@
     });
   }
 
+  // --- 10. EXCELLENT PRODUCTS SHOWCASE & SHOWROOM GALLERY ENGINE ---
+  const showcaseBikesData = [
+    {
+      name: "Zuboo Mini",
+      badge: "Compact City Commuter",
+      power: "490W Eco Motor",
+      speed: "35 km/h",
+      range: "≥ 35 km",
+      price: "LKR 195,000",
+      image: "bikes/mini/mini.webp",
+      desc: "Ultra-agile step-through commuter with deep front basket"
+    },
+    {
+      name: "Zuboo Paris",
+      badge: "European Retro Classic",
+      power: "1200W Smooth Torque",
+      speed: "60 km/h",
+      range: "≥ 80 km",
+      price: "LKR 330,000",
+      image: "bikes/paris/paris.webp",
+      desc: "Timeless European retro luxury with front windscreen and plush backrest"
+    },
+    {
+      name: "Zuboo The Tank",
+      badge: "Heavy-Duty Utility Flagship",
+      power: "3000W Peak Performance",
+      speed: "75 km/h",
+      range: "≥ 80 km",
+      price: "LKR 515,000",
+      image: "bikes/tank/tank.webp",
+      desc: "Reinforced steel crash bars & twin projector headlights for Southern terrain"
+    },
+    {
+      name: "Zuboo T3",
+      badge: "Sport Motorcycle Flagship",
+      power: "2000W High Torque",
+      speed: "65 km/h",
+      range: "≥ 110 km",
+      price: "LKR 480,000",
+      image: "bikes/t3/t3.webp",
+      desc: "Aggressive sport aerodynamics with smart LCD console and highway range"
+    },
+    {
+      name: "Zuboo T11",
+      badge: "Commercial Logistics Cargo",
+      power: "1500W Commercial Motor",
+      speed: "55 km/h",
+      range: "≥ 90 km",
+      price: "LKR 420,000",
+      image: "bikes/t11/t11.webp",
+      desc: "Heavy-duty extended cargo rack for enterprise delivery fleets"
+    },
+    {
+      name: "Zuboo EX008",
+      badge: "Modern Urban Commuter",
+      power: "1000W Urban Motor",
+      speed: "45 km/h",
+      range: "≥ 60 km",
+      price: "LKR 295,000",
+      image: "bikes/ex008/ex008.webp",
+      desc: "Streamlined aerodynamic styling with durable hydraulic suspension"
+    }
+  ];
+
+  const galleryPhotosData = [
+    { src: "media/gallery/gallery-1.jpg", title: "Opening Blessing Ceremony", desc: "Venerable Maha Sangha invoking auspicious pirith blessings for Udan Enterprises Galle." },
+    { src: "media/gallery/gallery-2.jpg", title: "Traditional Oil Lamp Lighting", desc: "Inauguration ceremony marking the official launch of the Zuboo dealership in Galle." },
+    { src: "media/gallery/gallery-3.jpg", title: "Showroom Launch & Community", desc: "Welcoming Southern Province riders to the premier electric mobility showroom." },
+    { src: "media/gallery/gallery-4.jpg", title: "Official Showroom Entrance", desc: "Grand Zuboo branded archway and front motorcycle showcase on Udugama Road." },
+    { src: "media/gallery/gallery-5.jpg", title: "Showroom Glass Facade & Display", desc: "Direct view into the modern air-conditioned Zuboo e-scooter showroom floor." },
+    { src: "media/gallery/gallery-6.jpg", title: "Zuboo Fleet Lineup Presentation", desc: "Diverse range of Zuboo models ready for customer inspection and test rides." },
+    { src: "media/gallery/gallery-7.jpg", title: "Grand Opening Celebration", desc: "Official dealership launch celebration at Kurunduwatta, Galle with guests and riders." },
+    { src: "media/gallery/gallery-8.jpg", title: "Showroom Customer Experience Desk", desc: "Dedicated consultation area for test rides, leasing, and model guidance." },
+    { src: "media/gallery/gallery-9.jpg", title: "Electric Fleet Ready for Delivery", desc: "Fully charged Zuboo motorcycles prepared for registration, handover, and delivery." },
+    { src: "media/gallery/gallery-10.jpg", title: "Certified Service & Technical Support", desc: "Trained technician bay supporting battery warranty, diagnostics, and after-sales service." },
+    { src: "media/gallery/gallery-11.jpg", title: "Zuboo Premium Showroom Showcase", desc: "Modern indoor display featuring top-tier electric models and original accessories." }
+  ];
+
+  let currentGalleryIndex = 0;
+  let currentLightboxIndex = 0;
+
+  function initShowcaseAndGallery() {
+    renderGalleryThumbs();
+
+    // Lightbox keyboard navigation
+    document.addEventListener("keydown", (e) => {
+      const modal = document.getElementById("showroom-lightbox");
+      if (!modal || modal.style.display === "none") return;
+      if (e.key === "Escape") {
+        window.closeShowroomLightbox();
+      } else if (e.key === "ArrowLeft") {
+        window.navLightbox(-1);
+      } else if (e.key === "ArrowRight") {
+        window.navLightbox(1);
+      }
+    });
+  }
+
+  function renderGalleryThumbs() {
+    const grid = document.getElementById("gallery-thumbs-grid");
+    if (!grid) return;
+
+    grid.innerHTML = "";
+    const visiblePhotos = galleryPhotosData.slice(currentGalleryIndex, currentGalleryIndex + 4);
+
+    visiblePhotos.forEach((photo, sliceIdx) => {
+      const originalIdx = currentGalleryIndex + sliceIdx;
+      const item = document.createElement("div");
+      item.className = "gallery-thumb-item";
+      item.title = photo.title;
+      item.innerHTML = `
+        <img src="${photo.src}" alt="${photo.title}" loading="lazy">
+        <span class="gallery-thumb-badge">#${originalIdx + 1}</span>
+      `;
+      item.onclick = () => window.openShowroomLightbox(originalIdx);
+      grid.appendChild(item);
+    });
+
+    const rangeLabel = document.getElementById("gallery-range-label");
+    if (rangeLabel) {
+      rangeLabel.textContent = `${currentGalleryIndex + 1}–${Math.min(currentGalleryIndex + 4, galleryPhotosData.length)}`;
+    }
+
+    const prevBtn = document.getElementById("gallery-prev-btn");
+    const nextBtn = document.getElementById("gallery-next-btn");
+    if (prevBtn) prevBtn.disabled = currentGalleryIndex === 0;
+    if (nextBtn) nextBtn.disabled = currentGalleryIndex >= galleryPhotosData.length - 4;
+  }
+
+  window.switchShowcaseBike = function (idx) {
+    const bike = showcaseBikesData[idx];
+    if (!bike) return;
+
+    const pills = document.querySelectorAll(".model-pill");
+    pills.forEach((p, i) => {
+      if (i === idx) p.classList.add("active");
+      else p.classList.remove("active");
+    });
+
+    const badge = document.getElementById("showcase-badge");
+    const title = document.getElementById("showcase-title");
+    const desc = document.getElementById("showcase-desc");
+    const power = document.getElementById("showcase-power");
+    const img = document.getElementById("showcase-image");
+    const speed = document.getElementById("showcase-speed");
+    const range = document.getElementById("showcase-range");
+    const price = document.getElementById("showcase-price");
+    const inquireLink = document.getElementById("showcase-inquire-link");
+
+    if (badge) badge.textContent = bike.badge;
+    if (title) title.textContent = bike.name;
+    if (desc) desc.textContent = bike.desc;
+    if (power) power.textContent = bike.power;
+    if (img) {
+      img.src = bike.image;
+      img.alt = bike.name;
+    }
+    if (speed) speed.innerHTML = `⚡ Speed: <strong>${bike.speed}</strong>`;
+    if (range) range.innerHTML = `🔋 Range: <strong>${bike.range}</strong>`;
+    if (price) price.innerHTML = `💰 <strong>${bike.price}</strong>`;
+    if (inquireLink) {
+      inquireLink.href = `https://wa.me/94784969652?text=${encodeURIComponent(
+        `Hello Udan Enterprises, I would like to inquire about the ${bike.name} (${bike.power}) at your Galle showroom.`
+      )}`;
+    }
+  };
+
+  window.slideGallery = function (dir) {
+    const maxIdx = galleryPhotosData.length - 4;
+    currentGalleryIndex = Math.max(0, Math.min(maxIdx, currentGalleryIndex + dir));
+    renderGalleryThumbs();
+  };
+
+  window.openShowroomLightbox = function (idx) {
+    currentLightboxIndex = idx;
+    const modal = document.getElementById("showroom-lightbox");
+    if (!modal) return;
+
+    const photo = galleryPhotosData[idx];
+    const img = document.getElementById("lightbox-img");
+    const title = document.getElementById("lightbox-title");
+    const desc = document.getElementById("lightbox-desc");
+    const waBtn = document.getElementById("lightbox-wa-btn");
+
+    if (img) {
+      img.src = photo.src;
+      img.alt = photo.title;
+    }
+    if (title) {
+      title.textContent = `${photo.title} (${idx + 1} of ${galleryPhotosData.length})`;
+    }
+    if (desc) {
+      desc.textContent = photo.desc;
+    }
+    if (waBtn) {
+      waBtn.href = `https://wa.me/94784969652?text=${encodeURIComponent(
+        `Hello Udan Enterprises, I am inquiring regarding the showroom photo: ${photo.title}`
+      )}`;
+    }
+
+    modal.style.display = "flex";
+    document.body.style.overflow = "hidden";
+  };
+
+  window.closeShowroomLightbox = function () {
+    const modal = document.getElementById("showroom-lightbox");
+    if (modal) modal.style.display = "none";
+    document.body.style.overflow = "";
+  };
+
+  window.navLightbox = function (dir) {
+    currentLightboxIndex = (currentLightboxIndex + dir + galleryPhotosData.length) % galleryPhotosData.length;
+    window.openShowroomLightbox(currentLightboxIndex);
+  };
+
   // --- INITIALIZE ON DOM READY ---
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", () => {
@@ -520,11 +735,13 @@
       initFooterGSAP();
       initBackToTop();
       initEmbersCanvas();
+      initShowcaseAndGallery();
     });
   } else {
     initGlobalScrollAnimations();
     initFooterGSAP();
     initBackToTop();
     initEmbersCanvas();
+    initShowcaseAndGallery();
   }
 })();
