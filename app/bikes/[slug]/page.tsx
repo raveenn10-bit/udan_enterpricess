@@ -9,10 +9,9 @@ interface BikePageProps {
   }>;
 }
 
-// Generate static params for all 8 Zuboo models
+// Generate static params for all Zuboo models
 export async function generateStaticParams() {
-  const slugs = ["mini", "gt", "the-tank", "t11", "t3", "paris", "ex008", "kb1"];
-  return slugs.map((slug) => ({
+  return getAllBikeSlugs().map((slug) => ({
     slug,
   }));
 }

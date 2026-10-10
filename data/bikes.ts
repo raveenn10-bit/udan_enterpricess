@@ -236,6 +236,63 @@ export const ZUBOO_COLLECTION: BikeModel[] = [
     ]
   },
   {
+    id: "t16",
+    slug: "t16",
+    name: "Zuboo T16",
+    modelCode: "T16-1500W",
+    badge: "Heavy Duty • Sport Commuter",
+    category: "Sports Maxi",
+    tagline: "High-Performance Trail & Urban Heavy-Duty Commuter",
+    description: "Engineered with high-strength steel framing, 12-tube controller, front 90/90-12 and rear 3.5-10 P-425 tires, dual hydraulic disc brakes, and full TFT digital dashboard for long-range city and commercial transit.",
+    advertisedPrice: 465000,
+    formattedPrice: "LKR 465,000",
+    isPriceVerified: true,
+    motorPower: "1500W High Output (2000W Peak)",
+    topSpeed: "65 km/h",
+    advertisedRange: "≥ 90 km",
+    battery: "72V 32Ah / 20Ah High Capacity",
+    chargingTime: "5 - 7 hours",
+    dimensions: "1915 × 725 × 1240 mm",
+    brakes: "Front & Rear Hydraulic Disc Brakes",
+    suspension: "Long-travel front hydraulic suspension fork & dual heavy-duty rear shock absorbers",
+    display: "Trail-Riding TFT Digital Dashboard",
+    tires: "Front 90/90-12 P-425, Rear 3.5-10 P-425 Tubeless",
+    warranty: {
+      batteryAndMotor: "2 Years or 20,000 km",
+      chassis: "3 Years",
+      isVerified: true,
+    },
+    features: [
+      "Heavy-duty perimeter steel crash cage with footrest winglets",
+      "Reinforced rear cargo rack with lockable top trunk box",
+      "Dual LED projector headlights with illuminated Zuboo Cheetah logo",
+      "Trail-riding full TFT digital instrument console",
+      "12-Tube intelligent sine-wave power controller",
+      "Front 90/90-12 & Rear 3.5-10 heavy-duty puncture-resistant tires",
+      "Dual hydraulic front and rear disc braking system"
+    ],
+    mainImage: "/bikes/t16/t16.webp",
+    gallery: [
+      "/bikes/t16/t16.webp",
+      "/media/bikes/t16/gallery/t16-1.webp",
+      "/media/bikes/t16/gallery/t16-2.webp",
+      "/media/bikes/t16/gallery/t16-3.webp",
+      "/media/bikes/t16/gallery/t16-4.webp",
+      "/media/bikes/t16/gallery/t16-5.webp",
+      "/media/bikes/t16/gallery/t16-6.webp"
+    ],
+    colors: [
+      { name: "Gunmetal Grey", hex: "#374151", image: "/media/bikes/t16/gallery/t16-1.webp" },
+      { name: "Pearl White", hex: "#F3F4F6", image: "/media/bikes/t16/gallery/t16-2.webp" },
+      { name: "Chameleon Purple", hex: "#581c87", image: "/media/bikes/t16/gallery/t16-3.webp" }
+    ],
+    isFeatured: true,
+    provisionalNotes: [
+      "Official factory specifications verified from Zuboo OEM manufacturing data sheet.",
+      "Dual hydraulic disc brakes and 12-tube controller configuration."
+    ]
+  },
+  {
     id: "t3",
     slug: "t3",
     name: "Zuboo T3",

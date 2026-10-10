@@ -252,6 +252,46 @@ export const SAMPLE_WARRANTIES: Record<string, WarrantyRecord> = {
       },
     ],
   },
+  "ZB-2026-T16-009": {
+    vin: "ZB-2026-T16-009",
+    modelId: "t16",
+    modelName: "Zuboo T16 Heavy-Duty Commuter",
+    modelCode: "T16-1500W",
+    modelImage: "/bikes/t16/t16.webp",
+    customerName: "Dishan Jayawardena",
+    maskedPhone: "078 ••• •412",
+    registeredDate: "2026-02-10",
+    expiryDate: "2028-02-10",
+    status: "Active",
+    mileageLimit: "20,000 km",
+    motorCoverage: {
+      spec: "1500W High Output (2000W Peak) Hub Motor",
+      warrantyYears: 2,
+      status: "Covered",
+      details: "Full coverage on 12-tube controller, motor armature, and power delivery bus.",
+    },
+    batteryCoverage: {
+      spec: "72V 32Ah High Capacity Pack",
+      warrantyYears: 2,
+      status: "Covered",
+      healthPercentage: 100,
+      details: "Deep-cycle cell arrangement with intelligent BMS thermal management.",
+    },
+    chassisCoverage: {
+      warrantyYears: 3,
+      status: "Covered",
+      details: "High-strength steel reinforced perimeter crash frame and swingarm.",
+    },
+    serviceLogs: [
+      {
+        date: "2026-02-10",
+        mileage: "0 km",
+        serviceType: "Pre-Delivery Inspection (PDI)",
+        center: "Udan Enterprises Galle Showroom",
+        technicianNotes: "Dual hydraulic disc brakes bled and calibrated. Full diagnostics verified.",
+      },
+    ],
+  },
 };
 
 export function lookupWarranty(vinQuery: string): WarrantyRecord | null {

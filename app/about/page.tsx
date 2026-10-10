@@ -71,7 +71,7 @@ export default function AboutPage() {
                 </div>
                 <div>
                   <div className="font-heading text-2xl sm:text-3xl font-bold text-[#346C83]">
-                    8 Models
+                    9 Models
                   </div>
                   <div className="text-xs font-semibold uppercase tracking-wider text-[#667780] mt-1">
                     Versatile EV Collection

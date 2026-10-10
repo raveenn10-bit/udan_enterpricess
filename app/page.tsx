@@ -711,7 +711,7 @@ export default function ZubooHomePage() {
         </div>
       </section>
 
-      {/* 5. "EXCELLENT PRODUCTS" / ALL 8 ZUBOO MODELS SHOWCASE */}
+      {/* 5. "EXCELLENT PRODUCTS" / ALL 9 ZUBOO MODELS SHOWCASE */}
       <section id="featured-models" data-scroll-section className="reveal-section py-24 bg-white border-b border-slate-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <FadeIn bidirectional className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16">
@@ -1049,7 +1049,7 @@ export default function ZubooHomePage() {
                   <BrandBounceText sizeClassName="text-2xl sm:text-3xl lg:text-4xl" />
                 </h2>
                 <p className="mt-2 text-sm text-slate-600 font-manrope">
-                  Step inside our modern showroom, inspect all 8 Zuboo models in person, speak with certified technicians, and experience a live test ride.
+                  Step inside our modern showroom, inspect all 9 Zuboo models in person, speak with certified technicians, and experience a live test ride.
                 </p>
               </div>
 

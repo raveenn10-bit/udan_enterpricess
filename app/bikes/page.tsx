@@ -94,7 +94,7 @@ export default function BikesCataloguePage() {
 
               <p className="mt-5 text-base sm:text-lg text-[#667780] leading-relaxed max-w-2xl font-normal">
                 Engineered for daily urban reliability, zero petrol dependency, and island-wide endurance.
-                Explore all 8 Zuboo electric models with full technical specifications, verified range ratings,
+                Explore all 9 Zuboo electric models with full technical specifications, verified range ratings,
                 and direct test-ride reservations.
               </p>
 
@@ -105,7 +105,7 @@ export default function BikesCataloguePage() {
                     Models Available
                   </span>
                   <span className="font-heading text-xl sm:text-2xl font-bold text-[#111820]">
-                    8 Distinct Models
+                    9 Distinct Models
                   </span>
                   <span className="text-[11px] text-[#346C83] block mt-0.5 font-medium">
                     Commuters to Tourers
@@ -197,7 +197,7 @@ export default function BikesCataloguePage() {
               {/* Category Filter for Comparison Matrix */}
               <div className="flex flex-wrap gap-2">
                 {[
-                  { id: "all", label: "All 8 Models" },
+                  { id: "all", label: "All 9 Models" },
                   { id: "commuters", label: "Commuters" },
                   { id: "touring", label: "Touring & Adventure" },
                   { id: "sports", label: "Sports Maxi" },

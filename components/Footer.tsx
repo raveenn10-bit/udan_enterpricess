@@ -657,6 +657,18 @@ export default function Footer() {
                 </li>
                 <li>
                   <Link
+                    href="/bikes/t16"
+                    className="footer-nav-link group p-2.5 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 hover:border-[#FF5E14]/50 transition-all flex items-center justify-between"
+                  >
+                    <span className="flex items-center gap-1.5 min-w-0">
+                      <span className="arrow-bullet text-[#FF2222] font-black text-xs transition-transform duration-200 group-hover:translate-x-0.5 shrink-0">›</span>
+                      <span className="truncate group-hover:text-white">Zuboo T16</span>
+                    </span>
+                    <span className="text-[10px] px-1.5 py-0.5 rounded bg-[#FF5E14]/15 text-[#FF5E14] font-bold border border-[#FF5E14]/30 shrink-0 ml-1">1500W</span>
+                  </Link>
+                </li>
+                <li>
+                  <Link
                     href="/bikes/ex008"
                     className="footer-nav-link group p-2.5 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 hover:border-[#FF5E14]/50 transition-all flex items-center justify-between"
                   >

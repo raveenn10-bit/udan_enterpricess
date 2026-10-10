@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Zuboo Electric Bikes Collection | All 8 Models - Udan Enterprises Galle",
-  description: "Browse the full collection of 8 Zuboo electric bikes and scooters in Sri Lanka. From the eco-friendly Mini to the 3000W Tank, discover specifications, range, provisional prices, and book a test ride at Udan Enterprises.",
+  title: "Zuboo Electric Bikes Collection | All 9 Models - Udan Enterprises Galle",
+  description: "Browse the full collection of 9 Zuboo electric bikes and scooters in Sri Lanka. From the heavy-duty T16 and 3000W Tank to the retro Paris and eco Mini, discover specifications, range, and book a test ride at Udan Enterprises.",
   openGraph: {
-    title: "All 8 Zuboo Electric Bikes | Udan Enterprises Sri Lanka",
-    description: "Discover Zuboo electric motorcycles & scooters: Mini, GT, The Tank, T11, T3, Paris, EX008, KB1. High torque, up to 110km range, zero petrol costs.",
+    title: "All 9 Zuboo Electric Bikes | Udan Enterprises Sri Lanka",
+    description: "Discover Zuboo electric motorcycles & scooters: T16, Mini, GT, The Tank, T11, T3, Paris, EX008, KB1. High torque, up to 110km range, zero petrol costs.",
     url: "https://udanenterprises.lk/bikes",
     siteName: "Udan Enterprises",
     images: [

@@ -157,7 +157,7 @@ export default function ContactPage() {
                   Experience Zuboo Electric Bikes Live
                 </h3>
                 <p className="text-xs sm:text-sm text-[#667780] leading-relaxed">
-                  Visit our primary dealership in {settings.city || "Galle"}. Our showroom floor houses all 8 Zuboo models, complete with high-speed DC charging stations, workshop bays, and certified technical support.
+                  Visit our primary dealership in {settings.city || "Galle"}. Our showroom floor houses all 9 Zuboo models, complete with high-speed DC charging stations, workshop bays, and certified technical support.
                 </p>
                 <div className="pt-2 flex flex-wrap gap-3">
                   <a
