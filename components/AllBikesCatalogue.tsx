@@ -20,7 +20,7 @@ export default function AllBikesCatalogue({
   const { settings } = useShowroomSettings();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
-  const [selectedColorForT3, setSelectedColorForT3] = useState<string>("/bikes/t3/t3-black.webp");
+  const [selectedColorForT3, setSelectedColorForT3] = useState<string>("/bikes/t3/t3-white.webp");
 
   const rawPhone = settings.whatsappNumber || "0784969652";
   const cleanPhone = rawPhone.replace(/[^0-9]/g, "");

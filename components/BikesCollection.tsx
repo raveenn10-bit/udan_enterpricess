@@ -22,10 +22,10 @@ export default function BikesCollection({ onSelectModelForTestRide }: BikesColle
   const sectionRef = useRef<HTMLElement>(null);
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [selectedColorForT3, setSelectedColorForT3] = useState<string>(
-    BIKE_MODELS[0].colors?.[0].image || "/bikes/t3/t3-black.webp"
+    "/bikes/t3/t3-white.webp"
   );
   const [activeColorNameForT3, setActiveColorNameForT3] = useState<string>(
-    BIKE_MODELS[0].colors?.[0].name || "Matte Black"
+    "Pearl White"
   );
 
   useEffect(() => {

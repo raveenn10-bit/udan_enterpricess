@@ -542,7 +542,7 @@
       speed: "65 km/h",
       range: "≥ 110 km",
       price: "LKR 480,000",
-      image: "media/showcase/3.png",
+      image: "bikes/t3/t3-white.webp",
       desc: "White sport commuter styling with 110km extended highway range and smart digital cockpit"
     },
     {

@@ -269,21 +269,18 @@ export const ZUBOO_COLLECTION: BikeModel[] = [
       "Front disc brake with responsive rear drum",
       "Available in 5 custom colorways"
     ],
-    mainImage: "/media/bikes/t3/main.webp",
+    mainImage: "/bikes/t3/t3-white.webp",
     gallery: [
-      "/bikes/t3/t3.webp",
-      "/media/bikes/t3/gallery/1.webp",
-      "/media/bikes/t3/gallery/2.webp",
-      "/bikes/t3/t3-mint.webp",
-      "/bikes/t3/t3-black.webp",
-      "/bikes/t3/t3-white.webp"
+      "/bikes/t3/t3-white.webp",
+      "/bikes/t3/t3-gold.webp",
+      "/bikes/t3/t3-grey.webp",
+      "/bikes/t3/t3-blue.webp"
     ],
     colors: [
-      { name: "Matte Black", hex: "#1e1e1e", image: "/bikes/t3/t3-black.webp" },
-      { name: "Charcoal Grey", hex: "#4b5563", image: "/bikes/t3/t3-grey.webp" },
-      { name: "Soft Mint", hex: "#d1fae5", image: "/bikes/t3/t3-mint.webp" },
       { name: "Pearl White", hex: "#f3f4f6", image: "/bikes/t3/t3-white.webp" },
-      { name: "Desert Sand", hex: "#e7d7c1", image: "/bikes/t3/t3-cream.webp" },
+      { name: "Champagne Gold", hex: "#c5a880", image: "/bikes/t3/t3-gold.webp" },
+      { name: "Titanium Grey", hex: "#5a5f64", image: "/bikes/t3/t3-grey.webp" },
+      { name: "Ocean Teal", hex: "#3b6d7a", image: "/bikes/t3/t3-blue.webp" },
     ],
     provisionalNotes: [
       "Range of 100-110 km advertised under optimal test conditions; real world varies."

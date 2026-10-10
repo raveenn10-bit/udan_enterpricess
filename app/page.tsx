@@ -75,7 +75,7 @@ const SHOWCASE_BIKES = [
     range: "≥ 110 km",
     battery: "72V 32Ah",
     price: "LKR 480,000",
-    image: "/media/showcase/3.png",
+    image: "/bikes/t3/t3-white.webp",
     tagline: "Aggressive sport aerodynamics with smart LCD console",
     desc: "White sport commuter styling with 110km extended highway range and smart digital cockpit."
   },
