@@ -1,0 +1,449 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Calculate your monthly leasing installment and estimated petrol savings for Zuboo Electric Bikes in Sri Lanka with Udan Enterprises.">
+  <title>LKR Loan & EMI Calculator — Udan Enterprises</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .calc-container {
+      max-width: 1200px;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+    .calc-header {
+      margin-bottom: 32px;
+    }
+    .model-selector-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+    .model-card-btn {
+      padding: 14px;
+      background: #ffffff;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      text-align: left;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+    .model-card-btn:hover {
+      border-color: var(--color-accent-cyan);
+      background: var(--bg-canvas);
+    }
+    .model-card-btn.selected {
+      border-color: var(--color-accent-cyan);
+      background: #e8f1f5;
+      box-shadow: 0 0 0 2px var(--color-accent-cyan);
+    }
+    .model-card-btn strong {
+      display: block;
+      font-size: 14px;
+      color: var(--color-text-main);
+    }
+    .model-card-btn span {
+      display: block;
+      font-size: 12px;
+      font-weight: 800;
+      color: #2b6cb0;
+      margin-top: 4px;
+    }
+    .model-card-btn small {
+      display: block;
+      font-size: 10px;
+      color: var(--color-text-muted);
+      margin-top: 2px;
+    }
+    .tenure-pills {
+      display: flex;
+      gap: 10px;
+      margin: 12px 0;
+    }
+    .tenure-btn {
+      flex: 1;
+      padding: 10px;
+      background: #ffffff;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-sm);
+      font-weight: 700;
+      cursor: pointer;
+      text-align: center;
+      transition: all var(--transition-fast);
+    }
+    .tenure-btn.selected {
+      background: var(--bg-dark);
+      color: #ffffff;
+      border-color: var(--bg-dark);
+    }
+    .bank-benchmarks {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 8px;
+      margin-top: 10px;
+    }
+    .bank-btn {
+      padding: 8px;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-sm);
+      background: #ffffff;
+      font-size: 11px;
+      text-align: left;
+      cursor: pointer;
+    }
+    .bank-btn.selected {
+      border-color: var(--color-accent-cyan);
+      background: #e8f1f5;
+      font-weight: bold;
+    }
+    .whatsapp-quote-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      width: 100%;
+      background: #25D366;
+      color: #111820;
+      padding: 14px;
+      border-radius: var(--radius-md);
+      font-weight: 800;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-top: 20px;
+      border: none;
+      cursor: pointer;
+      transition: background var(--transition-fast);
+    }
+    .whatsapp-quote-btn:hover {
+      background: #20ba5a;
+    }
+  </style>
+</head>
+<body>
+<div class="page" id="calculator-page">
+  <header>
+    <a class="brand" href="index.html#home" aria-label="Udan Enterprises home">UDAN<small data-i18n="brand_sub">ENTERPRISES</small></a>
+    <nav aria-label="Main navigation">
+      <a href="index.html#home" data-i18n="nav_home">Home</a>
+      <a href="bikes.html" data-i18n="nav_bikes">Zuboo Bikes</a>
+      <a class="active" href="calculator.html" data-i18n="nav_calculator">EMI Calculator</a>
+      <a href="parts.html" data-i18n="nav_parts">Spare Parts</a>
+      <a href="index.html#about" data-i18n="nav_about">About Us</a>
+      <a href="index.html#reasons" data-i18n="nav_offers">Offers</a>
+      <a href="index.html#contact" data-i18n="nav_contact">Contact</a>
+    </nav>
+    <div class="lang-switcher-wrapper">
+      <button class="lang-btn active" data-set-lang="en">EN</button>
+      <button class="lang-btn" data-set-lang="si">සිං</button>
+      <button class="lang-btn" data-set-lang="ta">தம</button>
+    </div>
+    <a class="btn dark header-book" href="https://wa.me/94784969652?text=Hello%20Udan%20Enterprises,%20I%20would%20like%20to%20inquire%20about%20a%20test%20ride." target="_blank" rel="noopener">Book a Test Ride <span>→</span></a>
+    <button class="menu icon" aria-label="Toggle menu" aria-expanded="false">☰</button>
+  </header>
+
+  <main class="calc-container">
+    <div class="calc-header">
+      <p class="eyebrow" data-i18n="hero_eyebrow">ZUBOO ELECTRIC BIKES • UDAN ENTERPRISES</p>
+      <h1 data-i18n="calc_heading">Sri Lankan Rupee (LKR) Loan / EMI Calculator</h1>
+      <p class="intro" data-i18n="calc_tagline">Benchmark your monthly lease installment against fuel savings!</p>
+    </div>
+
+    <div class="model-selector-grid" id="model-grid">
+      <!-- Generated via JS -->
+    </div>
+
+    <div class="tool-grid">
+      <!-- Input Controls -->
+      <div class="calc-card">
+        <h2 style="font-size:16px; margin-bottom:20px; font-weight:800;" data-i18n="calc_heading">Financing Configuration</h2>
+
+        <!-- Down Payment -->
+        <div style="margin-bottom:20px;">
+          <div class="calc-row">
+            <label style="font-weight:700;" data-i18n="calc_down_payment">Down Payment</label>
+            <span id="down-payment-display" style="font-weight:800; color:var(--color-accent-cyan);">Rs 133,500 (30%)</span>
+          </div>
+          <input type="range" min="20" max="70" step="5" value="30" class="calc-slider" id="down-payment-slider">
+          <div style="display:flex; justify-content:space-between; font-size:11px; color:var(--color-text-muted);">
+            <span>20% (Min)</span>
+            <span>40% (Recommended)</span>
+            <span>70% (Lowest EMI)</span>
+          </div>
+        </div>
+
+        <!-- Tenure -->
+        <div style="margin-bottom:20px;">
+          <label style="font-weight:700;" data-i18n="calc_tenure_months">Loan Tenure (Months)</label>
+          <div class="tenure-pills">
+            <button class="tenure-btn" data-tenure="12">12M</button>
+            <button class="tenure-btn selected" data-tenure="24">24M</button>
+            <button class="tenure-btn" data-tenure="36">36M</button>
+            <button class="tenure-btn" data-tenure="48">48M</button>
+          </div>
+        </div>
+
+        <!-- Interest Rate -->
+        <div style="margin-bottom:20px;">
+          <div class="calc-row">
+            <label style="font-weight:700;" data-i18n="calc_interest_rate">Annual Interest Rate (%)</label>
+            <span id="rate-display" style="font-weight:800;">15.0%</span>
+          </div>
+          <input type="range" min="12" max="22" step="0.5" value="15" class="calc-slider" id="rate-slider">
+          <div style="font-size:11px; font-weight:700; color:var(--color-text-muted); margin-bottom:6px;">Local Bank Benchmarks:</div>
+          <div class="bank-benchmarks">
+            <button class="bank-btn" data-rate="14.5">Commercial Bank (14.5%)</button>
+            <button class="bank-btn selected" data-rate="15.0">HNB (15.0%)</button>
+            <button class="bank-btn" data-rate="15.5">Sampath Bank (15.5%)</button>
+            <button class="bank-btn" data-rate="16.5">Seylan / LOLC (16.5%)</button>
+          </div>
+        </div>
+
+        <!-- Commute Distance for Fuel Savings -->
+        <div style="background:#e8f1f5; padding:16px; border-radius:var(--radius-md); border:1px solid #cbd6de;">
+          <div class="calc-row">
+            <label style="font-weight:800; color:#111820;" data-i18n="calc_daily_km">Daily Commute (KM)</label>
+            <span id="km-display" style="font-weight:800; color:#2b6cb0;">35 km / day</span>
+          </div>
+          <input type="range" min="10" max="100" step="5" value="35" class="calc-slider" id="km-slider">
+          <small style="color:var(--color-text-muted); display:block; margin-top:4px;" data-i18n="calc_savings_desc">Petrol benchmarked at Rs 370/L. Electric mobility costs ~Rs 750/month.</small>
+        </div>
+      </div>
+
+      <!-- Financial Calculation Output -->
+      <div class="calc-result-box">
+        <span style="font-size:11px; text-transform:uppercase; letter-spacing:1px; color:#cbd6de;" data-i18n="calc_monthly_emi">Estimated Monthly Installment (EMI)</span>
+        <div style="font-size:38px; font-weight:900; color:#ffffff; margin:6px 0;" id="emi-amount">Rs 15,116</div>
+        <small style="color:#a0aec0; display:block;" id="emi-subtitle">for 24 monthly installments on Zuboo GT</small>
+
+        <!-- Savings Card -->
+        <div class="savings-badge">
+          <div style="font-weight:800; font-size:12px; text-transform:uppercase; display:flex; justify-content:space-between;">
+            <span data-i18n="calc_savings_title">Estimated Monthly Petrol Savings</span>
+            <span>⚡ Rs 370/L Petrol</span>
+          </div>
+          <div style="margin-top:10px; font-size:13px;">
+            <div class="calc-row" style="margin:4px 0;">
+              <span style="color:#e2e8f0;" data-i18n="calc_fuel_cost">Petrol Fuel Cost:</span>
+              <span id="petrol-cost" style="font-weight:700; color:#feb2b2;">~Rs 14,775</span>
+            </div>
+            <div class="calc-row" style="margin:4px 0;">
+              <span style="color:#e2e8f0;" data-i18n="calc_ev_cost">Zuboo Electric Cost:</span>
+              <span id="ev-cost" style="font-weight:700; color:#9ae6b4;">~Rs 945</span>
+            </div>
+            <div class="calc-row" style="border-top:1px solid rgba(255,255,255,0.2); padding-top:8px; margin-top:8px;">
+              <strong style="color:#ffffff;" data-i18n="calc_net_saved">Net Savings Saved per Month:</strong>
+              <strong id="net-savings" style="font-size:16px; color:#68d391;">+Rs 13,830 / mo</strong>
+            </div>
+          </div>
+        </div>
+
+        <!-- Breakdown Details -->
+        <div style="font-size:12px; color:#cbd6de; border-top:1px solid rgba(255,255,255,0.1); padding-top:14px;">
+          <div class="calc-row">
+            <span data-i18n="calc_vehicle_price">Vehicle Price:</span>
+            <strong id="summary-price" style="color:#ffffff;">Rs 445,000</strong>
+          </div>
+          <div class="calc-row">
+            <span data-i18n="calc_down_payment">Down Payment:</span>
+            <strong id="summary-down" style="color:#ffffff;">Rs 133,500</strong>
+          </div>
+          <div class="calc-row">
+            <span data-i18n="calc_financed_amount">Financed Loan Amount:</span>
+            <strong id="summary-loan" style="color:#ffffff;">Rs 311,500</strong>
+          </div>
+          <div class="calc-row">
+            <span>Total Interest:</span>
+            <strong id="summary-interest" style="color:#f6e05e;">Rs 51,284</strong>
+          </div>
+        </div>
+
+        <a class="whatsapp-quote-btn" id="quote-whatsapp" href="#" target="_blank" rel="noopener">
+          <span>💬</span>
+          <span data-i18n="calc_btn_whatsapp">Request Official Bank Lease Quote via WhatsApp</span>
+        </a>
+
+        <small style="display:block; margin-top:12px; font-size:10px; color:#718096; line-height:1.4;">
+          * Installment calculations are indicative estimates. Final leasing approvals and specific lease margins are determined by financial partners (Commercial Bank, HNB, Sampath, LOLC).
+        </small>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div>
+      <a class="brand" href="index.html#home">UDAN<span class="leaf">▰</span><small data-i18n="brand_sub">ENTERPRISES</small></a>
+      <p data-i18n="footer_partner" data-i18n-html="true">Your trusted partner for Zuboo electric bikes.<br>Ride today for a cleaner tomorrow.</p>
+      <br>
+      <strong data-i18n="slogan_charge">JOIN US &amp; CHARGE YOUR RIDE ⚡</strong><br>
+      <span data-i18n="contact_address" data-i18n-html="true">Udugama Road, Kurunduwatta, Galle</span><br>
+      <span data-i18n="footer_phone">Phone: 078 496 9652</span><br>
+      <span data-i18n="footer_email">Email: Pibida17udan4131@gmail.com</span>
+    </div>
+    <div>
+      <h3 data-i18n="footer_quick_links">Quick Links</h3>
+      <div class="footer-links">
+        <a href="index.html#home" data-i18n="nav_home">Home</a>
+        <a href="bikes.html" data-i18n="nav_bikes">Zuboo Bikes</a>
+        <a href="calculator.html" data-i18n="nav_calculator">EMI Calculator</a>
+        <a href="parts.html" data-i18n="nav_parts">Spare Parts</a>
+        <a href="index.html#about" data-i18n="nav_about">About Us</a>
+        <a href="index.html#contact" data-i18n="nav_contact">Contact</a>
+      </div>
+    </div>
+    <div>
+      <h3 data-i18n="footer_follow_us">Follow Us</h3>
+      <div class="socials">
+        <button data-social="Facebook" aria-label="Facebook">f</button>
+        <button data-social="Instagram" aria-label="Instagram">◎</button>
+        <button data-social="YouTube" aria-label="YouTube">▣</button>
+        <button data-social="TikTok" aria-label="TikTok">♪</button>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<script src="i18n.js"></script>
+<script>
+  // All 8 Models
+  const BIKES = [
+    { id: 'mini', name: 'Zuboo Mini', price: 195000, spec: '490W • >32 km' },
+    { id: 'gt', name: 'Zuboo GT', price: 445000, spec: '1800W • ≥100 km' },
+    { id: 'the-tank', name: 'Zuboo The Tank', price: 515000, spec: '3000W • ≥80 km' },
+    { id: 't11', name: 'Zuboo T11', price: 455000, spec: '1800W • ≥80 km' },
+    { id: 't3', name: 'Zuboo T3', price: 395000, spec: '1300W • 100-110 km' },
+    { id: 'paris', name: 'Zuboo Paris', price: 330000, spec: '1200W • ≥80 km' },
+    { id: 'ex008', name: 'Zuboo EX008', price: 495000, spec: '2000W • ≥80 km' },
+    { id: 'kb1', name: 'Zuboo KB1', price: 382500, spec: '1500W • 80-100 km' }
+  ];
+
+  let selectedBike = BIKES[1]; // GT default
+  let downPaymentPercent = 30;
+  let tenureMonths = 24;
+  let interestRate = 15.0;
+  let dailyKm = 35;
+
+  function renderModelGrid() {
+    const grid = document.getElementById('model-grid');
+    grid.innerHTML = BIKES.map(b => `
+      <button class="model-card-btn ${b.id === selectedBike.id ? 'selected' : ''}" data-bike="${b.id}">
+        <strong>${b.name}</strong>
+        <span>Rs ${b.price.toLocaleString('en-LK')}</span>
+        <small>${b.spec}</small>
+      </button>
+    `).join('');
+
+    grid.querySelectorAll('.model-card-btn').forEach(btn => {
+      btn.onclick = () => {
+        selectedBike = BIKES.find(b => b.id === btn.dataset.bike);
+        renderModelGrid();
+        recalculate();
+      };
+    });
+  }
+
+  function formatLKR(val) {
+    return 'Rs ' + Math.round(val).toLocaleString('en-LK');
+  }
+
+  function recalculate() {
+    const price = selectedBike.price;
+    const downAmount = Math.round((price * downPaymentPercent) / 100);
+    const loanAmount = price - downAmount;
+    const r = interestRate / (12 * 100);
+    const n = tenureMonths;
+
+    let emi = 0;
+    if (r === 0) emi = loanAmount / n;
+    else emi = (loanAmount * r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1);
+
+    const totalInterest = Math.round(emi * n - loanAmount);
+
+    // Petrol Savings
+    const monthlyDistance = dailyKm * 30;
+    const petrolCost = Math.round((monthlyDistance / 35) * 370 + (monthlyDistance * 3.5));
+    const evCost = Math.round(monthlyDistance * 0.9);
+    const netSavings = petrolCost - evCost;
+
+    // Update DOM
+    document.getElementById('down-payment-display').textContent = `${formatLKR(downAmount)} (${downPaymentPercent}%)`;
+    document.getElementById('rate-display').textContent = `${interestRate.toFixed(1)}%`;
+    document.getElementById('km-display').textContent = `${dailyKm} km / day`;
+
+    document.getElementById('emi-amount').textContent = formatLKR(emi);
+    document.getElementById('emi-subtitle').textContent = `for ${tenureMonths} monthly installments on ${selectedBike.name}`;
+
+    document.getElementById('petrol-cost').textContent = `~${formatLKR(petrolCost)}`;
+    document.getElementById('ev-cost').textContent = `~${formatLKR(evCost)}`;
+    document.getElementById('net-savings').textContent = `+${formatLKR(netSavings)} / mo`;
+
+    document.getElementById('summary-price').textContent = formatLKR(price);
+    document.getElementById('summary-down').textContent = formatLKR(downAmount);
+    document.getElementById('summary-loan').textContent = formatLKR(loanAmount);
+    document.getElementById('summary-interest').textContent = formatLKR(totalInterest);
+
+    // WhatsApp Link
+    const waText = `*Leasing & Quotation Inquiry - Udan Enterprises*\n\n` +
+      `*Vehicle:* ${selectedBike.name} (Rs ${price.toLocaleString('en-LK')})\n` +
+      `*Down Payment:* ${formatLKR(downAmount)} (${downPaymentPercent}%)\n` +
+      `*Financed Amount:* ${formatLKR(loanAmount)}\n` +
+      `*Tenure:* ${tenureMonths} Months @ ${interestRate}% p.a.\n` +
+      `*Estimated EMI:* ${formatLKR(emi)}/month\n` +
+      `*Fuel Savings:* ${formatLKR(netSavings)}/month\n\n` +
+      `Please provide the official bank quotation and documents required in Galle.`;
+    document.getElementById('quote-whatsapp').href = `https://wa.me/94784969652?text=${encodeURIComponent(waText)}`;
+  }
+
+  // Sliders and Buttons Listeners
+  document.getElementById('down-payment-slider').oninput = (e) => {
+    downPaymentPercent = Number(e.target.value);
+    recalculate();
+  };
+
+  document.getElementById('rate-slider').oninput = (e) => {
+    interestRate = Number(e.target.value);
+    document.querySelectorAll('.bank-btn').forEach(b => b.classList.remove('selected'));
+    recalculate();
+  };
+
+  document.getElementById('km-slider').oninput = (e) => {
+    dailyKm = Number(e.target.value);
+    recalculate();
+  };
+
+  document.querySelectorAll('.tenure-btn').forEach(btn => {
+    btn.onclick = () => {
+      document.querySelectorAll('.tenure-btn').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+      tenureMonths = Number(btn.dataset.tenure);
+      recalculate();
+    };
+  });
+
+  document.querySelectorAll('.bank-btn').forEach(btn => {
+    btn.onclick = () => {
+      document.querySelectorAll('.bank-btn').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+      interestRate = Number(btn.dataset.rate);
+      document.getElementById('rate-slider').value = interestRate;
+      recalculate();
+    };
+  });
+
+  // Mobile menu toggle
+  const menu = document.querySelector('.menu');
+  const nav = document.querySelector('nav');
+  if (menu && nav) {
+    menu.onclick = () => {
+      const open = nav.classList.toggle('open');
+      menu.setAttribute('aria-expanded', String(open));
+    };
+  }
+
+  renderModelGrid();
+  recalculate();
+</script>
+</body>
+</html>

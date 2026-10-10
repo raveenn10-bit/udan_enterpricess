@@ -1,0 +1,365 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Genuine Zuboo electric bike spare parts and accessories available at Udan Enterprises Showroom in Galle, Sri Lanka. Fast chargers, batteries, tubeless tires, brake pads, and riding gear.">
+  <title>Genuine Zuboo Spare Parts & Accessories — Udan Enterprises</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .parts-container {
+      max-width: 1200px;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+    .filter-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin: 24px 0;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .filter-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .filter-pill {
+      padding: 8px 16px;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-full);
+      background: #ffffff;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+    .filter-pill.active {
+      background: var(--bg-dark);
+      color: #ffffff;
+      border-color: var(--bg-dark);
+    }
+    .search-input {
+      padding: 10px 16px;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      font-size: 12px;
+      width: 280px;
+      max-width: 100%;
+    }
+    .part-price {
+      font-size: 18px;
+      font-weight: 800;
+      color: #111820;
+    }
+    .badge-stock {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      background: #c6f6d5;
+      color: #22543d;
+      margin-bottom: 8px;
+    }
+    .order-wa-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      background: #25D366;
+      color: #111820;
+      padding: 10px;
+      border-radius: var(--radius-sm);
+      font-weight: 800;
+      font-size: 12px;
+      text-transform: uppercase;
+      margin-top: 14px;
+      text-decoration: none;
+      transition: background var(--transition-fast);
+    }
+    .order-wa-btn:hover {
+      background: #20ba5a;
+    }
+  </style>
+</head>
+<body>
+<div class="page" id="parts-page">
+  <header>
+    <a class="brand" href="index.html#home" aria-label="Udan Enterprises home">UDAN<small data-i18n="brand_sub">ENTERPRISES</small></a>
+    <nav aria-label="Main navigation">
+      <a href="index.html#home" data-i18n="nav_home">Home</a>
+      <a href="bikes.html" data-i18n="nav_bikes">Zuboo Bikes</a>
+      <a href="calculator.html" data-i18n="nav_calculator">EMI Calculator</a>
+      <a class="active" href="parts.html" data-i18n="nav_parts">Spare Parts</a>
+      <a href="index.html#about" data-i18n="nav_about">About Us</a>
+      <a href="index.html#reasons" data-i18n="nav_offers">Offers</a>
+      <a href="index.html#contact" data-i18n="nav_contact">Contact</a>
+    </nav>
+    <div class="lang-switcher-wrapper">
+      <button class="lang-btn active" data-set-lang="en">EN</button>
+      <button class="lang-btn" data-set-lang="si">සිං</button>
+      <button class="lang-btn" data-set-lang="ta">தம</button>
+    </div>
+    <a class="btn dark header-book" href="https://wa.me/94784969652?text=Hello%20Udan%20Enterprises,%20I%20would%20like%20to%20order%20spare%20parts." target="_blank" rel="noopener">Order via WhatsApp <span>→</span></a>
+    <button class="menu icon" aria-label="Toggle menu" aria-expanded="false">☰</button>
+  </header>
+
+  <main class="parts-container">
+    <div>
+      <p class="eyebrow" data-i18n="hero_eyebrow">ZUBOO ELECTRIC BIKES • UDAN ENTERPRISES</p>
+      <h1 data-i18n="parts_heading">Genuine Zuboo Spare Parts & Accessories</h1>
+      <p class="intro" data-i18n="parts_tagline">Factory certified chargers, tires, batteries and riding gear at Galle Showroom</p>
+    </div>
+
+    <!-- Filter & Search Toolbar -->
+    <div class="filter-bar">
+      <div class="filter-pills" id="filter-pills">
+        <button class="filter-pill active" data-cat="all" data-i18n="parts_all">All Parts</button>
+        <button class="filter-pill" data-cat="batteries" data-i18n="parts_batteries">Batteries & Chargers</button>
+        <button class="filter-pill" data-cat="tires" data-i18n="parts_tires">Tires & Brakes</button>
+        <button class="filter-pill" data-cat="accessories" data-i18n="parts_accessories">Accessories & Gear</button>
+      </div>
+      <input type="search" id="parts-search" class="search-input" placeholder="Search spare parts..." data-i18n-placeholder="parts_search">
+    </div>
+
+    <!-- Parts Grid Container -->
+    <div class="parts-grid" id="parts-grid">
+      <!-- Injected via JavaScript -->
+    </div>
+
+    <!-- Service Guarantee Box -->
+    <div style="margin-top:40px; padding:28px; background:#e8f1f5; border-radius:var(--radius-lg); border:1px solid #cbd6de; display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:20px;">
+      <div>
+        <h3 style="font-weight:800; font-size:16px;">Professional Technician Installation & Free Diagnostics</h3>
+        <p style="font-size:12px; color:var(--color-text-muted); max-width:600px; margin-top:4px;">
+          Need battery health cell balancing, tire mounting, or brake pad installation? Our dedicated EV technicians at Kurunduwatta, Galle showroom provide complete fitting with genuine warranty support.
+        </p>
+      </div>
+      <a class="btn dark" href="https://wa.me/94784969652?text=Hello%20Udan%20Enterprises,%20I%20would%20like%20to%20book%20a%20technician%20service%20slot%20at%20Galle%20showroom." target="_blank" rel="noopener">Book Service Slot <span>→</span></a>
+    </div>
+  </main>
+
+  <footer>
+    <div>
+      <a class="brand" href="index.html#home">UDAN<span class="leaf">▰</span><small data-i18n="brand_sub">ENTERPRISES</small></a>
+      <p data-i18n="footer_partner" data-i18n-html="true">Your trusted partner for Zuboo electric bikes.<br>Ride today for a cleaner tomorrow.</p>
+      <br>
+      <strong data-i18n="slogan_charge">JOIN US &amp; CHARGE YOUR RIDE ⚡</strong><br>
+      <span data-i18n="contact_address" data-i18n-html="true">Udugama Road, Kurunduwatta, Galle</span><br>
+      <span data-i18n="footer_phone">Phone: 078 496 9652</span><br>
+      <span data-i18n="footer_email">Email: Pibida17udan4131@gmail.com</span>
+    </div>
+    <div>
+      <h3 data-i18n="footer_quick_links">Quick Links</h3>
+      <div class="footer-links">
+        <a href="index.html#home" data-i18n="nav_home">Home</a>
+        <a href="bikes.html" data-i18n="nav_bikes">Zuboo Bikes</a>
+        <a href="calculator.html" data-i18n="nav_calculator">EMI Calculator</a>
+        <a href="parts.html" data-i18n="nav_parts">Spare Parts</a>
+        <a href="index.html#about" data-i18n="nav_about">About Us</a>
+        <a href="index.html#contact" data-i18n="nav_contact">Contact</a>
+      </div>
+    </div>
+    <div>
+      <h3 data-i18n="footer_follow_us">Follow Us</h3>
+      <div class="socials">
+        <button data-social="Facebook" aria-label="Facebook">f</button>
+        <button data-social="Instagram" aria-label="Instagram">◎</button>
+        <button data-social="YouTube" aria-label="YouTube">▣</button>
+        <button data-social="TikTok" aria-label="TikTok">♪</button>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<script src="i18n.js"></script>
+<script>
+  const PARTS = [
+    {
+      id: "chg-72",
+      name: "Zuboo 72V 5A Smart Fast Lithium Charger",
+      cat: "batteries",
+      price: 18500,
+      code: "ZB-CHG-72V5A",
+      desc: "Microprocessor-controlled fast charger with auto-cutoff and dual-bearing silent cooling fan.",
+      img: "public/design/smart-dashboard.webp",
+      warranty: "1 Year Warranty"
+    },
+    {
+      id: "chg-60",
+      name: "Zuboo 60V 4A Compact Smart Charger",
+      cat: "batteries",
+      price: 16500,
+      code: "ZB-CHG-60V4A",
+      desc: "Aluminum-cased smart charger with trickle pulse logic for battery cell health extension.",
+      img: "public/design/smart-dashboard.webp",
+      warranty: "1 Year Warranty"
+    },
+    {
+      id: "bat-72-tn",
+      name: "Tianneng 72V 32Ah Deep Cycle Power Pack",
+      cat: "batteries",
+      price: 165000,
+      code: "ZB-BAT-72V32A-TN",
+      desc: "OEM factory replacement deep discharge battery pack for GT, Tank, T11, T3 and KB1.",
+      img: "public/design/rear-wheel.webp",
+      warranty: "2 Years / 20,000 km"
+    },
+    {
+      id: "bat-72-li",
+      name: "72V 30Ah Removable Lithium Pack with Smart BMS",
+      cat: "batteries",
+      price: 245000,
+      code: "ZB-BAT-72V30A-LI",
+      desc: "Lightweight removable pack with 2000+ cycle lifespan and Bluetooth battery monitoring.",
+      img: "public/design/blueprint-bike.webp",
+      warranty: "3 Years Comprehensive"
+    },
+    {
+      id: "tire-300-10",
+      name: "3.00-10 All-Terrain Tubeless Tire",
+      cat: "tires",
+      price: 8500,
+      code: "ZB-WHL-30010-AT",
+      desc: "Reinforced 4PR puncture resistant tread engineered for Sri Lankan monsoon asphalt.",
+      img: "public/design/rear-wheel.webp",
+      warranty: "6 Months Defect"
+    },
+    {
+      id: "tire-90-14",
+      name: "90/90-14 High-Speed Highway Tire (EX008)",
+      cat: "tires",
+      price: 12500,
+      code: "ZB-WHL-909014-EX",
+      desc: "Large alloy rim tubeless highway tire with hydro-channel anti-skid rain grooves.",
+      img: "public/design/bike-front.webp",
+      warranty: "6 Months Defect"
+    },
+    {
+      id: "brk-pads",
+      name: "Ceramic Disc Brake Pads Set (Front & Rear)",
+      cat: "tires",
+      price: 3800,
+      code: "ZB-BRK-CP-01",
+      desc: "High heat-resistant copper-ceramic compound with silent, noise-free stopping response.",
+      img: "public/design/rear-wheel.webp",
+      warranty: "Official Wear Guarantee"
+    },
+    {
+      id: "key-fob",
+      name: "Smart Key Fob & Anti-Theft Alarm System",
+      cat: "accessories",
+      price: 6500,
+      code: "ZB-ELC-KEY-02",
+      desc: "Two keyless fobs with push-button start, vibration sensor and 115 dB siren.",
+      img: "public/design/smart-dashboard.webp",
+      warranty: "1 Year Warranty"
+    },
+    {
+      id: "helmet",
+      name: "DOT & SLS Certified Aerodynamic Helmet",
+      cat: "accessories",
+      price: 14500,
+      code: "ZB-ACC-HLM-SLS",
+      desc: "Sri Lanka Standards (SLS 517) certified open-face helmet with anti-scratch UV visor.",
+      img: "public/design/rider-bridge.webp",
+      warranty: "Lifetime Shell Integrity"
+    },
+    {
+      id: "cover",
+      name: "All-Weather Heavy Duty Waterproof Bike Cover",
+      cat: "accessories",
+      price: 4800,
+      code: "ZB-ACC-CVR-HD",
+      desc: "210D Oxford UV heat-reflective waterproof fabric protecting against tropical rain.",
+      img: "public/design/hero-scooter.webp",
+      warranty: "1 Year Material Warranty"
+    }
+  ];
+
+  let currentCategory = 'all';
+  let searchTerm = '';
+
+  function renderParts() {
+    const grid = document.getElementById('parts-grid');
+    const filtered = PARTS.filter(p => {
+      const matchCat = currentCategory === 'all' || p.cat === currentCategory;
+      const q = searchTerm.toLowerCase();
+      const matchSearch = !q || p.name.toLowerCase().includes(q) || p.desc.toLowerCase().includes(q) || p.code.toLowerCase().includes(q);
+      return matchCat && matchSearch;
+    });
+
+    if (filtered.length === 0) {
+      grid.innerHTML = '<div style="grid-column:1/-1; text-align:center; padding:40px; background:#fff; border-radius:12px; border:1px solid #cbd6de;"><p>No parts found matching your criteria. Contact our Galle showroom via WhatsApp to special order.</p></div>';
+      return;
+    }
+
+    grid.innerHTML = filtered.map(p => {
+      const waText = `*Spare Part Order Inquiry - Udan Enterprises*\n\n` +
+        `*Item:* ${p.name}\n` +
+        `*Code:* ${p.code}\n` +
+        `*Price:* Rs ${p.price.toLocaleString('en-LK')}\n\n` +
+        `Please confirm stock availability at the Galle showroom.`;
+      const waUrl = `https://wa.me/94784969652?text=${encodeURIComponent(waText)}`;
+
+      return `
+        <div class="part-card">
+          <div class="part-card-img">
+            <img src="${p.img}" alt="${p.name}" loading="lazy">
+          </div>
+          <div class="part-card-body">
+            <div>
+              <span class="badge-stock">In Stock • Galle</span>
+              <small style="display:block; font-family:monospace; color:#718096; margin-bottom:4px;">${p.code}</small>
+              <h3 style="font-size:15px; font-weight:800; line-height:1.3; color:#111820; margin-bottom:8px;">${p.name}</h3>
+              <p style="font-size:12px; color:var(--color-text-muted); line-height:1.4; margin-bottom:12px;">${p.desc}</p>
+            </div>
+            <div>
+              <div style="display:flex; justify-content:space-between; align-items:baseline;">
+                <span class="part-price">Rs ${p.price.toLocaleString('en-LK')}</span>
+                <small style="color:#718096;">${p.warranty}</small>
+              </div>
+              <a class="order-wa-btn" href="${waUrl}" target="_blank" rel="noopener">
+                <span>💬</span>
+                <span data-i18n="parts_order_btn">Order via WhatsApp</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  // Filter click handlers
+  document.querySelectorAll('.filter-pill').forEach(pill => {
+    pill.onclick = () => {
+      document.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
+      pill.classList.add('active');
+      currentCategory = pill.dataset.cat;
+      renderParts();
+    };
+  });
+
+  document.getElementById('parts-search').oninput = (e) => {
+    searchTerm = e.target.value;
+    renderParts();
+  };
+
+  // Mobile menu toggle
+  const menu = document.querySelector('.menu');
+  const nav = document.querySelector('nav');
+  if (menu && nav) {
+    menu.onclick = () => {
+      const open = nav.classList.toggle('open');
+      menu.setAttribute('aria-expanded', String(open));
+    };
+  }
+
+  renderParts();
+</script>
+</body>
+</html>

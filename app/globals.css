@@ -1,0 +1,256 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@theme inline {
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-info: var(--info);
+  --color-info-foreground: var(--info-foreground);
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+  --ring: var(--ring);
+  --input: var(--input);
+  --border: var(--border);
+  --warning-foreground: var(--warning-foreground);
+  --warning: var(--warning);
+  --success-foreground: var(--success-foreground);
+  --success: var(--success);
+  --info-foreground: var(--info-foreground);
+  --info: var(--info);
+  --destructive-foreground: var(--destructive-foreground);
+  --destructive: var(--destructive);
+  --accent-foreground: var(--accent-foreground);
+  --accent: var(--accent);
+  --muted-foreground: var(--muted-foreground);
+  --muted: var(--muted);
+  --secondary-foreground: var(--secondary-foreground);
+  --primary-foreground: var(--primary-foreground);
+  --popover-foreground: var(--popover-foreground);
+  --popover: var(--popover);
+  --card-foreground: var(--card-foreground);
+  --card: var(--card);
+  --foreground: var(--foreground);
+  --background: var(--background);
+}
+
+:root {
+  --destructive-foreground: var(--color-red-700);
+  --info: var(--color-blue-500);
+  --info-foreground: var(--color-blue-700);
+  --success: var(--color-emerald-500);
+  --success-foreground: var(--color-emerald-700);
+  --warning: var(--color-amber-500);
+  --warning-foreground: var(--color-amber-700);
+
+  --background: #FFFFFF;
+  --foreground: #0F172A;
+  --card: #FFFFFF;
+  --card-foreground: #0F172A;
+  --popover: #FFFFFF;
+  --popover-foreground: #0F172A;
+  --primary: #FF5E14;
+  --primary-foreground: #FFFFFF;
+  --secondary: #F1F5F9;
+  --secondary-foreground: #0F172A;
+  --muted: #F8FAFC;
+  --muted-foreground: #64748B;
+  --accent: #F1F5F9;
+  --accent-foreground: #0F172A;
+  --destructive: #EF4444;
+  --border: #E2E8F0;
+  --input: #E2E8F0;
+  --ring: #FF5E14;
+
+  --bg-primary: #FFFFFF;
+  --bg-secondary: #F8FAFC;
+  --bg-surface: #FFFFFF;
+  --text-primary: #111820;
+  --text-secondary: #5A6A76;
+  --accent-blue: #1A365D;
+  --zuboo-orange: #FF5E14;
+  --zuboo-orange-hover: #E04D09;
+  --border-color: #E2E8F0;
+  --border-light: #EDF2F7;
+  --white: #FFFFFF;
+  --dark-section: #0F172A;
+  --zuboo-red: #E51937;
+}
+
+.dark {
+  --destructive-foreground: var(--color-red-400);
+  --info: var(--color-blue-500);
+  --info-foreground: var(--color-blue-400);
+  --success: var(--color-emerald-500);
+  --success-foreground: var(--color-emerald-400);
+  --warning: var(--color-amber-500);
+  --warning-foreground: var(--color-amber-400);
+}
+
+body {
+  background-color: #FFFFFF;
+  color: var(--text-primary);
+  font-family: var(--font-inter), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  overflow-x: hidden;
+}
+
+h1, h2, h3, h4, h5, h6, .font-heading {
+  font-family: var(--font-space-grotesk), var(--font-inter), sans-serif;
+  letter-spacing: -0.02em;
+}
+
+.editorial-container {
+  max-width: 1440px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+@media (min-width: 1024px) {
+  .editorial-container {
+    padding-left: 3rem;
+    padding-right: 3rem;
+  }
+}
+
+.bg-secondary-tint {
+  background-color: var(--bg-secondary);
+}
+
+.border-subtle {
+  border-color: var(--border-color);
+}
+
+.accent-blue {
+  color: var(--accent-blue);
+}
+
+.bg-accent-blue {
+  background-color: var(--accent-blue);
+}
+
+.bg-dark-section {
+  background-color: var(--dark-section);
+}
+
+.text-primary-dark {
+  color: var(--text-primary);
+}
+
+.text-secondary-muted {
+  color: var(--text-secondary);
+}
+
+/* Subtle editorial borders and hair lines */
+.hairline-b {
+  border-bottom: 1px solid var(--border-color);
+}
+
+.hairline-t {
+  border-top: 1px solid var(--border-color);
+}
+
+.hairline-r {
+  border-right: 1px solid var(--border-color);
+}
+
+.hairline-l {
+  border-left: 1px solid var(--border-color);
+}
+
+.text-zuboo-orange {
+  color: var(--zuboo-orange);
+}
+
+.bg-zuboo-orange {
+  background-color: var(--zuboo-orange);
+}
+
+.bg-zuboo-orange:hover {
+  background-color: var(--zuboo-orange-hover);
+}
+
+.btn-zuboo {
+  background-color: var(--zuboo-orange);
+  color: #ffffff;
+  font-weight: 700;
+  transition: all 0.2s ease;
+}
+
+.btn-zuboo:hover {
+  background-color: var(--zuboo-orange-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(255, 94, 20, 0.25);
+}
+
+.card-zuboo {
+  background-color: #ffffff;
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  transition: all 0.25s ease;
+}
+
+.card-zuboo:hover {
+  border-color: var(--zuboo-orange);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.06), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+}
+
+/* Figma-quality micro-interactions */
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fade-in-scale {
+  from { opacity: 0; transform: scale(0.96); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes slide-up {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.5s ease-out;
+}
+
+.animate-slide-up {
+  animation: slide-up 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Smooth scroll behavior */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Product card hover polish */
+.product-card {
+  transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.product-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.08);
+}
+
+.product-card:hover .product-image {
+  transform: scale(1.05);
+}
+
+.product-image {
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Section divider line animation */
+.section-line {
+  width: 0;
+  height: 2px;
+  background: #FF5E14;
+  transition: width 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.section-line.visible {
+  width: 48px;
+}

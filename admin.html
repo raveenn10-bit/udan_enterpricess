@@ -1,0 +1,1134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CMS Admin Dashboard & Inventory Manager | Udan Enterprises Galle</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #F7F9FA;
+      --bg-secondary: #E8F1F5;
+      --text-primary: #111820;
+      --text-secondary: #667780;
+      --accent-blue: #346C83;
+      --accent-hover: #265366;
+      --border-color: #E0E8EC;
+      --white: #FFFFFF;
+      --emerald: #059669;
+      --emerald-bg: #ecfdf5;
+      --amber: #d97706;
+      --amber-bg: #fffbeb;
+      --rose: #e11d48;
+      --rose-bg: #fff1f2;
+      --font-inter: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-heading: 'Space Grotesk', sans-serif;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      font-family: var(--font-inter);
+      font-size: 13px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+    h1, h2, h3, h4, .font-heading {
+      font-family: var(--font-heading);
+      letter-spacing: -0.02em;
+    }
+    a { color: inherit; text-decoration: none; }
+    button, input, select, textarea { font-family: inherit; font-size: inherit; }
+    .container {
+      max-width: 1360px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+    /* Header */
+    header {
+      background: rgba(255, 255, 255, 0.96);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border-color);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .header-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 0;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .brand-logo {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      background: var(--bg-secondary);
+      display: grid;
+      place-items: center;
+      font-weight: 900;
+      font-family: var(--font-heading);
+      color: var(--accent-blue);
+      border: 1px solid var(--border-color);
+    }
+    .badge-cms {
+      background: var(--bg-secondary);
+      color: var(--accent-blue);
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      padding: 2px 8px;
+      border-radius: 99px;
+      border: 1px solid rgba(52, 108, 131, 0.2);
+    }
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 14px;
+      border-radius: 8px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      cursor: pointer;
+      border: 1px solid var(--border-color);
+      background: var(--white);
+      color: var(--text-primary);
+      transition: all 0.15s ease;
+    }
+    .btn:hover { background: var(--bg-secondary); }
+    .btn-dark {
+      background: var(--text-primary);
+      color: var(--white);
+      border-color: var(--text-primary);
+    }
+    .btn-dark:hover { background: var(--accent-blue); border-color: var(--accent-blue); }
+    .btn-accent {
+      background: var(--accent-blue);
+      color: var(--white);
+      border-color: var(--accent-blue);
+    }
+    .btn-accent:hover { background: var(--accent-hover); }
+    .btn-logout {
+      background: var(--rose-bg);
+      color: var(--rose);
+      border-color: #fecdd3;
+    }
+    .btn-logout:hover { background: #ffe4e6; }
+    .btn-wa {
+      background: #10b981;
+      color: white;
+      border-color: #10b981;
+      padding: 5px 10px;
+      font-size: 10px;
+    }
+    .btn-wa:hover { background: #059669; }
+
+    /* Auth screen */
+    #auth-screen {
+      min-height: 85vh;
+      display: grid;
+      place-items: center;
+      padding: 30px 20px;
+    }
+    .login-card {
+      background: var(--white);
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      padding: 36px;
+      max-width: 440px;
+      width: 100%;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.04);
+      text-align: center;
+    }
+    .pin-input {
+      width: 100%;
+      padding: 14px;
+      text-align: center;
+      font-size: 22px;
+      font-family: monospace;
+      letter-spacing: 8px;
+      border-radius: 12px;
+      border: 1px solid var(--border-color);
+      background: var(--bg-primary);
+      margin: 18px 0;
+      outline: none;
+    }
+    .pin-input:focus {
+      border-color: var(--accent-blue);
+      background: #fff;
+    }
+    .hint-box {
+      background: var(--bg-secondary);
+      border: 1px solid rgba(52, 108, 131, 0.2);
+      border-radius: 10px;
+      padding: 10px 14px;
+      margin: 16px 0;
+      font-size: 11px;
+      text-align: left;
+      color: var(--text-primary);
+    }
+
+    /* KPI Grid */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin: 24px 0;
+    }
+    .kpi-card {
+      background: var(--white);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      padding: 18px;
+    }
+    .kpi-title {
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-secondary);
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 6px;
+    }
+    .kpi-value {
+      font-size: 26px;
+      font-family: var(--font-heading);
+      font-weight: 900;
+      color: var(--text-primary);
+    }
+
+    /* Tabs */
+    .tabs-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 12px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .tabs-group {
+      display: flex;
+      gap: 8px;
+    }
+    .tab-btn {
+      padding: 8px 16px;
+      border-radius: 10px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      background: var(--white);
+      border: 1px solid var(--border-color);
+      color: var(--text-secondary);
+      cursor: pointer;
+    }
+    .tab-btn.active {
+      background: var(--text-primary);
+      color: var(--white);
+      border-color: var(--text-primary);
+    }
+
+    /* Filter toolbar */
+    .toolbar {
+      background: var(--white);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      padding: 12px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+    .filter-pills {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+    }
+    .pill {
+      padding: 5px 10px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      background: var(--bg-primary);
+      border: 1px solid transparent;
+      cursor: pointer;
+    }
+    .pill.active {
+      background: var(--text-primary);
+      color: white;
+    }
+    .search-input {
+      padding: 7px 12px;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+      background: var(--bg-primary);
+      font-size: 12px;
+      outline: none;
+      min-width: 220px;
+    }
+    .search-input:focus { border-color: var(--accent-blue); background: #fff; }
+
+    /* Table */
+    .table-container {
+      background: var(--white);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      overflow-x: auto;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+    th {
+      background: var(--bg-primary);
+      padding: 12px 16px;
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-secondary);
+      border-bottom: 1px solid var(--border-color);
+    }
+    td {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border-color);
+      vertical-align: top;
+    }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: rgba(247, 249, 250, 0.7); }
+    .status-select {
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-size: 10px;
+      font-weight: 700;
+      border: 1px solid var(--border-color);
+      background: #fff;
+      cursor: pointer;
+    }
+
+    /* Inventory Grid */
+    .inventory-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 18px;
+    }
+    .inv-card {
+      background: var(--white);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 14px;
+    }
+    .inv-card:hover { border-color: rgba(52, 108, 131, 0.4); }
+    .inv-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+    .inv-category {
+      font-size: 9px;
+      font-weight: 800;
+      text-transform: uppercase;
+      color: var(--accent-blue);
+      letter-spacing: 0.05em;
+    }
+    .inv-title {
+      font-size: 17px;
+      font-family: var(--font-heading);
+      font-weight: 800;
+      margin: 2px 0;
+    }
+    .inv-code {
+      font-size: 10px;
+      font-family: monospace;
+      color: var(--text-secondary);
+    }
+    .stock-badge {
+      font-size: 9px;
+      font-weight: 800;
+      text-transform: uppercase;
+      padding: 3px 8px;
+      border-radius: 99px;
+      border: 1px solid var(--border-color);
+    }
+    .stock-in { background: var(--emerald-bg); color: var(--emerald); border-color: #a7f3d0; }
+    .stock-low { background: var(--amber-bg); color: var(--amber); border-color: #fde68a; }
+    .stock-pre { background: var(--bg-secondary); color: var(--accent-blue); border-color: #bae6fd; }
+    .stock-out { background: var(--rose-bg); color: var(--rose); border-color: #fecdd3; }
+    .inv-field { margin-top: 8px; }
+    .inv-field label {
+      display: block;
+      font-size: 9px;
+      font-weight: 800;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      margin-bottom: 4px;
+    }
+    .inv-field input, .inv-field select {
+      width: 100%;
+      padding: 6px 10px;
+      border-radius: 6px;
+      border: 1px solid var(--border-color);
+      background: var(--bg-primary);
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    /* Modal */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(4px);
+      display: grid;
+      place-items: center;
+      z-index: 200;
+      padding: 20px;
+    }
+    .modal-card {
+      background: var(--white);
+      border-radius: 20px;
+      max-width: 480px;
+      width: 100%;
+      padding: 28px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+    }
+
+    /* Toast */
+    #toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: var(--text-primary);
+      color: white;
+      padding: 12px 20px;
+      border-radius: 10px;
+      font-size: 11px;
+      font-weight: 700;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      display: none;
+      z-index: 300;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TOAST NOTIFICATION -->
+  <div id="toast"></div>
+
+  <!-- AUTH SCREEN (PIN 4131) -->
+  <div id="auth-screen">
+    <div class="login-card">
+      <div class="brand-logo" style="margin: 0 auto 12px; width: 44px; height: 44px; font-size: 20px;">U</div>
+      <h1 style="font-size: 22px; text-transform: uppercase;">UDAN ENTERPRISES</h1>
+      <p style="color: var(--text-secondary); font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600;">
+        Showroom CMS & Inventory Terminal
+      </p>
+
+      <form id="login-form">
+        <label style="display: block; text-align: left; font-size: 11px; font-weight: 700; text-transform: uppercase; margin-top: 24px;">
+          Staff Security PIN
+        </label>
+        <input id="pin-input" type="password" maxlength="8" class="pin-input" placeholder="••••" autofocus required>
+        
+        <div class="hint-box">
+          <strong>Showroom Demo PIN: 4131</strong><br>
+          Authorized for Galle Kurunduwatta showroom staff and evaluation.
+        </div>
+
+        <button type="submit" class="btn btn-dark" style="width: 100%; padding: 12px; font-size: 12px;">
+          Unlock Dashboard →
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- MAIN ADMIN DASHBOARD -->
+  <div id="dashboard" style="display: none;">
+    <header>
+      <div class="container header-inner">
+        <div class="brand-group">
+          <div class="brand-logo">U</div>
+          <div>
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span class="font-heading" style="font-weight: 900; font-size: 14px; text-transform: uppercase;">UDAN ENTERPRISES</span>
+              <span class="badge-cms">CMS Admin v3.2</span>
+            </div>
+            <div style="font-size: 11px; color: var(--text-secondary);">
+              Galle Kurunduwatta Showroom • Terminal Officer
+            </div>
+          </div>
+        </div>
+
+        <div class="header-actions">
+          <a href="index.html" target="_blank" class="btn">View Live Site ↗</a>
+          <a href="service.html" target="_blank" class="btn">Service & Warranty Portal ↗</a>
+          <button id="logout-btn" class="btn btn-logout">Logout</button>
+        </div>
+      </div>
+    </header>
+
+    <main class="container" style="padding-top: 24px; padding-bottom: 60px;">
+      <!-- KPI CARDS -->
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-title">Total Inquiries <span>👥</span></div>
+          <div id="kpi-total-leads" class="kpi-value">8</div>
+          <div style="font-size: 10px; color: var(--text-secondary); margin-top: 4px;">Galle & Southern Province</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-title">Actionable New <span>⚡</span></div>
+          <div id="kpi-new-leads" class="kpi-value" style="color: var(--accent-blue);">2</div>
+          <div style="font-size: 10px; color: var(--text-secondary); margin-top: 4px;">Awaiting showroom call</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-title">Test Rides Done <span>🏍️</span></div>
+          <div id="kpi-done-rides" class="kpi-value" style="color: #0d9488;">2</div>
+          <div style="font-size: 10px; color: var(--text-secondary); margin-top: 4px;">Showroom trial completed</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-title">Converted Sales <span>🎉</span></div>
+          <div id="kpi-converted" class="kpi-value" style="color: var(--emerald);">2</div>
+          <div style="font-size: 10px; color: var(--text-secondary); margin-top: 4px;">25% Fleet Conversion</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-title">Showroom Stock <span>🏢</span></div>
+          <div id="kpi-showroom-units" class="kpi-value">22 Units</div>
+          <div style="font-size: 10px; color: var(--text-secondary); margin-top: 4px;">All 8 Zuboo models ready</div>
+        </div>
+      </div>
+
+      <!-- TABS CONTROLS -->
+      <div class="tabs-bar">
+        <div class="tabs-group">
+          <button id="tab-btn-leads" class="tab-btn active" onclick="switchTab('leads')">
+            Test Ride Leads Manager (<span id="leads-count-tab">8</span>)
+          </button>
+          <button id="tab-btn-inventory" class="tab-btn" onclick="switchTab('inventory')">
+            Inventory & Stock (8 Models)
+          </button>
+          <button id="tab-btn-service" class="tab-btn" onclick="switchTab('service')">
+            Service Bay Bookings (<span id="service-count-tab">3</span>)
+          </button>
+        </div>
+
+        <div id="leads-tab-actions" style="display: flex; gap: 8px;">
+          <button onclick="exportCSV()" class="btn">⬇ Export CSV</button>
+          <button onclick="openAddLeadModal()" class="btn btn-accent">+ Add Walk-In Lead</button>
+        </div>
+
+        <div id="inventory-tab-actions" style="display: none;">
+          <button onclick="resetInventoryDefaults()" class="btn">↺ Reset Factory Defaults</button>
+        </div>
+      </div>
+
+      <!-- ============================================== -->
+      <!-- SECTION 1: TEST RIDE LEADS                     -->
+      <!-- ============================================== -->
+      <div id="tab-leads-view">
+        <div class="toolbar">
+          <div class="filter-pills" id="lead-filter-pills">
+            <button class="pill active" onclick="filterLeadsByStatus('All', this)">All</button>
+            <button class="pill" onclick="filterLeadsByStatus('New', this)">New</button>
+            <button class="pill" onclick="filterLeadsByStatus('Contacted', this)">Contacted</button>
+            <button class="pill" onclick="filterLeadsByStatus('Test Ride Completed', this)">Completed</button>
+            <button class="pill" onclick="filterLeadsByStatus('Converted', this)">Converted</button>
+          </div>
+
+          <input type="text" id="lead-search-box" class="search-input" placeholder="🔍 Search customer, phone, model..." oninput="handleLeadSearch(this.value)">
+        </div>
+
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Customer / Contact</th>
+                <th>Model Requested</th>
+                <th>Preferred Time Slot</th>
+                <th>Showroom Notes</th>
+                <th>Status</th>
+                <th style="text-align: right;">Quick Contact</th>
+              </tr>
+            </thead>
+            <tbody id="leads-tbody">
+              <!-- Rendered via JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ============================================== -->
+      <!-- SECTION 2: INVENTORY & STOCK MANAGEMENT         -->
+      <!-- ============================================== -->
+      <div id="tab-inventory-view" style="display: none;">
+        <div class="toolbar">
+          <div>
+            <strong style="font-size: 13px; text-transform: uppercase;">Zuboo Showroom Fleet (8 Models)</strong>
+            <p style="font-size: 11px; color: var(--text-secondary);">Edit provisional LKR prices, stock statuses, and showroom floor counts.</p>
+          </div>
+          <input type="text" id="inv-search-box" class="search-input" placeholder="🔍 Search models..." oninput="handleInventorySearch(this.value)">
+        </div>
+
+        <div class="inventory-grid" id="inventory-grid-container">
+          <!-- Rendered via JS -->
+        </div>
+      </div>
+
+      <!-- ============================================== -->
+      <!-- SECTION 3: SERVICE BAY BOOKINGS                -->
+      <!-- ============================================== -->
+      <div id="tab-service-view" style="display: none;">
+        <div class="toolbar">
+          <div>
+            <strong style="font-size: 13px; text-transform: uppercase;">Kurunduwatta After-Sales Bay Bookings</strong>
+            <p style="font-size: 11px; color: var(--text-secondary);">Appointments booked for battery diagnostics, routine inspections, and brake servicing.</p>
+          </div>
+          <a href="service.html#booking-bay" target="_blank" class="btn btn-accent">+ New Customer Booking</a>
+        </div>
+
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>ID / Customer</th>
+                <th>Vehicle / VIN</th>
+                <th>Service Package</th>
+                <th>Scheduled Slot</th>
+                <th>Bay Status</th>
+                <th style="text-align: right;">Action</th>
+              </tr>
+            </thead>
+            <tbody id="service-tbody">
+              <!-- Rendered via JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- ADD WALK-IN LEAD MODAL -->
+  <div id="add-lead-modal" class="modal-backdrop" style="display: none;">
+    <div class="modal-card">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+        <h3 style="font-size: 16px; text-transform: uppercase;">Add Showroom Walk-In Lead</h3>
+        <button onclick="closeAddLeadModal()" style="border: none; background: none; font-size: 18px; cursor: pointer;">✕</button>
+      </div>
+
+      <form id="add-lead-form" onsubmit="handleCreateLead(event)">
+        <div style="margin-bottom: 12px;">
+          <label style="display: block; font-size: 10px; font-weight: 800; text-transform: uppercase; margin-bottom: 4px;">Customer Full Name *</label>
+          <input id="new-lead-name" type="text" class="search-input" style="width: 100%;" placeholder="e.g. Ruwan Wickramasinghe" required>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px;">
+          <div>
+            <label style="display: block; font-size: 10px; font-weight: 800; text-transform: uppercase; margin-bottom: 4px;">Phone Number *</label>
+            <input id="new-lead-phone" type="tel" class="search-input" style="width: 100%;" placeholder="07x xxxxxxx" required>
+          </div>
+          <div>
+            <label style="display: block; font-size: 10px; font-weight: 800; text-transform: uppercase; margin-bottom: 4px;">Town / City</label>
+            <input id="new-lead-city" type="text" class="search-input" style="width: 100%;" placeholder="e.g. Galle" value="Galle">
+          </div>
+        </div>
+
+        <div style="margin-bottom: 12px;">
+          <label style="display: block; font-size: 10px; font-weight: 800; text-transform: uppercase; margin-bottom: 4px;">Interested Model</label>
+          <select id="new-lead-model" class="search-input" style="width: 100%; font-weight: 600;">
+            <option value="Zuboo T3 (1200W)">Zuboo T3 (1200W Urban Commuter)</option>
+            <option value="Zuboo GT (1800W)">Zuboo GT (1800W Touring Dual-Sport)</option>
+            <option value="Zuboo The Tank (3000W)">Zuboo The Tank (3000W Extreme)</option>
+            <option value="Zuboo Paris (1200W)">Zuboo Paris (1200W Vintage Classic)</option>
+            <option value="Zuboo T11 (1500W)">Zuboo T11 (1500W Aerodynamic)</option>
+            <option value="Zuboo EX-008 (1000W)">Zuboo EX-008 (1000W City Compact)</option>
+            <option value="Zuboo KB1 (800W)">Zuboo KB1 (800W Daily Utility)</option>
+            <option value="Zuboo Mini (400W)">Zuboo Mini (400W Step-Through)</option>
+          </select>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px;">
+          <div>
+            <label style="display: block; font-size: 10px; font-weight: 800; text-transform: uppercase; margin-bottom: 4px;">Date</label>
+            <input id="new-lead-date" type="date" class="search-input" style="width: 100%;" required>
+          </div>
+          <div>
+            <label style="display: block; font-size: 10px; font-weight: 800; text-transform: uppercase; margin-bottom: 4px;">Slot</label>
+            <select id="new-lead-slot" class="search-input" style="width: 100%;">
+              <option value="Morning (9:30 AM)">Morning (9:30 AM)</option>
+              <option value="Morning (11:00 AM)">Morning (11:00 AM)</option>
+              <option value="Afternoon (2:30 PM)">Afternoon (2:30 PM)</option>
+              <option value="Evening (4:30 PM)">Evening (4:30 PM)</option>
+            </select>
+          </div>
+        </div>
+
+        <div style="margin-bottom: 16px;">
+          <label style="display: block; font-size: 10px; font-weight: 800; text-transform: uppercase; margin-bottom: 4px;">Staff Notes</label>
+          <input id="new-lead-notes" type="text" class="search-input" style="width: 100%;" placeholder="e.g. Walk-in visitor, tested seat height.">
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 8px;">
+          <button type="button" onclick="closeAddLeadModal()" class="btn">Cancel</button>
+          <button type="submit" class="btn btn-accent">Save to Dashboard</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // INITIAL DATASETS
+    const INITIAL_LEADS = [
+      { id: "LEAD-101", customerName: "Kasun Malinda", phoneNumber: "0771234567", bikeModelName: "Zuboo The Tank (3000W)", preferredDate: "2026-10-12", preferredTimeSlot: "Morning (9:30 AM)", locationCity: "Galle Fort", notes: "Interested in hill climbing torque and steel crash guards.", status: "New", createdAt: "2026-10-10 08:30 AM" },
+      { id: "LEAD-102", customerName: "Dr. Anura Senanayake", phoneNumber: "0719876543", bikeModelName: "Zuboo GT (1800W)", preferredDate: "2026-10-11", preferredTimeSlot: "Evening (4:00 PM)", locationCity: "Karapitiya, Galle", notes: "Requires daily hospital commute and weekend touring.", status: "Contacted", createdAt: "2026-10-09 02:15 PM" },
+      { id: "LEAD-103", customerName: "Dilshan Priyadarshana", phoneNumber: "0765544332", bikeModelName: "Zuboo T3 (1200W)", preferredDate: "2026-10-09", preferredTimeSlot: "Morning (11:00 AM)", locationCity: "Kurunduwatta, Galle", notes: "Visited showroom. Completed 5 km trial on Udugama Rd.", status: "Test Ride Completed", createdAt: "2026-10-08 10:00 AM" },
+      { id: "LEAD-104", customerName: "Harshani Jayakody", phoneNumber: "0783322114", bikeModelName: "Zuboo Paris (1200W)", preferredDate: "2026-10-08", preferredTimeSlot: "Afternoon (2:30 PM)", locationCity: "Unawatuna", notes: "Customer paid deposit for Vintage Cream White model.", status: "Converted", createdAt: "2026-10-07 04:45 PM" },
+      { id: "LEAD-105", customerName: "Sanjeewa Kumara", phoneNumber: "0704455667", bikeModelName: "Zuboo T11 (1500W)", preferredDate: "2026-10-13", preferredTimeSlot: "Morning (10:00 AM)", locationCity: "Hikkaduwa", notes: "Commutes daily to Galle. Comparing GT vs T11.", status: "New", createdAt: "2026-10-10 09:15 AM" },
+      { id: "LEAD-106", customerName: "Menaka Warnakulasuriya", phoneNumber: "0778899001", bikeModelName: "Zuboo Mini (400W)", preferredDate: "2026-10-10", preferredTimeSlot: "Afternoon (3:00 PM)", locationCity: "Galle Bazaar", notes: "Looking for step-through bike with front basket.", status: "Contacted", createdAt: "2026-10-09 11:20 AM" },
+      { id: "LEAD-107", customerName: "Rohan De Silva", phoneNumber: "0723344556", bikeModelName: "Zuboo KB1 (800W)", preferredDate: "2026-10-07", preferredTimeSlot: "Morning (9:00 AM)", locationCity: "Weligama", notes: "Test ride completed at Kurunduwatta showroom.", status: "Test Ride Completed", createdAt: "2026-10-06 01:10 PM" },
+      { id: "LEAD-108", customerName: "Tharindu Wickramasinghe", phoneNumber: "0751122334", bikeModelName: "Zuboo EX-008 (1000W)", preferredDate: "2026-10-14", preferredTimeSlot: "Afternoon (1:30 PM)", locationCity: "Ahangama", notes: "Pre-order reservation confirmed.", status: "Converted", createdAt: "2026-10-05 03:00 PM" }
+    ];
+
+    const INITIAL_INVENTORY = [
+      { id: "gt", name: "Zuboo GT", modelCode: "GT-1800W", category: "Touring & Adventure", motorPower: "1800W High Torque", battery: "72V 32Ah", topSpeed: "55-60 km/h", range: "≥ 100 km", price: 445000, stockStatus: "In Showroom", showroomUnits: 3, deliveryTime: "Immediate (Ready in Galle Showroom)" },
+      { id: "the-tank", name: "Zuboo The Tank", modelCode: "TANK-3000W", category: "Touring & Adventure", motorPower: "3000W Peak High Torque", battery: "72V 32Ah", topSpeed: "65-75 km/h", range: "≥ 80 km", price: 515000, stockStatus: "Low Stock", showroomUnits: 1, deliveryTime: "Immediate / 3-5 days for colors" },
+      { id: "paris", name: "Zuboo Paris", modelCode: "PARIS-1200W", category: "Classic & Vintage", motorPower: "1200W Smooth Acceleration", battery: "60V 24Ah", topSpeed: "45-50 km/h", range: "≥ 75 km", price: 385000, stockStatus: "In Showroom", showroomUnits: 4, deliveryTime: "Immediate (Ready in Galle Showroom)" },
+      { id: "t11", name: "Zuboo T11", modelCode: "T11-1500W", category: "Sport & Aerodynamic", motorPower: "1500W Dynamic Sports", battery: "72V 24Ah", topSpeed: "50-55 km/h", range: "≥ 80 km", price: 420000, stockStatus: "In Showroom", showroomUnits: 2, deliveryTime: "Immediate (Ready in Galle Showroom)" },
+      { id: "t3", name: "Zuboo T3", modelCode: "T3-1200W", category: "Urban Commuter", motorPower: "1200W Efficient Brushless", battery: "72V 20Ah", topSpeed: "45-50 km/h", range: "≥ 70 km", price: 365000, stockStatus: "In Showroom", showroomUnits: 5, deliveryTime: "Immediate (Most Popular Model)" },
+      { id: "ex008", name: "Zuboo EX-008", modelCode: "EX-008-1000W", category: "City Compact", motorPower: "1000W Reliable Commuter", battery: "60V 20Ah", topSpeed: "42-47 km/h", range: "≥ 65 km", price: 345000, stockStatus: "Pre-Order", showroomUnits: 0, deliveryTime: "7 - 10 Business Days" },
+      { id: "kb1", name: "Zuboo KB1", modelCode: "KB1-800W", category: "Everyday Utility", motorPower: "800W Economical Hub", battery: "48V 20Ah", topSpeed: "38-42 km/h", range: "≥ 60 km", price: 295000, stockStatus: "In Showroom", showroomUnits: 3, deliveryTime: "Immediate (Ready in Galle Showroom)" },
+      { id: "mini", name: "Zuboo Mini", modelCode: "MINI-400W", category: "Lightweight Step-Through", motorPower: "400W Light Utility", battery: "48V 16Ah", topSpeed: "30-35 km/h", range: "≥ 50 km", price: 245000, stockStatus: "In Showroom", showroomUnits: 4, deliveryTime: "Immediate (Ready in Galle Showroom)" }
+    ];
+
+    const INITIAL_SERVICE = [
+      { id: "SRV-201", customerName: "Kavindu Perera", phone: "0771234821", vinOrModel: "ZB-2026-T3-001 (Zuboo T3)", servicePackage: "Routine 3-Month / 1,000 km Inspection", date: "2026-10-14", time: "Morning (10:00 AM)", status: "Confirmed" },
+      { id: "SRV-202", customerName: "Nuwan Jayasuriya", phone: "0719876933", vinOrModel: "ZB-2026-GT-042 (Zuboo GT)", servicePackage: "Battery Diagnostics & BMS Calibration", date: "2026-10-15", time: "Afternoon (2:00 PM)", status: "Pending" },
+      { id: "SRV-203", customerName: "M. Farook", phone: "0763322119", vinOrModel: "Zuboo The Tank", servicePackage: "Hydraulic Brake Service & Caliper Overhaul", date: "2026-10-12", time: "Morning (11:30 AM)", status: "In Bay" }
+    ];
+
+    // STATE
+    let leads = JSON.parse(localStorage.getItem('udan_admin_leads') || JSON.stringify(INITIAL_LEADS));
+    let inventory = JSON.parse(localStorage.getItem('udan_admin_inventory') || JSON.stringify(INITIAL_INVENTORY));
+    let serviceBookings = JSON.parse(localStorage.getItem('udan_service_bookings') || JSON.stringify(INITIAL_SERVICE));
+    let currentFilter = 'All';
+    let currentSearch = '';
+
+    // TOAST
+    function showToast(text) {
+      const t = document.getElementById('toast');
+      t.textContent = text;
+      t.style.display = 'block';
+      setTimeout(() => { t.style.display = 'none'; }, 3200);
+    }
+
+    // AUTH
+    const authScreen = document.getElementById('auth-screen');
+    const dashboard = document.getElementById('dashboard');
+    const loginForm = document.getElementById('login-form');
+    const pinInput = document.getElementById('pin-input');
+    const logoutBtn = document.getElementById('logout-btn');
+
+    function checkAuth() {
+      if (localStorage.getItem('udan_admin_auth') === 'true') {
+        authScreen.style.display = 'none';
+        dashboard.style.display = 'block';
+        renderAll();
+      } else {
+        authScreen.style.display = 'grid';
+        dashboard.style.display = 'none';
+      }
+    }
+
+    loginForm.onsubmit = (e) => {
+      e.preventDefault();
+      const val = pinInput.value.trim();
+      if (val === '4131' || val === 'udan2026') {
+        localStorage.setItem('udan_admin_auth', 'true');
+        showToast('Showroom staff authentication successful.');
+        checkAuth();
+      } else {
+        alert('Invalid PIN. Use showroom demo PIN: 4131');
+      }
+    };
+
+    logoutBtn.onclick = () => {
+      localStorage.removeItem('udan_admin_auth');
+      pinInput.value = '';
+      checkAuth();
+    };
+
+    // TABS
+    function switchTab(tab) {
+      document.getElementById('tab-btn-leads').classList.toggle('active', tab === 'leads');
+      document.getElementById('tab-btn-inventory').classList.toggle('active', tab === 'inventory');
+      document.getElementById('tab-btn-service').classList.toggle('active', tab === 'service');
+
+      document.getElementById('tab-leads-view').style.display = tab === 'leads' ? 'block' : 'none';
+      document.getElementById('tab-inventory-view').style.display = tab === 'inventory' ? 'block' : 'none';
+      document.getElementById('tab-service-view').style.display = tab === 'service' ? 'block' : 'none';
+
+      document.getElementById('leads-tab-actions').style.display = tab === 'leads' ? 'flex' : 'none';
+      document.getElementById('inventory-tab-actions').style.display = tab === 'inventory' ? 'flex' : 'none';
+    }
+
+    // RENDER KPIS
+    function updateKPIs() {
+      document.getElementById('kpi-total-leads').textContent = leads.length;
+      document.getElementById('kpi-new-leads').textContent = leads.filter(l => l.status === 'New').length;
+      document.getElementById('kpi-done-rides').textContent = leads.filter(l => l.status === 'Test Ride Completed').length;
+      document.getElementById('kpi-converted').textContent = leads.filter(l => l.status === 'Converted').length;
+
+      const units = inventory.reduce((a, b) => a + (b.showroomUnits || 0), 0);
+      document.getElementById('kpi-showroom-units').textContent = units + ' Units';
+
+      document.getElementById('leads-count-tab').textContent = leads.length;
+      document.getElementById('service-count-tab').textContent = serviceBookings.length;
+    }
+
+    // RENDER LEADS TABLE
+    function renderLeads() {
+      const tbody = document.getElementById('leads-tbody');
+      const filtered = leads.filter(lead => {
+        const matchesFilter = (currentFilter === 'All' || lead.status === currentFilter);
+        const q = currentSearch.toLowerCase();
+        const matchesSearch = lead.customerName.toLowerCase().includes(q) ||
+                              lead.phoneNumber.includes(q) ||
+                              lead.bikeModelName.toLowerCase().includes(q) ||
+                              (lead.locationCity && lead.locationCity.toLowerCase().includes(q));
+        return matchesFilter && matchesSearch;
+      });
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding: 30px; color: var(--text-secondary);">No matching inquiries found.</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = filtered.map(lead => {
+        // WhatsApp URL generator
+        let cleanPhone = lead.phoneNumber.replace(/[\\s\\-\\+]/g, '');
+        if (cleanPhone.startsWith('0')) cleanPhone = '94' + cleanPhone.substring(1);
+        else if (!cleanPhone.startsWith('94')) cleanPhone = '94' + cleanPhone;
+
+        const waText = encodeURIComponent(`Hello ${lead.customerName}, this is Udan Enterprises (Official Zuboo Showroom, Galle). Regarding your test ride inquiry for the ${lead.bikeModelName} scheduled for ${lead.preferredDate}: Our team is ready at our Kurunduwatta showroom. Please confirm your arrival time!`);
+        const waUrl = `https://wa.me/${cleanPhone}?text=${waText}`;
+
+        return `
+          <tr>
+            <td>
+              <div style="font-weight: 800; font-size: 13px;">${lead.customerName}</div>
+              <div style="font-family: monospace; color: var(--accent-blue); font-size: 11px; font-weight: 700;">${lead.phoneNumber}</div>
+              <div style="font-size: 10px; color: var(--text-secondary);">${lead.id} • ${lead.locationCity || 'Galle'}</div>
+            </td>
+            <td>
+              <span style="font-weight: 700; background: var(--bg-secondary); padding: 3px 8px; border-radius: 4px; font-size: 11px;">${lead.bikeModelName}</span>
+            </td>
+            <td>
+              <div>📅 ${lead.preferredDate}</div>
+              <div style="font-size: 10px; color: var(--text-secondary);">${lead.preferredTimeSlot || 'Morning'}</div>
+            </td>
+            <td style="max-width: 220px; font-size: 11px; color: var(--text-secondary);">
+              <div>${lead.notes || '—'}</div>
+              <small style="font-size: 9px; opacity: 0.7;">${lead.createdAt}</small>
+            </td>
+            <td>
+              <select class="status-select" onchange="updateLeadStatus('${lead.id}', this.value)">
+                <option value="New" ${lead.status==='New'?'selected':''}>New</option>
+                <option value="Contacted" ${lead.status==='Contacted'?'selected':''}>Contacted</option>
+                <option value="Test Ride Completed" ${lead.status==='Test Ride Completed'?'selected':''}>Test Ride Completed</option>
+                <option value="Converted" ${lead.status==='Converted'?'selected':''}>Converted</option>
+                <option value="Cancelled" ${lead.status==='Cancelled'?'selected':''}>Cancelled</option>
+              </select>
+            </td>
+            <td style="text-align: right; white-space: nowrap;">
+              <a href="${waUrl}" target="_blank" class="btn btn-wa">WhatsApp</a>
+              <a href="tel:${lead.phoneNumber}" class="btn" style="padding: 5px 8px; font-size: 10px;">📞 Call</a>
+              <button onclick="deleteLead('${lead.id}')" class="btn" style="padding: 5px 8px; font-size: 10px; color: var(--rose);" title="Remove">✕</button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function filterLeadsByStatus(status, el) {
+      currentFilter = status;
+      document.querySelectorAll('#lead-filter-pills .pill').forEach(p => p.classList.remove('active'));
+      el.classList.add('active');
+      renderLeads();
+    }
+
+    function handleLeadSearch(val) {
+      currentSearch = val;
+      renderLeads();
+    }
+
+    function updateLeadStatus(id, newStatus) {
+      leads = leads.map(l => l.id === id ? { ...l, status: newStatus } : l);
+      localStorage.setItem('udan_admin_leads', JSON.stringify(leads));
+      updateKPIs();
+      showToast(`Lead #${id} marked as ${newStatus}`);
+    }
+
+    function deleteLead(id) {
+      if (confirm(`Remove lead #${id}?`)) {
+        leads = leads.filter(l => l.id !== id);
+        localStorage.setItem('udan_admin_leads', JSON.stringify(leads));
+        renderLeads();
+        updateKPIs();
+        showToast(`Lead #${id} removed.`);
+      }
+    }
+
+    // CSV EXPORT
+    function exportCSV() {
+      const headers = ["Lead ID", "Customer Name", "Phone", "Bike Model", "Preferred Date", "Slot", "City", "Status", "Notes"];
+      const rows = leads.map(l => [
+        `"${l.id}"`, `"${l.customerName}"`, `"${l.phoneNumber}"`, `"${l.bikeModelName}"`, `"${l.preferredDate}"`, `"${l.preferredTimeSlot||''}"`, `"${l.locationCity||''}"`, `"${l.status}"`, `"${(l.notes||'').replace(/"/g, '""')}"`
+      ]);
+      const csv = "data:text/csv;charset=utf-8," + [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
+      const link = document.createElement("a");
+      link.href = encodeURI(csv);
+      link.download = `udan_leads_${new Date().toISOString().slice(0,10)}.csv`;
+      link.click();
+      showToast("CSV export generated successfully.");
+    }
+
+    // ADD WALK-IN MODAL
+    function openAddLeadModal() {
+      document.getElementById('new-lead-date').value = new Date().toISOString().slice(0, 10);
+      document.getElementById('add-lead-modal').style.display = 'grid';
+    }
+    function closeAddLeadModal() {
+      document.getElementById('add-lead-modal').style.display = 'none';
+    }
+    function handleCreateLead(e) {
+      e.preventDefault();
+      const newLead = {
+        id: "LEAD-" + Math.floor(100 + Math.random() * 900),
+        customerName: document.getElementById('new-lead-name').value,
+        phoneNumber: document.getElementById('new-lead-phone').value,
+        bikeModelName: document.getElementById('new-lead-model').value,
+        preferredDate: document.getElementById('new-lead-date').value,
+        preferredTimeSlot: document.getElementById('new-lead-slot').value,
+        locationCity: document.getElementById('new-lead-city').value || "Galle",
+        notes: document.getElementById('new-lead-notes').value || "Walk-in visitor",
+        status: "New",
+        createdAt: new Date().toLocaleString()
+      };
+      leads.unshift(newLead);
+      localStorage.setItem('udan_admin_leads', JSON.stringify(leads));
+      closeAddLeadModal();
+      renderLeads();
+      updateKPIs();
+      showToast("New walk-in lead added to dashboard.");
+    }
+
+    // RENDER INVENTORY
+    let invSearch = '';
+    function handleInventorySearch(val) {
+      invSearch = val.toLowerCase();
+      renderInventory();
+    }
+
+    function renderInventory() {
+      const container = document.getElementById('inventory-grid-container');
+      const filtered = inventory.filter(item => {
+        return item.name.toLowerCase().includes(invSearch) ||
+               item.modelCode.toLowerCase().includes(invSearch) ||
+               item.category.toLowerCase().includes(invSearch);
+      });
+
+      container.innerHTML = filtered.map(item => {
+        const badgeClass = item.stockStatus === 'In Showroom' ? 'stock-in' :
+                           item.stockStatus === 'Low Stock' ? 'stock-low' :
+                           item.stockStatus === 'Pre-Order' ? 'stock-pre' : 'stock-out';
+
+        return `
+          <div class="inv-card">
+            <div>
+              <div class="inv-header">
+                <div>
+                  <span class="inv-category">${item.category}</span>
+                  <div class="inv-title">${item.name}</div>
+                  <div class="inv-code">${item.modelCode} • ${item.motorPower}</div>
+                </div>
+                <span class="stock-badge ${badgeClass}">${item.stockStatus}</span>
+              </div>
+
+              <div style="background: var(--bg-primary); border-radius: 8px; padding: 8px; margin: 10px 0; font-size: 10px; display: grid; grid-template-columns: 1fr 1fr; gap: 4px;">
+                <div><span style="color:var(--text-secondary)">Battery:</span> <b>${item.battery}</b></div>
+                <div><span style="color:var(--text-secondary)">Top Speed:</span> <b>${item.topSpeed}</b></div>
+                <div><span style="color:var(--text-secondary)">Range:</span> <b>${item.range}</b></div>
+                <div><span style="color:var(--text-secondary)">Floor Units:</span> <b>${item.showroomUnits} in Bay</b></div>
+              </div>
+
+              <div class="inv-field">
+                <label>Stock Status</label>
+                <select onchange="updateStockStatus('${item.id}', this.value)">
+                  <option value="In Showroom" ${item.stockStatus==='In Showroom'?'selected':''}>In Showroom (Ready)</option>
+                  <option value="Low Stock" ${item.stockStatus==='Low Stock'?'selected':''}>Low Stock (< 2 units)</option>
+                  <option value="Pre-Order" ${item.stockStatus==='Pre-Order'?'selected':''}>Pre-Order (Batch in Transit)</option>
+                  <option value="Out of Stock" ${item.stockStatus==='Out of Stock'?'selected':''}>Out of Stock</option>
+                </select>
+              </div>
+
+              <div class="inv-field">
+                <label>Provisional Retail Price (LKR)</label>
+                <input type="number" step="5000" value="${item.price}" onchange="updatePrice('${item.id}', Number(this.value))">
+                <small style="color: var(--accent-blue); font-weight: 700; font-size: 10px; margin-top: 2px; display: block;">
+                  LKR ${Number(item.price).toLocaleString()}
+                </small>
+              </div>
+
+              <div class="inv-field">
+                <label>Showroom Delivery Timeframe</label>
+                <input type="text" value="${item.deliveryTime}" onchange="updateDelivery('${item.id}', this.value)">
+              </div>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-color); padding-top: 10px; font-size: 10px;">
+              <span>Floor Units:</span>
+              <div style="display: flex; gap: 4px; align-items: center;">
+                <button class="btn" style="padding: 2px 7px;" onclick="changeFloorUnits('${item.id}', -1)">-</button>
+                <b style="width: 18px; text-align: center;">${item.showroomUnits}</b>
+                <button class="btn" style="padding: 2px 7px;" onclick="changeFloorUnits('${item.id}', 1)">+</button>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function updateStockStatus(id, newStatus) {
+      inventory = inventory.map(i => i.id === id ? { ...i, stockStatus: newStatus } : i);
+      localStorage.setItem('udan_admin_inventory', JSON.stringify(inventory));
+      renderInventory();
+      updateKPIs();
+      showToast(`Updated stock status for ${id.toUpperCase()}`);
+    }
+
+    function updatePrice(id, newPrice) {
+      inventory = inventory.map(i => i.id === id ? { ...i, price: newPrice } : i);
+      localStorage.setItem('udan_admin_inventory', JSON.stringify(inventory));
+      showToast(`Price updated for ${id.toUpperCase()}`);
+    }
+
+    function updateDelivery(id, newDelivery) {
+      inventory = inventory.map(i => i.id === id ? { ...i, deliveryTime: newDelivery } : i);
+      localStorage.setItem('udan_admin_inventory', JSON.stringify(inventory));
+      showToast(`Delivery timeframe updated for ${id.toUpperCase()}`);
+    }
+
+    function changeFloorUnits(id, delta) {
+      inventory = inventory.map(i => {
+        if (i.id === id) {
+          const count = Math.max(0, (i.showroomUnits || 0) + delta);
+          return {
+            ...i,
+            showroomUnits: count,
+            stockStatus: count === 0 ? 'Pre-Order' : (count === 1 ? 'Low Stock' : 'In Showroom')
+          };
+        }
+        return i;
+      });
+      localStorage.setItem('udan_admin_inventory', JSON.stringify(inventory));
+      renderInventory();
+      updateKPIs();
+    }
+
+    function resetInventoryDefaults() {
+      if (confirm("Reset inventory to factory specifications?")) {
+        inventory = INITIAL_INVENTORY;
+        localStorage.removeItem('udan_admin_inventory');
+        renderInventory();
+        updateKPIs();
+        showToast("Inventory restored to catalogue defaults.");
+      }
+    }
+
+    // RENDER SERVICE BOOKINGS
+    function renderService() {
+      const tbody = document.getElementById('service-tbody');
+      tbody.innerHTML = serviceBookings.map(b => {
+        let cleanPhone = b.phone.replace(/[\\s\\-\\+]/g, '');
+        if (cleanPhone.startsWith('0')) cleanPhone = '94' + cleanPhone.substring(1);
+        const waMsg = encodeURIComponent(`Hello ${b.customerName}, this is Udan Enterprises Galle regarding your scheduled service booking (#${b.id}) for ${b.servicePackage} on ${b.date} (${b.time}). Our technician team is prepared.`);
+        const waUrl = `https://wa.me/${cleanPhone}?text=${waMsg}`;
+
+        return `
+          <tr>
+            <td>
+              <div style="font-weight: 800; font-size: 13px;">${b.customerName}</div>
+              <div style="font-family: monospace; color: var(--accent-blue); font-size: 11px;">${b.phone}</div>
+              <div style="font-size: 10px; color: var(--text-secondary);">#${b.id}</div>
+            </td>
+            <td>
+              <div style="font-weight: 600;">${b.vinOrModel}</div>
+            </td>
+            <td>
+              <span style="font-weight: 700; background: var(--bg-secondary); color: var(--accent-blue); padding: 3px 8px; border-radius: 4px; font-size: 11px;">
+                ${b.servicePackage}
+              </span>
+            </td>
+            <td>
+              <div>📅 ${b.date}</div>
+              <small style="color: var(--text-secondary);">${b.time}</small>
+            </td>
+            <td>
+              <select class="status-select" onchange="updateServiceStatus('${b.id}', this.value)">
+                <option value="Pending" ${b.status==='Pending'?'selected':''}>Pending</option>
+                <option value="Confirmed" ${b.status==='Confirmed'?'selected':''}>Confirmed</option>
+                <option value="In Bay" ${b.status==='In Bay'?'selected':''}>In Bay</option>
+                <option value="Completed" ${b.status==='Completed'?'selected':''}>Completed</option>
+              </select>
+            </td>
+            <td style="text-align: right;">
+              <a href="${waUrl}" target="_blank" class="btn btn-wa">WhatsApp</a>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function updateServiceStatus(id, newStatus) {
+      serviceBookings = serviceBookings.map(b => b.id === id ? { ...b, status: newStatus } : b);
+      localStorage.setItem('udan_service_bookings', JSON.stringify(serviceBookings));
+      showToast(`Booking #${id} updated to ${newStatus}`);
+    }
+
+    function renderAll() {
+      updateKPIs();
+      renderLeads();
+      renderInventory();
+      renderService();
+    }
+
+    // INIT
+    checkAuth();
+  </script>
+</body>
+</html>

@@ -1,0 +1,369 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Explore the full 8-model collection of Zuboo electric bikes at Udan Enterprises Galle — GT, The Tank, Paris, T11, T3, EX008, KB1, and Mini. View specs, prices, and book a test ride.">
+  <title>Zuboo Electric Bikes Collection — Udan Enterprises Galle Sri Lanka</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" type="image/png" href="assets/branding/udan-logo.png">
+</head>
+<body>
+<div class="page" id="bikes-page">
+  <!-- Top Navigation Bar -->
+  <header>
+    <a class="brand" href="index.html" aria-label="Udan Enterprises Home">
+      <span class="brand-row">
+        <span data-i18n="brand_title">UDAN</span>
+        <span class="brand-stripes" aria-hidden="true">
+          <svg width="22" height="18" viewBox="0 0 24 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M5 19L13 1H9L1 19H5Z" fill="#38a169"/>
+            <path d="M12 19L20 1H16L8 19H12Z" fill="#48bb78"/>
+          </svg>
+        </span>
+      </span>
+      <small data-i18n="brand_sub">ENTERPRISES</small>
+    </a>
+    
+    <nav aria-label="Main navigation">
+      <a href="index.html" data-i18n="nav_home">Home</a>
+      <a class="active" href="bikes.html" data-i18n="nav_bikes">Zuboo Bikes</a>
+      <a href="calculator.html" data-i18n="nav_calculator">EMI Calculator</a>
+      <a href="parts.html" data-i18n="nav_parts">Spare Parts</a>
+      <a href="about.html" data-i18n="nav_about">About Us</a>
+      <a href="offers.html" data-i18n="nav_offers">Offers</a>
+      <button data-book data-i18n="nav_test_ride">Test Ride</button>
+      <a href="contact.html" data-i18n="nav_contact">Contact</a>
+    </nav>
+
+    <!-- Trilingual Switcher Dropdown/Buttons -->
+    <div class="lang-switcher-wrapper">
+      <button class="lang-btn active" data-set-lang="en">EN</button>
+      <button class="lang-btn" data-set-lang="si">සිං</button>
+      <button class="lang-btn" data-set-lang="ta">தம</button>
+    </div>
+    
+    <button class="search icon" aria-label="Search bikes">⌕</button>
+    <button class="btn dark header-book" data-book data-i18n="header_book_ride">Book a Test Ride <span>→</span></button>
+    <button class="menu icon" aria-label="Toggle menu" aria-expanded="false">☰</button>
+  </header>
+
+  <main>
+    <!-- Subpage Hero Banner -->
+    <section class="page-hero">
+      <p class="eyebrow" data-i18n="hero_eyebrow">THE OFFICIAL ZUBOO COLLECTION</p>
+      <h1>ENGINEERED FOR<br><span class="gradient-text">SRI LANKA'S ROADS</span></h1>
+      <p class="page-subtitle">Discover our full lineup of 8 high-performance Zuboo electric scooters and commuters — zero fuel, zero emissions, whisper-silent motors, and up to 110 km on a single charge.</p>
+    </section>
+
+    <!-- Bikes Filter & Showcase Grid -->
+    <section class="showcase-container">
+      <!-- Category Filtering Tabs -->
+      <div class="category-tabs" role="tablist" aria-label="Filter bikes by category">
+        <button class="tab-btn active" data-filter="all" role="tab" aria-selected="true">All Models (8)</button>
+        <button class="tab-btn" data-filter="touring" role="tab" aria-selected="false">Touring &amp; Adventure (2)</button>
+        <button class="tab-btn" data-filter="retro" role="tab" aria-selected="false">Retro Classic (1)</button>
+        <button class="tab-btn" data-filter="sports" role="tab" aria-selected="false">Sports Maxi (2)</button>
+        <button class="tab-btn" data-filter="commuters" role="tab" aria-selected="false">Commuters &amp; Utility (3)</button>
+      </div>
+
+      <!-- 8 Models Grid -->
+      <div class="bike-grid">
+        <!-- 1. Zuboo GT -->
+        <article class="bike-card" data-category="touring" data-slug="gt">
+          <div class="bike-card-media">
+            <span class="bike-badge">Featured • Touring</span>
+            <img src="assets/media/bikes/gt/main.webp" alt="Zuboo GT electric adventure scooter" class="bike-card-img" loading="lazy">
+          </div>
+          <div class="bike-card-body">
+            <div class="bike-card-header">
+              <h3>Zuboo GT</h3>
+              <p class="bike-card-tagline">Heavy-Duty Dual-Sport Utility with Luggage Trunk</p>
+            </div>
+            <div class="bike-price-box">
+              <span class="bike-price">LKR 445,000</span>
+              <span class="bike-price-note">Showroom Price</span>
+            </div>
+            <div class="specs-pill-grid">
+              <div><span>Motor</span><strong>1800W High Torque</strong></div>
+              <div><span>Range</span><strong>≥ 100 km</strong></div>
+              <div><span>Top Speed</span><strong>55 - 60 km/h</strong></div>
+              <div><span>Battery</span><strong>72V 32Ah Pack</strong></div>
+            </div>
+            <div class="bike-card-actions">
+              <button class="btn" data-spec="gt">View Specs <span>→</span></button>
+              <button class="btn dark" data-book="Zuboo GT">Test Ride</button>
+            </div>
+          </div>
+        </article>
+
+        <!-- 2. Zuboo The Tank -->
+        <article class="bike-card" data-category="touring" data-slug="the-tank">
+          <div class="bike-card-media">
+            <span class="bike-badge" style="background: #9b2c2c;">Featured • High Power</span>
+            <img src="assets/media/bikes/the-tank/main.webp" alt="Zuboo The Tank 3000W electric scooter" class="bike-card-img" loading="lazy">
+          </div>
+          <div class="bike-card-body">
+            <div class="bike-card-header">
+              <h3>Zuboo The Tank</h3>
+              <p class="bike-card-tagline">Extreme 3000W All-Terrain Dominance &amp; Crash Bars</p>
+            </div>
+            <div class="bike-price-box">
+              <span class="bike-price">LKR 515,000</span>
+              <span class="bike-price-note">Showroom Price</span>
+            </div>
+            <div class="specs-pill-grid">
+              <div><span>Motor</span><strong>3000W Peak Power</strong></div>
+              <div><span>Range</span><strong>≥ 80 km</strong></div>
+              <div><span>Top Speed</span><strong>65 - 75 km/h</strong></div>
+              <div><span>Battery</span><strong>72V 32Ah High Pack</strong></div>
+            </div>
+            <div class="bike-card-actions">
+              <button class="btn" data-spec="the-tank">View Specs <span>→</span></button>
+              <button class="btn dark" data-book="Zuboo The Tank">Test Ride</button>
+            </div>
+          </div>
+        </article>
+
+        <!-- 3. Zuboo Paris -->
+        <article class="bike-card" data-category="retro" data-slug="paris">
+          <div class="bike-card-media">
+            <span class="bike-badge" style="background: #2b6cb0;">Featured • Retro Luxury</span>
+            <img src="assets/media/bikes/paris/main.webp" alt="Zuboo Paris classic vintage electric scooter" class="bike-card-img" loading="lazy">
+          </div>
+          <div class="bike-card-body">
+            <div class="bike-card-header">
+              <h3>Zuboo Paris</h3>
+              <p class="bike-card-tagline">Timeless European Elegance, Windscreen &amp; Backrest</p>
+            </div>
+            <div class="bike-price-box">
+              <span class="bike-price">LKR 330,000</span>
+              <span class="bike-price-note">Showroom Price</span>
+            </div>
+            <div class="specs-pill-grid">
+              <div><span>Motor</span><strong>1200W Smooth Drive</strong></div>
+              <div><span>Range</span><strong>≥ 80 km</strong></div>
+              <div><span>Top Speed</span><strong>60 km/h</strong></div>
+              <div><span>Battery</span><strong>72V 23Ah Pack</strong></div>
+            </div>
+            <div class="bike-card-actions">
+              <button class="btn" data-spec="paris">View Specs <span>→</span></button>
+              <button class="btn dark" data-book="Zuboo Paris">Test Ride</button>
+            </div>
+          </div>
+        </article>
+
+        <!-- 4. Zuboo T11 -->
+        <article class="bike-card" data-category="sports" data-slug="t11">
+          <div class="bike-card-media">
+            <span class="bike-badge">Sports Maxi</span>
+            <img src="assets/media/bikes/t11/main.webp" alt="Zuboo T11 sports cruiser electric scooter" class="bike-card-img" loading="lazy">
+          </div>
+          <div class="bike-card-body">
+            <div class="bike-card-header">
+              <h3>Zuboo T11</h3>
+              <p class="bike-card-tagline">Urban Aerodynamic Sports Cruiser with Dual Matrix LED</p>
+            </div>
+            <div class="bike-price-box">
+              <span class="bike-price">LKR 455,000</span>
+              <span class="bike-price-note">Showroom Price</span>
+            </div>
+            <div class="specs-pill-grid">
+              <div><span>Motor</span><strong>1800W High Efficiency</strong></div>
+              <div><span>Range</span><strong>≥ 80 km</strong></div>
+              <div><span>Top Speed</span><strong>60 km/h</strong></div>
+              <div><span>Battery</span><strong>72V 32Ah Tianneng</strong></div>
+            </div>
+            <div class="bike-card-actions">
+              <button class="btn" data-spec="t11">View Specs <span>→</span></button>
+              <button class="btn dark" data-book="Zuboo T11">Test Ride</button>
+            </div>
+          </div>
+        </article>
+
+        <!-- 5. Zuboo T3 -->
+        <article class="bike-card" data-category="commuters" data-slug="t3">
+          <div class="bike-card-media">
+            <span class="bike-badge">Urban Favorite</span>
+            <img src="assets/media/bikes/t3/main.webp" alt="Zuboo T3 urban commuter scooter" class="bike-card-img" loading="lazy">
+          </div>
+          <div class="bike-card-body">
+            <div class="bike-card-header">
+              <h3>Zuboo T3</h3>
+              <p class="bike-card-tagline">Iconic Dual Round Headlights &amp; Long Range Efficiency</p>
+            </div>
+            <div class="bike-price-box">
+              <span class="bike-price">LKR 395,000</span>
+              <span class="bike-price-note">Showroom Price</span>
+            </div>
+            <div class="specs-pill-grid">
+              <div><span>Motor</span><strong>1300W High Torque</strong></div>
+              <div><span>Range</span><strong>100 - 110 km</strong></div>
+              <div><span>Top Speed</span><strong>60 km/h</strong></div>
+              <div><span>Battery</span><strong>72V 32Ah Pack</strong></div>
+            </div>
+            <div class="bike-card-actions">
+              <button class="btn" data-spec="t3">View Specs <span>→</span></button>
+              <button class="btn dark" data-book="Zuboo T3">Test Ride</button>
+            </div>
+          </div>
+        </article>
+
+        <!-- 6. Zuboo EX008 -->
+        <article class="bike-card" data-category="sports" data-slug="ex008">
+          <div class="bike-card-media">
+            <span class="bike-badge">Maxi Sport</span>
+            <img src="assets/media/bikes/ex008/main.webp" alt="Zuboo EX008 high wheel highway commuter" class="bike-card-img" loading="lazy">
+          </div>
+          <div class="bike-card-body">
+            <div class="bike-card-header">
+              <h3>Zuboo EX008</h3>
+              <p class="bike-card-tagline">Dynamic High-Wheel Commuter with 14-Inch Tubeless Tires</p>
+            </div>
+            <div class="bike-price-box">
+              <span class="bike-price">LKR 495,000</span>
+              <span class="bike-price-note">Showroom Price</span>
+            </div>
+            <div class="specs-pill-grid">
+              <div><span>Motor</span><strong>2000W High Speed</strong></div>
+              <div><span>Range</span><strong>≥ 80 km</strong></div>
+              <div><span>Top Speed</span><strong>60 km/h</strong></div>
+              <div><span>Battery</span><strong>72V 32Ah Pack</strong></div>
+            </div>
+            <div class="bike-card-actions">
+              <button class="btn" data-spec="ex008">View Specs <span>→</span></button>
+              <button class="btn dark" data-book="Zuboo EX008">Test Ride</button>
+            </div>
+          </div>
+        </article>
+
+        <!-- 7. Zuboo KB1 -->
+        <article class="bike-card" data-category="commuters" data-slug="kb1">
+          <div class="bike-card-media">
+            <span class="bike-badge">Executive Cruiser</span>
+            <img src="assets/media/bikes/kb1/main.webp" alt="Zuboo KB1 comfort touring scooter" class="bike-card-img" loading="lazy">
+          </div>
+          <div class="bike-card-body">
+            <div class="bike-card-header">
+              <h3>Zuboo KB1</h3>
+              <p class="bike-card-tagline">Comfort Cruiser with High 140mm Sri Lankan Ground Clearance</p>
+            </div>
+            <div class="bike-price-box">
+              <span class="bike-price">LKR 382,500</span>
+              <span class="bike-price-note">Showroom Price</span>
+            </div>
+            <div class="specs-pill-grid">
+              <div><span>Motor</span><strong>1500W Peak Torque</strong></div>
+              <div><span>Range</span><strong>80 - 100 km</strong></div>
+              <div><span>Top Speed</span><strong>50 - 70 km/h</strong></div>
+              <div><span>Battery</span><strong>72V 32Ah Pack</strong></div>
+            </div>
+            <div class="bike-card-actions">
+              <button class="btn" data-spec="kb1">View Specs <span>→</span></button>
+              <button class="btn dark" data-book="Zuboo KB1">Test Ride</button>
+            </div>
+          </div>
+        </article>
+
+        <!-- 8. Zuboo Mini -->
+        <article class="bike-card" data-category="commuters" data-slug="mini">
+          <div class="bike-card-media">
+            <span class="bike-badge">Compact Utility</span>
+            <img src="assets/media/bikes/mini/main.webp" alt="Zuboo Mini lightweight e-bike with front basket" class="bike-card-img" loading="lazy">
+          </div>
+          <div class="bike-card-body">
+            <div class="bike-card-header">
+              <h3>Zuboo Mini</h3>
+              <p class="bike-card-tagline">Lightweight Urban Freedom with Deep Grocery Basket</p>
+            </div>
+            <div class="bike-price-box">
+              <span class="bike-price">LKR 195,000</span>
+              <span class="bike-price-note">Showroom Price</span>
+            </div>
+            <div class="specs-pill-grid">
+              <div><span>Motor</span><strong>490W Eco Motor</strong></div>
+              <div><span>Range</span><strong>&gt; 32 km</strong></div>
+              <div><span>Top Speed</span><strong>30 km/h</strong></div>
+              <div><span>Battery</span><strong>48V 12Ah Pack</strong></div>
+            </div>
+            <div class="bike-card-actions">
+              <button class="btn" data-spec="mini">View Specs <span>→</span></button>
+              <button class="btn dark" data-book="Zuboo Mini">Test Ride</button>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <!-- High Fidelity 4-Column Footer -->
+  <footer>
+    <div>
+      <a class="brand" href="index.html">
+        <span class="brand-row">
+          <span data-i18n="brand_title">UDAN</span>
+          <span class="leaf">▰</span>
+        </span>
+        <small data-i18n="brand_sub">ENTERPRISES</small>
+      </a>
+      <div class="footer-info">
+        <p data-i18n="footer_partner" data-i18n-html="true">Your trusted partner for Zuboo electric bikes.<br>Ride today for a cleaner tomorrow.</p>
+        <br>
+        <strong data-i18n="slogan_charge">JOIN US &amp; CHARGE YOUR RIDE ⚡</strong><br>
+        <span data-i18n="contact_address" data-i18n-html="true">Udugama Road, Kurunduwatta, Galle</span><br>
+        <span data-i18n="footer_phone">Phone: 078 496 9652</span><br>
+        <span data-i18n="footer_email">Email: Pibida17udan4131@gmail.com</span>
+      </div>
+    </div>
+
+    <div>
+      <h3 data-i18n="footer_quick_links">Quick Links</h3>
+      <div class="footer-links">
+        <a href="index.html" data-i18n="nav_home">Home</a>
+        <a href="bikes.html" data-i18n="nav_bikes">Zuboo Bikes</a>
+        <a href="calculator.html" data-i18n="nav_calculator">EMI Calculator</a>
+        <a href="parts.html" data-i18n="nav_parts">Spare Parts</a>
+        <a href="offers.html" data-i18n="nav_offers">Offers</a>
+        <button data-book data-i18n="nav_test_ride">Test Ride</button>
+        <a href="about.html" data-i18n="nav_about">About Us</a>
+        <a href="contact.html" data-i18n="nav_contact">Contact</a>
+      </div>
+    </div>
+
+    <div>
+      <h3 data-i18n="footer_follow_us">Follow Us</h3>
+      <div class="socials">
+        <button data-social="Facebook" aria-label="Facebook">f</button>
+        <button data-social="Instagram" aria-label="Instagram">◎</button>
+        <button data-social="YouTube" aria-label="YouTube">▣</button>
+        <button data-social="TikTok" aria-label="TikTok">♪</button>
+      </div>
+    </div>
+
+    <div>
+      <h3 data-i18n="footer_newsletter">Newsletter</h3>
+      <p data-i18n="footer_newsletter_desc">Get the latest offers and updates.</p>
+      <form id="newsletter">
+        <label class="sr-only" for="email">Your email address</label>
+        <input id="email" type="email" placeholder="Enter your email" required>
+        <button class="dark" type="submit" aria-label="Subscribe">→</button>
+      </form>
+      <small id="newsletter-status" role="status"></small>
+    </div>
+  </footer>
+</div>
+
+<!-- Modal Dialog -->
+<dialog id="modal">
+  <button class="close" aria-label="Close dialog">×</button>
+  <div id="modal-content"></div>
+</dialog>
+
+<!-- Client-Side Trilingual Localization Engine -->
+<script src="i18n.js"></script>
+<!-- GSAP Animation Engine -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<!-- Interactive Application Logic -->
+<script src="app.js"></script>
+</body>
+</html>

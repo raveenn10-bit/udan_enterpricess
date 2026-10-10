@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>After-Sales Service & Digital Warranty Portal | Udan Enterprises Galle</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #F7F9FA;
+      --bg-secondary: #E8F1F5;
+      --text-primary: #111820;
+      --text-secondary: #667780;
+      --accent-blue: #346C83;
+      --accent-hover: #265366;
+      --border-color: #E0E8EC;
+      --white: #FFFFFF;
+      --emerald: #059669;
+      --emerald-bg: #ecfdf5;
+      --amber: #d97706;
+      --amber-bg: #fffbeb;
+      --font-inter: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-heading: 'Space Grotesk', sans-serif;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      font-family: var(--font-inter);
+      font-size: 13px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+    h1, h2, h3, h4, .font-heading {
+      font-family: var(--font-heading);
+      letter-spacing: -0.02em;
+    }
+    a { color: inherit; text-decoration: none; }
+    button, input, select, textarea { font-family: inherit; font-size: inherit; }
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+    /* Header */
+    header {
+      background: rgba(255, 255, 255, 0.94);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border-color);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .header-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 0;
+    }
+    .brand-link {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .brand-logo {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      background: var(--bg-secondary);
+      display: grid;
+      place-items: center;
+      font-weight: 900;
+      font-family: var(--font-heading);
+      color: var(--accent-blue);
+      border: 1px solid var(--border-color);
+    }
+    nav {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--text-secondary);
+    }
+    nav a:hover { color: var(--text-primary); }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      cursor: pointer;
+      border: 1px solid var(--border-color);
+      background: var(--white);
+      color: var(--text-primary);
+      transition: all 0.15s ease;
+    }
+    .btn:hover { background: var(--bg-secondary); }
+    .btn-dark {
+      background: var(--text-primary);
+      color: var(--white);
+      border-color: var(--text-primary);
+    }
+    .btn-dark:hover { background: var(--accent-blue); border-color: var(--accent-blue); }
+    .btn-accent {
+      background: var(--accent-blue);
+      color: var(--white);
+      border-color: var(--accent-blue);
+    }
+    .btn-accent:hover { background: var(--accent-hover); }
+    .btn-wa {
+      background: #10b981;
+      color: white;
+      border-color: #10b981;
+    }
+    .btn-wa:hover { background: #059669; }
+
+    /* Hero section */
+    .hero-section {
+      background: #fff;
+      border-bottom: 1px solid var(--border-color);
+      padding: 60px 0;
+    }
+    .eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--accent-blue);
+      margin-bottom: 12px;
+    }
+    .eyebrow:before {
+      content: '';
+      width: 24px;
+      height: 2px;
+      background: var(--accent-blue);
+    }
+    .hero-title {
+      font-size: clamp(32px, 5vw, 54px);
+      line-height: 1.05;
+      font-weight: 900;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+    .hero-desc {
+      font-size: 15px;
+      color: var(--text-secondary);
+      max-width: 760px;
+      margin-bottom: 24px;
+    }
+    .hero-meta {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      border-top: 1px solid var(--border-color);
+      padding-top: 24px;
+      margin-top: 24px;
+    }
+
+    /* Section Headers */
+    .section-header {
+      margin: 48px 0 24px;
+    }
+    .section-title {
+      font-size: 26px;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+
+    /* Cards Grid */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 20px;
+    }
+    .card {
+      background: var(--white);
+      border: 1px solid var(--border-color);
+      border-radius: 18px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 16px;
+      transition: border-color 0.2s;
+    }
+    .card:hover { border-color: rgba(52, 108, 131, 0.4); }
+
+    /* Warranty Box */
+    .warranty-box {
+      background: var(--white);
+      border: 2px solid rgba(52, 108, 131, 0.3);
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    }
+    .warranty-header {
+      background: var(--text-primary);
+      color: white;
+      padding: 24px 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .vin-pill {
+      background: var(--bg-primary);
+      border: 1px solid var(--border-color);
+      padding: 5px 10px;
+      border-radius: 8px;
+      font-family: monospace;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .vin-pill:hover, .vin-pill.active {
+      background: var(--accent-blue);
+      color: white;
+      border-color: var(--accent-blue);
+    }
+    .badge-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: 99px;
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      background: rgba(16, 185, 129, 0.2);
+      color: #34d399;
+      border: 1px solid rgba(16, 185, 129, 0.4);
+    }
+
+    /* Booking Form Layout */
+    .booking-wrapper {
+      background: var(--white);
+      border: 1px solid var(--border-color);
+      border-radius: 24px;
+      padding: 36px;
+      display: grid;
+      grid-template-columns: 1fr 1.3fr;
+      gap: 40px;
+    }
+    @media (max-width: 860px) {
+      .booking-wrapper { grid-template-columns: 1fr; gap: 24px; padding: 24px; }
+      nav { display: none; }
+    }
+    .form-group { margin-bottom: 14px; }
+    .form-group label {
+      display: block;
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 6px;
+    }
+    .form-control {
+      width: 100%;
+      padding: 10px 14px;
+      border-radius: 10px;
+      border: 1px solid var(--border-color);
+      background: var(--bg-primary);
+      font-size: 12px;
+      outline: none;
+    }
+    .form-control:focus { border-color: var(--accent-blue); background: #fff; }
+
+    /* Battery Tabs */
+    .battery-tabs {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 12px;
+      margin-bottom: 20px;
+    }
+    .b-tab {
+      padding: 8px 16px;
+      border-radius: 10px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      border: 1px solid var(--border-color);
+      background: var(--white);
+      color: var(--text-secondary);
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .b-tab.active {
+      background: var(--text-primary);
+      color: white;
+      border-color: var(--text-primary);
+    }
+    .battery-rule-card {
+      background: var(--white);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    /* Footer */
+    footer {
+      background: var(--text-primary);
+      color: white;
+      padding: 60px 0 30px;
+      margin-top: 80px;
+      font-size: 12px;
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 30px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      padding-bottom: 40px;
+      margin-bottom: 30px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <div class="container header-inner">
+      <a href="index.html" class="brand-link">
+        <div class="brand-logo">U</div>
+        <div>
+          <div class="font-heading" style="font-weight: 900; font-size: 14px; text-transform: uppercase;">
+            UDAN <span style="color: var(--accent-blue);">ENTERPRISES</span>
+          </div>
+          <div style="font-size: 10px; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600;">
+            After-Sales Service & Customer Portal
+          </div>
+        </div>
+      </a>
+
+      <nav>
+        <a href="#warranty-lookup">Warranty Lookup</a>
+        <a href="#service-packages">Service Packages</a>
+        <a href="#booking-section">Book Service</a>
+        <a href="#battery-guide">Tropical Battery Care</a>
+        <a href="admin.html">Showroom Admin 🔒</a>
+      </nav>
+
+      <div style="display: flex; gap: 8px; align-items: center;">
+        <a href="#booking-section" class="btn btn-dark">Book Service Bay</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero-section">
+    <div class="container">
+      <div class="eyebrow">PHASE 04 • AUTHORISED ZUBOO SERVICE & CUSTOMER PORTAL</div>
+      <h1 class="hero-title">
+        PRECISION CARE FOR A <span style="color: var(--accent-blue);">CLEANER TOMORROW</span>
+      </h1>
+      <p class="hero-desc">
+        Keep your Zuboo electric bike operating at factory performance. Our Galle Kurunduwatta showroom
+        features certified diagnostic bays for lithium BMS health tests, regenerative brake calibrations, and
+        digital warranty verification.
+      </p>
+
+      <div class="hero-meta">
+        <div>
+          <span style="font-size: 10px; font-weight: 800; text-transform: uppercase; color: var(--text-secondary); display: block;">Workshop Location</span>
+          <strong style="font-size: 13px;">Udugama Road, Kurunduwatta, Galle</strong>
+        </div>
+        <div>
+          <span style="font-size: 10px; font-weight: 800; text-transform: uppercase; color: var(--text-secondary); display: block;">Operating Schedule</span>
+          <strong style="font-size: 13px;">Mon - Sat: 8:30 AM - 5:30 PM</strong>
+        </div>
+        <div>
+          <span style="font-size: 10px; font-weight: 800; text-transform: uppercase; color: var(--text-secondary); display: block;">Technician Hotline</span>
+          <strong style="font-size: 13px;"><a href="tel:0784969652" style="color: var(--accent-blue);">078 496 9652 / WhatsApp</a></strong>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <main class="container" style="padding-bottom: 40px;">
+    <!-- ============================================== -->
+    <!-- 1. DIGITAL WARRANTY VIN LOOKUP                 -->
+    <!-- ============================================== -->
+    <section id="warranty-lookup" style="margin-top: 50px;">
+      <div class="section-header">
+        <span class="eyebrow">DIGITAL CERTIFICATE REGISTRY</span>
+        <h2 class="section-title">CHASSIS / VIN WARRANTY VERIFICATION</h2>
+        <p style="color: var(--text-secondary); font-size: 12px; margin-top: 4px;">
+          Lookup active factory warranties for motors, lithium battery packs, and high-tensile alloy chassis frames.
+        </p>
+      </div>
+
+      <div style="background: white; border: 1px solid var(--border-color); border-radius: 18px; padding: 24px; margin-bottom: 24px;">
+        <form onsubmit="handleVinSearch(event)" style="display: flex; gap: 12px; flex-wrap: wrap;">
+          <input id="vin-input-field" type="text" class="form-control" style="flex: 1; min-width: 250px; font-family: monospace; font-size: 14px; font-weight: 700; text-transform: uppercase;" placeholder="Enter VIN (e.g. ZB-2026-T3-001)" value="ZB-2026-T3-001" required>
+          <button type="submit" class="btn btn-dark" style="padding: 10px 20px;">Verify Warranty Status</button>
+        </form>
+
+        <div style="margin-top: 14px; border-top: 1px solid var(--border-color); padding-top: 12px;">
+          <span style="font-size: 10px; font-weight: 800; text-transform: uppercase; color: var(--text-secondary); display: block; margin-bottom: 6px;">
+            Quick Test Registered Sample VINs (1-Click):
+          </span>
+          <div style="display: flex; gap: 8px; flex-wrap: wrap;" id="sample-vins-bar">
+            <!-- Rendered via JS -->
+          </div>
+        </div>
+      </div>
+
+      <!-- DIGITAL CERTIFICATE DISPLAY -->
+      <div id="warranty-certificate-container">
+        <!-- Rendered via JS -->
+      </div>
+    </section>
+
+    <!-- ============================================== -->
+    <!-- 2. SERVICE PACKAGES CATALOG                    -->
+    <!-- ============================================== -->
+    <section id="service-packages" style="margin-top: 70px;">
+      <div class="section-header">
+        <span class="eyebrow">FACTORY MAINTENANCE SCHEDULE</span>
+        <h2 class="section-title">CERTIFIED SERVICE PACKAGES</h2>
+        <p style="color: var(--text-secondary); font-size: 12px; margin-top: 4px;">
+          Conducted by Zuboo-certified technicians in Galle with genuine spare parts.
+        </p>
+      </div>
+
+      <div class="cards-grid" id="packages-container">
+        <!-- Rendered via JS -->
+      </div>
+    </section>
+
+    <!-- ============================================== -->
+    <!-- 3. ONLINE SERVICE BOOKING                      -->
+    <!-- ============================================== -->
+    <section id="booking-section" style="margin-top: 70px;">
+      <div class="section-header">
+        <span class="eyebrow">EXPRESS SERVICE BAY</span>
+        <h2 class="section-title">ONLINE SERVICE APPOINTMENT</h2>
+        <p style="color: var(--text-secondary); font-size: 12px; margin-top: 4px;">
+          Reserve your service slot at our Kurunduwatta showroom.
+        </p>
+      </div>
+
+      <div class="booking-wrapper">
+        <div>
+          <span style="font-size: 10px; font-weight: 800; text-transform: uppercase; color: var(--accent-blue); display: block;">Workshop Assurance</span>
+          <h3 style="font-size: 20px; font-weight: 900; text-transform: uppercase; margin: 4px 0 12px;">Galle Bay Amenities</h3>
+          <p style="font-size: 12px; color: var(--text-secondary); line-height: 1.6; margin-bottom: 16px;">
+            Every periodic checkup includes computerized BMS voltage diagnostics, brake pressure calibration, and a digital health card signed by our senior master technician.
+          </p>
+
+          <div style="background: var(--bg-secondary); border-radius: 12px; padding: 14px; margin-bottom: 16px;">
+            <strong style="color: var(--accent-blue); font-size: 12px; display: block; margin-bottom: 4px;">⚡ 100% Free Under Official Warranty</strong>
+            <p style="font-size: 11px; color: var(--text-primary);">
+              Routine 3-month checkups and state-of-health diagnostics are covered with no labor charges for vehicles within their 2-year warranty period.
+            </p>
+          </div>
+
+          <ul style="list-style: none; font-size: 11px; color: var(--text-secondary); display: grid; gap: 8px;">
+            <li>✓ Same-day turnaround for standard routine checkups</li>
+            <li>✓ Original Zuboo brake pads, calipers, and throttle sensors in stock</li>
+            <li>✓ WhatsApp status alerts upon completion</li>
+          </ul>
+        </div>
+
+        <div>
+          <div id="booking-success-box" style="display: none; background: var(--emerald-bg); border: 1px solid #a7f3d0; border-radius: 16px; padding: 24px; text-align: center;">
+            <div style="font-size: 32px; margin-bottom: 8px;">✅</div>
+            <h4 style="font-size: 18px; font-weight: 900; text-transform: uppercase; color: var(--emerald);">SERVICE BAY RESERVED!</h4>
+            <p id="booking-summary-text" style="font-size: 12px; color: var(--text-secondary); margin: 8px 0 16px;"></p>
+            <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+              <a id="booking-wa-btn" href="#" target="_blank" class="btn btn-wa">Send WhatsApp Confirmation</a>
+              <button onclick="resetBookingForm()" class="btn">Book Another</button>
+            </div>
+          </div>
+
+          <form id="service-booking-form" onsubmit="handleBookService(event)">
+            <div class="form-group">
+              <label>Select Service Package</label>
+              <select id="book-pkg" class="form-control" style="font-weight: 700;">
+                <option value="Routine 3-Month / 1,000 km Inspection (Free Under Warranty)">Routine 3-Month / 1,000 km Inspection (LKR 0)</option>
+                <option value="Battery Health Diagnostics & BMS Calibration (LKR 2,500 / Free)">Battery Health Diagnostics & BMS Calibration (LKR 2,500)</option>
+                <option value="Hydraulic Brake Service & Caliper Overhaul (LKR 3,500)">Hydraulic Brake Service & Caliper Overhaul (LKR 3,500)</option>
+                <option value="Tubeless Tire Health & Sealant (LKR 1,800)">Tubeless Tire Health & Sealant (LKR 1,800)</option>
+                <option value="Electrical & Projector Lighting Tuning (LKR 2,200)">Electrical & Projector Lighting Tuning (LKR 2,200)</option>
+                <option value="Full Comprehensive Super-Tune & Reconditioning (LKR 6,500)">Full Comprehensive Super-Tune (LKR 6,500)</option>
+              </select>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+              <div class="form-group">
+                <label>Customer Full Name *</label>
+                <input id="book-name" type="text" class="form-control" placeholder="e.g. Kavindu Perera" required>
+              </div>
+              <div class="form-group">
+                <label>Phone Number *</label>
+                <input id="book-phone" type="tel" class="form-control" placeholder="07x xxxxxxx" required>
+              </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+              <div class="form-group">
+                <label>Vehicle Model / VIN</label>
+                <input id="book-vin" type="text" class="form-control" placeholder="e.g. ZB-2026-T3-001 or Zuboo GT">
+              </div>
+              <div class="form-group">
+                <label>Preferred Date</label>
+                <input id="book-date" type="date" class="form-control" required>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>Time Slot</label>
+              <select id="book-time" class="form-control">
+                <option value="Morning (8:30 AM - 10:30 AM)">Morning (8:30 AM - 10:30 AM)</option>
+                <option value="Morning (10:30 AM - 12:30 PM)">Morning (10:30 AM - 12:30 PM)</option>
+                <option value="Afternoon (1:30 PM - 3:30 PM)">Afternoon (1:30 PM - 3:30 PM)</option>
+                <option value="Late Afternoon (3:30 PM - 5:30 PM)">Late Afternoon (3:30 PM - 5:30 PM)</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>Symptoms / Special Notes (Optional)</label>
+              <textarea id="book-notes" class="form-control" rows="2" placeholder="e.g. Minor disc brake noise, routine 1,000km checkup."></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-dark" style="width: 100%; padding: 12px; font-size: 12px;">
+              Confirm Service Bay Appointment →
+            </button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================== -->
+    <!-- 4. BATTERY HEALTH & MAINTENANCE GUIDE          -->
+    <!-- ============================================== -->
+    <section id="battery-guide" style="margin-top: 70px;">
+      <div class="section-header">
+        <span class="eyebrow">ENGINEERING ADVISORY</span>
+        <h2 class="section-title">LITHIUM BATTERY HEALTH GUIDE (SRI LANKA)</h2>
+        <p style="color: var(--text-secondary); font-size: 12px; margin-top: 4px;">
+          Formulated specifically for tropical heat, coastal salt humidity in Galle, and monsoon riding.
+        </p>
+      </div>
+
+      <div class="battery-tabs" id="battery-tabs-bar">
+        <!-- Rendered via JS -->
+      </div>
+
+      <div class="cards-grid" id="battery-rules-grid">
+        <!-- Rendered via JS -->
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <strong style="font-size: 14px; text-transform: uppercase; font-family: var(--font-heading);">UDAN ENTERPRISES</strong>
+          <p style="color: #94a3b8; font-size: 11px; margin-top: 8px; line-height: 1.6;">
+            Authorized Zuboo Electric Mobility Showroom & Service Center for Southern Province, Sri Lanka.
+          </p>
+        </div>
+        <div>
+          <strong style="font-size: 11px; text-transform: uppercase; color: #94a3b8;">Showroom Address</strong>
+          <p style="color: #e2e8f0; font-size: 12px; margin-top: 6px;">
+            Udugama Road, Kurunduwatta, Galle<br>
+            Hotline: 078 496 9652<br>
+            Email: Pibida17udan4131@gmail.com
+          </p>
+        </div>
+        <div>
+          <strong style="font-size: 11px; text-transform: uppercase; color: #94a3b8;">Customer Portals</strong>
+          <p style="margin-top: 6px; display: grid; gap: 4px;">
+            <a href="index.html" style="color: #cbd5e1;">Home Page</a>
+            <a href="#warranty-lookup" style="color: #cbd5e1;">VIN Warranty Check</a>
+            <a href="#booking-section" style="color: #cbd5e1;">Online Service Booking</a>
+            <a href="admin.html" style="color: #facc15;">Showroom Admin CMS 🔒</a>
+          </p>
+        </div>
+      </div>
+      <div style="text-align: center; color: #64748b; font-size: 11px;">
+        © 2026 Udan Enterprises. All rights reserved. • Website Developer: Harsh Apex Digital Solutions
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // DATA
+    const WARRANTIES = {
+      "ZB-2026-T3-001": {
+        vin: "ZB-2026-T3-001",
+        modelName: "Zuboo T3 Urban Commuter (1200W)",
+        customerName: "Kavindu Perera",
+        phone: "077 ••• •821",
+        registeredDate: "2025-11-15",
+        expiryDate: "2027-11-15",
+        status: "Active",
+        motor: "1200W High Efficiency Brushless (2 Years / Covered)",
+        battery: "72V 20Ah Lithium Pack (2 Years / 99% SOH)",
+        chassis: "High-Tensile Alloy Frame (3 Years / Covered)",
+        logs: [
+          { date: "2025-11-15", type: "Pre-Delivery Inspection (PDI)", center: "Galle Showroom", note: "100-point safety check passed." },
+          { date: "2026-02-14", type: "1st 1,000 km Routine Checkup", center: "Galle Showroom", note: "Brake levers adjusted, battery resistance normal." }
+        ]
+      },
+      "ZB-2026-GT-042": {
+        vin: "ZB-2026-GT-042",
+        modelName: "Zuboo GT Touring Dual-Sport (1800W)",
+        customerName: "Nuwan Jayasuriya",
+        phone: "071 ••• •933",
+        registeredDate: "2026-01-10",
+        expiryDate: "2028-01-10",
+        status: "Active",
+        motor: "1800W High Torque Touring Motor (2 Years / Covered)",
+        battery: "72V 32Ah High Capacity (2 Years / 100% SOH)",
+        chassis: "Dual Airbag Mount Frame (3 Years / Covered)",
+        logs: [
+          { date: "2026-01-10", type: "PDI & Handover", center: "Galle Showroom", note: "Touring tail box fitted." }
+        ]
+      },
+      "ZB-2026-TK-088": {
+        vin: "ZB-2026-TK-088",
+        modelName: "Zuboo The Tank (3000W All-Terrain)",
+        customerName: "Dinesh Weerasinghe",
+        phone: "076 ••• •109",
+        registeredDate: "2026-02-01",
+        expiryDate: "2028-02-01",
+        status: "Active",
+        motor: "3000W Peak Performance Powertrain (2 Years / Covered)",
+        battery: "72V 32Ah High Discharge (2 Years / 100% SOH)",
+        chassis: "Steel Perimeter Crash Cage (3 Years / Covered)",
+        logs: [
+          { date: "2026-02-01", type: "PDI Handover", center: "Galle Showroom", note: "Dual projectors aligned." }
+        ]
+      },
+      "ZB-2025-PR-015": {
+        vin: "ZB-2025-PR-015",
+        modelName: "Zuboo Paris Retro Classic (1200W)",
+        customerName: "Chamari Bandara",
+        phone: "077 ••• •543",
+        registeredDate: "2025-08-20",
+        expiryDate: "2027-08-20",
+        status: "Active",
+        motor: "1200W Quiet Hub Motor (2 Years / Covered)",
+        battery: "60V 24Ah Lithium-ion (2 Years / 97% SOH)",
+        chassis: "Curved Vintage Chassis (3 Years / Covered)",
+        logs: [
+          { date: "2025-08-20", type: "PDI Delivery", center: "Galle Showroom", note: "Anti-salt seal applied." }
+        ]
+      }
+    };
+
+    const SERVICE_PACKAGES = [
+      {
+        id: "routine",
+        title: "Routine 3-Month / 1,000 km Inspection",
+        price: "LKR 0 (Free with Warranty)",
+        time: "45 Mins",
+        items: ["Battery voltage balancing check", "Hydraulic brake pad wear inspection", "Tire tread & pressure balancing (32 PSI)", "Steering stem bearing check"]
+      },
+      {
+        id: "battery-diag",
+        title: "Battery Health Diagnostics & BMS Calibration",
+        price: "LKR 2,500 / Free with Warranty",
+        time: "60 Mins",
+        items: ["Individual cell delta curve testing", "BMS low-voltage cut-off verification", "Anti-corrosion terminal greasing", "Digital State-of-Health certificate"]
+      },
+      {
+        id: "brakes",
+        title: "Hydraulic Brake Service & Caliper Bleed",
+        price: "LKR 3,500 + Parts",
+        time: "50 Mins",
+        items: ["DOT4 hydraulic fluid replacement", "Ceramic/sintered brake pad install", "Disc rotor de-glazing", "Regenerative EBS electronic sync"]
+      },
+      {
+        id: "tires",
+        title: "Tubeless Tire Health & Anti-Puncture Seal",
+        price: "LKR 1,800 + Sealant",
+        time: "30 Mins",
+        items: ["Tire bead inspection", "60ml fresh anti-puncture sealant injection", "High-speed wheel spin balancing", "Brass valve core renewal"]
+      },
+      {
+        id: "electrical",
+        title: "Electrical Wiring & Projector Lamp Tuning",
+        price: "LKR 2,200",
+        time: "40 Mins",
+        items: ["IP67 connector waterproof silicone seal", "Throttle hall sensor voltage check", "LED projector headlight aim alignment", "Anti-theft vibration sensitivity tune"]
+      },
+      {
+        id: "full-tune",
+        title: "Full Annual Super-Tune & Reconditioning",
+        price: "LKR 6,500",
+        time: "120 Mins",
+        items: ["120-point mechanical & electrical test", "Chassis anti-salt underbody coating", "Suspension hydraulic fluid condition check", "Road test by master technician"]
+      }
+    ];
+
+    const BATTERY_GUIDE = [
+      {
+        category: "charging",
+        label: "Tropical Charging",
+        rules: [
+          { num: "01", title: "The 30-Minute Cool-Down Rule", desc: "Never plug in your Zuboo electric bike immediately after a ride under hot midday sun or climbing steep Galle inclines. Allow 20-30 minutes for the battery pack to cool down before charging.", imp: "Critical" },
+          { num: "02", title: "Charge in Well-Ventilated, Shaded Areas", desc: "Always charge indoors or under shaded eaves. Never allow the charger or battery to bake in direct tropical sunlight during charging.", imp: "Critical" },
+          { num: "03", title: "The 20% - 85% Daily Commute Rule", desc: "For regular daily commuting in Galle, keeping the battery between 20% and 85% extends total cycle longevity from ~800 to over 1,500 cycles.", imp: "Recommended" },
+          { num: "04", title: "Use Only the Genuine Zuboo Smart Charger", desc: "Third-party chargers often lack precise BMS communication, risking cell overcharging in tropical ambient warmth.", imp: "Critical" }
+        ]
+      },
+      {
+        category: "coastal",
+        label: "Coastal Salt-Air",
+        rules: [
+          { num: "01", title: "Anti-Corrosion Terminal Care", desc: "Ocean spray near Galle Marine Drive accelerates electrical terminal oxidation. Have Udan Enterprises apply dielectric grease during routine inspections.", imp: "Recommended" },
+          { num: "02", title: "Rinse After Coastal Spray", desc: "Wipe chassis and battery compartment with a fresh-water damp microfiber cloth after riding along coastal winds. Never pressure-wash electrical seals directly.", imp: "Good Practice" },
+          { num: "03", title: "Secure Charging Port Flap", desc: "Ensure the rubberized weather-cap is firmly sealed before every ride to prevent saltwater vapor ingress.", imp: "Critical" }
+        ]
+      },
+      {
+        category: "monsoon",
+        label: "Monsoon & Rain",
+        rules: [
+          { num: "01", title: "Half-Hub Water Wading Rule", desc: "Zuboo motors are IP67 sealed, but you must avoid riding through standing floodwaters deeper than half the rear hub motor axle.", imp: "Critical" },
+          { num: "02", title: "Dry Before Indoor Charging", desc: "Wipe the charge socket dry with a towel before plugging in the AC charger after heavy monsoon rain.", imp: "Recommended" }
+        ]
+      },
+      {
+        category: "storage",
+        label: "Extended Storage",
+        rules: [
+          { num: "01", title: "Store at 50% - 60% Charge", desc: "If leaving Sri Lanka or leaving the bike idle for more than two weeks, store at ~55% charge in a cool, shaded garage.", imp: "Critical" },
+          { num: "02", title: "Monthly Maintenance Top-Up", desc: "Top up the battery for 1 hour every 30 days to counter parasitic BMS and security alarm micro-drain.", imp: "Recommended" }
+        ]
+      }
+    ];
+
+    // RENDER SAMPLE VINS
+    function renderSampleVins() {
+      const bar = document.getElementById('sample-vins-bar');
+      bar.innerHTML = Object.keys(WARRANTIES).map(vin => `
+        <button type="button" class="vin-pill" onclick="selectVin('${vin}')">${vin}</button>
+      `).join('');
+    }
+
+    function selectVin(vin) {
+      document.getElementById('vin-input-field').value = vin;
+      renderCertificate(vin);
+    }
+
+    function handleVinSearch(e) {
+      e.preventDefault();
+      const val = document.getElementById('vin-input-field').value.trim().toUpperCase();
+      renderCertificate(val);
+    }
+
+    function renderCertificate(vin) {
+      const container = document.getElementById('warranty-certificate-container');
+      const rec = WARRANTIES[vin];
+
+      if (!rec) {
+        container.innerHTML = `
+          <div style="background: white; border: 1px solid var(--border-color); border-radius: 18px; padding: 32px; text-align: center;">
+            <div style="font-size: 28px; margin-bottom: 6px;">⚠️</div>
+            <h3 style="font-size: 16px; font-weight: 800; text-transform: uppercase;">VIN Not Found in Registry</h3>
+            <p style="font-size: 12px; color: var(--text-secondary); margin: 6px 0 16px;">
+              Could not find warranty record for "${vin}". Please double check your chassis stamp.
+            </p>
+            <a href="https://wa.me/94784969652?text=Hello%20Udan%20Enterprises,%20I%20need%20help%20checking%20my%20Zuboo%20warranty%20chassis%20number" target="_blank" class="btn btn-wa">Inquire on WhatsApp</a>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = `
+        <div class="warranty-box">
+          <div class="warranty-header">
+            <div>
+              <span style="font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; opacity: 0.8; display: block;">Official Digital Warranty Certificate</span>
+              <h3 style="font-size: 20px; font-weight: 900; text-transform: uppercase;">ZUBOO MOTORS OFFICIAL WARRANTY</h3>
+              <div style="font-size: 11px; opacity: 0.8;">Issued through Udan Enterprises Galle Dealership</div>
+            </div>
+            <span class="badge-status">● ${rec.status} Warranty</span>
+          </div>
+
+          <div style="padding: 28px;">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; background: var(--bg-primary); padding: 18px; border-radius: 14px; margin-bottom: 24px;">
+              <div>
+                <span style="font-size: 9px; font-weight: 800; text-transform: uppercase; color: var(--text-secondary); display: block;">Chassis / VIN</span>
+                <strong style="font-family: monospace; font-size: 16px;">${rec.vin}</strong>
+              </div>
+              <div>
+                <span style="font-size: 9px; font-weight: 800; text-transform: uppercase; color: var(--text-secondary); display: block;">Registered Owner</span>
+                <strong style="font-size: 13px;">${rec.customerName}</strong>
+              </div>
+              <div>
+                <span style="font-size: 9px; font-weight: 800; text-transform: uppercase; color: var(--text-secondary); display: block;">Warranty Period</span>
+                <strong style="font-size: 13px; color: var(--emerald);">${rec.registeredDate} to ${rec.expiryDate}</strong>
+              </div>
+            </div>
+
+            <h4 style="font-size: 14px; font-weight: 900; text-transform: uppercase; margin-bottom: 12px;">Component Coverage Breakdown</h4>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; margin-bottom: 24px;">
+              <div style="background: white; border: 1px solid var(--border-color); border-radius: 12px; padding: 14px;">
+                <strong style="color: var(--accent-blue); font-size: 12px; display: block;">⚡ Electric Motor</strong>
+                <div style="font-size: 11px; margin-top: 4px;">${rec.motor}</div>
+              </div>
+              <div style="background: white; border: 1px solid var(--border-color); border-radius: 12px; padding: 14px;">
+                <strong style="color: var(--emerald); font-size: 12px; display: block;">🔋 Lithium Battery Pack</strong>
+                <div style="font-size: 11px; margin-top: 4px;">${rec.battery}</div>
+              </div>
+              <div style="background: white; border: 1px solid var(--border-color); border-radius: 12px; padding: 14px;">
+                <strong style="color: var(--text-primary); font-size: 12px; display: block;">🛡️ Chassis & Frame</strong>
+                <div style="font-size: 11px; margin-top: 4px;">${rec.chassis}</div>
+              </div>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-color); padding-top: 18px; flex-wrap: gap; gap: 12px;">
+              <span style="font-size: 11px; color: var(--text-secondary);">Verified against Galle Kurunduwatta showroom records database.</span>
+              <a href="#booking-section" class="btn btn-dark" onclick="prefillVin('${rec.vin}')">Book Routine Service for this VIN →</a>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function prefillVin(vin) {
+      document.getElementById('book-vin').value = vin;
+    }
+
+    // RENDER PACKAGES
+    function renderPackages() {
+      const container = document.getElementById('packages-container');
+      container.innerHTML = SERVICE_PACKAGES.map(pkg => `
+        <div class="card">
+          <div>
+            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+              <span style="font-size: 10px; font-weight: 800; color: var(--accent-blue); text-transform: uppercase;">Duration: ${pkg.time}</span>
+            </div>
+            <h3 style="font-size: 16px; font-weight: 800; text-transform: uppercase; margin-bottom: 6px;">${pkg.title}</h3>
+            <div style="font-size: 14px; font-weight: 900; color: var(--accent-blue); margin-bottom: 12px;">${pkg.price}</div>
+            <ul style="list-style: none; font-size: 11px; color: var(--text-secondary); display: grid; gap: 6px;">
+              ${pkg.items.map(i => `<li>✓ ${i}</li>`).join('')}
+            </ul>
+          </div>
+          <a href="#booking-section" class="btn btn-dark" onclick="selectServicePackage('${pkg.title}')">Select Package →</a>
+        </div>
+      `).join('');
+    }
+
+    function selectServicePackage(title) {
+      const select = document.getElementById('book-pkg');
+      for (let i = 0; i < select.options.length; i++) {
+        if (select.options[i].text.includes(title.substring(0, 15))) {
+          select.selectedIndex = i;
+          break;
+        }
+      }
+    }
+
+    // RENDER BATTERY GUIDE
+    let activeBatteryCat = 'charging';
+    function renderBatteryTabs() {
+      const bar = document.getElementById('battery-tabs-bar');
+      bar.innerHTML = BATTERY_GUIDE.map(cat => `
+        <button class="b-tab ${cat.category === activeBatteryCat ? 'active' : ''}" onclick="switchBatteryCat('${cat.category}')">${cat.label}</button>
+      `).join('');
+      renderBatteryRules();
+    }
+
+    function switchBatteryCat(cat) {
+      activeBatteryCat = cat;
+      renderBatteryTabs();
+    }
+
+    function renderBatteryRules() {
+      const grid = document.getElementById('battery-rules-grid');
+      const cat = BATTERY_GUIDE.find(c => c.category === activeBatteryCat) || BATTERY_GUIDE[0];
+      grid.innerHTML = cat.rules.map(r => `
+        <div class="battery-rule-card">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span style="font-family: monospace; font-size: 11px; font-weight: 800; color: var(--accent-blue);">RULE ${r.num}</span>
+            <span style="font-size: 9px; font-weight: 800; text-transform: uppercase; padding: 2px 6px; border-radius: 4px; background: ${r.imp === 'Critical' ? '#ffe4e6' : '#eff6ff'}; color: ${r.imp === 'Critical' ? '#e11d48' : '#2563eb'};">${r.imp}</span>
+          </div>
+          <h4 style="font-size: 14px; font-weight: 800;">${r.title}</h4>
+          <p style="font-size: 12px; color: var(--text-secondary);">${r.desc}</p>
+        </div>
+      `).join('');
+    }
+
+    // BOOKING FORM HANDLER
+    function handleBookService(e) {
+      e.preventDefault();
+      const id = "SRV-" + Math.floor(100 + Math.random() * 900);
+      const name = document.getElementById('book-name').value;
+      const phone = document.getElementById('book-phone').value;
+      const vin = document.getElementById('book-vin').value || "Zuboo Electric Bike";
+      const pkg = document.getElementById('book-pkg').value;
+      const date = document.getElementById('book-date').value;
+      const time = document.getElementById('book-time').value;
+      const notes = document.getElementById('book-notes').value;
+
+      // Save to localStorage for Admin CMS
+      const newBooking = { id, customerName: name, phone, vinOrModel: vin, servicePackage: pkg, date, time, notes, status: "Pending" };
+      const currentBookings = JSON.parse(localStorage.getItem('udan_service_bookings') || '[]');
+      currentBookings.unshift(newBooking);
+      localStorage.setItem('udan_service_bookings', JSON.stringify(currentBookings));
+
+      // WhatsApp link
+      const waMsg = encodeURIComponent(`Hello Udan Enterprises (Galle Showroom), I booked a service appointment:\n- Booking ID: #${id}\n- Name: ${name}\n- Phone: ${phone}\n- Vehicle/VIN: ${vin}\n- Service: ${pkg}\n- Date: ${date} (${time})\n- Notes: ${notes || "None"}\n\nPlease confirm my reservation.`);
+      const waUrl = `https://wa.me/94784969652?text=${waMsg}`;
+
+      // Update UI
+      document.getElementById('service-booking-form').style.display = 'none';
+      document.getElementById('booking-success-box').style.display = 'block';
+      document.getElementById('booking-summary-text').innerHTML = `
+        <strong>#${id}</strong> reserved for <strong>${name}</strong> (${phone})<br>
+        Service: <strong>${pkg}</strong> on <strong>${date}</strong> (${time})
+      `;
+      document.getElementById('booking-wa-btn').href = waUrl;
+    }
+
+    function resetBookingForm() {
+      document.getElementById('service-booking-form').reset();
+      document.getElementById('service-booking-form').style.display = 'block';
+      document.getElementById('booking-success-box').style.display = 'none';
+    }
+
+    // INIT
+    renderSampleVins();
+    renderCertificate("ZB-2026-T3-001");
+    renderPackages();
+    renderBatteryTabs();
+    document.getElementById('book-date').value = new Date(Date.now() + 86400000 * 2).toISOString().slice(0, 10);
+  </script>
+</body>
+</html>
