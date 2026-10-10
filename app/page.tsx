@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import Footer from "@/components/Footer";
 import {
   Zap,
   ShieldCheck,
@@ -1187,107 +1188,8 @@ export default function ZubooHomePage() {
         </div>
       )}
 
-      {/* 10. CLEAN INTERNATIONAL OEM FOOTER */}
-      <footer className="bg-slate-950 text-white pt-16 pb-12 border-t border-slate-800 mt-auto">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 pb-12 border-b border-slate-800">
-            {/* Col 1: Brand & Dealership Info */}
-            <div className="lg:col-span-2 space-y-4">
-              <div className="flex items-center gap-3">
-                <div className="relative h-10 w-10">
-                  <Image
-                    src="/media/branding/udan-logo.png"
-                    alt="Udan Enterprises"
-                    fill
-                    className="object-contain"
-                  />
-                </div>
-                <div>
-                  <span className="text-lg font-black tracking-tight text-white block">
-                    UDAN ENTERPRISES
-                  </span>
-                  <span className="text-[10px] uppercase font-bold text-slate-400">
-                    Official Zuboo Dealership • Galle
-                  </span>
-                </div>
-              </div>
-
-              <p className="text-xs text-slate-400 leading-relaxed max-w-sm">
-                Sri Lanka's dedicated Zuboo electric vehicle dealership. Delivering premium zero-emission transportation, high-capacity lithium battery technology, and genuine factory spare parts in Galle.
-              </p>
-
-              <div className="pt-2 text-xs text-slate-300 font-bold">
-                <span className="text-[#FF5E14]">Tagline:</span> JOIN US & CHARGE YOUR RIDE ⚡
-              </div>
-            </div>
-
-            {/* Col 2: Models Quick Links */}
-            <div>
-              <h4 className="text-xs font-black uppercase tracking-wider text-white mb-4">
-                Zuboo Models
-              </h4>
-              <ul className="space-y-2.5 text-xs text-slate-400">
-                <li><Link href="/bikes/t3" className="hover:text-white transition-colors">Zuboo T3 (2000W)</Link></li>
-                <li><Link href="/bikes/gt" className="hover:text-white transition-colors">Zuboo GT (1800W)</Link></li>
-                <li><Link href="/bikes/the-tank" className="hover:text-white transition-colors">Zuboo The Tank</Link></li>
-                <li><Link href="/bikes/mini" className="hover:text-white transition-colors">Zuboo Mini City</Link></li>
-                <li><Link href="/bikes/kb1" className="hover:text-white transition-colors">Zuboo KB1 Value</Link></li>
-                <li><Link href="/bikes/paris" className="hover:text-white transition-colors">Zuboo Paris Retro</Link></li>
-              </ul>
-            </div>
-
-            {/* Col 3: Customer Services & Portals */}
-            <div>
-              <h4 className="text-xs font-black uppercase tracking-wider text-white mb-4">
-                Services & Portals
-              </h4>
-              <ul className="space-y-2.5 text-xs text-slate-400">
-                <li><Link href="/calculator" className="hover:text-white transition-colors">LKR Loan & EMI Calculator</Link></li>
-                <li><Link href="/parts" className="hover:text-white transition-colors">Genuine Spare Parts</Link></li>
-                <li><Link href="/service" className="hover:text-white transition-colors">Service Booking Galle</Link></li>
-                <li><Link href="/warranty" className="hover:text-white transition-colors">Digital VIN Warranty Check</Link></li>
-                <li><Link href="/offers" className="hover:text-white transition-colors">Special Seasonal Offers</Link></li>
-                <li><Link href="/admin" className="hover:text-white transition-colors">Showroom Staff CMS</Link></li>
-              </ul>
-            </div>
-
-            {/* Col 4: Galle Showroom Direct */}
-            <div>
-              <h4 className="text-xs font-black uppercase tracking-wider text-white mb-4">
-                Galle Showroom
-              </h4>
-              <div className="space-y-3 text-xs text-slate-400">
-                <p>Udugama Road, Kurunduwatta, Galle</p>
-                <p>
-                  <strong className="text-white block">Hotline:</strong>
-                  <a href="tel:0784969652" className="text-[#FF5E14] hover:underline">078 496 9652</a>
-                </p>
-                <p>
-                  <strong className="text-white block">Email:</strong>
-                  <a href="mailto:Pibida17udan4131@gmail.com" className="hover:text-white">Pibida17udan4131@gmail.com</a>
-                </p>
-                <p>
-                  <strong className="text-white block">WhatsApp:</strong>
-                  <a href="https://wa.me/94784969652" target="_blank" rel="noopener noreferrer" className="text-emerald-400 hover:underline">
-                    +94 78 496 9652
-                  </a>
-                </p>
-              </div>
-            </div>
-          </div>
-
-          {/* Bottom Copyright & Credits */}
-          <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-slate-500">
-            <div>
-              © 2026 Udan Enterprises (Pvt) Ltd. Official Zuboo Electric Dealership. All Rights Reserved.
-            </div>
-            <div className="flex items-center gap-1.5">
-              <span>Crafted by</span>
-              <span className="font-bold text-slate-300">Harsh Apex Digital Solutions</span>
-            </div>
-          </div>
-        </div>
-      </footer>
+      {/* 10. CINEMATIC MOTORCYCLE SKYLINE FOOTER */}
+      <Footer />
     </div>
   );
 }

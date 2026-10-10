@@ -1,7 +1,8 @@
 <!-- ==========================================================================
      UDAN ENTERPRISES — CINEMATIC MOTORCYCLE SKYLINE & NEON ROAD
-     Inspired by official design reference (Colombo Lotus Tower + S-Curve Ridge)
-     Responsive SVG ViewBox: 0 0 1440 260 | Zero Horizontal Overflow | 60 FPS
+     Inspired by official design reference (media_1791620142265.png)
+     Colombo Lotus Tower • Crimson Dusk Glow • S-Curve Highway Crest • 60 FPS
+     ViewBox: 0 0 1440 260 | Zero Horizontal Overflow | Full Mobile Fidelity
      ========================================================================== -->
 
 <div class="udan-skyline-container" aria-hidden="true">
@@ -14,73 +15,74 @@
     <defs>
       <!-- Deep Crimson Dusk Gradient -->
       <linearGradient id="skyDuskGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-        <stop offset="0%" stop-color="#0a0103" />
-        <stop offset="35%" stop-color="#1e0308" />
-        <stop offset="60%" stop-color="#3c0610" />
-        <stop offset="78%" stop-color="#580a15" />
-        <stop offset="88%" stop-color="#730e1b" />
+        <stop offset="0%" stop-color="#080103" />
+        <stop offset="30%" stop-color="#1c0307" />
+        <stop offset="55%" stop-color="#3c050f" />
+        <stop offset="74%" stop-color="#5a0816" />
+        <stop offset="86%" stop-color="#7a0d1d" />
         <stop offset="100%" stop-color="#140205" />
       </linearGradient>
 
-      <!-- Blood-Red Sun/Moon Radial Glow -->
+      <!-- Blood-Red Sun/Moon Radial Glow Aura -->
       <radialGradient id="moonGlowAura" cx="50%" cy="50%" r="50%">
-        <stop offset="0%" stop-color="#ff2632" stop-opacity="0.85" />
-        <stop offset="35%" stop-color="#d90b1c" stop-opacity="0.55" />
-        <stop offset="65%" stop-color="#7a050f" stop-opacity="0.25" />
-        <stop offset="100%" stop-color="#1f0206" stop-opacity="0" />
+        <stop offset="0%" stop-color="#ff2632" stop-opacity="0.9" />
+        <stop offset="30%" stop-color="#e1081a" stop-opacity="0.6" />
+        <stop offset="62%" stop-color="#80040f" stop-opacity="0.25" />
+        <stop offset="100%" stop-color="#1a0205" stop-opacity="0" />
       </radialGradient>
 
       <!-- Giant Crimson Sun/Moon Disc -->
       <linearGradient id="moonDiscGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-        <stop offset="0%" stop-color="#ff5240" />
-        <stop offset="45%" stop-color="#ff1a26" />
-        <stop offset="100%" stop-color="#8a0712" />
+        <stop offset="0%" stop-color="#ff5845" />
+        <stop offset="40%" stop-color="#ff1a26" />
+        <stop offset="100%" stop-color="#880611" />
       </linearGradient>
 
-      <!-- Headlight Projector Beam Gradient -->
+      <!-- Headlight Projector Conical Beam Gradient -->
       <linearGradient id="headlightBeamGrad" x1="0%" y1="50%" x2="100%" y2="50%">
-        <stop offset="0%" stop-color="#ffffff" stop-opacity="0.95" />
-        <stop offset="22%" stop-color="#fff2c2" stop-opacity="0.75" />
-        <stop offset="55%" stop-color="#ffb74d" stop-opacity="0.32" />
-        <stop offset="85%" stop-color="#ff7043" stop-opacity="0.1" />
+        <stop offset="0%" stop-color="#ffffff" stop-opacity="0.98" />
+        <stop offset="18%" stop-color="#fff5cc" stop-opacity="0.85" />
+        <stop offset="45%" stop-color="#ffc107" stop-opacity="0.45" />
+        <stop offset="75%" stop-color="#ff7043" stop-opacity="0.16" />
         <stop offset="100%" stop-color="#ff5722" stop-opacity="0" />
       </linearGradient>
 
       <!-- Headlight Road Asphalt Puddle Reflection -->
       <radialGradient id="roadLightPuddle" cx="50%" cy="50%" r="50%">
-        <stop offset="0%" stop-color="#ffe082" stop-opacity="0.55" />
-        <stop offset="40%" stop-color="#ff8f00" stop-opacity="0.25" />
-        <stop offset="100%" stop-color="#d84315" stop-opacity="0" />
+        <stop offset="0%" stop-color="#fff59d" stop-opacity="0.65" />
+        <stop offset="35%" stop-color="#ffb300" stop-opacity="0.32" />
+        <stop offset="70%" stop-color="#e65100" stop-opacity="0.1" />
+        <stop offset="100%" stop-color="#bf360c" stop-opacity="0" />
       </radialGradient>
 
       <!-- Tail Light Speed Streaks Gradient -->
       <linearGradient id="speedStreakGrad" x1="100%" y1="50%" x2="0%" y2="50%">
-        <stop offset="0%" stop-color="#ffffff" stop-opacity="0.95" />
-        <stop offset="15%" stop-color="#ff2e3b" stop-opacity="0.9" />
-        <stop offset="50%" stop-color="#e60012" stop-opacity="0.5" />
-        <stop offset="85%" stop-color="#800008" stop-opacity="0.15" />
+        <stop offset="0%" stop-color="#ffffff" stop-opacity="1" />
+        <stop offset="12%" stop-color="#ff3344" stop-opacity="0.95" />
+        <stop offset="45%" stop-color="#e60012" stop-opacity="0.65" />
+        <stop offset="80%" stop-color="#8a000c" stop-opacity="0.2" />
         <stop offset="100%" stop-color="#ff0015" stop-opacity="0" />
       </linearGradient>
 
-      <!-- Streetlight Ambient Cone Gradient -->
+      <!-- Streetlight Ambient Downward Cone Gradient -->
       <linearGradient id="lampConeGrad" x1="50%" y1="0%" x2="50%" y2="100%">
-        <stop offset="0%" stop-color="#ffe57f" stop-opacity="0.7" />
-        <stop offset="40%" stop-color="#ffb74d" stop-opacity="0.35" />
-        <stop offset="80%" stop-color="#ff9100" stop-opacity="0.12" />
+        <stop offset="0%" stop-color="#fff9c4" stop-opacity="0.8" />
+        <stop offset="35%" stop-color="#ffb74d" stop-opacity="0.4" />
+        <stop offset="75%" stop-color="#ff9800" stop-opacity="0.14" />
         <stop offset="100%" stop-color="#ff6d00" stop-opacity="0" />
       </linearGradient>
 
-      <!-- Lotus Tower Petal Illumination -->
+      <!-- Colombo Lotus Tower Petal Gradient -->
       <linearGradient id="lotusPetalGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-        <stop offset="0%" stop-color="#ff2a4b" />
-        <stop offset="50%" stop-color="#cc0828" />
-        <stop offset="100%" stop-color="#54000d" />
+        <stop offset="0%" stop-color="#ff2e52" />
+        <stop offset="50%" stop-color="#c90829" />
+        <stop offset="100%" stop-color="#4e000c" />
       </linearGradient>
 
-      <!-- Neon Edge Filters -->
+      <!-- Neon Edge Multi-Stage Bloom Filter -->
       <filter id="neonBloom" x="-20%" y="-40%" width="140%" height="180%">
-        <feGaussianBlur in="SourceGraphic" stdDeviation="5.5" result="blurWide" />
-        <feGaussianBlur in="SourceGraphic" stdDeviation="1.8" result="blurSharp" />
+        <feGaussianBlur in="SourceGraphic" stdDeviation="6" result="blurWide" />
+        <feGaussianBlur in="SourceGraphic" stdDeviation="2" result="blurSharp" />
         <feMerge>
           <feMergeNode in="blurWide" />
           <feMergeNode in="blurSharp" />
@@ -88,9 +90,9 @@
         </feMerge>
       </filter>
 
-      <!-- Headlight Glow Filter -->
+      <!-- Headlight Lens Flare Glow Filter -->
       <filter id="bulbGlow" x="-50%" y="-50%" width="200%" height="200%">
-        <feGaussianBlur stdDeviation="3" result="blur" />
+        <feGaussianBlur stdDeviation="3.5" result="blur" />
         <feMerge>
           <feMergeNode in="blur" />
           <feMergeNode in="SourceGraphic" />
@@ -99,28 +101,28 @@
 
       <!-- Reusable Chevron Road Warning Sign Symbol -->
       <g id="chevronSign">
-        <rect x="-8" y="-12" width="16" height="24" rx="2" fill="#0d0204" stroke="#ff2a32" stroke-width="1.2" />
-        <polyline points="-3,-7 2,0 -3,7" fill="none" stroke="#ff2a32" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-        <line x1="0" y1="12" x2="0" y2="28" stroke="#120406" stroke-width="2.5" />
+        <rect x="-9" y="-13" width="18" height="26" rx="2.5" fill="#0c0204" stroke="#ff2632" stroke-width="1.3" />
+        <polyline points="-3.5,-8 2.5,0 -3.5,8" fill="none" stroke="#ff2632" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" />
+        <line x1="0" y1="13" x2="0" y2="30" stroke="#120406" stroke-width="2.6" />
       </g>
 
       <!-- Reusable Arched Highway Streetlamp Symbol -->
       <g id="highwayLamp">
-        <!-- Curved Gooseneck Pole -->
-        <path d="M 0 0 L 0 -58 C 0 -68 12 -72 22 -68" fill="none" stroke="#120306" stroke-width="2" />
-        <!-- Fixture Head -->
-        <ellipse cx="23" cy="-67" rx="3.5" ry="1.5" fill="#2d050c" />
-        <!-- Radiant Bulb Core -->
-        <circle cx="23" cy="-66" r="2.2" fill="#fff9c4" filter="url(#bulbGlow)" />
-        <!-- Downward Golden Light Cone -->
-        <polygon points="21,-65 35,0 9,0" fill="url(#lampConeGrad)" />
+        <!-- Curved Gooseneck Lamp Mast -->
+        <path d="M 0 0 L 0 -62 C 0 -73 13 -77 24 -73" fill="none" stroke="#130306" stroke-width="2.2" />
+        <!-- Lamp Head Shade -->
+        <ellipse cx="25" cy="-72" rx="4" ry="1.8" fill="#2c050c" />
+        <!-- Glowing Amber Core -->
+        <circle cx="25" cy="-71" r="2.5" fill="#fff9c4" filter="url(#bulbGlow)" />
+        <!-- Projected Amber Light Pool on Highway -->
+        <polygon points="23,-70 38,0 8,0" fill="url(#lampConeGrad)" />
       </g>
     </defs>
 
     <style>
-      /* Wheels rotation */
+      /* Wheels rotation at 60 FPS */
       .wheel-spin {
-        animation: udanWheelRoll 0.45s linear infinite;
+        animation: udanWheelRoll 0.4s linear infinite;
         transform-box: fill-box;
         transform-origin: center center;
       }
@@ -129,65 +131,65 @@
         to { transform: rotate(360deg); }
       }
 
-      /* Micro-suspension road bounce */
+      /* Micro suspension road vibration */
       .bike-chassis-bounce {
-        animation: udanSuspension 0.28s ease-in-out infinite alternate;
+        animation: udanSuspension 0.25s ease-in-out infinite alternate;
       }
       @keyframes udanSuspension {
         0% { transform: translateY(0px); }
-        100% { transform: translateY(-0.85px); }
+        100% { transform: translateY(-0.9px); }
       }
 
-      /* Headlight subtle beam flicker */
+      /* Dynamic headlight beam shimmer */
       .beam-shimmer {
-        animation: udanBeamPulse 2.8s ease-in-out infinite alternate;
+        animation: udanBeamPulse 2.4s ease-in-out infinite alternate;
       }
       @keyframes udanBeamPulse {
-        0% { opacity: 0.82; transform: scaleY(0.97); }
-        100% { opacity: 0.98; transform: scaleY(1.02); }
+        0% { opacity: 0.84; transform: scaleY(0.97); }
+        100% { opacity: 1; transform: scaleY(1.03); }
       }
 
-      /* Lotus Tower aviation beacon blink */
+      /* Colombo Lotus Tower beacon pulse */
       .lotus-beacon {
-        animation: udanBeaconBlink 1.2s ease-in-out infinite alternate;
+        animation: udanBeaconBlink 1.1s ease-in-out infinite alternate;
       }
       @keyframes udanBeaconBlink {
-        0% { opacity: 0.2; transform: scale(0.8); }
-        100% { opacity: 1; transform: scale(1.4); }
+        0% { opacity: 0.3; transform: scale(0.85); }
+        100% { opacity: 1; transform: scale(1.5); }
       }
 
-      /* Ambient floating embers / sparks */
+      /* Ambient floating dusk sparks / embers */
       .sky-ember {
-        animation: udanEmberFloat 4.5s ease-in-out infinite;
+        animation: udanEmberFloat 4.2s ease-in-out infinite;
       }
       .ember-1 { animation-delay: 0s; }
-      .ember-2 { animation-delay: 1.1s; }
-      .ember-3 { animation-delay: 2.2s; }
-      .ember-4 { animation-delay: 3.3s; }
-      .ember-5 { animation-delay: 1.7s; }
+      .ember-2 { animation-delay: 0.9s; }
+      .ember-3 { animation-delay: 1.8s; }
+      .ember-4 { animation-delay: 2.7s; }
+      .ember-5 { animation-delay: 3.5s; }
       @keyframes udanEmberFloat {
         0% { transform: translateY(0) translateX(0); opacity: 0; }
-        25% { opacity: 0.85; }
-        75% { opacity: 0.6; }
-        100% { transform: translateY(-42px) translateX(18px); opacity: 0; }
+        20% { opacity: 0.9; }
+        70% { opacity: 0.55; }
+        100% { transform: translateY(-46px) translateX(22px); opacity: 0; }
       }
 
-      /* Speed trails pulse */
+      /* Tail speed streaks dynamic pulse */
       .speed-trail {
-        animation: udanTrailStretch 0.6s ease-in-out infinite alternate;
+        animation: udanTrailStretch 0.5s ease-in-out infinite alternate;
       }
       @keyframes udanTrailStretch {
-        0% { opacity: 0.75; transform: scaleX(0.92); }
-        100% { opacity: 1; transform: scaleX(1.08); }
+        0% { opacity: 0.8; transform: scaleX(0.94); }
+        100% { opacity: 1; transform: scaleX(1.06); }
       }
 
-      /* Neon road subtle breath */
+      /* Neon road edge glow pulse */
       .neon-glow-line {
-        animation: udanNeonPulse 3s ease-in-out infinite alternate;
+        animation: udanNeonPulse 3.2s ease-in-out infinite alternate;
       }
       @keyframes udanNeonPulse {
         0% { filter: drop-shadow(0 0 6px #ff1f24); }
-        100% { filter: drop-shadow(0 0 14px #ff1f24) drop-shadow(0 0 4px #ff6666); }
+        100% { filter: drop-shadow(0 0 16px #ff1f24) drop-shadow(0 0 5px #ff6666); }
       }
 
       /* Accessibility: Respect Reduced Motion */
@@ -218,274 +220,255 @@
     <!-- Far mountain layer -->
     <path
       d="M -20 180 Q 140 120 280 145 T 620 150 T 960 125 T 1240 142 T 1460 135 L 1460 260 L -20 260 Z"
-      fill="#1b0409"
-      opacity="0.85"
+      fill="#1a0308"
+      opacity="0.88"
     />
     <!-- Mid mountain ridge -->
     <path
       d="M -20 185 Q 190 140 370 162 T 740 160 T 1110 145 T 1460 152 L 1460 260 L -20 260 Z"
-      fill="#130206"
-      opacity="0.9"
+      fill="#120206"
+      opacity="0.92"
     />
 
     <!-- ====================================================================
-         3. GIANT CRIMSON SUN / MOON (Behind Colombo Skyline)
+         3. GIANT CRIMSON SUN / MOON (Behind Skyline)
          ==================================================================== -->
     <!-- Large soft outer atmospheric aura -->
-    <circle cx="985" cy="144" r="120" fill="url(#moonGlowAura)" />
+    <circle cx="890" cy="142" r="125" fill="url(#moonGlowAura)" />
     <!-- Radiant core moon/sun disc -->
-    <circle cx="985" cy="144" r="62" fill="url(#moonDiscGrad)" />
+    <circle cx="890" cy="142" r="65" fill="url(#moonDiscGrad)" />
     <!-- Atmospheric horizon cut lines across disc -->
-    <line x1="924" y1="154" x2="1046" y2="154" stroke="#0e0204" stroke-width="2.2" opacity="0.8" />
-    <line x1="930" y1="162" x2="1040" y2="162" stroke="#0e0204" stroke-width="2.6" opacity="0.8" />
-    <line x1="940" y1="170" x2="1030" y2="170" stroke="#0e0204" stroke-width="3" opacity="0.85" />
+    <line x1="828" y1="152" x2="952" y2="152" stroke="#0e0204" stroke-width="2.2" opacity="0.8" />
+    <line x1="834" y1="160" x2="946" y2="160" stroke="#0e0204" stroke-width="2.6" opacity="0.8" />
+    <line x1="844" y1="168" x2="936" y2="168" stroke="#0e0204" stroke-width="3" opacity="0.85" />
 
     <!-- ====================================================================
          4. DEEP BACKGROUND CITY SILHOUETTE (Highrises, Cranes, Antennas)
          ==================================================================== -->
-    <g fill="#110205" opacity="0.75">
+    <g fill="#100205" opacity="0.75">
       <!-- Left side highrises & antennas -->
       <rect x="180" y="105" width="22" height="75" />
       <rect x="206" y="118" width="16" height="62" />
       <rect x="230" y="92" width="28" height="88" />
-      <line x1="244" y1="92" x2="244" y2="76" stroke="#110205" stroke-width="1.8" />
+      <line x1="244" y1="92" x2="244" y2="76" stroke="#100205" stroke-width="1.8" />
       <rect x="270" y="125" width="20" height="55" />
       <rect x="330" y="110" width="32" height="70" />
       <rect x="375" y="128" width="24" height="52" />
       <rect x="420" y="138" width="26" height="42" />
 
       <!-- Center highrises (Colombo Financial Center / Fort) -->
-      <rect x="580" y="108" width="30" height="72" />
-      <rect x="618" y="85" width="38" height="95" />
-      <line x1="637" y1="85" x2="637" y2="68" stroke="#110205" stroke-width="1.6" />
-      <rect x="668" y="115" width="25" height="65" />
-      <rect x="710" y="98" width="34" height="82" />
-      <rect x="752" y="122" width="28" height="58" />
+      <rect x="540" y="112" width="28" height="68" />
+      <rect x="580" y="105" width="32" height="75" />
+      <rect x="620" y="82" width="40" height="98" />
+      <line x1="640" y1="82" x2="640" y2="65" stroke="#100205" stroke-width="1.6" />
+      <rect x="670" y="115" width="26" height="65" />
+      <rect x="710" y="96" width="36" height="84" />
+      <rect x="755" y="122" width="30" height="58" />
 
       <!-- Right skyline towers -->
-      <rect x="1050" y="88" width="36" height="92" />
-      <line x1="1068" y1="88" x2="1068" y2="70" stroke="#110205" stroke-width="1.8" />
-      <rect x="1094" y="102" width="26" height="78" />
-      <rect x="1130" y="115" width="32" height="65" />
-      <rect x="1175" y="95" width="28" height="85" />
-      <rect x="1215" y="120" width="22" height="60" />
-      <rect x="1250" y="105" width="35" height="75" />
-      <rect x="1310" y="128" width="26" height="52" />
-      <rect x="1350" y="112" width="24" height="68" />
+      <rect x="970" y="88" width="36" height="92" />
+      <line x1="988" y1="88" x2="988" y2="68" stroke="#100205" stroke-width="1.8" />
+      <rect x="1014" y="102" width="28" height="78" />
+      <rect x="1050" y="115" width="32" height="65" />
+      <rect x="1095" y="95" width="28" height="85" />
+      <rect x="1135" y="120" width="24" height="60" />
+      <rect x="1170" y="105" width="36" height="75" />
+      <rect x="1230" y="128" width="26" height="52" />
+      <rect x="1270" y="112" width="26" height="68" />
+      <rect x="1330" y="124" width="24" height="56" />
     </g>
 
     <!-- ====================================================================
          5. MIDGROUND CITY SKYLINE + COLOMBO LOTUS TOWER + WINDOW LIGHTS
          ==================================================================== -->
-    <g fill="#090103">
-      <!-- Skyscraper cluster 1 (Altair-inspired twin towers) -->
-      <polygon points="630,78 648,72 654,180 626,180" />
-      <!-- Slanted diag tower -->
-      <polygon points="656,92 672,86 688,180 672,180" />
+    <g fill="#080103">
+      <!-- Altair Colombo inclined twin towers -->
+      <polygon points="610,76 630,70 636,180 606,180" />
+      <polygon points="638,90 656,84 674,180 656,180" />
 
       <!-- Commercial high-rises with spires -->
-      <rect x="696" y="90" width="36" height="90" />
-      <polygon points="704,90 714,64 724,90" />
-      <line x1="714" y1="64" x2="714" y2="48" stroke="#090103" stroke-width="2" />
+      <rect x="678" y="88" width="38" height="92" />
+      <polygon points="687,88 697,60 707,88" />
+      <line x1="697" y1="60" x2="697" y2="44" stroke="#080103" stroke-width="2" />
 
-      <rect x="740" y="105" width="28" height="75" />
-      <rect x="778" y="118" width="34" height="62" />
-
-      <rect x="820" y="88" width="42" height="92" />
-      <line x1="841" y1="88" x2="841" y2="70" stroke="#090103" stroke-width="2" />
+      <rect x="724" y="104" width="30" height="76" />
+      <rect x="762" y="116" width="36" height="64" />
 
       <!-- ================================================================
-           COLOMBO LOTUS TOWER (NELUM KULUNA) — x: 890 to 922
+           COLOMBO LOTUS TOWER (NELUM KULUNA) — x: 810 to 842
            ================================================================ -->
       <!-- Concrete Tower Shaft / Stem -->
-      <polygon points="902,185 904,112 910,112 912,185" fill="#090103" />
+      <polygon points="822,185 824,110 830,110 832,185" fill="#080103" />
 
       <!-- Lower Petal Support Ring -->
-      <path d="M 901 114 Q 907 117 913 114 L 912 110 L 902 110 Z" fill="#1c0307" />
+      <path d="M 821 112 Q 827 115 833 112 L 832 108 L 822 108 Z" fill="#1b0307" />
 
       <!-- Glowing Lotus Petal Bud (Distinctive Flower Shape) -->
       <path
-        d="M 902 110
-           C 892 102, 891 82, 907 72
-           C 923 82, 922 102, 912 110
+        d="M 822 108
+           C 810 100, 809 78, 827 68
+           C 845 78, 844 100, 832 108
            Z"
         fill="url(#lotusPetalGrad)"
       />
       <!-- Petal Decorative Ribs -->
-      <path d="M 907 110 Q 907 88 907 72" stroke="#ff4d6d" stroke-width="1.2" fill="none" opacity="0.85" />
-      <path d="M 902 100 Q 906 88 907 72" stroke="#ff4d6d" stroke-width="0.9" fill="none" opacity="0.7" />
-      <path d="M 912 100 Q 908 88 907 72" stroke="#ff4d6d" stroke-width="0.9" fill="none" opacity="0.7" />
+      <path d="M 827 108 Q 827 85 827 68" stroke="#ff4d6d" stroke-width="1.3" fill="none" opacity="0.88" />
+      <path d="M 822 98 Q 826 85 827 68" stroke="#ff4d6d" stroke-width="1" fill="none" opacity="0.75" />
+      <path d="M 832 98 Q 828 85 827 68" stroke="#ff4d6d" stroke-width="1" fill="none" opacity="0.75" />
 
       <!-- Observation Deck Tier -->
-      <rect x="903" y="65" width="8" height="7" rx="1.5" fill="#090103" />
+      <rect x="823" y="61" width="8" height="7" rx="1.5" fill="#080103" />
       <!-- Communication Spire / Mast -->
-      <line x1="907" y1="65" x2="907" y2="28" stroke="#090103" stroke-width="2.2" />
-      <line x1="907" y1="28" x2="907" y2="20" stroke="#090103" stroke-width="1.2" />
+      <line x1="827" y1="61" x2="827" y2="24" stroke="#080103" stroke-width="2.2" />
+      <line x1="827" y1="24" x2="827" y2="18" stroke="#080103" stroke-width="1.2" />
 
       <!-- Red Aviation Warning Beacon on Lotus Tower Peak -->
-      <circle cx="907" cy="20" r="2.2" fill="#ff1f24" class="lotus-beacon" />
-      <circle cx="907" cy="20" r="4.5" fill="#ff1f24" opacity="0.4" class="lotus-beacon" />
+      <circle cx="827" cy="18" r="2.4" fill="#ff1f24" class="lotus-beacon" />
+      <circle cx="827" cy="18" r="5" fill="#ff1f24" opacity="0.45" class="lotus-beacon" />
 
-      <!-- Right side skyscrapers (overlooking moon/sun) -->
-      <rect x="930" y="112" width="30" height="68" />
-      <rect x="968" y="96" width="38" height="84" />
-      <polygon points="980,96 987,74 994,96" />
-      <line x1="987" y1="74" x2="987" y2="58" stroke="#090103" stroke-width="1.8" />
+      <!-- Center-Right Skyscrapers (Framing Sun/Moon) -->
+      <rect x="850" y="92" width="38" height="88" />
+      <polygon points="861,92 869,70 877,92" />
+      <line x1="869" y1="70" x2="869" y2="52" stroke="#080103" stroke-width="1.8" />
 
-      <rect x="1016" y="120" width="28" height="60" />
-      <rect x="1052" y="82" width="44" height="98" />
-      <!-- Twin spire tops -->
-      <line x1="1064" y1="82" x2="1064" y2="60" stroke="#090103" stroke-width="1.8" />
-      <line x1="1084" y1="82" x2="1084" y2="60" stroke="#090103" stroke-width="1.8" />
-      <circle cx="1064" cy="60" r="1.5" fill="#ff2632" class="lotus-beacon" />
-      <circle cx="1084" cy="60" r="1.5" fill="#ff2632" class="lotus-beacon" />
+      <rect x="898" y="112" width="32" height="68" />
+      <rect x="938" y="95" width="40" height="85" />
+      <rect x="988" y="80" width="46" height="100" />
+      <!-- Twin Spire Towers (WTC Colombo Style) -->
+      <line x1="1000" y1="80" x2="1000" y2="58" stroke="#080103" stroke-width="1.8" />
+      <line x1="1022" y1="80" x2="1022" y2="58" stroke="#080103" stroke-width="1.8" />
+      <circle cx="1000" cy="58" r="1.6" fill="#ff2632" class="lotus-beacon" />
+      <circle cx="1022" cy="58" r="1.6" fill="#ff2632" class="lotus-beacon" />
 
-      <rect x="1108" y="108" width="32" height="72" />
-      <rect x="1150" y="125" width="26" height="55" />
-      <rect x="1186" y="110" width="36" height="70" />
+      <rect x="1044" y="108" width="34" height="72" />
+      <rect x="1088" y="125" width="28" height="55" />
+      <rect x="1126" y="110" width="38" height="70" />
     </g>
 
-    <!-- Glowing Skyscraper Windows (Active Night Metropolis) -->
-    <g fill="#ffe082" opacity="0.65">
+    <!-- Glowing Skyscraper Windows (Active Metropolis Nightscape) -->
+    <g fill="#ffe082" opacity="0.7">
       <!-- Cluster 1 Windows -->
-      <rect x="634" y="98" width="2" height="3" /><rect x="640" y="98" width="2" height="3" /><rect x="646" y="98" width="2" height="3" />
-      <rect x="634" y="110" width="2" height="3" /><rect x="640" y="110" width="2" height="3" /><rect x="646" y="110" width="2" height="3" />
-      <rect x="634" y="122" width="2" height="3" /><rect x="640" y="122" width="2" height="3" /><rect x="646" y="122" width="2" height="3" />
-      <rect x="634" y="134" width="2" height="3" /><rect x="646" y="134" width="2" height="3" />
+      <rect x="614" y="95" width="2" height="3" /><rect x="620" y="95" width="2" height="3" /><rect x="626" y="95" width="2" height="3" />
+      <rect x="614" y="108" width="2" height="3" /><rect x="620" y="108" width="2" height="3" /><rect x="626" y="108" width="2" height="3" />
+      <rect x="614" y="120" width="2" height="3" /><rect x="620" y="120" width="2" height="3" /><rect x="626" y="120" width="2" height="3" />
+      <rect x="614" y="132" width="2" height="3" /><rect x="626" y="132" width="2" height="3" />
 
       <!-- Cluster 2 Windows -->
-      <rect x="702" y="105" width="2" height="3" /><rect x="712" y="105" width="2" height="3" /><rect x="722" y="105" width="2" height="3" />
-      <rect x="702" y="116" width="2" height="3" /><rect x="712" y="116" width="2" height="3" /><rect x="722" y="116" width="2" height="3" />
-      <rect x="702" y="127" width="2" height="3" /><rect x="712" y="127" width="2" height="3" /><rect x="722" y="127" width="2" height="3" />
-      <rect x="702" y="138" width="2" height="3" /><rect x="722" y="138" width="2" height="3" />
+      <rect x="684" y="102" width="2" height="3" /><rect x="694" y="102" width="2" height="3" /><rect x="704" y="102" width="2" height="3" />
+      <rect x="684" y="114" width="2" height="3" /><rect x="694" y="114" width="2" height="3" /><rect x="704" y="114" width="2" height="3" />
+      <rect x="684" y="126" width="2" height="3" /><rect x="694" y="126" width="2" height="3" /><rect x="704" y="126" width="2" height="3" />
+      <rect x="684" y="138" width="2" height="3" /><rect x="704" y="138" width="2" height="3" />
 
       <!-- Cluster 3 Windows -->
-      <rect x="828" y="100" width="2" height="3" /><rect x="838" y="100" width="2" height="3" /><rect x="848" y="100" width="2" height="3" />
-      <rect x="828" y="112" width="2" height="3" /><rect x="838" y="112" width="2" height="3" /><rect x="848" y="112" width="2" height="3" />
-      <rect x="828" y="124" width="2" height="3" /><rect x="848" y="124" width="2" height="3" />
-      <rect x="828" y="136" width="2" height="3" /><rect x="838" y="136" width="2" height="3" />
+      <rect x="856" y="104" width="2" height="3" /><rect x="866" y="104" width="2" height="3" /><rect x="876" y="104" width="2" height="3" />
+      <rect x="856" y="116" width="2" height="3" /><rect x="866" y="116" width="2" height="3" /><rect x="876" y="116" width="2" height="3" />
+      <rect x="856" y="128" width="2" height="3" /><rect x="876" y="128" width="2" height="3" />
 
-      <!-- Right Cluster Windows -->
-      <rect x="974" y="108" width="2" height="3" /><rect x="986" y="108" width="2" height="3" /><rect x="996" y="108" width="2" height="3" />
-      <rect x="974" y="120" width="2" height="3" /><rect x="986" y="120" width="2" height="3" /><rect x="996" y="120" width="2" height="3" />
-      <rect x="974" y="132" width="2" height="3" /><rect x="996" y="132" width="2" height="3" />
+      <!-- Cluster 4 Windows -->
+      <rect x="944" y="106" width="2" height="3" /><rect x="956" y="106" width="2" height="3" /><rect x="968" y="106" width="2" height="3" />
+      <rect x="944" y="118" width="2" height="3" /><rect x="956" y="118" width="2" height="3" /><rect x="968" y="118" width="2" height="3" />
+      <rect x="944" y="130" width="2" height="3" /><rect x="968" y="130" width="2" height="3" />
 
-      <rect x="1060" y="95" width="2" height="3" /><rect x="1070" y="95" width="2" height="3" /><rect x="1082" y="95" width="2" height="3" />
-      <rect x="1060" y="106" width="2" height="3" /><rect x="1070" y="106" width="2" height="3" /><rect x="1082" y="106" width="2" height="3" />
-      <rect x="1060" y="117" width="2" height="3" /><rect x="1070" y="117" width="2" height="3" /><rect x="1082" y="117" width="2" height="3" />
-      <rect x="1060" y="128" width="2" height="3" /><rect x="1082" y="128" width="2" height="3" />
+      <rect x="996" y="92" width="2" height="3" /><rect x="1008" y="92" width="2" height="3" /><rect x="1022" y="92" width="2" height="3" />
+      <rect x="996" y="104" width="2" height="3" /><rect x="1008" y="104" width="2" height="3" /><rect x="1022" y="104" width="2" height="3" />
+      <rect x="996" y="116" width="2" height="3" /><rect x="1008" y="116" width="2" height="3" /><rect x="1022" y="116" width="2" height="3" />
+      <rect x="996" y="128" width="2" height="3" /><rect x="1022" y="128" width="2" height="3" />
     </g>
 
     <!-- ====================================================================
          6. HIGHWAY STREETLIGHTS ALONG THE RIDGE
          ==================================================================== -->
-    <use href="#highwayLamp" x="290" y="148" />
-    <use href="#highwayLamp" x="640" y="186" />
-    <use href="#highwayLamp" x="930" y="184" />
-    <use href="#highwayLamp" x="1340" y="165" />
+    <use href="#highwayLamp" x="280" y="150" />
+    <use href="#highwayLamp" x="580" y="186" />
+    <use href="#highwayLamp" x="880" y="184" />
+    <use href="#highwayLamp" x="1180" y="196" />
+    <use href="#highwayLamp" x="1360" y="165" />
 
     <!-- ====================================================================
          7. ROADSIDE WARNING CHEVRONS (Curved Mountain Highway Signs)
          ==================================================================== -->
-    <!-- Left hill chevron -->
-    <use href="#chevronSign" x="65" y="152" transform="rotate(-6 65 152)" />
-    <!-- Valley chevron -->
-    <use href="#chevronSign" x="390" y="172" transform="rotate(3 390 172)" />
+    <!-- Left hill crest chevron -->
+    <use href="#chevronSign" x="75" y="152" transform="rotate(-6 75 152)" />
+    <!-- Valley curve chevron -->
+    <use href="#chevronSign" x="420" y="174" transform="rotate(3 420 174)" />
     <!-- Right ridge chevron -->
-    <use href="#chevronSign" x="1310" y="170" transform="rotate(-4 1310 170)" />
+    <use href="#chevronSign" x="1290" y="172" transform="rotate(-4 1290 172)" />
 
     <!-- ====================================================================
          8. SCENIC STATIONARY MOTORCYCLE SILHOUETTES ON THE RIDGE
          ==================================================================== -->
 
-    <!-- SILHOUETTE 1: Adventure / Naked Touring Bike at x=515, y=184 -->
-    <g transform="translate(515, 184) scale(0.92)" fill="#060103">
+    <!-- SILHOUETTE 1: Adventure / Naked Touring Bike at x=510, y=184 -->
+    <g transform="translate(510, 184) scale(1.05)" fill="#050102">
       <!-- Rear Wheel -->
-      <circle cx="-25" cy="-12" r="11" />
-      <circle cx="-25" cy="-12" r="7.5" fill="#150307" />
+      <circle cx="-25" cy="-12" r="11.5" />
+      <circle cx="-25" cy="-12" r="8" fill="#140206" />
       <!-- Front Wheel -->
-      <circle cx="25" cy="-12" r="11" />
-      <circle cx="25" cy="-12" r="7.5" fill="#150307" />
+      <circle cx="25" cy="-12" r="11.5" />
+      <circle cx="25" cy="-12" r="8" fill="#140206" />
       <!-- Chassis, Engine, Tank, Upswept Exhaust -->
-      <path d="M -25 -12 L -12 -18 L 4 -12 L 25 -12 L 18 -25 L 5 -24 L -4 -28 L -14 -24 L -25 -20 Z" />
-      <!-- Muscular Adventure Fuel Tank & Beak Fairing -->
-      <path d="M 5 -24 L 14 -32 L 24 -30 L 19 -25 Z" />
+      <path d="M -25 -12 L -12 -18 L 4 -12 L 25 -12 L 18 -26 L 5 -25 L -4 -29 L -14 -25 L -25 -21 Z" />
+      <!-- Adventure Fuel Tank & Beak Fairing -->
+      <path d="M 5 -25 L 14 -33 L 25 -31 L 19 -26 Z" />
       <!-- Tall Touring Windscreen -->
-      <polygon points="17,-33 22,-42 24,-40 21,-32" fill="#060103" />
+      <polygon points="17,-34 22,-44 25,-42 21,-33" fill="#050102" />
       <!-- Upright Handlebars -->
-      <line x1="14" y1="-32" x2="16" y2="-38" stroke="#060103" stroke-width="2" />
-      <!-- Rider in Touring / Adventure Riding Stance -->
-      <!-- Helmet -->
-      <circle cx="4" cy="-47" r="5" />
-      <!-- Visor -->
-      <path d="M 7 -48 L 9 -46 L 7 -45 Z" fill="#ff8088" />
-      <!-- Torso / Jacket -->
-      <path d="M -3 -42 L 8 -41 L 6 -28 L -6 -28 Z" />
-      <!-- Arms to Handlebars -->
-      <path d="M 4 -39 L 16 -37" stroke="#060103" stroke-width="2.5" stroke-linecap="round" />
-      <!-- Legs & Footpegs -->
-      <path d="M -4 -28 L 2 -18 L -3 -15" stroke="#060103" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
-      <!-- Adventure Rear Luggage Rack -->
-      <polygon points="-16,-25 -26,-28 -24,-24 -14,-22" />
+      <line x1="14" y1="-33" x2="16" y2="-40" stroke="#050102" stroke-width="2.2" />
+      <!-- Rider in Touring Stance -->
+      <circle cx="4" cy="-48" r="5.2" />
+      <path d="M 7 -49 L 9 -47 L 7 -46 Z" fill="#ff707a" />
+      <path d="M -3 -43 L 8 -42 L 6 -29 L -6 -29 Z" />
+      <path d="M 4 -40 L 16 -38" stroke="#050102" stroke-width="2.6" stroke-linecap="round" />
+      <path d="M -4 -29 L 2 -19 L -3 -16" stroke="#050102" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" />
+      <polygon points="-16,-26 -26,-29 -24,-25 -14,-23" />
     </g>
 
-    <!-- SILHOUETTE 2: Modern Electric Commuter Scooter (Zuboo Style) at x=810, y=177 -->
-    <g transform="translate(810, 177) scale(0.9)" fill="#060103">
+    <!-- SILHOUETTE 2: Modern Electric Commuter Scooter (Zuboo Style) at x=710, y=177 -->
+    <g transform="translate(710, 177) scale(1.02)" fill="#050102">
       <!-- Compact Rear Hub Wheel -->
-      <circle cx="-22" cy="-10" r="9.5" />
-      <circle cx="-22" cy="-10" r="6" fill="#140206" />
+      <circle cx="-23" cy="-10" r="10" />
+      <circle cx="-23" cy="-10" r="6.5" fill="#130205" />
       <!-- Front Wheel -->
-      <circle cx="22" cy="-10" r="9.5" />
-      <circle cx="22" cy="-10" r="6" fill="#140206" />
+      <circle cx="23" cy="-10" r="10" />
+      <circle cx="23" cy="-10" r="6.5" fill="#130205" />
       <!-- Flat Step-through Floorboard -->
-      <rect x="-8" y="-9" width="16" height="4" rx="1.5" />
+      <rect x="-8" y="-9" width="16" height="4.5" rx="1.5" />
       <!-- Sleek Aerodynamic Front Apron / Cowl -->
-      <path d="M 6 -9 L 16 -12 L 21 -25 L 14 -28 L 8 -16 Z" />
+      <path d="M 6 -9 L 17 -12 L 22 -26 L 15 -29 L 8 -17 Z" />
       <!-- Plush Dual Seat & Rear Cowl -->
-      <path d="M -23 -14 C -21 -22, -10 -22, 6 -16 L 4 -12 L -20 -10 Z" />
+      <path d="M -24 -14 C -22 -23, -10 -23, 6 -17 L 4 -13 L -21 -11 Z" />
       <!-- Upright Commuter Handlebars -->
-      <line x1="16" y1="-28" x2="14" y2="-34" stroke="#060103" stroke-width="2.2" />
-      <!-- Commuter Rider Sitting Comfortably Upright -->
-      <!-- Helmet -->
-      <circle cx="-2" cy="-45" r="5.2" />
-      <!-- Visor -->
-      <polygon points="2,-46 4,-44 2,-43" fill="#ff8088" />
-      <!-- Upright Torso -->
-      <path d="M -8 -40 L 2 -39 L 1 -21 L -9 -21 Z" />
-      <!-- Arms to Handlebars -->
-      <path d="M 0 -36 L 14 -33" stroke="#060103" stroke-width="2.2" stroke-linecap="round" />
-      <!-- Legs onto Flat Floorboard -->
-      <path d="M -1 -21 L 6 -12 L 4 -8" stroke="#060103" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
-      <!-- Scooter Headlight Beam Cone -->
-      <polygon points="22,-22 90,-28 95,-10 23,-16" fill="url(#headlightBeamGrad)" opacity="0.45" />
+      <line x1="17" y1="-29" x2="15" y2="-35" stroke="#050102" stroke-width="2.4" />
+      <!-- Commuter Rider Sitting Upright -->
+      <circle cx="-2" cy="-46" r="5.4" />
+      <polygon points="2,-47 4.5,-45 2,-44" fill="#ff707a" />
+      <path d="M -8 -41 L 2 -40 L 1 -22 L -9 -22 Z" />
+      <path d="M 0 -37 L 15 -34" stroke="#050102" stroke-width="2.4" stroke-linecap="round" />
+      <path d="M -1 -22 L 6 -13 L 4 -9" stroke="#050102" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" />
+      <!-- Commuter Headlight Beam Puddle -->
+      <polygon points="23,-23 100,-29 106,-9 24,-17" fill="url(#headlightBeamGrad)" opacity="0.48" />
     </g>
 
-    <!-- SILHOUETTE 3: Sportbike Overlooking Skyline at x=1220, y=194 -->
-    <g transform="translate(1220, 194) scale(0.92)" fill="#060103">
-      <!-- Wheels -->
-      <circle cx="-25" cy="-12" r="11" />
-      <circle cx="-25" cy="-12" r="7" fill="#130206" />
-      <circle cx="25" cy="-12" r="11" />
-      <circle cx="25" cy="-12" r="7" fill="#130206" />
-      <!-- Sportbike Perimeter Frame & Fairings -->
-      <path d="M -25 -12 L -14 -20 L 5 -12 L 25 -12 L 18 -26 L 6 -26 L -4 -22 L -16 -24 Z" />
-      <path d="M 6 -26 L 16 -32 L 23 -29 L 19 -22 Z" />
-      <!-- Upswept Tail Pillion -->
-      <polygon points="-12,-23 -26,-28 -22,-20 -10,-19" />
-      <!-- Clip-on Bars -->
-      <line x1="16" y1="-31" x2="14" y2="-34" stroke="#060103" stroke-width="2" />
-      <!-- Rider in Lean / Casual Stance Looking Out -->
-      <circle cx="2" cy="-45" r="5" />
-      <polygon points="6,-46 8,-44 6,-43" fill="#ff8088" />
-      <path d="M -5 -40 L 4 -39 L 2 -24 L -7 -24 Z" />
-      <path d="M 2 -36 L 14 -32" stroke="#060103" stroke-width="2.2" stroke-linecap="round" />
-      <path d="M -1 -24 L 5 -15 L 0 -12" stroke="#060103" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+    <!-- SILHOUETTE 3: Sportbike Overlooking Skyline at x=1180, y=196 -->
+    <g transform="translate(1180, 196) scale(1.05)" fill="#050102">
+      <circle cx="-26" cy="-12" r="11.5" />
+      <circle cx="-26" cy="-12" r="7.5" fill="#120205" />
+      <circle cx="26" cy="-12" r="11.5" />
+      <circle cx="26" cy="-12" r="7.5" fill="#120205" />
+      <path d="M -26 -12 L -14 -20 L 5 -12 L 26 -12 L 19 -27 L 6 -27 L -4 -23 L -17 -25 Z" />
+      <path d="M 6 -27 L 17 -33 L 24 -30 L 20 -23 Z" />
+      <polygon points="-13,-24 -27,-29 -23,-21 -11,-20" />
+      <line x1="17" y1="-32" x2="15" y2="-35" stroke="#050102" stroke-width="2.2" />
+      <circle cx="2" cy="-46" r="5.2" />
+      <polygon points="6,-47 8.5,-45 6,-44" fill="#ff707a" />
+      <path d="M -5 -41 L 4 -40 L 2 -25 L -7 -25 Z" />
+      <path d="M 2 -37 L 15 -33" stroke="#050102" stroke-width="2.4" stroke-linecap="round" />
+      <path d="M -1 -25 L 5 -16 L 0 -13" stroke="#050102" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" />
     </g>
 
     <!-- ====================================================================
          9. THE SWEEPING BLACK ROAD HILL & DEEP ASPHALT BED
          ==================================================================== -->
-    <!-- Solid Dark Roadbed (Fuses seamlessly into the dark footer) -->
     <path
       d="M -60 172
          C 80 162, 120 138, 220 138
@@ -496,7 +479,7 @@
          L 1500 270
          L -60 270
          Z"
-      fill="#060103"
+      fill="#050102"
     />
 
     <!-- ====================================================================
@@ -512,9 +495,9 @@
            C 940 178, 1040 196, 1150 196
            C 1260 196, 1360 165, 1500 155"
         fill="none"
-        stroke="#ff0515"
-        stroke-width="8.5"
-        opacity="0.45"
+        stroke="#ff0018"
+        stroke-width="9.5"
+        opacity="0.48"
         stroke-linecap="round"
         filter="url(#neonBloom)"
       />
@@ -528,8 +511,8 @@
            C 1260 196, 1360 165, 1500 155"
         fill="none"
         stroke="#ff1f24"
-        stroke-width="3.5"
-        opacity="0.9"
+        stroke-width="3.8"
+        opacity="0.95"
         stroke-linecap="round"
       />
       <!-- Layer C: White-Hot Neon Core Filament -->
@@ -541,93 +524,89 @@
            C 940 178, 1040 196, 1150 196
            C 1260 196, 1360 165, 1500 155"
         fill="none"
-        stroke="#ffa8ad"
-        stroke-width="1.4"
-        opacity="0.95"
+        stroke="#ffb0b4"
+        stroke-width="1.5"
+        opacity="0.98"
         stroke-linecap="round"
       />
     </g>
 
     <!-- ====================================================================
          11. ANIMATED TRAVELING SPORT MOTORCYCLE WITH TUCKED RACER
-         Rides along the S-curve highway crest using GPU animateMotion
          ==================================================================== -->
     <g id="travelingRiderGroup">
-      <!-- animateMotion: traverses the exact curved path with automatic pitch rotation -->
       <animateMotion
-        dur="13.5s"
+        dur="11.5s"
         repeatCount="indefinite"
         rotate="auto"
-        path="M -120 168
+        path="M -160 168
               C 80 162, 120 138, 220 138
               C 320 138, 420 182, 530 185
               C 640 188, 720 178, 830 178
               C 940 178, 1040 196, 1150 196
-              C 1260 196, 1360 165, 1560 148"
+              C 1260 196, 1360 165, 1600 148"
       />
 
-      <!-- Rider Group with Suspensions Micro-Bounce -->
-      <g class="bike-chassis-bounce" transform="translate(0, -1)">
+      <!-- Scaled Rider Group (scale 1.25 for muscular, prominent silhouette) -->
+      <g class="bike-chassis-bounce" transform="scale(1.25) translate(0, -1)">
 
-        <!-- A. SPEED TRAILS (Vibrant Red Streaks Behind Tail Light) -->
+        <!-- A. EXTENDED VIBRANT RED SPEED TRAILS BEHIND TAIL LIGHT -->
         <g class="speed-trail">
-          <!-- Main Upper Trail -->
-          <polygon points="-30,-27 -135,-31 -132,-26 -30,-25" fill="url(#speedStreakGrad)" />
+          <!-- Upper Trail Streak -->
+          <polygon points="-30,-28 -175,-33 -171,-27 -30,-26" fill="url(#speedStreakGrad)" />
           <!-- Mid Streamline Trail -->
-          <polygon points="-28,-23 -115,-25 -113,-21 -28,-21" fill="url(#speedStreakGrad)" opacity="0.85" />
+          <polygon points="-28,-24 -145,-26 -142,-21 -28,-22" fill="url(#speedStreakGrad)" opacity="0.9" />
           <!-- Lower Trailing Streak -->
-          <polygon points="-26,-18 -85,-19 -83,-16 -26,-16" fill="url(#speedStreakGrad)" opacity="0.6" />
+          <polygon points="-26,-19 -105,-20 -102,-16 -26,-17" fill="url(#speedStreakGrad)" opacity="0.75" />
+          <!-- Bottom Ghost Trail -->
+          <polygon points="-24,-15 -75,-16 -73,-13 -24,-14" fill="url(#speedStreakGrad)" opacity="0.5" />
           <!-- Hot Tail Light Core Point -->
-          <circle cx="-29" cy="-26" r="3.2" fill="#ff2632" filter="url(#bulbGlow)" />
-          <circle cx="-29" cy="-26" r="1.5" fill="#ffffff" />
+          <circle cx="-29" cy="-27" r="3.6" fill="#ff2632" filter="url(#bulbGlow)" />
+          <circle cx="-29" cy="-27" r="1.6" fill="#ffffff" />
         </g>
 
-        <!-- B. HEADLIGHT BEAM (Luminous Cone Illuminating Asphalt) -->
+        <!-- B. DRAMATIC HEADLIGHT PROJECTOR BEAM -->
         <g class="beam-shimmer">
           <!-- Main Conical Beam Projector -->
           <polygon
-            points="38,-20 195,-32 215,8 36,-11"
+            points="38,-20 220,-34 245,14 36,-11"
             fill="url(#headlightBeamGrad)"
-            opacity="0.9"
+            opacity="0.95"
           />
-          <!-- Asphalt Road Light Puddle Reflection -->
-          <ellipse cx="140" cy="0" rx="65" ry="7.5" fill="url(#roadLightPuddle)" />
+          <!-- Asphalt Road Light Reflection Puddle -->
+          <ellipse cx="160" cy="1" rx="80" ry="8.5" fill="url(#roadLightPuddle)" />
           <!-- Intense White Headlight Lens Flare Core -->
-          <circle cx="37" cy="-18" r="4.2" fill="#ffffff" filter="url(#bulbGlow)" />
-          <circle cx="37" cy="-18" r="2" fill="#fffde7" />
+          <circle cx="37" cy="-18" r="4.8" fill="#ffffff" filter="url(#bulbGlow)" />
+          <circle cx="37" cy="-18" r="2.2" fill="#fffde7" />
         </g>
 
         <!-- C. MOTORCYCLE REAR WHEEL + SPINNING SPOKES -->
-        <!-- Tire & Rim -->
-        <circle cx="-26" cy="-12" r="12" fill="#060103" />
-        <circle cx="-26" cy="-12" r="8.2" fill="#170307" stroke="#ff2632" stroke-width="0.8" />
-        <!-- Spinning Spokes -->
+        <circle cx="-26" cy="-12" r="12" fill="#050102" />
+        <circle cx="-26" cy="-12" r="8.2" fill="#150206" stroke="#ff2632" stroke-width="0.9" />
         <g class="wheel-spin" style="transform-origin: -26px -12px;">
-          <line x1="-26" y1="-20" x2="-26" y2="-4" stroke="#ff8088" stroke-width="1.2" opacity="0.8" />
-          <line x1="-34" y1="-12" x2="-18" y2="-12" stroke="#ff8088" stroke-width="1.2" opacity="0.8" />
-          <line x1="-32" y1="-18" x2="-20" y2="-6" stroke="#ff8088" stroke-width="0.9" opacity="0.6" />
-          <line x1="-32" y1="-6" x2="-20" y2="-18" stroke="#ff8088" stroke-width="0.9" opacity="0.6" />
+          <line x1="-26" y1="-20" x2="-26" y2="-4" stroke="#ff8088" stroke-width="1.3" opacity="0.85" />
+          <line x1="-34" y1="-12" x2="-18" y2="-12" stroke="#ff8088" stroke-width="1.3" opacity="0.85" />
+          <line x1="-32" y1="-18" x2="-20" y2="-6" stroke="#ff8088" stroke-width="1" opacity="0.65" />
+          <line x1="-32" y1="-6" x2="-20" y2="-18" stroke="#ff8088" stroke-width="1" opacity="0.65" />
         </g>
-        <circle cx="-26" cy="-12" r="3" fill="#060103" />
+        <circle cx="-26" cy="-12" r="3.2" fill="#050102" />
 
         <!-- D. MOTORCYCLE FRONT WHEEL + SPINNING SPOKES -->
-        <!-- Tire & Rim -->
-        <circle cx="26" cy="-12" r="12" fill="#060103" />
-        <circle cx="26" cy="-12" r="8.2" fill="#170307" stroke="#ff2632" stroke-width="0.8" />
-        <!-- Spinning Spokes -->
+        <circle cx="26" cy="-12" r="12" fill="#050102" />
+        <circle cx="26" cy="-12" r="8.2" fill="#150206" stroke="#ff2632" stroke-width="0.9" />
         <g class="wheel-spin" style="transform-origin: 26px -12px;">
-          <line x1="26" y1="-20" x2="26" y2="-4" stroke="#ff8088" stroke-width="1.2" opacity="0.8" />
-          <line x1="18" y1="-12" x2="34" y2="-12" stroke="#ff8088" stroke-width="1.2" opacity="0.8" />
-          <line x1="20" y1="-18" x2="32" y2="-6" stroke="#ff8088" stroke-width="0.9" opacity="0.6" />
-          <line x1="20" y1="-6" x2="32" y2="-18" stroke="#ff8088" stroke-width="0.9" opacity="0.6" />
+          <line x1="26" y1="-20" x2="26" y2="-4" stroke="#ff8088" stroke-width="1.3" opacity="0.85" />
+          <line x1="18" y1="-12" x2="34" y2="-12" stroke="#ff8088" stroke-width="1.3" opacity="0.85" />
+          <line x1="20" y1="-18" x2="32" y2="-6" stroke="#ff8088" stroke-width="1" opacity="0.65" />
+          <line x1="20" y1="-6" x2="32" y2="-18" stroke="#ff8088" stroke-width="1" opacity="0.65" />
         </g>
-        <circle cx="26" cy="-12" r="3" fill="#060103" />
+        <circle cx="26" cy="-12" r="3.2" fill="#050102" />
 
         <!-- E. SPORT SUPERBIKE CHASSIS & AERODYNAMIC BODYWORK -->
         <!-- Front Inverted Telescopic Forks -->
-        <line x1="26" y1="-12" x2="18" y2="-27" stroke="#060103" stroke-width="2.6" />
+        <line x1="26" y1="-12" x2="18" y2="-27" stroke="#050102" stroke-width="2.8" />
         <!-- Rear Aluminum Swingarm -->
-        <line x1="-26" y1="-12" x2="-8" y2="-17" stroke="#060103" stroke-width="3.2" />
+        <line x1="-26" y1="-12" x2="-8" y2="-17" stroke="#050102" stroke-width="3.4" />
 
         <!-- Main Fairing, Engine Block, Bellypan & Perimeter Frame -->
         <path
@@ -644,26 +623,26 @@
              L -28 -27
              L -22 -19
              Z"
-          fill="#060103"
+          fill="#050102"
         />
 
         <!-- Sharp Nose Cowl & Racing Windscreen -->
-        <polygon points="21,-31 29,-39 36,-31 37,-25 28,-26" fill="#060103" />
-        <polygon points="28,-26 36,-27 38,-20 31,-20" fill="#1a0308" />
+        <polygon points="21,-31 29,-39 36,-31 37,-25 28,-26" fill="#050102" />
+        <polygon points="28,-26 36,-27 38,-20 31,-20" fill="#180206" />
 
         <!-- Racing Belly Pan & Engine Crankcase -->
-        <polygon points="-8,-16 12,-16 19,-14 16,-8 -3,-8" fill="#060103" />
+        <polygon points="-8,-16 12,-16 19,-14 16,-8 -3,-8" fill="#050102" />
         <!-- Upswept Carbon Racing Exhaust -->
-        <polygon points="-12,-16 -24,-20 -23,-17 -11,-13" fill="#170206" stroke="#ff2632" stroke-width="0.5" />
+        <polygon points="-12,-16 -24,-20 -23,-17 -11,-13" fill="#160205" stroke="#ff2632" stroke-width="0.5" />
 
         <!-- Clip-on Low Handlebars -->
-        <line x1="21" y1="-30" x2="19" y2="-33" stroke="#060103" stroke-width="2.4" />
+        <line x1="21" y1="-30" x2="19" y2="-33" stroke="#050102" stroke-width="2.5" />
 
-        <!-- F. RACER SILHOUETTE IN AGGRESSIVE RACING TUCK -->
-        <!-- Aerodynamic Helmet in Full Forward Tuck -->
-        <ellipse cx="14" cy="-40" rx="6.5" ry="5.5" transform="rotate(-15 14 -40)" fill="#060103" />
+        <!-- F. RACER SILHOUETTE IN FULL RACING TUCK -->
+        <!-- Aerodynamic Helmet in Forward Tuck -->
+        <ellipse cx="14" cy="-40" rx="6.8" ry="5.6" transform="rotate(-15 14 -40)" fill="#050102" />
         <!-- Iridescent Visor Slit -->
-        <path d="M 18 -41 L 21 -39 L 19 -38 Z" fill="#ff4d5a" />
+        <path d="M 18 -41 L 21.5 -39 L 19 -38 Z" fill="#ff4d5a" />
 
         <!-- Tucked Torso (Curved Aerodynamic Racing Back) -->
         <path
@@ -672,15 +651,15 @@
              C -14 -32, -14 -26, -9 -24
              C -2 -24, 6 -29, 10 -32
              Z"
-          fill="#060103"
+          fill="#050102"
         />
 
         <!-- Bent Arm Reaching for Clip-on Handlebar -->
         <path
           d="M 8 -34
              Q 13 -30 19 -32"
-          stroke="#060103"
-          stroke-width="3.2"
+          stroke="#050102"
+          stroke-width="3.4"
           stroke-linecap="round"
           fill="none"
         />
@@ -690,8 +669,8 @@
           d="M -7 -25
              Q 3 -21 1 -14
              Q -3 -14 -7 -14"
-          stroke="#060103"
-          stroke-width="3.6"
+          stroke="#050102"
+          stroke-width="3.8"
           stroke-linecap="round"
           stroke-linejoin="round"
           fill="none"
@@ -703,13 +682,14 @@
          12. AMBIENT FLOATING EMBERS & SPARKS (Ascending into Dusk Sky)
          ==================================================================== -->
     <g fill="#ff7043">
-      <circle cx="210" cy="140" r="1.5" class="sky-ember ember-1" />
-      <circle cx="340" cy="165" r="1.2" class="sky-ember ember-2" />
-      <circle cx="560" cy="175" r="1.6" class="sky-ember ember-3" />
-      <circle cx="780" cy="168" r="1.3" class="sky-ember ember-4" />
-      <circle cx="1020" cy="180" r="1.7" class="sky-ember ember-5" />
-      <circle cx="1190" cy="185" r="1.4" class="sky-ember ember-2" />
-      <circle cx="1380" cy="155" r="1.5" class="sky-ember ember-4" />
+      <circle cx="210" cy="140" r="1.6" class="sky-ember ember-1" />
+      <circle cx="340" cy="165" r="1.3" class="sky-ember ember-2" />
+      <circle cx="560" cy="175" r="1.7" class="sky-ember ember-3" />
+      <circle cx="780" cy="168" r="1.4" class="sky-ember ember-4" />
+      <circle cx="920" cy="175" r="1.6" class="sky-ember ember-5" />
+      <circle cx="1060" cy="180" r="1.8" class="sky-ember ember-1" />
+      <circle cx="1200" cy="185" r="1.4" class="sky-ember ember-3" />
+      <circle cx="1380" cy="155" r="1.5" class="sky-ember ember-5" />
     </g>
   </svg>
 </div>
@@ -720,17 +700,18 @@
     position: relative;
     width: 100%;
     overflow: hidden;
-    background: #090103;
+    background: #050102;
     line-height: 0;
     margin: 0;
     padding: 0;
-    border-top: 1px solid rgba(255, 31, 36, 0.2);
+    border-top: 1px solid rgba(255, 31, 36, 0.28);
+    box-shadow: inset 0 1px 0 0 rgba(255, 100, 110, 0.15);
   }
 
   .udan-skyline-svg {
     display: block;
     width: 100%;
-    height: clamp(140px, 18vw, 260px);
+    height: clamp(155px, 20vw, 255px);
     max-height: 260px;
     vertical-align: bottom;
     pointer-events: none;
@@ -740,25 +721,25 @@
   /* Responsive screen height adjustments */
   @media (max-width: 480px) {
     .udan-skyline-svg {
-      height: 140px;
+      height: 160px;
     }
   }
 
   @media (min-width: 481px) and (max-width: 768px) {
     .udan-skyline-svg {
-      height: 175px;
+      height: 195px;
     }
   }
 
   @media (min-width: 769px) and (max-width: 1024px) {
     .udan-skyline-svg {
-      height: 210px;
+      height: 225px;
     }
   }
 
   @media (min-width: 1025px) {
     .udan-skyline-svg {
-      height: 250px;
+      height: 255px;
     }
   }
 </style>
