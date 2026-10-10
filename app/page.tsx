@@ -82,7 +82,7 @@ const SHOWCASE_BIKES = [
   {
     name: "Zuboo Paris",
     badge: "European Retro Classic",
-    power: "1200W Smooth Torque",
+    power: "1200W",
     speed: "60 km/h",
     range: "≥ 80 km",
     battery: "72V 23Ah",
@@ -304,7 +304,7 @@ export default function ZubooHomePage() {
       tagline: "Timeless European Retro Classic Electric Scooter",
       badge: "Retro Classic & Luxury",
       desc: "Inspired by classic European luxury with gentle curves, cushioned passenger backrest, aerodynamic front windscreen, and smooth whisper-quiet electric drive. The ideal urban cruiser for effortless everyday travel in Galle.",
-      motor: "1200W Smooth Torque",
+      motor: "1200W",
       speed: "60 km/h",
       range: "≥ 80 km",
       battery: "72V 23Ah High Efficiency",
@@ -320,8 +320,8 @@ export default function ZubooHomePage() {
       tagline: "Lightweight Urban Commuter with Deep Cargo Basket",
       badge: "Compact City Commuter",
       desc: "Ultra-agile, lightweight step-through electric commuter bike featuring a deep front shopping basket, plush passenger pillion seat, dual shock absorbers, and low running costs. Perfect for daily local trips.",
-      motor: "490W Eco Motor",
-      speed: "30 - 35 km/h",
+      motor: "490W",
+      speed: "35 km/h",
       range: "≥ 35 km",
       battery: "48V 12Ah Lithium Ready",
       charging: "4 - 6 Hours",
@@ -336,8 +336,8 @@ export default function ZubooHomePage() {
       tagline: "Heavy-Duty All-Terrain Commercial & Utility Electric Scooter",
       badge: "Heavy-Duty Utility Flagship",
       desc: "Built with extreme structural reinforcement, twin circular projector spotlights, steel perimeter crash bars, inverted hydraulic forks, and unstoppable high-torque motor engineered to haul heavy cargo across Southern terrain.",
-      motor: "3000W Peak Performance",
-      speed: "65 - 75 km/h",
+      motor: "3000W",
+      speed: "75 km/h",
       range: "≥ 80 km",
       battery: "72V 32Ah High Discharge",
       charging: "6 - 8 Hours",
@@ -466,35 +466,43 @@ export default function ZubooHomePage() {
                   {currentHero.desc}
                 </p>
 
-                {/* Technical Spec Matrix (Smooth Horizontal Scrollable on Mobile) */}
-                <div className="flex overflow-x-auto snap-x snap-mandatory scrollbar-none sm:grid sm:grid-cols-4 gap-3 bg-white/50 backdrop-blur-md p-4 rounded-2xl border border-white/70 shadow-sm">
-                  <div className="p-2 shrink-0 w-[40vw] min-w-[130px] sm:w-auto snap-start">
+                {/* Technical Spec Matrix (Grid-based, Zero Overlap, Mobile & Desktop Responsive) */}
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-3 bg-white/70 backdrop-blur-md p-3.5 sm:p-4 rounded-2xl border border-white/80 shadow-sm">
+                  <div className="p-2.5 rounded-xl bg-white/60 border border-slate-100 flex flex-col justify-center min-w-0">
                     <div className="flex items-center gap-1.5 text-[#FF5E14] mb-1">
-                      <Zap className="w-4 h-4 shrink-0" />
-                      <span className="text-[11px] font-bold uppercase text-slate-500 whitespace-nowrap">Motor Power</span>
+                      <Zap className="w-3.5 h-3.5 shrink-0" />
+                      <span className="text-[10px] sm:text-[11px] font-extrabold uppercase tracking-wider text-slate-500 truncate">Motor Power</span>
                     </div>
-                    <div className="text-base font-black text-slate-950 whitespace-nowrap">{currentHero.motor}</div>
+                    <div className="text-base sm:text-lg font-black text-slate-950 tracking-tight leading-tight truncate">
+                      {currentHero.motor}
+                    </div>
                   </div>
-                  <div className="p-2 shrink-0 w-[40vw] min-w-[130px] sm:w-auto snap-start">
+                  <div className="p-2.5 rounded-xl bg-white/60 border border-slate-100 flex flex-col justify-center min-w-0">
                     <div className="flex items-center gap-1.5 text-[#FF5E14] mb-1">
-                      <Gauge className="w-4 h-4 shrink-0" />
-                      <span className="text-[11px] font-bold uppercase text-slate-500 whitespace-nowrap">Max Speed</span>
+                      <Gauge className="w-3.5 h-3.5 shrink-0" />
+                      <span className="text-[10px] sm:text-[11px] font-extrabold uppercase tracking-wider text-slate-500 truncate">Max Speed</span>
                     </div>
-                    <div className="text-base font-black text-slate-950 whitespace-nowrap">{currentHero.speed}</div>
+                    <div className="text-base sm:text-lg font-black text-slate-950 tracking-tight leading-tight truncate">
+                      {currentHero.speed}
+                    </div>
                   </div>
-                  <div className="p-2 shrink-0 w-[40vw] min-w-[130px] sm:w-auto snap-start">
+                  <div className="p-2.5 rounded-xl bg-white/60 border border-slate-100 flex flex-col justify-center min-w-0">
                     <div className="flex items-center gap-1.5 text-[#FF5E14] mb-1">
-                      <BatteryCharging className="w-4 h-4 shrink-0" />
-                      <span className="text-[11px] font-bold uppercase text-slate-500 whitespace-nowrap">Range</span>
+                      <BatteryCharging className="w-3.5 h-3.5 shrink-0" />
+                      <span className="text-[10px] sm:text-[11px] font-extrabold uppercase tracking-wider text-slate-500 truncate">Range</span>
                     </div>
-                    <div className="text-base font-black text-slate-950 whitespace-nowrap">{currentHero.range}</div>
+                    <div className="text-base sm:text-lg font-black text-slate-950 tracking-tight leading-tight truncate">
+                      {currentHero.range}
+                    </div>
                   </div>
-                  <div className="p-2 shrink-0 w-[40vw] min-w-[130px] sm:w-auto snap-start">
+                  <div className="p-2.5 rounded-xl bg-white/60 border border-slate-100 flex flex-col justify-center min-w-0">
                     <div className="flex items-center gap-1.5 text-[#FF5E14] mb-1">
-                      <ShieldCheck className="w-4 h-4 shrink-0" />
-                      <span className="text-[11px] font-bold uppercase text-slate-500 whitespace-nowrap">Warranty</span>
+                      <ShieldCheck className="w-3.5 h-3.5 shrink-0" />
+                      <span className="text-[10px] sm:text-[11px] font-extrabold uppercase tracking-wider text-slate-500 truncate">Warranty</span>
                     </div>
-                    <div className="text-base font-black text-slate-950 whitespace-nowrap">{currentHero.warranty}</div>
+                    <div className="text-base sm:text-lg font-black text-slate-950 tracking-tight leading-tight truncate">
+                      {currentHero.warranty}
+                    </div>
                   </div>
                 </div>
 

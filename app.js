@@ -548,7 +548,7 @@
     {
       name: "Zuboo Paris",
       badge: "European Retro Classic",
-      power: "1200W Smooth Torque",
+      power: "1200W",
       speed: "60 km/h",
       range: "≥ 80 km",
       price: "LKR 330,000",
