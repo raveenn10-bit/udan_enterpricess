@@ -36,7 +36,7 @@ export const INITIAL_INVENTORY: InventoryItem[] = [
     stockStatus: "In Showroom",
     showroomUnits: 3,
     deliveryTime: "Immediate (Ready in Galle Showroom)",
-    availableColors: ["Midnight Obsidian", "Desert Titanium", "Ocean Blue"],
+    availableColors: ["Pearl White", "Black & Solar Orange", "Metallic Silver"],
     showroomLocation: "Galle Kurunduwatta Display Bay 1",
     lastUpdated: "2026-10-10",
     badge: "Featured • Touring",

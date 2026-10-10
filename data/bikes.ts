@@ -80,7 +80,16 @@ export const ZUBOO_COLLECTION: BikeModel[] = [
       "/bikes/gt/gt.webp",
       "/media/bikes/gt/gallery/gt-1.webp",
       "/media/bikes/gt/gallery/gt-2.webp",
-      "/media/bikes/gt/gallery/gt-3.webp"
+      "/media/bikes/gt/gallery/gt-3.webp",
+      "/media/bikes/gt/gallery/gt-4.webp",
+      "/media/bikes/gt/gallery/gt-5.webp",
+      "/media/bikes/gt/gallery/gt-6.webp",
+      "/media/bikes/gt/gallery/gt-7.webp"
+    ],
+    colors: [
+      { name: "Pearl White", hex: "#f3f4f6", image: "/media/bikes/gt/gallery/gt-1.webp" },
+      { name: "Black & Solar Orange", hex: "#f97316", image: "/media/bikes/gt/gallery/gt-2.webp" },
+      { name: "Metallic Silver", hex: "#9ca3af", image: "/media/bikes/gt/gallery/gt-7.webp" }
     ],
     isFeatured: true,
     provisionalNotes: [
