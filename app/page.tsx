@@ -181,16 +181,7 @@ export default function ZubooHomePage() {
     gsap.registerPlugin(ScrollTrigger);
     
     let ctx = gsap.context(() => {
-      // 1. Header Animation
-      gsap.from(".main-header", {
-        y: -100,
-        opacity: 0,
-        duration: 1,
-        ease: "expo.out",
-        delay: 0.2
-      });
-
-      // 2. Sections Reveal (Bidirectional)
+      // 1. Sections Reveal (Bidirectional)
       gsap.utils.toArray<HTMLElement>(".reveal-section, [data-scroll-section]").forEach((section) => {
         gsap.fromTo(
           section,
@@ -255,7 +246,6 @@ export default function ZubooHomePage() {
   const [activeCategory, setActiveCategory] = useState<string>("all");
   const [isTestRideOpen, setIsTestRideOpen] = useState<boolean>(false);
   const [testRideBike, setTestRideBike] = useState<string>("Zuboo Paris");
-  const [dailyKm, setDailyKm] = useState<number>(35);
   const [bookingSuccess, setBookingSuccess] = useState<boolean>(false);
   const [bookingDetails, setBookingDetails] = useState<{ name: string; phone: string; date: string; bike: string }>({
     name: "",
@@ -282,14 +272,6 @@ export default function ZubooHomePage() {
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [lightboxPhotoIndex]);
-
-  // Fuel calculation values
-  const petrolPricePerLiter = 370; // LKR
-  const bikeMileagePerLiter = 38; // km/L
-  const monthlyPetrolCost = Math.round(((dailyKm * 30) / bikeMileagePerLiter) * petrolPricePerLiter);
-  const monthlyElectricCost = Math.round((dailyKm * 30 * 0.03 * 45)); // ~Rs 1.35 per km electric
-  const monthlySavings = monthlyPetrolCost - monthlyElectricCost;
-  const yearlySavings = monthlySavings * 12;
 
   const heroModelsData = {
     paris: {
@@ -409,19 +391,19 @@ export default function ZubooHomePage() {
             </div>
 
             {/* Flagship 3-Model Selector Tabs */}
-            <div className="flex items-center bg-white/50 backdrop-blur-md p-1.5 rounded-2xl border border-white/80 shadow-sm text-xs font-black">
+            <div className="flex items-center bg-white/50 backdrop-blur-md p-1.5 rounded-2xl border border-white/80 shadow-sm text-xs font-black overflow-x-auto scrollbar-none max-w-full">
               {(["paris", "mini", "the-tank"] as const).map((key) => (
                 <button
                   key={key}
                   onClick={() => setSelectedHeroModel(key)}
-                  className={`px-4 sm:px-5 py-2 rounded-xl transition-all flex items-center gap-2 ${
+                  className={`px-4 sm:px-5 py-2 rounded-xl transition-all flex items-center gap-2 shrink-0 whitespace-nowrap ${
                     selectedHeroModel === key
                       ? "bg-[#0F172A] text-white shadow-md shadow-slate-900/25 scale-[1.02]"
                       : "text-slate-700 hover:text-slate-950 hover:bg-white/60"
                   }`}
                 >
                   <span>{heroModelsData[key].name}</span>
-                  <span className={`text-[10px] px-1.5 py-0.5 rounded font-extrabold ${
+                  <span className={`text-[10px] px-1.5 py-0.5 rounded font-extrabold shrink-0 ${
                     selectedHeroModel === key ? "bg-[#FF5E14] text-white" : "bg-slate-200/70 text-slate-600"
                   }`}>
                     {key === "paris" ? "Retro" : key === "mini" ? "Commuter" : "Utility"}
@@ -452,35 +434,35 @@ export default function ZubooHomePage() {
                   {currentHero.desc}
                 </p>
 
-                {/* Technical Spec Matrix (Ultra-Clean Glassmorphism) */}
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-white/50 backdrop-blur-md p-4 rounded-2xl border border-white/70 shadow-sm">
-                  <div className="p-2">
+                {/* Technical Spec Matrix (Smooth Horizontal Scrollable on Mobile) */}
+                <div className="flex overflow-x-auto snap-x snap-mandatory scrollbar-none sm:grid sm:grid-cols-4 gap-3 bg-white/50 backdrop-blur-md p-4 rounded-2xl border border-white/70 shadow-sm">
+                  <div className="p-2 shrink-0 w-[40vw] min-w-[130px] sm:w-auto snap-start">
                     <div className="flex items-center gap-1.5 text-[#FF5E14] mb-1">
-                      <Zap className="w-4 h-4" />
-                      <span className="text-[11px] font-bold uppercase text-slate-500">Motor Power</span>
+                      <Zap className="w-4 h-4 shrink-0" />
+                      <span className="text-[11px] font-bold uppercase text-slate-500 whitespace-nowrap">Motor Power</span>
                     </div>
-                    <div className="text-base font-black text-slate-950">{currentHero.motor}</div>
+                    <div className="text-base font-black text-slate-950 whitespace-nowrap">{currentHero.motor}</div>
                   </div>
-                  <div className="p-2">
+                  <div className="p-2 shrink-0 w-[40vw] min-w-[130px] sm:w-auto snap-start">
                     <div className="flex items-center gap-1.5 text-[#FF5E14] mb-1">
-                      <Gauge className="w-4 h-4" />
-                      <span className="text-[11px] font-bold uppercase text-slate-500">Max Speed</span>
+                      <Gauge className="w-4 h-4 shrink-0" />
+                      <span className="text-[11px] font-bold uppercase text-slate-500 whitespace-nowrap">Max Speed</span>
                     </div>
-                    <div className="text-base font-black text-slate-950">{currentHero.speed}</div>
+                    <div className="text-base font-black text-slate-950 whitespace-nowrap">{currentHero.speed}</div>
                   </div>
-                  <div className="p-2">
+                  <div className="p-2 shrink-0 w-[40vw] min-w-[130px] sm:w-auto snap-start">
                     <div className="flex items-center gap-1.5 text-[#FF5E14] mb-1">
-                      <BatteryCharging className="w-4 h-4" />
-                      <span className="text-[11px] font-bold uppercase text-slate-500">Range</span>
+                      <BatteryCharging className="w-4 h-4 shrink-0" />
+                      <span className="text-[11px] font-bold uppercase text-slate-500 whitespace-nowrap">Range</span>
                     </div>
-                    <div className="text-base font-black text-slate-950">{currentHero.range}</div>
+                    <div className="text-base font-black text-slate-950 whitespace-nowrap">{currentHero.range}</div>
                   </div>
-                  <div className="p-2">
+                  <div className="p-2 shrink-0 w-[40vw] min-w-[130px] sm:w-auto snap-start">
                     <div className="flex items-center gap-1.5 text-[#FF5E14] mb-1">
-                      <ShieldCheck className="w-4 h-4" />
-                      <span className="text-[11px] font-bold uppercase text-slate-500">Warranty</span>
+                      <ShieldCheck className="w-4 h-4 shrink-0" />
+                      <span className="text-[11px] font-bold uppercase text-slate-500 whitespace-nowrap">Warranty</span>
                     </div>
-                    <div className="text-base font-black text-slate-950">{currentHero.warranty}</div>
+                    <div className="text-base font-black text-slate-950 whitespace-nowrap">{currentHero.warranty}</div>
                   </div>
                 </div>
 
@@ -592,8 +574,13 @@ export default function ZubooHomePage() {
             </h2>
           </FadeIn>
 
-          {/* 6 Models in 3-Column Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-16 gap-x-10 max-w-6xl mx-auto">
+          {/* Subtle Mobile Swipe Indicator */}
+          <div className="flex sm:hidden items-center justify-center gap-1.5 text-xs font-bold text-[#FF5E14] mb-4 uppercase tracking-wider">
+            <span>👈 Swipe to explore all models 👉</span>
+          </div>
+
+          {/* 6 Models in Responsive Horizontal Snap Carousel on Mobile / 3-Column Grid on Desktop */}
+          <div className="flex overflow-x-auto snap-x snap-mandatory pb-4 gap-4 scrollbar-none sm:grid sm:grid-cols-2 lg:grid-cols-3 sm:gap-y-16 sm:gap-x-10 max-w-6xl mx-auto -mx-4 px-4 sm:mx-auto sm:px-0">
             {[
               {
                 classification: "Electric Motorcycle",
@@ -642,7 +629,7 @@ export default function ZubooHomePage() {
                 key={item.slug}
                 bidirectional
                 delay={idx * 0.08}
-                className="group flex flex-col items-center text-center bg-white rounded-2xl p-4 transition-all duration-300"
+                className="group flex flex-col items-center text-center bg-white rounded-2xl p-4 transition-all duration-300 shrink-0 w-[82vw] sm:w-auto snap-center border border-slate-100 sm:border-transparent shadow-xs sm:shadow-none"
               >
                 <Link
                   href={`/bikes/${item.slug}`}
@@ -693,7 +680,7 @@ export default function ZubooHomePage() {
             </div>
 
             {/* Filter Pills */}
-            <div className="flex flex-wrap items-center gap-1">
+            <div className="flex items-center gap-1.5 overflow-x-auto scrollbar-none sm:flex-wrap pb-1 max-w-full">
               {[
                 { id: "all", label: "All Models" },
                 { id: "touring", label: "Sport & Touring" },
@@ -704,7 +691,7 @@ export default function ZubooHomePage() {
                 <button
                   key={tab.id}
                   onClick={() => setActiveCategory(tab.id)}
-                  className={`px-4 py-2 text-sm transition-colors rounded-full ${
+                  className={`px-4 py-2 text-sm transition-colors rounded-full shrink-0 whitespace-nowrap ${
                     activeCategory === tab.id
                       ? "text-slate-900 font-medium"
                       : "text-slate-500 hover:text-slate-900"
@@ -716,14 +703,19 @@ export default function ZubooHomePage() {
             </div>
           </FadeIn>
 
-          {/* Clean 3-Column Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {/* Subtle Mobile Swipe Indicator */}
+          <div className="flex sm:hidden items-center justify-center gap-1.5 text-xs font-bold text-[#FF5E14] mb-4 uppercase tracking-wider">
+            <span>👈 Swipe to explore all models 👉</span>
+          </div>
+
+          {/* Clean Carousel on Mobile / 3-Column Grid on Desktop */}
+          <div className="flex overflow-x-auto snap-x snap-mandatory pb-4 gap-4 scrollbar-none sm:grid sm:grid-cols-2 lg:grid-cols-3 sm:gap-8 -mx-4 px-4 sm:mx-0 sm:px-0">
             {filteredBikes.map((bike, idx) => (
               <FadeIn
                 key={bike.id}
                 bidirectional
                 delay={(idx % 3) * 0.08}
-                className="h-full"
+                className="h-full shrink-0 w-[80vw] sm:w-auto snap-center"
               >
                 <Link
                   href={`/bikes/${bike.slug}`}
@@ -782,9 +774,14 @@ export default function ZubooHomePage() {
             </p>
           </FadeIn>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          {/* Subtle Mobile Swipe Indicator */}
+          <div className="flex sm:hidden items-center justify-center gap-1.5 text-xs font-bold text-[#FF5E14] mb-4 uppercase tracking-wider">
+            <span>👈 Swipe to view all features 👉</span>
+          </div>
+
+          <div className="flex overflow-x-auto snap-x snap-mandatory pb-4 gap-4 scrollbar-none sm:grid sm:grid-cols-2 lg:grid-cols-4 sm:gap-8 -mx-4 px-4 sm:mx-0 sm:px-0">
             {/* 1. Smart BMS */}
-            <FadeIn bidirectional delay={0} className="bg-white rounded-2xl p-6 border border-slate-100 hover:border-[#FF5E14] transition-all duration-300 hover:shadow-lg">
+            <FadeIn bidirectional delay={0} className="bg-white rounded-2xl p-6 border border-slate-100 hover:border-[#FF5E14] transition-all duration-300 hover:shadow-lg shrink-0 w-[80vw] sm:w-auto snap-center">
               <div className="w-10 h-10 rounded-lg bg-orange-50 text-[#FF5E14] flex items-center justify-center mb-5">
                 <Cpu className="w-5 h-5" />
               </div>
@@ -797,7 +794,7 @@ export default function ZubooHomePage() {
             </FadeIn>
 
             {/* 2. Waterproof Motor */}
-            <FadeIn bidirectional delay={0.1} className="bg-white rounded-2xl p-6 border border-slate-100 hover:border-[#FF5E14] transition-all duration-300 hover:shadow-lg">
+            <FadeIn bidirectional delay={0.1} className="bg-white rounded-2xl p-6 border border-slate-100 hover:border-[#FF5E14] transition-all duration-300 hover:shadow-lg shrink-0 w-[80vw] sm:w-auto snap-center">
               <div className="w-10 h-10 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center mb-5">
                 <Droplets className="w-5 h-5" />
               </div>
@@ -810,7 +807,7 @@ export default function ZubooHomePage() {
             </FadeIn>
 
             {/* 3. Fuel Economy */}
-            <FadeIn bidirectional delay={0.2} className="bg-white rounded-2xl p-6 border border-slate-100 hover:border-[#FF5E14] transition-all duration-300 hover:shadow-lg">
+            <FadeIn bidirectional delay={0.2} className="bg-white rounded-2xl p-6 border border-slate-100 hover:border-[#FF5E14] transition-all duration-300 hover:shadow-lg shrink-0 w-[80vw] sm:w-auto snap-center">
               <div className="w-10 h-10 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center mb-5">
                 <DollarSign className="w-5 h-5" />
               </div>
@@ -823,7 +820,7 @@ export default function ZubooHomePage() {
             </FadeIn>
 
             {/* 4. Showroom & Genuine Parts */}
-            <FadeIn bidirectional delay={0.3} className="bg-white rounded-2xl p-6 border border-slate-100 hover:border-[#FF5E14] transition-all duration-300 hover:shadow-lg">
+            <FadeIn bidirectional delay={0.3} className="bg-white rounded-2xl p-6 border border-slate-100 hover:border-[#FF5E14] transition-all duration-300 hover:shadow-lg shrink-0 w-[80vw] sm:w-auto snap-center">
               <div className="w-10 h-10 rounded-lg bg-purple-50 text-purple-600 flex items-center justify-center mb-5">
                 <Wrench className="w-5 h-5" />
               </div>
@@ -838,111 +835,239 @@ export default function ZubooHomePage() {
         </div>
       </section>
 
-      {/* 7. INTERACTIVE FUEL SAVINGS CALCULATOR (Sri Lankan Rupees) */}
-      <section id="savings-calculator" data-scroll-section className="reveal-section py-20 bg-slate-900 text-white relative overflow-hidden">
+
+
+      {/* 8. EXCELLENT PRODUCTS SHOWCASE & GALLE SHOWROOM GALLERY (Zuboo OEM White Showcase) */}
+      <section id="excellent-products" data-scroll-section className="reveal-section py-16 sm:py-24 bg-white text-slate-900 border-b border-slate-200 relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-            {/* Left: Explanations */}
-            <FadeIn bidirectional direction="left" className="lg:col-span-6 space-y-6">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-400 text-xs font-bold uppercase tracking-wider border border-emerald-500/30">
-                <DollarSign className="w-3.5 h-3.5" />
-                <span>SRI LANKA PETROL VS ELECTRIC SAVINGS</span>
-              </div>
-              <h2 className="text-3xl sm:text-5xl font-normal tracking-tight leading-tight font-editorial">
-                STOP BURNING MONEY AT PETROL SHEDS.
-              </h2>
-              <p className="text-slate-300 text-sm sm:text-base leading-relaxed">
-                With Sri Lankan petrol priced at Rs 370/L, switching to a Zuboo electric scooter puts tens of thousands of rupees back into your pocket every month.
-              </p>
+          {/* Section Header matching zuboo.com */}
+          <div className="text-center max-w-3xl mx-auto mb-8 sm:mb-10">
+            <h2 className="text-3xl sm:text-5xl font-black tracking-tight uppercase text-black font-manrope">
+              EXCELLENT PRODUCTS
+            </h2>
+          </div>
 
-              {/* Slider Input */}
-              <div className="bg-slate-800/80 p-6 rounded-2xl border border-slate-700 space-y-4">
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold uppercase text-slate-400">Daily Commute Distance:</span>
-                  <span className="text-xl font-black text-[#FF5E14]">{dailyKm} km / day</span>
-                </div>
-                <input
-                  type="range"
-                  min="10"
-                  max="90"
-                  value={dailyKm}
-                  onChange={(e) => setDailyKm(Number(e.target.value))}
-                  className="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-[#FF5E14]"
-                />
-                <div className="flex justify-between text-[11px] text-slate-400 font-semibold">
-                  <span>10 km (City Short)</span>
-                  <span>45 km (Average)</span>
-                  <span>90 km (Southern Intercity)</span>
-                </div>
-              </div>
-            </FadeIn>
+          {/* Model Switcher Tabs */}
+          <div className="flex items-center overflow-x-auto scrollbar-none sm:flex-wrap justify-start sm:justify-center gap-2 sm:gap-2.5 mb-8 pb-2 px-1 max-w-full">
+            {SHOWCASE_BIKES.map((bike, idx) => (
+              <button
+                key={bike.name}
+                onClick={() => setSelectedShowcaseBike(idx)}
+                className={`px-4 sm:px-5 py-2 rounded-full text-xs sm:text-sm font-bold transition-all duration-300 cursor-pointer shrink-0 whitespace-nowrap ${
+                  selectedShowcaseBike === idx
+                    ? "bg-black text-white shadow-md scale-105"
+                    : "bg-slate-100 hover:bg-slate-200 text-slate-700"
+                }`}
+              >
+                {bike.name}
+              </button>
+            ))}
+          </div>
 
-            {/* Right: Calculated Results Card */}
-            <FadeIn bidirectional direction="right" className="lg:col-span-6">
-              <div className="bg-slate-800 rounded-3xl p-8 border border-slate-700 shadow-2xl space-y-6">
-                <h3 className="text-lg font-bold text-slate-300 uppercase tracking-wider">
-                  Monthly Fuel Comparison
-                </h3>
+          {/* Center Stage: Large Bike Model Cutout on Pure White with Prev / Next Arrows */}
+          {(() => {
+            const currentBike = SHOWCASE_BIKES[selectedShowcaseBike];
+            return (
+              <div className="relative w-full max-w-4xl mx-auto flex flex-col items-center justify-center mb-12">
+                {/* Bike Display Canvas */}
+                <div className="relative w-full h-[320px] sm:h-[440px] md:h-[500px] flex items-center justify-center">
+                  {/* Previous Bike Button */}
+                  <button
+                    onClick={() =>
+                      setSelectedShowcaseBike(
+                        (prev) => (prev - 1 + SHOWCASE_BIKES.length) % SHOWCASE_BIKES.length
+                      )
+                    }
+                    className="absolute left-0 sm:-left-6 top-1/2 -translate-y-1/2 z-20 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white/90 hover:bg-white text-slate-800 border border-slate-200 shadow-lg hover:shadow-xl flex items-center justify-center transition-all cursor-pointer hover:scale-105"
+                    aria-label="Previous bike model"
+                  >
+                    <ChevronLeft className="w-6 h-6" />
+                  </button>
 
-                <div className="space-y-4">
-                  {/* Petrol bill */}
-                  <div className="flex items-center justify-between p-4 bg-slate-900/60 rounded-xl border border-red-500/30">
-                    <div>
-                      <span className="text-xs font-bold text-red-400 block uppercase">Petrol Scooter Bill</span>
-                      <span className="text-xs text-slate-400">Based on Rs 370/L @ 38 km/L</span>
-                    </div>
-                    <span className="text-xl font-black text-red-400">
-                      Rs. {monthlyPetrolCost.toLocaleString()} /mo
-                    </span>
+                  {/* Main Studio Cutout Image */}
+                  <div className="relative w-full h-full max-w-2xl flex items-center justify-center transition-all duration-500">
+                    <Image
+                      src={currentBike.image}
+                      alt={currentBike.name}
+                      fill
+                      sizes="(max-width: 1024px) 100vw, 800px"
+                      className="object-contain drop-shadow-[0_20px_35px_rgba(0,0,0,0.12)] hover:scale-105 transition-transform duration-500"
+                      priority
+                    />
                   </div>
 
-                  {/* Zuboo Electric Bill */}
-                  <div className="flex items-center justify-between p-4 bg-slate-900/60 rounded-xl border border-emerald-500/30">
-                    <div>
-                      <span className="text-xs font-bold text-emerald-400 block uppercase">Zuboo Electric Power</span>
-                      <span className="text-xs text-slate-400">Domestic overnight charging (~Rs 60/charge)</span>
-                    </div>
-                    <span className="text-xl font-black text-emerald-400">
-                      Rs. {monthlyElectricCost.toLocaleString()} /mo
-                    </span>
-                  </div>
+                  {/* Next Bike Button */}
+                  <button
+                    onClick={() =>
+                      setSelectedShowcaseBike((prev) => (prev + 1) % SHOWCASE_BIKES.length)
+                    }
+                    className="absolute right-0 sm:-right-6 top-1/2 -translate-y-1/2 z-20 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white/90 hover:bg-white text-slate-800 border border-slate-200 shadow-lg hover:shadow-xl flex items-center justify-center transition-all cursor-pointer hover:scale-105"
+                    aria-label="Next bike model"
+                  >
+                    <ChevronRight className="w-6 h-6" />
+                  </button>
                 </div>
 
-                {/* Net Savings Box */}
-                <div className="p-6 bg-gradient-to-r from-emerald-950/60 to-slate-900 rounded-2xl border border-emerald-500/40 text-center">
-                  <span className="text-xs uppercase font-bold text-emerald-300 tracking-wider block mb-1">
-                    YOUR ANNUAL ESTIMATED CASH SAVINGS
+                {/* Subtle Bike Info Badge & Quick Actions */}
+                <div className="flex flex-wrap items-center justify-center gap-3 mt-4 text-xs font-semibold text-slate-600">
+                  <span className="bg-slate-100 text-slate-900 px-3.5 py-1.5 rounded-full border border-slate-200">
+                    {currentBike.name} • {currentBike.power}
                   </span>
-                  <div className="text-4xl sm:text-5xl font-black text-emerald-400 tracking-tight my-2">
-                    Rs. {yearlySavings.toLocaleString()}
-                  </div>
-                  <span className="text-xs text-slate-300 block">
-                    Save Rs. {monthlySavings.toLocaleString()} every single month! That covers your bike installment.
+                  <span className="bg-slate-100 text-slate-900 px-3.5 py-1.5 rounded-full border border-slate-200">
+                    Top Speed: {currentBike.speed}
                   </span>
+                  <span className="bg-slate-100 text-emerald-700 px-3.5 py-1.5 rounded-full border border-slate-200">
+                    Range: {currentBike.range}
+                  </span>
+                  <span className="bg-orange-50 text-[#FF5E14] px-3.5 py-1.5 rounded-full border border-orange-200 font-bold">
+                    {currentBike.price}
+                  </span>
+                  <button
+                    onClick={() => {
+                      setTestRideBike(currentBike.name);
+                      setIsTestRideOpen(true);
+                    }}
+                    className="ml-1 px-4 py-1.5 rounded-full bg-[#FF5E14] hover:bg-[#E04D09] text-white font-bold text-xs uppercase tracking-wider transition-all shadow-sm cursor-pointer"
+                  >
+                    Book Test Ride
+                  </button>
                 </div>
+              </div>
+            );
+          })()}
 
-                {/* CTA */}
-                <a
-                  href={`https://wa.me/94784969652?text=${encodeURIComponent(`Hello Udan Enterprises, I calculated my daily commute as ${dailyKm}km with expected savings of Rs. ${monthlySavings.toLocaleString()}/month. Please provide financing/buying details for Zuboo bikes.`)}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-full py-4 rounded-xl bg-[#FF5E14] hover:bg-[#E04D09] text-white font-black text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 shadow-lg shadow-orange-500/30"
+          {/* Lower Stage: 4 Clean Showroom Photo Thumbnails Directly Below Bike (Matching zuboo.com) */}
+          <div className="w-full max-w-5xl mx-auto pt-6 border-t border-slate-100">
+            <div className="flex items-center justify-between mb-4">
+              <span className="text-xs font-bold uppercase tracking-wider text-slate-500 font-manrope">
+                Galle Showroom Gallery ({galleryIndex + 1}–{Math.min(galleryIndex + 4, SHOWROOM_PHOTOS.length)} of {SHOWROOM_PHOTOS.length})
+              </span>
+              <div className="flex items-center gap-1.5">
+                <button
+                  onClick={() => setGalleryIndex((prev) => Math.max(0, prev - 1))}
+                  disabled={galleryIndex === 0}
+                  className="p-1.5 rounded-lg border border-slate-200 hover:bg-slate-100 text-slate-700 disabled:opacity-30 disabled:cursor-not-allowed transition-colors cursor-pointer"
+                  aria-label="Previous gallery photos"
                 >
-                  <MessageSquare className="w-4 h-4" />
-                  <span>Get Financing Quotation on WhatsApp</span>
-                </a>
+                  <ChevronLeft className="w-4 h-4" />
+                </button>
+                <button
+                  onClick={() => setGalleryIndex((prev) => Math.min(SHOWROOM_PHOTOS.length - 4, prev + 1))}
+                  disabled={galleryIndex >= SHOWROOM_PHOTOS.length - 4}
+                  className="p-1.5 rounded-lg border border-slate-200 hover:bg-slate-100 text-slate-700 disabled:opacity-30 disabled:cursor-not-allowed transition-colors cursor-pointer"
+                  aria-label="Next gallery photos"
+                >
+                  <ChevronRight className="w-4 h-4" />
+                </button>
               </div>
-            </FadeIn>
+            </div>
+
+            {/* 4 Clean Thumbnails in a Horizontal Row */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+              {SHOWROOM_PHOTOS.slice(galleryIndex, galleryIndex + 4).map((photo, sliceIdx) => {
+                const originalIdx = galleryIndex + sliceIdx;
+                return (
+                  <button
+                    key={photo.src}
+                    onClick={() => setLightboxPhotoIndex(originalIdx)}
+                    className="group relative aspect-[4/3] rounded-xl overflow-hidden border border-slate-200 hover:border-black shadow-xs hover:shadow-md transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-black cursor-pointer text-left bg-slate-50"
+                    title={photo.title}
+                  >
+                    <Image
+                      src={photo.src}
+                      alt={photo.title}
+                      fill
+                      sizes="(max-width: 640px) 50vw, 25vw"
+                      className="object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center">
+                      <span className="opacity-0 group-hover:opacity-100 transition-opacity bg-white/95 text-slate-900 p-2 rounded-full shadow-md">
+                        <ZoomIn className="w-4 h-4" />
+                      </span>
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
           </div>
         </div>
       </section>
 
-      {/* 8. SHOWROOM LOCATION & CONTACT SECTION */}
+      {/* 9. SHOWROOM LOCATION & FREE TEST RIDE BOOKING FORM */}
       <section id="showroom-location" data-scroll-section className="reveal-section py-20 bg-white border-b border-slate-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
-            {/* Showroom Details */}
-            <FadeIn bidirectional direction="left" className="lg:col-span-5 space-y-6">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-stretch">
+            {/* Showroom Photo & Dealership Credentials - Left Column */}
+            <FadeIn bidirectional direction="left" className="lg:col-span-6 space-y-5 flex flex-col justify-between">
+              {/* Authentic Galle Showroom Photo */}
+              <div className="relative rounded-3xl overflow-hidden aspect-[16/10] border border-slate-200 shadow-md group">
+                <Image
+                  src="/media/showroom/galle-showroom.jpg"
+                  alt="Udan Enterprises Kurunduwatta Galle Showroom"
+                  fill
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                  className="object-cover group-hover:scale-105 transition-transform duration-500"
+                />
+                <div className="absolute bottom-3 left-3 bg-slate-900/85 backdrop-blur-md text-white text-[11px] font-bold px-3 py-1.5 rounded-lg border border-white/20 flex items-center gap-1.5 shadow-sm">
+                  <MapPin className="w-3.5 h-3.5 text-[#FF5E14]" />
+                  <span>Udan Enterprises Showroom • Kurunduwatta, Galle</span>
+                </div>
+              </div>
+
+              {/* Dealership Credential Chips */}
+              <div className="grid grid-cols-2 gap-3 sm:gap-4 pt-1">
+                <div className="flex items-center gap-3 p-3.5 sm:p-4 rounded-2xl bg-slate-50 border border-slate-200">
+                  <div className="w-9 h-9 rounded-xl bg-orange-500/10 text-[#FF5E14] flex items-center justify-center shrink-0">
+                    <BatteryCharging className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <span className="text-xs font-black uppercase text-slate-900 block leading-tight">
+                      100% Fully Charged Fleet
+                    </span>
+                    <span className="text-[11px] text-slate-500 block mt-0.5">Ready for live test ride</span>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-3 p-3.5 sm:p-4 rounded-2xl bg-slate-50 border border-slate-200">
+                  <div className="w-9 h-9 rounded-xl bg-blue-500/10 text-blue-600 flex items-center justify-center shrink-0">
+                    <Wrench className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <span className="text-xs font-black uppercase text-slate-900 block leading-tight">
+                      Certified Zuboo Technicians
+                    </span>
+                    <span className="text-[11px] text-slate-500 block mt-0.5">Factory trained diagnostics</span>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-3 p-3.5 sm:p-4 rounded-2xl bg-slate-50 border border-slate-200">
+                  <div className="w-9 h-9 rounded-xl bg-emerald-500/10 text-emerald-600 flex items-center justify-center shrink-0">
+                    <ShieldCheck className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <span className="text-xs font-black uppercase text-slate-900 block leading-tight">
+                      Genuine Spare Parts Bay
+                    </span>
+                    <span className="text-[11px] text-slate-500 block mt-0.5">Original Zuboo spares in stock</span>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-3 p-3.5 sm:p-4 rounded-2xl bg-slate-50 border border-slate-200">
+                  <div className="w-9 h-9 rounded-xl bg-amber-500/10 text-amber-600 flex items-center justify-center shrink-0">
+                    <CheckCircle2 className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <span className="text-xs font-black uppercase text-slate-900 block leading-tight">
+                      Official Factory Warranty
+                    </span>
+                    <span className="text-[11px] text-slate-500 block mt-0.5">Authorized dealership backing</span>
+                  </div>
+                </div>
+              </div>
+            </FadeIn>
+
+            {/* Showroom Details & Contact Cards - Right Column */}
+            <FadeIn bidirectional direction="right" className="lg:col-span-6 space-y-6 flex flex-col justify-between">
               <div>
                 <span className="text-xs font-black tracking-widest text-[#FF5E14] uppercase block mb-2 font-manrope">
                   OFFICIAL GALLE SHOWROOM
@@ -956,248 +1081,81 @@ export default function ZubooHomePage() {
                 </p>
               </div>
 
-              {/* Authentic Galle Showroom Photo */}
-              <div className="relative rounded-2xl overflow-hidden aspect-[16/10] border border-slate-200 shadow-md group">
-                <Image
-                  src="/media/showroom/galle-showroom.jpg"
-                  alt="Udan Enterprises Kurunduwatta Galle Showroom"
-                  fill
-                  sizes="(max-width: 1024px) 100vw, 40vw"
-                  className="object-cover group-hover:scale-105 transition-transform duration-500"
-                />
-                <div className="absolute bottom-3 left-3 bg-slate-900/85 backdrop-blur-md text-white text-[11px] font-bold px-3 py-1.5 rounded-lg border border-white/20 flex items-center gap-1.5 shadow-sm">
-                  <MapPin className="w-3.5 h-3.5 text-[#FF5E14]" />
-                  <span>Udan Enterprises Showroom • Kurunduwatta, Galle</span>
-                </div>
-              </div>
-
-              <div className="space-y-4 pt-2">
-                <div className="flex items-start gap-3.5 p-4 bg-slate-50 rounded-xl border border-slate-200">
+              {/* 4 Contact Info Cards */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                {/* 1. Address */}
+                <div className="flex items-start gap-3.5 p-4 bg-slate-50 rounded-2xl border border-slate-200">
                   <MapPin className="w-5 h-5 text-[#FF5E14] shrink-0 mt-0.5" />
                   <div>
                     <h4 className="text-xs font-black uppercase text-slate-900">Showroom Address</h4>
-                    <p className="text-xs text-slate-600 mt-0.5">
+                    <p className="text-xs text-slate-600 mt-1 leading-relaxed">
                       Udugama Road, Kurunduwatta, Galle, Sri Lanka
                     </p>
                   </div>
                 </div>
 
-                <div className="flex items-start gap-3.5 p-4 bg-slate-50 rounded-xl border border-slate-200">
+                {/* 2. Hotline */}
+                <div className="flex items-start gap-3.5 p-4 bg-slate-50 rounded-2xl border border-slate-200">
                   <Phone className="w-5 h-5 text-[#FF5E14] shrink-0 mt-0.5" />
                   <div>
-                    <h4 className="text-xs font-black uppercase text-slate-900">Direct Showroom Hotline</h4>
-                    <a href="tel:0784969652" className="text-xs font-bold text-slate-900 hover:text-[#FF5E14] mt-0.5 block">
+                    <h4 className="text-xs font-black uppercase text-slate-900">Direct Hotline</h4>
+                    <a href="tel:0784969652" className="text-xs font-black text-slate-900 hover:text-[#FF5E14] mt-1 block">
                       078 496 9652
                     </a>
                   </div>
                 </div>
 
-                <div className="flex items-start gap-3.5 p-4 bg-slate-50 rounded-xl border border-slate-200">
+                {/* 3. Opening Hours */}
+                <div className="flex items-start gap-3.5 p-4 bg-slate-50 rounded-2xl border border-slate-200">
                   <Clock className="w-5 h-5 text-[#FF5E14] shrink-0 mt-0.5" />
                   <div>
                     <h4 className="text-xs font-black uppercase text-slate-900">Opening Hours</h4>
-                    <p className="text-xs text-slate-600 mt-0.5">
-                      Monday – Saturday: 8:30 AM – 6:00 PM<br />
-                      Sunday: 9:00 AM – 2:00 PM
+                    <p className="text-xs text-slate-600 mt-1 leading-relaxed">
+                      Mon–Sat: 8:30 AM – 6:00 PM<br />
+                      Sun: 9:00 AM – 2:00 PM
                     </p>
                   </div>
                 </div>
 
-                <div className="flex items-start gap-3.5 p-4 bg-slate-50 rounded-xl border border-slate-200">
+                {/* 4. Email */}
+                <div className="flex items-start gap-3.5 p-4 bg-slate-50 rounded-2xl border border-slate-200">
                   <Mail className="w-5 h-5 text-[#FF5E14] shrink-0 mt-0.5" />
-                  <div>
-                    <h4 className="text-xs font-black uppercase text-slate-900">Official Inquiries Email</h4>
-                    <a href="mailto:Pibida17udan4131@gmail.com" className="text-xs text-slate-600 hover:text-[#FF5E14] mt-0.5 block">
+                  <div className="min-w-0">
+                    <h4 className="text-xs font-black uppercase text-slate-900">Official Inquiries</h4>
+                    <a href="mailto:Pibida17udan4131@gmail.com" className="text-xs text-slate-600 hover:text-[#FF5E14] mt-1 block truncate">
                       Pibida17udan4131@gmail.com
                     </a>
                   </div>
                 </div>
               </div>
 
-              <div className="pt-2">
+              {/* Direct CTA Buttons */}
+              <div className="flex flex-wrap items-center gap-3 pt-2">
                 <a
                   href="https://wa.me/94784969652"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl bg-[#25D366] hover:bg-[#20ba5a] text-white text-xs font-bold uppercase tracking-wider transition-colors shadow-md shadow-green-500/20"
+                  className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-xl bg-[#25D366] hover:bg-[#20ba5a] text-white text-xs font-bold uppercase tracking-wider transition-colors shadow-md shadow-green-500/20"
                 >
                   <MessageSquare className="w-4 h-4" />
-                  <span>Chat on WhatsApp Directly</span>
+                  <span>WhatsApp Chat</span>
                 </a>
-              </div>
-            </FadeIn>
 
-            {/* EXCELLENT PRODUCTS Showcase & Showroom Photo Gallery */}
-            <FadeIn bidirectional direction="right" className="lg:col-span-7 bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-sm flex flex-col justify-between">
-              <div>
-                {/* Showcase Header matching zuboo.com */}
-                <div className="text-center mb-5">
-                  <span className="text-[11px] font-black tracking-widest text-[#FF5E14] uppercase block mb-1 font-manrope">
-                    OFFICIAL FLEET SHOWCASE
-                  </span>
-                  <h3 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight uppercase font-manrope">
-                    EXCELLENT PRODUCTS
-                  </h3>
-                  <p className="text-xs text-slate-500 font-medium mt-1">
-                    Select any Zuboo model to preview • Authentic Galle showroom gallery below
-                  </p>
-                </div>
+                <a
+                  href="tel:0784969652"
+                  className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold uppercase tracking-wider transition-colors shadow-sm"
+                >
+                  <Phone className="w-4 h-4 text-[#FF5E14]" />
+                  <span>Call 078 496 9652</span>
+                </a>
 
-                {/* Bike Model Switcher Pills */}
-                <div className="flex flex-wrap items-center justify-center gap-2 mb-5">
-                  {SHOWCASE_BIKES.map((bike, idx) => (
-                    <button
-                      key={bike.name}
-                      onClick={() => setSelectedShowcaseBike(idx)}
-                      className={`px-3.5 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer ${
-                        selectedShowcaseBike === idx
-                          ? "bg-slate-900 text-white shadow-sm ring-2 ring-slate-900 ring-offset-2"
-                          : "bg-slate-100 hover:bg-slate-200 text-slate-700"
-                      }`}
-                    >
-                      {bike.name}
-                    </button>
-                  ))}
-                </div>
-
-                {/* Center Stage: Selected Bike Cutout Display */}
-                {(() => {
-                  const currentBike = SHOWCASE_BIKES[selectedShowcaseBike];
-                  return (
-                    <div className="relative bg-gradient-to-b from-slate-50 to-white rounded-2xl p-5 sm:p-6 border border-slate-100 flex flex-col">
-                      <div className="flex items-start justify-between w-full mb-1">
-                        <div>
-                          <span className="text-[10px] font-black uppercase tracking-wider text-[#FF5E14] bg-orange-50 px-2.5 py-1 rounded-md border border-orange-200/60 inline-block mb-1">
-                            {currentBike.badge}
-                          </span>
-                          <h4 className="text-lg sm:text-xl font-black text-slate-900">{currentBike.name}</h4>
-                          <p className="text-xs text-slate-500 mt-0.5 line-clamp-1">{currentBike.tagline}</p>
-                        </div>
-                        <div className="text-right shrink-0">
-                          <span className="text-[10px] uppercase font-bold text-slate-500 block">Motor</span>
-                          <span className="text-xs sm:text-sm font-black text-slate-900">{currentBike.power}</span>
-                        </div>
-                      </div>
-
-                      {/* Studio Cutout Bike Image */}
-                      <div className="relative w-full h-52 sm:h-64 my-2 flex items-center justify-center">
-                        <Image
-                          src={currentBike.image}
-                          alt={currentBike.name}
-                          fill
-                          sizes="(max-width: 1024px) 100vw, 50vw"
-                          className="object-contain drop-shadow-xl hover:scale-105 transition-transform duration-500"
-                          priority
-                        />
-                      </div>
-
-                      {/* Specs bar & Actions */}
-                      <div className="w-full flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-slate-100 mt-1">
-                        <div className="flex flex-wrap items-center gap-2 text-xs text-slate-600 font-medium">
-                          <span className="bg-white px-2.5 py-1 rounded-lg border border-slate-200 shadow-2xs">
-                            ⚡ Top Speed: <strong className="text-slate-900">{currentBike.speed}</strong>
-                          </span>
-                          <span className="bg-white px-2.5 py-1 rounded-lg border border-slate-200 shadow-2xs">
-                            🔋 Range: <strong className="text-slate-900">{currentBike.range}</strong>
-                          </span>
-                          <span className="bg-white px-2.5 py-1 rounded-lg border border-slate-200 shadow-2xs">
-                            💰 <strong className="text-[#FF5E14]">{currentBike.price}</strong>
-                          </span>
-                        </div>
-
-                        <div className="flex items-center gap-2">
-                          <button
-                            onClick={() => {
-                              setTestRideBike(currentBike.name);
-                              setIsTestRideOpen(true);
-                            }}
-                            className="px-3.5 py-2 rounded-xl bg-[#FF5E14] hover:bg-[#E04D09] text-white text-xs font-bold uppercase tracking-wider transition-all shadow-xs cursor-pointer"
-                          >
-                            Book Test Ride
-                          </button>
-                          <a
-                            href={`https://wa.me/94784969652?text=${encodeURIComponent(
-                              `Hello Udan Enterprises, I would like to inquire about the ${currentBike.name} (${currentBike.power}) at your Galle showroom.`
-                            )}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="px-3.5 py-2 rounded-xl border border-slate-200 hover:border-slate-400 bg-white text-slate-700 text-xs font-bold inline-flex items-center gap-1.5 transition-colors shadow-2xs"
-                          >
-                            <MessageSquare className="w-3.5 h-3.5 text-green-600" />
-                            <span>Inquire</span>
-                          </a>
-                        </div>
-                      </div>
-                    </div>
-                  );
-                })()}
-              </div>
-
-              {/* Showroom Photo Gallery Strip (4 Visible Thumbnails with slider) */}
-              <div className="mt-6 pt-5 border-t border-slate-200">
-                <div className="flex items-center justify-between mb-3">
-                  <div>
-                    <span className="text-[10px] font-black uppercase tracking-wider text-[#FF5E14] block">
-                      AUTHENTIC SHOWROOM EXPERIENCE
-                    </span>
-                    <h4 className="text-xs sm:text-sm font-bold text-slate-900">
-                      Galle Showroom Gallery ({galleryIndex + 1}–{Math.min(galleryIndex + 4, SHOWROOM_PHOTOS.length)} of {SHOWROOM_PHOTOS.length})
-                    </h4>
-                  </div>
-                  <div className="flex items-center gap-1.5">
-                    <button
-                      onClick={() => setGalleryIndex((prev) => Math.max(0, prev - 1))}
-                      disabled={galleryIndex === 0}
-                      className="p-1.5 rounded-lg border border-slate-200 hover:bg-slate-100 disabled:opacity-35 disabled:cursor-not-allowed text-slate-700 transition-colors cursor-pointer"
-                      aria-label="Previous gallery photos"
-                    >
-                      <ChevronLeft className="w-4 h-4" />
-                    </button>
-                    <button
-                      onClick={() => setGalleryIndex((prev) => Math.min(SHOWROOM_PHOTOS.length - 4, prev + 1))}
-                      disabled={galleryIndex >= SHOWROOM_PHOTOS.length - 4}
-                      className="p-1.5 rounded-lg border border-slate-200 hover:bg-slate-100 disabled:opacity-35 disabled:cursor-not-allowed text-slate-700 transition-colors cursor-pointer"
-                      aria-label="Next gallery photos"
-                    >
-                      <ChevronRight className="w-4 h-4" />
-                    </button>
-                  </div>
-                </div>
-
-                {/* 4 Thumbnails Grid */}
-                <div className="grid grid-cols-4 gap-2 sm:gap-3">
-                  {SHOWROOM_PHOTOS.slice(galleryIndex, galleryIndex + 4).map((photo, sliceIdx) => {
-                    const originalIdx = galleryIndex + sliceIdx;
-                    return (
-                      <button
-                        key={photo.src}
-                        onClick={() => setLightboxPhotoIndex(originalIdx)}
-                        className="group relative aspect-[4/3] rounded-xl overflow-hidden border border-slate-200 hover:border-[#FF5E14] shadow-2xs hover:shadow-md transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#FF5E14] cursor-pointer"
-                        title={photo.title}
-                      >
-                        <Image
-                          src={photo.src}
-                          alt={photo.title}
-                          fill
-                          sizes="(max-width: 1024px) 25vw, 15vw"
-                          className="object-cover group-hover:scale-110 transition-transform duration-500"
-                        />
-                        <div className="absolute inset-0 bg-slate-900/0 group-hover:bg-slate-900/35 transition-colors flex items-center justify-center">
-                          <span className="opacity-0 group-hover:opacity-100 transition-opacity bg-white/95 text-slate-900 p-1.5 rounded-full shadow-sm">
-                            <ZoomIn className="w-3.5 h-3.5" />
-                          </span>
-                        </div>
-                        <span className="absolute bottom-1 right-1 bg-black/70 backdrop-blur-xs text-white text-[9px] font-bold px-1.5 py-0.5 rounded">
-                          #{originalIdx + 1}
-                        </span>
-                      </button>
-                    );
-                  })}
-                </div>
-
-                <p className="text-[11px] text-slate-500 text-center mt-2.5">
-                  💡 Click any photo above to inspect in high-resolution fullscreen lightbox
-                </p>
+                <button
+                  onClick={() => setIsTestRideOpen(true)}
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-[#FF5E14] hover:bg-[#E04D09] text-white text-xs font-bold uppercase tracking-wider transition-colors shadow-md shadow-orange-500/20 cursor-pointer"
+                >
+                  <Calendar className="w-4 h-4" />
+                  <span>Book Test Ride</span>
+                </button>
               </div>
             </FadeIn>
           </div>

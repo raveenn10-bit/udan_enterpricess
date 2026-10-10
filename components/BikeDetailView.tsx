@@ -1,9 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { BikeModel } from "@/data/bikes";
+import { BikeModel, BikeColor } from "@/data/bikes";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import TestRideModal from "@/components/TestRideModal";
@@ -17,6 +17,7 @@ import {
   Calendar,
   MessageSquare,
   ArrowRight,
+  ChevronLeft,
   ChevronRight,
   CheckCircle2,
   Info,
@@ -38,12 +39,73 @@ interface BikeDetailViewProps {
 
 export default function BikeDetailView({ bike, relatedBikes }: BikeDetailViewProps) {
   const [testRideModalOpen, setTestRideModalOpen] = useState(false);
-  const [selectedColorImage, setSelectedColorImage] = useState<string>(
-    bike.colors?.[0]?.image || bike.mainImage
-  );
+
+  // Gallery images with fallback
+  const baseGallery = (bike.gallery && bike.gallery.length > 0)
+    ? bike.gallery
+    : [bike.mainImage];
+
+  const [galleryImages, setGalleryImages] = useState<string[]>(baseGallery);
+  const [activeIndex, setActiveIndex] = useState<number>(0);
+  const [isPaused, setIsPaused] = useState<boolean>(false);
   const [selectedColorName, setSelectedColorName] = useState<string>(
     bike.colors?.[0]?.name || "Default Finish"
   );
+  const thumbnailRefs = useRef<(HTMLButtonElement | null)[]>([]);
+
+  // Smoothly ensure active thumbnail is visible
+  const scrollToThumbnail = (index: number) => {
+    const thumb = thumbnailRefs.current[index];
+    if (thumb) {
+      thumb.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "nearest" });
+    }
+  };
+
+  const handleSelectImage = useCallback((index: number) => {
+    setActiveIndex(index);
+    scrollToThumbnail(index);
+  }, []);
+
+  const handlePrev = useCallback(() => {
+    setActiveIndex((prev) => {
+      const nextIdx = (prev - 1 + galleryImages.length) % galleryImages.length;
+      scrollToThumbnail(nextIdx);
+      return nextIdx;
+    });
+  }, [galleryImages.length]);
+
+  const handleNext = useCallback(() => {
+    setActiveIndex((prev) => {
+      const nextIdx = (prev + 1) % galleryImages.length;
+      scrollToThumbnail(nextIdx);
+      return nextIdx;
+    });
+  }, [galleryImages.length]);
+
+  // Auto-rotation every 3.5 seconds
+  useEffect(() => {
+    if (isPaused || galleryImages.length <= 1) return;
+
+    const interval = setInterval(() => {
+      handleNext();
+    }, 3500);
+
+    return () => clearInterval(interval);
+  }, [isPaused, galleryImages.length, handleNext]);
+
+  // Colorway switcher handler
+  const handleColorSelect = (c: BikeColor) => {
+    setSelectedColorName(c.name);
+    const existingIdx = galleryImages.indexOf(c.image);
+    if (existingIdx !== -1) {
+      handleSelectImage(existingIdx);
+    } else {
+      setGalleryImages((prev) => [c.image, ...prev.filter((img) => img !== c.image)]);
+      setActiveIndex(0);
+    }
+  };
+
+  const currentImage = galleryImages[activeIndex] || bike.mainImage;
 
   const getWhatsAppMessage = () => {
     return encodeURIComponent(
@@ -153,33 +215,122 @@ export default function BikeDetailView({ bike, relatedBikes }: BikeDetailViewPro
         <section className="py-10 lg:py-16 bg-white border-b border-[#E0E8EC]">
           <div className="editorial-container">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
-              {/* Left Column: Visual Showcase & Color Picker */}
-              <div className="lg:col-span-7 flex flex-col items-center">
-                {/* Main Hero Image Canvas */}
-                <div className="relative w-full aspect-[4/3] max-w-[620px] rounded-2xl bg-[#F7F9FA] border border-[#E0E8EC] p-6 sm:p-10 flex items-center justify-center overflow-hidden shadow-sm group">
-                  {/* Subtle pedestal glow */}
-                  <div className="absolute inset-0 bg-radial-gradient from-[#346C83]/5 via-transparent to-transparent pointer-events-none" />
+              {/* Left Column: Visual Showcase & Auto-Rotating Referral Gallery */}
+              <div className="lg:col-span-7 flex flex-col items-center w-full">
+                {/* Main Gallery Container with Hover Auto-Pause */}
+                <div
+                  className="w-full flex flex-col lg:flex-row gap-3 sm:gap-4 items-stretch"
+                  onMouseEnter={() => setIsPaused(true)}
+                  onMouseLeave={() => setIsPaused(false)}
+                >
+                  {/* Left: Main Product Image Canvas with Prev / Next Arrow Controls */}
+                  <div className="relative flex-1 aspect-[4/3] rounded-2xl bg-[#F7F9FA] border border-[#E0E8EC] p-6 sm:p-10 flex items-center justify-center overflow-hidden shadow-sm group select-none">
+                    {/* Subtle pedestal glow */}
+                    <div className="absolute inset-0 bg-radial-gradient from-[#346C83]/5 via-transparent to-transparent pointer-events-none" />
 
-                  <div className="relative w-full h-full transition-transform duration-500 group-hover:scale-105">
-                    <Image
-                      src={selectedColorImage}
-                      alt={`${bike.name} - ${selectedColorName}`}
-                      fill
-                      priority
-                      className="object-contain drop-shadow-md"
-                      sizes="(max-width: 768px) 100vw, 55vw"
-                    />
+                    <div className="relative w-full h-full transition-transform duration-500 group-hover:scale-105">
+                      <Image
+                        src={currentImage}
+                        alt={`${bike.name} - View ${activeIndex + 1}`}
+                        fill
+                        priority
+                        className="object-contain drop-shadow-md"
+                        sizes="(max-width: 768px) 100vw, 55vw"
+                      />
+                    </div>
+
+                    {/* Prev Navigation Arrow */}
+                    {galleryImages.length > 1 && (
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handlePrev();
+                        }}
+                        aria-label="Previous image"
+                        className="absolute left-0 top-1/2 -translate-y-1/2 w-8 sm:w-9 h-12 sm:h-14 bg-neutral-900/40 hover:bg-neutral-900/75 text-white rounded-r-md flex items-center justify-center transition-all opacity-80 hover:opacity-100 z-10 backdrop-blur-xs cursor-pointer shadow-sm"
+                      >
+                        <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6" />
+                      </button>
+                    )}
+
+                    {/* Next Navigation Arrow */}
+                    {galleryImages.length > 1 && (
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleNext();
+                        }}
+                        aria-label="Next image"
+                        className="absolute right-0 top-1/2 -translate-y-1/2 w-8 sm:w-9 h-12 sm:h-14 bg-neutral-900/40 hover:bg-neutral-900/75 text-white rounded-l-md flex items-center justify-center transition-all opacity-80 hover:opacity-100 z-10 backdrop-blur-xs cursor-pointer shadow-sm"
+                      >
+                        <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6" />
+                      </button>
+                    )}
+
+                    {/* Image Counter Badge */}
+                    {galleryImages.length > 1 && (
+                      <div className="absolute bottom-3 left-3 bg-white/80 backdrop-blur-sm border border-[#E0E8EC] px-2 py-0.5 rounded text-[10px] font-mono font-bold text-[#667780]">
+                        {activeIndex + 1} / {galleryImages.length}
+                      </div>
+                    )}
+
+                    {/* Watermark / Model code */}
+                    <div className="absolute bottom-4 right-4 text-[10px] font-mono tracking-widest text-[#667780]/60 uppercase">
+                      {bike.modelCode}
+                    </div>
                   </div>
 
-                  {/* Watermark / Model code */}
-                  <div className="absolute bottom-4 right-4 text-[10px] font-mono tracking-widest text-[#667780]/60 uppercase">
-                    {bike.modelCode}
-                  </div>
+                  {/* Right Side (Desktop) / Bottom Strip (Mobile): Column of Thumbnail Previews */}
+                  {galleryImages.length > 1 && (
+                    <div className="flex flex-row lg:flex-col gap-2.5 overflow-x-auto lg:overflow-y-auto max-h-none lg:max-h-[490px] py-1 px-1 shrink-0 justify-start items-center">
+                      {galleryImages.map((img, idx) => {
+                        const isActive = activeIndex === idx;
+                        return (
+                          <button
+                            key={`${img}-${idx}`}
+                            ref={(el) => {
+                              thumbnailRefs.current[idx] = el;
+                            }}
+                            type="button"
+                            onClick={() => handleSelectImage(idx)}
+                            aria-label={`Select image ${idx + 1}`}
+                            className={`relative w-16 h-16 sm:w-20 sm:h-20 lg:w-[84px] lg:h-[84px] rounded-lg bg-[#F7F9FA] p-1.5 flex items-center justify-center transition-all shrink-0 cursor-pointer ${
+                              isActive
+                                ? "border-2 border-red-500 shadow-sm"
+                                : "border border-[#E0E8EC] hover:border-slate-400 opacity-80 hover:opacity-100"
+                            }`}
+                          >
+                            {/* Active Thumbnail Indicator: Red Triangle Pointer */}
+                            {isActive && (
+                              <>
+                                {/* Desktop: Sharp red triangle pointing toward main image (left) */}
+                                <span className="hidden lg:block absolute -left-2.5 top-1/2 -translate-y-1/2 w-0 h-0 border-y-[6px] border-y-transparent border-r-[8px] border-r-red-500 z-20 pointer-events-none" />
+                                {/* Mobile: Sharp red triangle pointing toward main image (up) */}
+                                <span className="lg:hidden absolute -top-2 left-1/2 -translate-x-1/2 w-0 h-0 border-x-[6px] border-x-transparent border-b-[8px] border-b-red-500 z-20 pointer-events-none" />
+                              </>
+                            )}
+
+                            <div className="relative w-full h-full">
+                              <Image
+                                src={img}
+                                alt={`${bike.name} thumbnail ${idx + 1}`}
+                                fill
+                                sizes="84px"
+                                className="object-contain"
+                              />
+                            </div>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  )}
                 </div>
 
                 {/* Interactive Color Switcher (e.g. for T3) */}
                 {bike.colors && bike.colors.length > 0 && (
-                  <div className="mt-5 w-full max-w-[620px] p-3 rounded-xl bg-[#F7F9FA] border border-[#E0E8EC] flex items-center justify-between">
+                  <div className="mt-5 w-full p-3 rounded-xl bg-[#F7F9FA] border border-[#E0E8EC] flex items-center justify-between">
                     <div className="flex items-center gap-2 text-xs">
                       <span className="font-bold text-[#667780] uppercase tracking-wider text-[10px]">
                         Colorway:
@@ -192,12 +343,9 @@ export default function BikeDetailView({ bike, relatedBikes }: BikeDetailViewPro
                         <button
                           key={c.name}
                           type="button"
-                          onClick={() => {
-                            setSelectedColorImage(c.image);
-                            setSelectedColorName(c.name);
-                          }}
+                          onClick={() => handleColorSelect(c)}
                           className={`w-5 h-5 rounded-full border-2 transition-all ${
-                            selectedColorImage === c.image
+                            currentImage === c.image
                               ? "border-[#346C83] ring-2 ring-[#346C83]/30 scale-110"
                               : "border-slate-300 hover:scale-105"
                           }`}

@@ -131,7 +131,7 @@ export default function Hero({
           typeProgress,
           {
             count: totalChars,
-            duration: Math.max(1.7, totalChars * 0.046),
+            duration: Math.max(3.2, totalChars * 0.075),
             ease: "none",
             onUpdate: () => {
               const current = Math.floor(typeProgress.count);
@@ -156,7 +156,7 @@ export default function Hero({
           duration: 0.9,
           ease: "power2.out",
         },
-        1.7
+        3.4
       );
 
       // 5. CTA Button pop in with spring physics
@@ -169,7 +169,7 @@ export default function Hero({
           duration: 0.8,
           ease: "back.out(1.4)",
         },
-        2.0
+        3.8
       );
 
       // 6. Parallax effect on scroll

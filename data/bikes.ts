@@ -34,6 +34,7 @@ export interface BikeModel {
   features: string[];
   mainImage: string;
   originalPoster?: string;
+  gallery?: string[];
   colors?: BikeColor[];
   isFeatured?: boolean;
   provisionalNotes: string[];
@@ -75,6 +76,12 @@ export const ZUBOO_COLLECTION: BikeModel[] = [
       "Anti-theft alarm security system"
     ],
     mainImage: "/media/bikes/gt/main.webp",
+    gallery: [
+      "/bikes/gt/gt.webp",
+      "/media/bikes/gt/gallery/gt-1.webp",
+      "/media/bikes/gt/gallery/gt-2.webp",
+      "/media/bikes/gt/gallery/gt-3.webp"
+    ],
     isFeatured: true,
     provisionalNotes: [
       "Price and warranty transcribed from promotional poster; pending showroom verification.",
@@ -116,6 +123,18 @@ export const ZUBOO_COLLECTION: BikeModel[] = [
       "Heavy-duty long travel front hydraulic suspension"
     ],
     mainImage: "/media/bikes/the-tank/main.webp",
+    gallery: [
+      "/bikes/tank/tank.webp",
+      "/media/bikes/the-tank/gallery/tank-1.webp",
+      "/media/bikes/the-tank/gallery/tank-2.webp",
+      "/media/bikes/the-tank/gallery/tank-3.webp",
+      "/media/bikes/the-tank/gallery/tank-4.webp",
+      "/media/bikes/the-tank/gallery/tank-5.webp",
+      "/media/bikes/the-tank/gallery/tank-6.webp",
+      "/media/bikes/the-tank/gallery/tank-7.webp",
+      "/media/bikes/the-tank/gallery/tank-8.webp",
+      "/media/bikes/the-tank/gallery/tank-9.webp"
+    ],
     isFeatured: true,
     provisionalNotes: [
       "Exact battery chemistry and dimensions to be verified with showroom.",
@@ -157,6 +176,14 @@ export const ZUBOO_COLLECTION: BikeModel[] = [
       "Vintage chrome styling accents and mirrors"
     ],
     mainImage: "/media/bikes/paris/main.webp",
+    gallery: [
+      "/bikes/paris/paris.webp",
+      "/media/bikes/paris/gallery/paris-1.webp",
+      "/media/bikes/paris/gallery/paris-2.webp",
+      "/media/bikes/paris/gallery/paris-3.webp",
+      "/media/bikes/paris/gallery/paris-4.webp",
+      "/media/bikes/paris/gallery/paris-5.webp"
+    ],
     isFeatured: true,
     provisionalNotes: [
       "Promotional price of Rs 330,000 marked as promotional; confirm showroom retail list."
@@ -197,6 +224,13 @@ export const ZUBOO_COLLECTION: BikeModel[] = [
       "Safety climbing assist mode"
     ],
     mainImage: "/media/bikes/t11/main.webp",
+    gallery: [
+      "/bikes/t11/t11.webp",
+      "/media/bikes/t11/gallery/t11-1.webp",
+      "/media/bikes/t11/gallery/t11-2.webp",
+      "/media/bikes/t11/gallery/t11-3.webp",
+      "/media/bikes/t11/gallery/t11-4.webp"
+    ],
     provisionalNotes: [
       "Battery type specified as Tianneng Lead-acid on original promo poster."
     ]
@@ -236,6 +270,14 @@ export const ZUBOO_COLLECTION: BikeModel[] = [
       "Available in 5 custom colorways"
     ],
     mainImage: "/media/bikes/t3/main.webp",
+    gallery: [
+      "/bikes/t3/t3.webp",
+      "/media/bikes/t3/gallery/1.webp",
+      "/media/bikes/t3/gallery/2.webp",
+      "/bikes/t3/t3-mint.webp",
+      "/bikes/t3/t3-black.webp",
+      "/bikes/t3/t3-white.webp"
+    ],
     colors: [
       { name: "Matte Black", hex: "#1e1e1e", image: "/bikes/t3/t3-black.webp" },
       { name: "Charcoal Grey", hex: "#4b5563", image: "/bikes/t3/t3-grey.webp" },
@@ -282,6 +324,11 @@ export const ZUBOO_COLLECTION: BikeModel[] = [
       "Integrated USB mobile charging socket"
     ],
     mainImage: "/media/bikes/ex008/main.webp",
+    gallery: [
+      "/bikes/ex008/ex008.webp",
+      "/media/bikes/ex008/main.webp",
+      "/bikes/ex008/3.31.1.webp"
+    ],
     provisionalNotes: [
       "Battery capacity specification to be verified on physical spec plate."
     ]
@@ -321,6 +368,10 @@ export const ZUBOO_COLLECTION: BikeModel[] = [
       "Platinum single kickstand & sturdy center stand"
     ],
     mainImage: "/media/bikes/kb1/main.webp",
+    gallery: [
+      "/bikes/kb1/kb1.webp",
+      "/media/bikes/kb1/main.webp"
+    ],
     provisionalNotes: [
       "Motor wattage marked as variable; confirm rated vs peak watt."
     ]
@@ -360,6 +411,10 @@ export const ZUBOO_COLLECTION: BikeModel[] = [
       "Eco low-speed safe cruising mode"
     ],
     mainImage: "/media/bikes/mini/main.webp",
+    gallery: [
+      "/bikes/mini/mini.webp",
+      "/media/bikes/mini/main.webp"
+    ],
     provisionalNotes: [
       "Entry-level lightweight model. 1 year warranty as per promotional poster."
     ]

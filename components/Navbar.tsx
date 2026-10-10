@@ -54,12 +54,17 @@ export default function Navbar({ onOpenTestRide }: NavbarProps) {
     // Subtle GSAP entrance animation for header elements
     const ctx = gsap.context(() => {
       if (headerRef.current) {
-        gsap.from(headerRef.current, {
-          y: -18,
-          opacity: 0,
-          duration: 0.65,
-          ease: "power3.out",
-        });
+        gsap.fromTo(
+          headerRef.current,
+          { y: -16, opacity: 0 },
+          {
+            y: 0,
+            opacity: 1,
+            duration: 0.45,
+            ease: "power2.out",
+            clearProps: "all",
+          }
+        );
       }
     }, headerRef);
 

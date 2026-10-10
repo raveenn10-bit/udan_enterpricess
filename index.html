@@ -105,7 +105,8 @@
       <h3 class="font-collection heading-collection" style="text-transform: uppercase;">MAIN PRODUCT CLASSIFICATION</h3>
     </div>
 
-    <div class="oem-classification-grid">
+    <div class="mobile-swipe-indicator">👈 Swipe to explore all models 👉</div>
+    <div class="oem-classification-grid mobile-snap scrollbar-none">
       <!-- 1. T3 -->
       <div class="oem-class-card">
         <a href="bikes.html" class="oem-img-wrap">
@@ -176,7 +177,8 @@
       <p>All 8 models available with factory warranty and direct test rides at our Kurunduwatta, Galle showroom.</p>
     </div>
 
-    <div class="products-grid">
+    <div class="mobile-swipe-indicator">👈 Swipe to explore all models 👉</div>
+    <div class="products-grid mobile-snap scrollbar-none">
       <!-- 1. T3 -->
       <div class="product-card">
         <div>
@@ -387,7 +389,8 @@
       <p>Built with aerospace-standard testing and intelligent electronics for maximum reliability in Sri Lanka.</p>
     </div>
 
-    <div class="tech-grid">
+    <div class="mobile-swipe-indicator">👈 Swipe to view all features 👉</div>
+    <div class="tech-grid mobile-snap scrollbar-none">
       <div class="tech-card">
         <div class="icon-box">⚡</div>
         <h4>Intelligent Smart BMS</h4>
@@ -414,7 +417,77 @@
     </div>
   </section>
 
-  <!-- 7. SHOWROOM LOCATION & TEST RIDE FORM -->
+  <!-- 7. EXCELLENT PRODUCTS SHOWCASE & SHOWROOM GALLERY (Zuboo OEM White Design) -->
+  <section id="excellent-products" class="excellent-products-section" style="padding: 70px 20px; background: #ffffff; color: #0f172a; border-top: 1px solid #e2e8f0; border-bottom: 1px solid #e2e8f0;">
+    <div style="max-width: 1200px; margin: 0 auto;">
+      <div class="section-title-wrap" style="text-align: center; margin-bottom: 28px;">
+        <h3 style="font-size: 36px; font-weight: 900; margin: 0; text-transform: uppercase; letter-spacing: -0.5px; color: #000000; font-family: 'Montserrat', sans-serif;">
+          EXCELLENT PRODUCTS
+        </h3>
+      </div>
+
+      <div class="excellent-products-box" style="background: #ffffff; border: none; padding: 0; box-shadow: none;">
+        <!-- Bike Model Switcher Tabs -->
+        <div class="model-switcher-tabs mobile-scroll scrollbar-none" id="model-switcher-tabs" style="display: flex; justify-content: center; gap: 8px; margin-bottom: 24px;">
+          <button class="model-pill active" onclick="switchShowcaseBike(0)" style="border-radius: 9999px; font-weight: 700;">Zuboo Mini</button>
+          <button class="model-pill" onclick="switchShowcaseBike(1)" style="border-radius: 9999px; font-weight: 700;">Zuboo Paris</button>
+          <button class="model-pill" onclick="switchShowcaseBike(2)" style="border-radius: 9999px; font-weight: 700;">The Tank</button>
+          <button class="model-pill" onclick="switchShowcaseBike(3)" style="border-radius: 9999px; font-weight: 700;">Zuboo T3</button>
+          <button class="model-pill" onclick="switchShowcaseBike(4)" style="border-radius: 9999px; font-weight: 700;">Zuboo T11</button>
+          <button class="model-pill" onclick="switchShowcaseBike(5)" style="border-radius: 9999px; font-weight: 700;">Zuboo EX008</button>
+        </div>
+
+        <!-- Center Bike Display Stage on Pure White -->
+        <div class="showcase-bike-display" style="background: transparent; border: none; padding: 10px 0; margin-bottom: 24px; position: relative;">
+          <button onclick="switchShowcaseBike((currentShowcaseIdx - 1 + 6) % 6)" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); z-index: 10; width: 44px; height: 44px; border-radius: 50%; background: #ffffff; border: 1px solid #e2e8f0; box-shadow: 0 4px 12px rgba(0,0,0,0.1); cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center;">❮</button>
+          <button onclick="switchShowcaseBike((currentShowcaseIdx + 1) % 6)" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); z-index: 10; width: 44px; height: 44px; border-radius: 50%; background: #ffffff; border: 1px solid #e2e8f0; box-shadow: 0 4px 12px rgba(0,0,0,0.1); cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center;">❯</button>
+
+          <div class="bike-image-stage" style="min-height: 380px; display: flex; align-items: center; justify-content: center; margin: 10px 0;">
+            <img id="showcase-image" src="bikes/mini/mini.webp" alt="Zuboo Mini" style="max-height: 420px; width: auto; object-fit: contain; filter: drop-shadow(0 20px 30px rgba(0,0,0,0.12)); transition: transform 0.4s ease;">
+          </div>
+
+          <div class="bike-specs-bar" style="border: none; padding-top: 8px; display: flex; justify-content: center; gap: 12px; flex-wrap: wrap;">
+            <div class="specs-mini-pills" style="display: flex; gap: 8px; flex-wrap: wrap; justify-content: center;">
+              <span class="mini-spec" id="showcase-title" style="background: #f1f5f9; border: 1px solid #e2e8f0; color: #0f172a; padding: 6px 14px; border-radius: 9999px; font-weight: 800;">Zuboo Mini</span>
+              <span class="mini-spec" id="showcase-power" style="background: #f1f5f9; border: 1px solid #e2e8f0; color: #0f172a; padding: 6px 14px; border-radius: 9999px; font-weight: 700;">490W Eco Motor</span>
+              <span class="mini-spec" id="showcase-speed" style="background: #f1f5f9; border: 1px solid #e2e8f0; color: #0f172a; padding: 6px 14px; border-radius: 9999px; font-weight: 700;">⚡ 35 km/h</span>
+              <span class="mini-spec" id="showcase-range" style="background: #f1f5f9; border: 1px solid #e2e8f0; color: #0f172a; padding: 6px 14px; border-radius: 9999px; font-weight: 700;">🔋 ≥ 35 km</span>
+              <span class="mini-spec" id="showcase-price" style="background: #fff7ed; border: 1px solid #fed7aa; color: #FF5E14; padding: 6px 14px; border-radius: 9999px; font-weight: 800;">💰 LKR 195,000</span>
+            </div>
+            <div class="specs-actions" style="display: flex; gap: 8px; align-items: center;">
+              <a href="#showroom" class="btn-primary" style="padding: 7px 18px; font-size: 11px; font-weight: 800; text-transform: uppercase; border-radius: 9999px;">
+                📅 Book Test Ride
+              </a>
+              <a id="showcase-inquire-link" href="https://wa.me/94784969652?text=Hello%20Udan%20Enterprises%2C%20I%20would%20like%20to%20inquire%20about%20the%20Zuboo%20Mini" target="_blank" rel="noopener noreferrer" class="btn-primary" style="background: #25D366; padding: 7px 16px; font-size: 11px; font-weight: 800; text-transform: uppercase; border-radius: 9999px;">
+                💬 WhatsApp
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4 Clean Showroom Photo Thumbnails Directly Below Bike (Matching zuboo.com) -->
+        <div class="showroom-gallery-strip" style="border-top: 1px solid #e2e8f0; padding-top: 24px;">
+          <div class="gallery-strip-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+            <div>
+              <strong style="font-size: 13px; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px;">GALLE SHOWROOM GALLERY (<span id="gallery-range-label">1–4</span> of 11)</strong>
+            </div>
+            <div class="gallery-nav-buttons" style="display: flex; gap: 6px;">
+              <button id="gallery-prev-btn" onclick="slideGallery(-1)" class="btn-nav" style="background: #f1f5f9; color: #0f172a; border-color: #cbd5e1; border-radius: 8px; width: 32px; height: 32px; cursor: pointer;" title="Previous photos">❮</button>
+              <button id="gallery-next-btn" onclick="slideGallery(1)" class="btn-nav" style="background: #f1f5f9; color: #0f172a; border-color: #cbd5e1; border-radius: 8px; width: 32px; height: 32px; cursor: pointer;" title="Next photos">❯</button>
+            </div>
+          </div>
+
+          <!-- 4 Visible Thumbnails Grid -->
+          <div class="gallery-thumbs-grid mobile-snap scrollbar-none" id="gallery-thumbs-grid"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8. SHOWROOM LOCATION & FREE TEST RIDE BOOKING FORM -->
   <section id="showroom" class="showroom-section">
     <div class="showroom-wrap">
       <div class="contact-box">
@@ -472,76 +545,6 @@
         </div>
       </div>
 
-      <div class="excellent-products-box">
-        <div class="showcase-header">
-          <span class="sub-title" style="color:var(--primary); font-size:11px; font-weight:800; text-transform:uppercase;">OFFICIAL FLEET SHOWCASE</span>
-          <h3 style="font-size:24px; font-weight:900; margin: 4px 0 6px; text-transform:uppercase; letter-spacing:-0.5px;">EXCELLENT PRODUCTS</h3>
-          <p style="color:var(--text-muted); font-size:12px; margin-bottom:14px;">Select any Zuboo model to preview • Authentic Galle showroom gallery below</p>
-        </div>
-
-        <!-- Bike Model Switcher Tabs -->
-        <div class="model-switcher-tabs" id="model-switcher-tabs">
-          <button class="model-pill active" onclick="switchShowcaseBike(0)">Zuboo Mini</button>
-          <button class="model-pill" onclick="switchShowcaseBike(1)">Zuboo Paris</button>
-          <button class="model-pill" onclick="switchShowcaseBike(2)">The Tank</button>
-          <button class="model-pill" onclick="switchShowcaseBike(3)">Zuboo T3</button>
-          <button class="model-pill" onclick="switchShowcaseBike(4)">Zuboo T11</button>
-          <button class="model-pill" onclick="switchShowcaseBike(5)">Zuboo EX008</button>
-        </div>
-
-        <!-- Bike Display Box -->
-        <div class="showcase-bike-display">
-          <div class="bike-info-row">
-            <div>
-              <span class="badge" id="showcase-badge" style="background:#fff3ed; color:#FF5E14; font-size:10px; font-weight:800; padding:4px 8px; border-radius:6px; border:1px solid #ffd8c7;">Compact City Commuter</span>
-              <h4 id="showcase-title" style="font-size:18px; font-weight:900; margin:4px 0 0; color:#0F172A;">Zuboo Mini</h4>
-              <p id="showcase-desc" style="font-size:11px; color:#64748B; margin:2px 0 0;">Ultra-agile step-through commuter with deep front basket</p>
-            </div>
-            <div style="text-align:right; flex-shrink:0;">
-              <span style="font-size:10px; text-transform:uppercase; color:#64748B; font-weight:700;">Motor Power</span>
-              <strong id="showcase-power" style="display:block; font-size:14px; font-weight:900; color:#0F172A;">490W Eco Motor</strong>
-            </div>
-          </div>
-
-          <div class="bike-image-stage">
-            <img id="showcase-image" src="bikes/mini/mini.webp" alt="Zuboo Mini">
-          </div>
-
-          <div class="bike-specs-bar">
-            <div class="specs-mini-pills">
-              <span class="mini-spec" id="showcase-speed">⚡ Speed: <strong>35 km/h</strong></span>
-              <span class="mini-spec" id="showcase-range">🔋 Range: <strong>≥ 35 km</strong></span>
-              <span class="mini-spec" id="showcase-price" style="color:#FF5E14;">💰 <strong>LKR 195,000</strong></span>
-            </div>
-            <div class="specs-actions">
-              <a id="showcase-inquire-link" href="https://wa.me/94784969652?text=Hello%20Udan%20Enterprises%2C%20I%20would%20like%20to%20inquire%20about%20the%20Zuboo%20Mini" target="_blank" rel="noopener noreferrer" class="btn-primary" style="padding:8px 14px; font-size:11px;">
-                💬 Inquire on WhatsApp
-              </a>
-            </div>
-          </div>
-        </div>
-
-        <!-- Showroom Gallery Strip -->
-        <div class="showroom-gallery-strip">
-          <div class="gallery-strip-header">
-            <div>
-              <span style="font-size:10px; font-weight:800; color:var(--primary); text-transform:uppercase; display:block;">AUTHENTIC SHOWROOM EXPERIENCE</span>
-              <strong style="font-size:13px; color:#0F172A;">Galle Showroom Photos (<span id="gallery-range-label">1–4</span> of 11)</strong>
-            </div>
-            <div class="gallery-nav-buttons">
-              <button id="gallery-prev-btn" onclick="slideGallery(-1)" class="btn-nav" title="Previous photos">❮</button>
-              <button id="gallery-next-btn" onclick="slideGallery(1)" class="btn-nav" title="Next photos">❯</button>
-            </div>
-          </div>
-
-          <!-- 4 Visible Thumbnails Grid -->
-          <div class="gallery-thumbs-grid" id="gallery-thumbs-grid"></div>
-
-          <div style="font-size:11px; color:#64748B; text-align:center; margin-top:8px;">
-            💡 Click any photo above to inspect in high-resolution fullscreen lightbox
-          </div>
-        </div>
-      </div>
     </div>
   </section>
 
