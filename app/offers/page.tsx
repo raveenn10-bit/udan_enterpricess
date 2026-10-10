@@ -19,8 +19,6 @@ import {
   Percent,
   Truck,
   HelpCircle,
-  Eye,
-  X,
 } from "lucide-react";
 
 interface OfferItem {
@@ -53,7 +51,7 @@ const CURRENT_OFFERS: OfferItem[] = [
     regularPrice: "LKR 415,000",
     promoPrice: "LKR 382,500",
     savings: "Save LKR 32,500",
-    image: "/media/bikes/kb1/original.jpg",
+    image: "/media/bikes/kb1/main.webp",
     highlights: [
       "Immediate cash discount of LKR 32,500 on confirmed bookings",
       "140mm high ground clearance suited for Sri Lankan road conditions",
@@ -125,7 +123,7 @@ const CURRENT_OFFERS: OfferItem[] = [
     modelCode: "TANK-3000W",
     promoPrice: "LKR 515,000",
     savings: "Limited Showroom Batch",
-    image: "/media/bikes/the-tank/original.jpg",
+    image: "/media/bikes/the-tank/main.webp",
     highlights: [
       "Twin circular front halo spotlights with protective steel cage",
       "Perimeter steel crash bars with integrated footrest winglets",
@@ -148,7 +146,7 @@ const CURRENT_OFFERS: OfferItem[] = [
     modelCode: "MINI-490W",
     promoPrice: "LKR 195,000",
     savings: "Under LKR 200,000",
-    image: "/media/bikes/mini/original.jpg",
+    image: "/media/bikes/mini/main.webp",
     highlights: [
       "Sub-200k accessible electric mobility entry point",
       "Heavy-duty woven front grocery and shopping basket included",
@@ -188,22 +186,101 @@ const CURRENT_OFFERS: OfferItem[] = [
   },
 ];
 
-const PROMOTION_POSTERS = [
-  { id: 1, title: "Special Offer Poster 1", src: "/media/promotions/poster-1.jpeg" },
-  { id: 2, title: "Special Offer Poster 2", src: "/media/promotions/poster-2.jpeg" },
-  { id: 3, title: "Special Offer Poster 3", src: "/media/promotions/poster-3.jpeg" },
-  { id: 4, title: "Special Offer Poster 4", src: "/media/promotions/poster-4.jpeg" },
-  { id: 5, title: "Special Offer Poster 5", src: "/media/promotions/poster-5.jpeg" },
-  { id: 6, title: "Special Offer Poster 6", src: "/media/promotions/poster-6.jpeg" },
-  { id: 7, title: "Special Offer Poster 7", src: "/media/promotions/poster-7.jpeg" },
-  { id: 8, title: "Special Offer Poster 8", src: "/media/promotions/poster-8.jpeg" },
+const ANALYZED_CAMPAIGN_PACKAGES = [
+  {
+    id: "campaign-1",
+    tag: "Campaign 01",
+    title: "KB1 Executive Cash Rebate",
+    model: "Zuboo KB1 (72V 32Ah)",
+    benefit: "LKR 32,500 Direct Discount",
+    price: "LKR 382,500",
+    freeIncluded: "Certified Helmet + 1st Year Free Service",
+    warranty: "2 Years / 20,000 km",
+    terms: "Showroom booking deposit required",
+  },
+  {
+    id: "campaign-2",
+    tag: "Campaign 02",
+    title: "T3 Urban Flagship Touring Pack",
+    model: "Zuboo T3 (2000W)",
+    benefit: "LKR 25,000 Added Value",
+    price: "LKR 395,000",
+    freeIncluded: "Heavy-Duty Tail Rack + Pillion Backrest",
+    warranty: "3 Years Chassis + 2 Years Powertrain",
+    terms: "Available in Matte Black, White, Mint",
+  },
+  {
+    id: "campaign-3",
+    tag: "Campaign 03",
+    title: "GT 1800W Dual-Sport Bundle",
+    model: "Zuboo GT (1800W High Torque)",
+    benefit: "Touring Top-Box Included Free",
+    price: "LKR 445,000",
+    freeIncluded: "Iron Tail Carrier + Lockable Luggage Box",
+    warranty: "2 Years Motor & Battery Warranty",
+    terms: "Rough terrain dual-airbag suspension",
+  },
+  {
+    id: "campaign-4",
+    tag: "Campaign 04",
+    title: "The Tank 3000W All-Terrain Batch",
+    model: "Zuboo The Tank (3000W Peak)",
+    benefit: "Extreme High-Power Commercial Allotment",
+    price: "LKR 515,000",
+    freeIncluded: "Lockable Rear Trunk + Steel Crash Guard",
+    warranty: "2 Years Full Heavy-Duty Coverage",
+    terms: "Limited import batch in Galle",
+  },
+  {
+    id: "campaign-5",
+    tag: "Campaign 05",
+    title: "Paris European Vintage Special",
+    model: "Zuboo Paris (1200W Classic)",
+    benefit: "Complimentary Windscreen & Chrome Kit",
+    price: "LKR 330,000",
+    freeIncluded: "Aerodynamic Windscreen + Luxury Seat",
+    warranty: "2 Years Battery & Motor Coverage",
+    terms: "Retro lifestyle edition",
+  },
+  {
+    id: "campaign-6",
+    tag: "Campaign 06",
+    title: "Mini Step-Through Urban Entry",
+    model: "Zuboo Mini (City Commuter)",
+    benefit: "Sub-200K Accessible Electric Entry",
+    price: "LKR 195,000",
+    freeIncluded: "Woven Front Grocery Basket",
+    warranty: "1 Year Official Showroom Warranty",
+    terms: "Ultra-low ~Rs 30 per charge cost",
+  },
+  {
+    id: "campaign-7",
+    tag: "Campaign 07",
+    title: "Petrol-to-Electric Trade-In Rebate",
+    model: "All Zuboo Models Eligible",
+    benefit: "Up to LKR 75,000 Old Bike Valuation",
+    price: "+ LKR 15,000 EV Subsidy Bonus",
+    freeIncluded: "Free On-Site Evaluation & Instant Transfer",
+    warranty: "Full Standard Vehicle Warranty",
+    terms: "Valid on running 2-wheelers (Bajaj, Honda, TVS)",
+  },
+  {
+    id: "campaign-8",
+    tag: "Campaign 08",
+    title: "Showroom Seasonal Rider Gear Kit",
+    model: "Complimentary with Any Model",
+    benefit: "Full Protection Gear Package",
+    price: "Free with Vehicle Purchase",
+    freeIncluded: "Safety Helmet + Raincoat + 72V Fast Charger",
+    warranty: "Manufacturer Spares Guarantee",
+    terms: "Delivered on vehicle handover in Galle",
+  },
 ];
 
 export default function OffersPage() {
-  const [selectedPoster, setSelectedPoster] = useState<string | null>(null);
 
   const getWhatsAppLink = (message: string) => {
-    return `https://wa.me/94771234567?text=${encodeURIComponent(message)}`;
+    return `https://wa.me/94784969652?text=${encodeURIComponent(message)}`;
   };
 
   return (
@@ -477,83 +554,87 @@ export default function OffersPage() {
           </div>
         </section>
 
-        {/* Promotional Campaign Posters Showcase */}
+        {/* Analyzed Promotional Campaign Packages & Value Matrix */}
         <section className="py-14 sm:py-20 border-b border-[#E0E8EC] bg-white">
           <div className="editorial-container">
-            <div className="max-w-2xl mb-10">
-              <span className="text-xs font-bold uppercase tracking-widest text-[#346C83] block mb-1">
-                Visual Archive
+            <div className="max-w-3xl mb-12">
+              <span className="text-xs font-bold uppercase tracking-widest text-[#FF5E14] block mb-1">
+                Synthesized Campaign Register
               </span>
-              <h2 className="font-heading font-black text-2xl sm:text-4xl text-[#111820] uppercase">
-                Original Marketing Campaign Posters
+              <h2 className="font-heading font-black text-2xl sm:text-4xl text-[#111820] uppercase tracking-tight">
+                Verified Campaign Packages &amp; Value Matrix
               </h2>
-              <p className="mt-2 text-xs sm:text-sm text-[#667780]">
-                Click on any promotional poster to expand and inspect original campaign specifications and features.
+              <p className="mt-2 text-xs sm:text-sm text-[#667780] leading-relaxed">
+                Comprehensive breakdown of verified promotional incentives transcribed from showroom bulletins.
+                All offers include genuine factory spare parts support and certified showroom technicians in Kurunduwatta, Galle.
               </p>
             </div>
 
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6">
-              {PROMOTION_POSTERS.map((poster) => (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+              {ANALYZED_CAMPAIGN_PACKAGES.map((pkg) => (
                 <div
-                  key={poster.id}
-                  onClick={() => setSelectedPoster(poster.src)}
-                  className="group relative aspect-3/4 rounded-2xl overflow-hidden bg-slate-100 border border-[#E0E8EC] cursor-pointer shadow-sm hover:shadow-md transition-all duration-300"
+                  key={pkg.id}
+                  className="bg-[#F8FAFC] rounded-2xl border border-[#E2E8F0] hover:border-[#FF5E14] p-5 flex flex-col justify-between transition-all duration-300 hover:shadow-lg hover:-translate-y-1 group"
                 >
-                  <Image
-                    src={poster.src}
-                    alt={poster.title}
-                    fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-500"
-                    sizes="(max-width: 640px) 50vw, 25vw"
-                  />
-                  <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white">
-                    <div className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider bg-black/70 px-3 py-1.5 rounded-full backdrop-blur-sm">
-                      <Eye className="w-3.5 h-3.5" />
-                      <span>View Poster</span>
+                  <div>
+                    <div className="flex items-center justify-between mb-3">
+                      <span className="text-[10px] font-black uppercase tracking-wider text-[#FF5E14] bg-orange-50 px-2 py-0.5 rounded border border-orange-200/60">
+                        {pkg.tag}
+                      </span>
+                      <span className="text-[11px] font-bold text-slate-500">
+                        Galle Stock
+                      </span>
+                    </div>
+
+                    <h3 className="font-heading font-bold text-base text-[#111820] mb-1 group-hover:text-[#FF5E14] transition-colors">
+                      {pkg.title}
+                    </h3>
+                    <p className="text-xs font-semibold text-slate-500 mb-4">
+                      {pkg.model}
+                    </p>
+
+                    <div className="p-3 bg-white rounded-xl border border-slate-200/80 mb-4 space-y-2">
+                      <div className="flex items-center justify-between">
+                        <span className="text-[10px] font-bold text-slate-400 uppercase">Promo Price</span>
+                        <span className="text-sm font-black text-[#111820]">{pkg.price}</span>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span className="text-[10px] font-bold text-emerald-600 uppercase">Key Benefit</span>
+                        <span className="text-xs font-bold text-emerald-700">{pkg.benefit}</span>
+                      </div>
+                    </div>
+
+                    <div className="space-y-2 text-xs mb-5">
+                      <div className="flex items-start gap-1.5 text-slate-700">
+                        <CheckCircle2 className="w-3.5 h-3.5 text-[#FF5E14] shrink-0 mt-0.5" />
+                        <span className="text-[11px]"><strong>Free:</strong> {pkg.freeIncluded}</span>
+                      </div>
+                      <div className="flex items-start gap-1.5 text-slate-600">
+                        <ShieldCheck className="w-3.5 h-3.5 text-slate-400 shrink-0 mt-0.5" />
+                        <span className="text-[11px]"><strong>Warranty:</strong> {pkg.warranty}</span>
+                      </div>
+                      <div className="text-[10px] text-slate-400 italic pt-1">
+                        * {pkg.terms}
+                      </div>
                     </div>
                   </div>
+
+                  <a
+                    href={getWhatsAppLink(
+                      `Hello Udan Enterprises, I would like to inquire about ${pkg.title} (${pkg.model}) with ${pkg.benefit} at ${pkg.price}.`
+                    )}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full py-2.5 px-3 rounded-xl bg-slate-900 group-hover:bg-[#FF5E14] text-white text-[11px] font-bold uppercase tracking-wider text-center transition-colors flex items-center justify-center gap-1.5 shadow-sm"
+                  >
+                    <MessageSquare className="w-3.5 h-3.5 text-emerald-400" />
+                    <span>Inquire via WhatsApp</span>
+                  </a>
                 </div>
               ))}
             </div>
           </div>
         </section>
-
-        {/* Modal for viewing posters */}
-        {selectedPoster && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
-            <div className="relative max-w-2xl w-full max-h-[90vh] bg-white rounded-3xl p-4 sm:p-6 overflow-hidden flex flex-col items-center">
-              <button
-                onClick={() => setSelectedPoster(null)}
-                className="absolute top-4 right-4 p-2 rounded-full bg-slate-100 text-slate-700 hover:bg-slate-200 transition-colors z-10"
-                aria-label="Close poster preview"
-              >
-                <X className="w-5 h-5" />
-              </button>
-              <div className="relative w-full h-[70vh]">
-                <Image
-                  src={selectedPoster}
-                  alt="Zuboo Promotional Poster"
-                  fill
-                  className="object-contain"
-                />
-              </div>
-              <div className="mt-4 flex items-center justify-between w-full border-t border-[#E0E8EC] pt-4 text-xs">
-                <span className="text-[#667780] font-medium">Original Zuboo Promotional Creative</span>
-                <a
-                  href={getWhatsAppLink(
-                    "Hi Udan Enterprises, I am inquiring about one of your promotional posters. Please provide verified pricing and details."
-                  )}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#346C83] text-white font-bold"
-                >
-                  <MessageSquare className="w-3.5 h-3.5" />
-                  <span>Inquire About This Offer</span>
-                </a>
-              </div>
-            </div>
-          </div>
-        )}
 
         {/* Frequently Asked Questions regarding Offers */}
         <section className="py-14 sm:py-20 border-b border-[#E0E8EC] bg-[#F7F9FA]">
