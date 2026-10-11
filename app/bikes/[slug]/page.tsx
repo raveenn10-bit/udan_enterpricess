@@ -30,17 +30,25 @@ export async function generateMetadata({
     };
   }
 
+  const bikeUrl = `https://zubooudan.com/bikes/${bike.slug}`;
+  const imageUrl = bike.mainImage.startsWith("http")
+    ? bike.mainImage
+    : `https://zubooudan.com${bike.mainImage}`;
+
   return {
     title: `${bike.name} (${bike.modelCode}) | Zuboo Electric Sri Lanka - Udan Enterprises`,
     description: `${bike.tagline}. ${bike.description} Motor: ${bike.motorPower}, Range: ${bike.advertisedRange}, Top Speed: ${bike.topSpeed}. Available for test rides at Udan Enterprises Galle showroom.`,
+    alternates: {
+      canonical: `https://zubooudan.com/bikes/${bike.slug}`,
+    },
     openGraph: {
       title: `${bike.name} (${bike.modelCode}) - Zuboo Electric`,
       description: `${bike.tagline}. Range: ${bike.advertisedRange}, Motor: ${bike.motorPower}. Inquire now at Udan Enterprises Galle.`,
-      url: `https://udanenterprises.lk/bikes/${bike.slug}`,
-      siteName: "Udan Enterprises",
+      url: bikeUrl,
+      siteName: "Zuboo Udan Enterprises Sri Lanka",
       images: [
         {
-          url: bike.mainImage,
+          url: imageUrl,
           width: 800,
           height: 600,
           alt: `${bike.name} Zuboo Electric Motorcycle`,
@@ -62,5 +70,38 @@ export default async function BikeDetailPage({ params }: BikePageProps) {
 
   const relatedBikes = getRelatedBikes(bike.slug, 3);
 
-  return <BikeDetailView bike={bike} relatedBikes={relatedBikes} />;
+  const productJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: bike.name,
+    brand: {
+      "@type": "Brand",
+      name: "Zuboo",
+    },
+    modelCode: bike.modelCode,
+    description: bike.description,
+    image: bike.mainImage.startsWith("http")
+      ? bike.mainImage
+      : `https://zubooudan.com${bike.mainImage}`,
+    offers: {
+      "@type": "Offer",
+      price: bike.advertisedPrice,
+      priceCurrency: "LKR",
+      availability: "https://schema.org/InStock",
+      seller: {
+        "@type": "Organization",
+        name: "Udan Enterprises",
+      },
+    },
+  };
+
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd) }}
+      />
+      <BikeDetailView bike={bike} relatedBikes={relatedBikes} />
+    </>
+  );
 }

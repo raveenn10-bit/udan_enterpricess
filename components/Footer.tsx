@@ -751,7 +751,19 @@ export default function Footer() {
               © {new Date().getFullYear()} Udan Enterprises (Pvt) Ltd. {t.footer_all_rights}
             </div>
 
-            <div className="footer-legal-links flex items-center gap-3 text-slate-400">
+            <div className="footer-legal-links flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-slate-400">
+              <Link href="/privacy" className="hover:text-white transition-colors">
+                Privacy Policy
+              </Link>
+              <span className="text-slate-600">|</span>
+              <Link href="/terms" className="hover:text-white transition-colors">
+                Terms of Service
+              </Link>
+              <span className="text-slate-600">|</span>
+              <Link href="/policies" className="hover:text-white transition-colors">
+                Dealership Policies
+              </Link>
+              <span className="text-slate-600">|</span>
               <Link href="/contact" className="hover:text-white transition-colors">
                 Showroom Verification
               </Link>

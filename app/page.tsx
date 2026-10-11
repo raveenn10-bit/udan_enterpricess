@@ -39,6 +39,7 @@ import Hero from "@/components/ui/hero";
 import FadeIn from "@/components/FadeIn";
 import TextReveal from "@/components/TextReveal";
 import BrandBounceText from "@/components/BrandBounceText";
+import FaqSection from "@/components/FaqSection";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -978,6 +979,9 @@ export default function ZubooHomePage() {
           </div>
         </div>
       </section>
+
+      {/* FREQUENTLY ASKED QUESTIONS (AEO & GEO KNOWLEDGE HUB) */}
+      <FaqSection />
 
       {/* 9. SHOWROOM LOCATION & FREE TEST RIDE BOOKING FORM */}
       <section id="showroom-location" data-scroll-section className="reveal-section py-20 bg-white border-b border-slate-200">
