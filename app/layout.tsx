@@ -218,7 +218,13 @@ export default function RootLayout({
         <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
         <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
 
-        {/* Instant first-paint visual with hero poster and video stream buffering */}
+        {/* Instant first-paint visual with official hero banner preload */}
+        <link
+          rel="preload"
+          href="/media/branding/udan-hero-banner.webp"
+          as="image"
+          type="image/webp"
+        />
         <link
           rel="preload"
           href="/media/branding/udan-hero-poster.webp"

@@ -258,10 +258,13 @@ nav.main-nav a:hover, nav.main-nav a.active {
 }
 
 /* HERO SECTION */
+#hero,
 .hero-oem {
   background: linear-gradient(180deg, #F8FAFC 0%, #FFFFFF 100%);
   padding: 50px 24px 60px;
   border-bottom: 1px solid var(--border-color);
+  position: relative;
+  overflow: hidden;
 }
 
 .hero-wrap {
@@ -336,6 +339,19 @@ nav.main-nav a:hover, nav.main-nav a.active {
   display: flex;
   gap: 12px;
   flex-wrap: wrap;
+  align-items: center;
+}
+
+.hero-ctas .btn-primary {
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-weight: 800;
+  font-size: 12px;
+  text-transform: uppercase;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  text-decoration: none;
 }
 
 .hero-ctas .btn-outline {
@@ -350,6 +366,8 @@ nav.main-nav a:hover, nav.main-nav a.active {
   display: inline-flex;
   align-items: center;
   gap: 6px;
+  background: transparent;
+  text-decoration: none;
 }
 
 .hero-ctas .btn-outline:hover {
@@ -357,15 +375,62 @@ nav.main-nav a:hover, nav.main-nav a.active {
   color: white;
 }
 
+.hero-ctas .btn-outline.btn-whatsapp {
+  border-color: #25D366;
+  color: #15803d;
+}
+
+.hero-ctas .btn-outline.btn-whatsapp:hover {
+  background: #25D366;
+  border-color: #25D366;
+  color: white;
+}
+
 .hero-media {
   position: relative;
   text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.hero-banner-card {
+  position: relative;
+  width: 100%;
+  max-width: 640px;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 16px 36px -10px rgba(15, 23, 42, 0.16), 0 0 0 1px rgba(15, 23, 42, 0.08);
+  background: #0F172A;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
+}
+
+.hero-banner-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 24px 48px -10px rgba(15, 23, 42, 0.22), 0 0 0 1px rgba(255, 94, 20, 0.3);
+}
+
+.hero-banner-picture {
+  display: block;
+  width: 100%;
+  line-height: 0;
+}
+
+.hero-banner-img {
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  display: block;
+  border-radius: 16px;
+  filter: none !important;
 }
 
 .hero-media img {
   max-width: 100%;
   height: auto;
-  filter: drop-shadow(0 20px 30px rgba(0,0,0,0.12));
 }
 
 /* SECTION HEADERS */
@@ -2020,6 +2085,14 @@ footer.oem-footer {
 @media (max-width: 640px) {
   nav.main-nav, .top-bar .contact-info {
     display: none;
+  }
+  #hero,
+  .hero-oem {
+    padding: 32px 16px 40px;
+  }
+  .hero-banner-card,
+  .hero-banner-img {
+    border-radius: 12px;
   }
   .categories-grid, .tech-grid, .products-grid {
     grid-template-columns: 1fr;

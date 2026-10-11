@@ -402,6 +402,7 @@ export default function ZubooHomePage() {
         onCtaClick={() => {
           (document.getElementById("fleet") || document.getElementById("showroom-fleet"))?.scrollIntoView({ behavior: "smooth" });
         }}
+        onOpenTestRide={() => openBookingModal("Zuboo GT")}
       />
 
       {/* 3. SHOWROOM FLEET & FLAGSHIP SHOWCASE (Zuboo Clean Transparent Glassmorphic Showcase - Paris, Mini & The Tank) */}
