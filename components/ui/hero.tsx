@@ -1,7 +1,14 @@
 "use client";
 
-import Image from "next/image";
-import { Zap, MapPin, Calendar, ArrowRight, ShieldCheck, Leaf, Sparkles } from "lucide-react";
+import { useEffect, useRef, useState, useMemo } from "react";
+import { ArrowUpRight } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+if (typeof window !== "undefined") {
+  gsap.registerPlugin(ScrollTrigger);
+}
 
 interface HeroProps {
   title?: string;
@@ -9,184 +16,280 @@ interface HeroProps {
   buttonText?: string;
   onCtaClick?: () => void;
   onOpenTestRide?: () => void;
+  videoSrc?: string;
 }
 
 export default function Hero({
-  title = "ZUBOO EV BIKES Powered by UDAN ENTERPRISES",
-  subtitle = "Ride the Future with Stylish, Smart Electric Mobility",
-  buttonText = "Explore 9 Models",
+  title = "Sustainable Solutions for a Better Future",
+  subtitle = "Empowering businesses and communities to thrive in a low-carbon world through tailored clean energy solutions.",
+  buttonText = "Start a Project",
   onCtaClick,
-  onOpenTestRide,
+  videoSrc = "/videos/hero.mp4",
 }: HeroProps) {
-  const handleExploreClick = () => {
-    if (onCtaClick) {
-      onCtaClick();
-      return;
-    }
-    const target =
-      document.getElementById("fleet") ||
-      document.getElementById("featured-models") ||
-      document.getElementById("showroom-fleet");
-    if (target) {
-      target.scrollIntoView({ behavior: "smooth" });
-    }
-  };
+  const sectionRef = useRef<HTMLElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
+  const badgeRef = useRef<HTMLDivElement>(null);
+  const titleRef = useRef<HTMLHeadingElement>(null);
+  const subtitleRef = useRef<HTMLParagraphElement>(null);
+  const ctaRef = useRef<HTMLDivElement>(null);
+  const gridLinesRef = useRef<(HTMLDivElement | null)[]>([]);
+  const videoRef = useRef<HTMLVideoElement>(null);
 
-  const handleVisitShowroom = () => {
-    const showroom = document.getElementById("showroom-location");
-    if (showroom) {
-      showroom.scrollIntoView({ behavior: "smooth" });
-    } else if (onOpenTestRide) {
-      onOpenTestRide();
-    }
-  };
+  // Typewriter reveal state
+  const [visibleCount, setVisibleCount] = useState<number>(0);
+  const [isTypingComplete, setIsTypingComplete] = useState<boolean>(false);
 
-  const handleBookTestRide = () => {
-    if (onOpenTestRide) {
-      onOpenTestRide();
-    } else {
-      const target =
-        document.getElementById("showroom-location") ||
-        document.getElementById("fleet");
-      target?.scrollIntoView({ behavior: "smooth" });
+  // Tokenize title into words & characters for zero-layout-shift typewriter effect
+  const wordsData = useMemo(() => {
+    const words = title.split(" ");
+    let runningIndex = 0;
+    return words.map((word, wordIdx) => {
+      const chars = word.split("").map((char) => {
+        const idx = runningIndex;
+        runningIndex += 1;
+        return { char, index: idx };
+      });
+      const hasSpaceAfter = wordIdx < words.length - 1;
+      const spaceIndex = hasSpaceAfter ? runningIndex : null;
+      if (hasSpaceAfter) {
+        runningIndex += 1;
+      }
+      return {
+        word,
+        chars,
+        spaceIndex,
+      };
+    });
+  }, [title]);
+
+  const totalChars = useMemo(() => {
+    if (wordsData.length === 0) return 0;
+    const lastWord = wordsData[wordsData.length - 1];
+    if (lastWord.chars.length === 0) return 0;
+    return lastWord.chars[lastWord.chars.length - 1].index + 1;
+  }, [wordsData]);
+
+  useEffect(() => {
+    // Ultra-fast instant playback with no artificial delay
+    const video = videoRef.current;
+    if (video) {
+      video.play().catch(() => {});
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const ctx = gsap.context(() => {
+      const tl = gsap.timeline();
+
+      // 1. Architectural Grid Lines stagger fade in
+      tl.fromTo(
+        gridLinesRef.current,
+        { opacity: 0 },
+        {
+          opacity: 1,
+          duration: 1.2,
+          stagger: 0.1,
+          ease: "power2.out",
+        },
+        0
+      );
+
+      // 2. Eyebrow Badge
+      tl.fromTo(
+        badgeRef.current,
+        { opacity: 0, y: 20 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.8,
+          ease: "power3.out",
+        },
+        0.2
+      );
+
+      // 3. Smooth realistic Typewriter reveal on Hero Title
+      const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      if (prefersReducedMotion) {
+        setVisibleCount(totalChars);
+        setIsTypingComplete(true);
+      } else {
+        const typeProgress = { count: 0 };
+        tl.to(
+          typeProgress,
+          {
+            count: totalChars,
+            duration: Math.max(3.2, totalChars * 0.075),
+            ease: "none",
+            onUpdate: () => {
+              const current = Math.floor(typeProgress.count);
+              setVisibleCount((prev) => (prev !== current ? current : prev));
+            },
+            onComplete: () => {
+              setVisibleCount(totalChars);
+              setIsTypingComplete(true);
+            },
+          },
+          0.4
+        );
+      }
+
+      // 4. Subtitle fade in (timed to blend as typing progresses)
+      tl.fromTo(
+        subtitleRef.current,
+        { opacity: 0, y: 15 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.9,
+          ease: "power2.out",
+        },
+        3.4
+      );
+
+      // 5. CTA Button pop in with spring physics
+      tl.fromTo(
+        ctaRef.current,
+        { opacity: 0, scale: 0.92 },
+        {
+          opacity: 1,
+          scale: 1,
+          duration: 0.8,
+          ease: "back.out(1.4)",
+        },
+        3.8
+      );
+
+      // 6. Parallax effect on scroll
+      if (sectionRef.current && contentRef.current) {
+        gsap.to(contentRef.current, {
+          y: "25%",
+          opacity: 0.15,
+          ease: "none",
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "top top",
+            end: "bottom top",
+            scrub: true,
+          },
+        });
+      }
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, [totalChars]);
+
+  // Glowing orange bar typing cursor
+  const renderCursor = () => (
+    <span
+      aria-hidden="true"
+      className="inline-block w-0 relative overflow-visible pointer-events-none select-none align-baseline"
+    >
+      <span
+        className={`absolute -left-[1.5px] -top-[0.08em] h-[1.15em] w-[3px] sm:w-[4px] lg:w-[5px] rounded-full bg-[#FF5E14] shadow-[0_0_12px_#FF5E14,0_0_24px_rgba(255,94,20,0.7)] ${
+          isTypingComplete ? "animate-cursor-pulse" : "animate-cursor-blink"
+        }`}
+      />
+    </span>
+  );
 
   return (
-    <section className="relative w-full bg-[#0a0a0c] text-white pt-6 pb-12 sm:pt-10 sm:pb-16 lg:pt-12 lg:pb-20 overflow-hidden">
-      {/* Background automotive ambient glow */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute -top-40 left-1/2 -translate-x-1/2 w-[800px] h-[450px] bg-red-600/15 rounded-full blur-[140px]" />
-        <div className="absolute top-1/3 left-10 w-[400px] h-[400px] bg-orange-600/10 rounded-full blur-[120px]" />
-        <div className="absolute top-1/3 right-10 w-[400px] h-[400px] bg-red-700/10 rounded-full blur-[120px]" />
+    <section ref={sectionRef} className="relative flex min-h-[90vh] lg:h-screen w-full items-center justify-center overflow-hidden">
+      {/* 12-column architectural grid overlay */}
+      <div className="pointer-events-none absolute inset-0 z-10 size-full">
+        <div className="grid w-full grid-cols-12 divide-x divide-white/10 h-full">
+          <div className="col-span-1 h-full" ref={(el) => { gridLinesRef.current[0] = el; }} />
+          <div className="col-span-3 h-full" ref={(el) => { gridLinesRef.current[1] = el; }} />
+          <div className="col-span-4 h-full" ref={(el) => { gridLinesRef.current[2] = el; }} />
+          <div className="col-span-3 h-full" ref={(el) => { gridLinesRef.current[3] = el; }} />
+          <div className="col-span-1 h-full" ref={(el) => { gridLinesRef.current[4] = el; }} />
+        </div>
       </div>
 
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Sleek Automotive Eyebrow Header */}
-        <div className="flex flex-wrap items-center justify-between gap-3 mb-4 sm:mb-6">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs font-semibold tracking-wide text-slate-300 backdrop-blur-md">
-            <span className="h-2 w-2 rounded-full bg-[#FF5E14] animate-pulse" />
-            <span className="text-[#FF5E14] font-bold">UDAN ENTERPRISES</span>
-            <span className="text-white/30">•</span>
-            <span>Official Zuboo Electric Dealership</span>
-          </div>
-          <div className="hidden sm:inline-flex items-center gap-2 text-xs font-medium text-slate-400">
-            <span className="text-emerald-400 font-bold">● Showroom Open in Galle</span>
-            <span className="text-white/20">|</span>
-            <span>Udugama Rd, Pinnaduwa</span>
-          </div>
+      {/* Hero background video with dark overlay */}
+      <div className="absolute inset-0">
+        <video
+          ref={videoRef}
+          preload="auto"
+          poster="/media/branding/udan-hero-poster.webp"
+          autoPlay
+          muted
+          loop
+          playsInline
+          {...{ fetchPriority: "high" }}
+          className="absolute inset-0 w-full h-full object-cover"
+        >
+          <source src={videoSrc} type="video/mp4" />
+          <source src="/media/hero/hero-video.mp4" type="video/mp4" />
+        </video>
+        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-black/20 backdrop-blur-[1px]" />
+      </div>
+
+      {/* Content */}
+      <div ref={contentRef} className="relative z-20 max-w-5xl px-4 sm:px-6 py-20 text-center text-white will-change-transform">
+        {/* Eyebrow badge */}
+        <div ref={badgeRef} className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-[#e1fcad] backdrop-blur-md">
+          <span className="h-1.5 w-1.5 rounded-full bg-[#e1fcad] animate-pulse" />
+          <span>JOIN US &amp; CHARGE YOUR RIDE ⚡</span>
         </div>
 
-        {/* Accessibility & SEO Headings (Visual content embedded in high-res graphic) */}
-        <h1 className="sr-only">{title}</h1>
-        <p className="sr-only">{subtitle}</p>
+        {/* Hero Title with realistic Typewriter reveal animation and zero layout shift */}
+        <h1
+          ref={titleRef}
+          aria-label={title}
+          className="text-center font-normal text-3xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl leading-[1.12] sm:leading-[1.08] tracking-tight text-white flex flex-wrap justify-center font-hero select-none break-words hyphens-none"
+        >
+          {wordsData.map((wordObj, wordIdx) => (
+            <span
+              key={wordIdx}
+              className="inline-block whitespace-nowrap mr-[0.25em] last:mr-0"
+            >
+              {/* If cursor is before first character */}
+              {visibleCount === 0 && wordIdx === 0 && renderCursor()}
 
-        {/* Center Visual: 16:9 Official Graphic Banner with Desktop Interactive Hotspots */}
-        <div className="relative w-full aspect-[16/9] min-h-[240px] sm:min-h-[380px] md:min-h-[480px] lg:min-h-[580px] rounded-2xl lg:rounded-3xl overflow-hidden shadow-2xl shadow-black/80 border border-white/10 bg-[#101014]">
-          <Image
-            src="/media/branding/udan-hero-banner.webp"
-            alt="ZUBOO EV BIKES Powered by UDAN ENTERPRISES - Ride the Future with Stylish, Smart Electric Mobility"
-            fill
-            priority={true}
-            {...({ fetchPriority: "high" } as Record<string, unknown>)}
-            sizes="(max-width: 1280px) 100vw, 1280px"
-            className="object-cover w-full h-full select-none"
-          />
+              {wordObj.chars.map((charObj) => {
+                const isVisible = charObj.index < visibleCount;
+                const isCursorHere = charObj.index === visibleCount - 1;
+                return (
+                  <span key={charObj.index} className="inline">
+                    <span
+                      className={`inline transition-opacity duration-75 ${
+                        isVisible ? "opacity-100" : "opacity-0"
+                      }`}
+                    >
+                      {charObj.char}
+                    </span>
+                    {isCursorHere && renderCursor()}
+                  </span>
+                );
+              })}
 
-          {/* Desktop Interactive Hotspots Overlaid on Banner Buttons */}
-          <div className="absolute inset-0 pointer-events-none">
-            {/* Left Hotspot: "Explore Models" */}
-            <button
-              type="button"
-              onClick={handleExploreClick}
-              title="Explore Models"
-              aria-label="Explore Zuboo Models"
-              className="pointer-events-auto absolute rounded-full cursor-pointer transition-all duration-200 hover:ring-2 hover:ring-[#FF5E14] hover:bg-[#FF5E14]/15 hover:shadow-[0_0_20px_rgba(255,94,20,0.6)] focus:outline-hidden focus:ring-2 focus:ring-[#FF5E14] active:scale-95"
-              style={{
-                left: "34.2%",
-                top: "41.5%",
-                width: "16.8%",
-                height: "6.5%",
-              }}
-            />
+              {/* If cursor is active on the space following this word */}
+              {wordObj.spaceIndex !== null &&
+                wordObj.spaceIndex === visibleCount - 1 &&
+                renderCursor()}
+            </span>
+          ))}
+        </h1>
 
-            {/* Right Hotspot: "Visit Showroom" */}
-            <button
-              type="button"
-              onClick={handleVisitShowroom}
-              title="Visit Showroom"
-              aria-label="Visit Galle Showroom"
-              className="pointer-events-auto absolute rounded-full cursor-pointer transition-all duration-200 hover:ring-2 hover:ring-white/80 hover:bg-white/15 hover:shadow-[0_0_20px_rgba(255,255,255,0.5)] focus:outline-hidden focus:ring-2 focus:ring-white active:scale-95"
-              style={{
-                left: "52.0%",
-                top: "41.5%",
-                width: "14.0%",
-                height: "6.5%",
-              }}
-            />
-          </div>
-        </div>
+        <p ref={subtitleRef} className="mx-auto mt-6 mb-8 max-w-2xl text-center font-light text-base text-white/90 sm:text-lg md:text-xl leading-relaxed">
+          {subtitle}
+        </p>
 
-        {/* Sleek Action Bar (Mobile / Under Banner) */}
-        <div className="mt-6 sm:mt-8 flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3 sm:gap-4 max-w-4xl mx-auto">
-          {/* 1. Explore 9 Models */}
-          <button
-            type="button"
-            onClick={handleExploreClick}
-            className="group relative inline-flex items-center justify-center gap-2.5 px-6 sm:px-8 py-3.5 sm:py-4 rounded-xl sm:rounded-2xl bg-gradient-to-r from-[#FF5E14] via-[#FF6B2B] to-[#E51937] hover:from-[#E04D09] hover:to-[#C4122D] text-white font-black text-xs sm:text-sm uppercase tracking-wider shadow-lg shadow-orange-600/30 active:scale-95 transition-all cursor-pointer"
+        <div ref={ctaRef}>
+          <Button
+            onClick={onCtaClick}
+            className="group not-disabled:inset-shadow-none mx-auto flex cursor-pointer items-center justify-center gap-0 rounded-full border-none bg-transparent px-0 py-5 font-normal shadow-none hover:bg-transparent [:hover,[data-pressed]]:bg-transparent"
           >
-            <Zap className="w-4 h-4 text-white animate-pulse" />
-            <span>{buttonText || "Explore 9 Models"}</span>
-            <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
-          </button>
-
-          {/* 2. Visit Galle Showroom */}
-          <button
-            type="button"
-            onClick={handleVisitShowroom}
-            className="inline-flex items-center justify-center gap-2.5 px-6 sm:px-7 py-3.5 sm:py-4 rounded-xl sm:rounded-2xl bg-[#16161c] hover:bg-[#202028] text-white font-bold text-xs sm:text-sm uppercase tracking-wider border border-white/15 hover:border-white/30 shadow-md active:scale-95 transition-all cursor-pointer"
-          >
-            <MapPin className="w-4 h-4 text-[#FF5E14]" />
-            <span>Visit Galle Showroom</span>
-          </button>
-
-          {/* 3. Book Free Test Ride */}
-          <button
-            type="button"
-            onClick={handleBookTestRide}
-            className="inline-flex items-center justify-center gap-2.5 px-6 sm:px-7 py-3.5 sm:py-4 rounded-xl sm:rounded-2xl bg-white/[0.04] hover:bg-[#FF5E14]/10 text-white hover:text-[#FF8C38] font-bold text-xs sm:text-sm uppercase tracking-wider border border-[#FF5E14]/40 hover:border-[#FF5E14] shadow-sm active:scale-95 transition-all cursor-pointer"
-          >
-            <Calendar className="w-4 h-4 text-[#FF5E14]" />
-            <span>Book Free Test Ride</span>
-          </button>
-        </div>
-
-        {/* 4 Official Badges under Banner */}
-        <div className="mt-8 pt-6 border-t border-white/10 grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 max-w-4xl mx-auto">
-          <div className="flex items-center justify-center gap-2.5 py-2.5 px-3 rounded-xl bg-white/[0.03] border border-white/[0.06]">
-            <Zap className="w-4 h-4 text-[#FF5E14] shrink-0" />
-            <span className="text-[11px] sm:text-xs font-bold uppercase tracking-wider text-slate-300">
-              Electric Power
+            <span className="rounded-full bg-[#e1fcad] px-7 py-3.5 text-sm sm:text-base font-bold text-black duration-500 ease-in-out group-hover:bg-[#122023] group-hover:text-[#e1fcad] group-hover:transition-colors shadow-lg">
+              {buttonText}
             </span>
-          </div>
-          <div className="flex items-center justify-center gap-2.5 py-2.5 px-3 rounded-xl bg-white/[0.03] border border-white/[0.06]">
-            <Leaf className="w-4 h-4 text-emerald-400 shrink-0" />
-            <span className="text-[11px] sm:text-xs font-bold uppercase tracking-wider text-slate-300">
-              Eco Friendly
-            </span>
-          </div>
-          <div className="flex items-center justify-center gap-2.5 py-2.5 px-3 rounded-xl bg-white/[0.03] border border-white/[0.06]">
-            <Sparkles className="w-4 h-4 text-amber-400 shrink-0" />
-            <span className="text-[11px] sm:text-xs font-bold uppercase tracking-wider text-slate-300">
-              Stylish Design
-            </span>
-          </div>
-          <div className="flex items-center justify-center gap-2.5 py-2.5 px-3 rounded-xl bg-white/[0.03] border border-white/[0.06]">
-            <ShieldCheck className="w-4 h-4 text-sky-400 shrink-0" />
-            <span className="text-[11px] sm:text-xs font-bold uppercase tracking-wider text-slate-300">
-              Smart Mobility
-            </span>
-          </div>
+            <div className="relative flex h-fit cursor-pointer items-center overflow-hidden rounded-full bg-[#e1fcad] p-5 text-black duration-500 ease-in-out group-hover:bg-[#122023] group-hover:text-[#e1fcad] group-hover:transition-colors shadow-lg">
+              <ArrowUpRight className="absolute h-5 w-5 -translate-x-1/2 transition-all duration-500 ease-in-out group-hover:translate-x-10" />
+              <ArrowUpRight className="absolute h-5 w-5 -translate-10 transition-all duration-500 ease-in-out group-hover:-translate-x-1/2" />
+            </div>
+          </Button>
         </div>
       </div>
     </section>
